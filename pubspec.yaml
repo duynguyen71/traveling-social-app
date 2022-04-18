@@ -38,6 +38,8 @@ dependencies:
   google_fonts: ^2.1.0
   provider: ^5.0.0
   fluttertoast: ^8.0.7
+  http: ^0.13.4
+  flutter_secure_storage: ^5.0.2
 
 dev_dependencies:
   flutter_test:
