@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:traveling_social_app/screens/home/home_screen.dart';
 import 'package:traveling_social_app/screens/login/login_screen.dart';
-
+import 'package:traveling_social_app/view_model/user_viewmodel.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,16 +13,48 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.grey[100],
-        brightness: Brightness.light,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider<UserViewModel>(
+            create: (_) => UserViewModel(),
+          )
+        ],
+        builder: (context, child) {
+          return MaterialApp(
+            title: 'Flutter Demo',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              scaffoldBackgroundColor: Colors.white,
+              brightness: Brightness.light,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+            ),
+            home: const AuthWrapper(),
+          );
+        });
+  }
+}
 
-      ),
-      home: const LoginScreen(),
+class AuthWrapper extends StatelessWidget {
+  const AuthWrapper({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _userViewModel = context.read<UserViewModel>();
+    // return const VerificationScreen();
+    //
+    return FutureBuilder(
+      future: _userViewModel.fetchUserDetail(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return snapshot.hasData ? const HomeScreen() : const LoginScreen();
+        }
+        return const Scaffold(
+          body: Align(
+            alignment: Alignment.center,
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
     );
   }
 }

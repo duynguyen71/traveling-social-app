@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:traveling_social_app/widgets/loading_widget.dart';
 
 class RegisterBackground extends StatelessWidget {
-  const RegisterBackground({Key? key, required this.child}) : super(key: key);
+  const RegisterBackground({Key? key, required this.child, required this.isLoading}) : super(key: key);
 
   final Widget child;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,8 @@ class RegisterBackground extends StatelessWidget {
             child: Image.asset("assets/images/top_left2.png",
                 width: size.width * .3),
           ),
-          child
+          child,
+          LoadingWidget(isLoading: isLoading)
         ],
       ),
     );

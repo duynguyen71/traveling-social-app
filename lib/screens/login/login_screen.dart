@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
+import 'package:traveling_social_app/screens/home/home_screen.dart';
 import 'package:traveling_social_app/screens/login/components/login_background.dart';
 import 'package:traveling_social_app/screens/register/register_screen.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
+import 'package:traveling_social_app/view_model/user_viewmodel.dart';
 import 'package:traveling_social_app/widgets/already_have_account_check.dart';
 import 'package:traveling_social_app/widgets/custom_input_field.dart';
 import 'package:traveling_social_app/widgets/rounded_button.dart';
@@ -42,7 +45,9 @@ class _LoginScreenState extends State<LoginScreen> {
     _showLoadingIndicator(true);
 
     try {
-      final data = await _userService.login(username, password);
+      await _userService.login(username, password);
+      await context.read<UserViewModel>().fetchUserDetail();
+      ApplicationUtility.pushAndReplace(context, const HomeScreen());
     } catch (e) {
       _setErrorMessage(e.toString());
     } finally {
@@ -146,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       //ERROR MESSAGE
-                      SizedBox(height: size.height * .03),
+                      SizedBox(height: size.height * .015),
                       SizedBox(
                         width: size.width * .8,
                         child: Align(
@@ -173,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(height: size.height * .03),
                       AlreadyHaveAccountCheck(
                         isLogin: true,
-                        onPress: () => ApplicationUtility.navigateToScreen(
+                        onPress: () => ApplicationUtility.pushAndReplace(
                             context, const RegisterScreen()),
                       ),
                     ],
