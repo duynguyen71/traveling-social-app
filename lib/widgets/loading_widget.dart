@@ -9,12 +9,14 @@ class LoadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return isLoading
         ? Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.deepPurpleAccent.withOpacity(0.05)),
-              child: const Align(
-                child: CircularProgressIndicator(),
-                alignment: Alignment.center,
+            child: Center(
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.deepPurpleAccent.withOpacity(0.05)),
+                child: const Align(
+                  child: CircularProgressIndicator(),
+                  alignment: Alignment.center,
+                ),
               ),
             ),
           )

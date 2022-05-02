@@ -71,4 +71,10 @@ class User with ChangeNotifier {
     map['followingCounts'] = _followingCounts;
     return map;
   }
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return 'id: $id, username: $username';
+  }
 }

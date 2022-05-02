@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:palette_generator/palette_generator.dart';
 
 class ApplicationUtility {
   //hide input keyboard
@@ -15,5 +16,14 @@ class ApplicationUtility {
   static Future<dynamic> pushAndReplace(BuildContext context, Widget screen) {
     return Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (c) => screen));
+  }
+
+  static Future<PaletteGenerator?> getPaletteGenerator(String image) async {
+    if (image != null) {
+      return await PaletteGenerator.fromImageProvider(
+        Image.network(image).image,
+      );
+    }
+    return null;
   }
 }

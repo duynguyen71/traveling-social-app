@@ -6,6 +6,7 @@ import 'package:traveling_social_app/screens/login/components/login_background.d
 import 'package:traveling_social_app/screens/register/register_screen.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
+import 'package:traveling_social_app/view_model/loading_viewmodel.dart';
 import 'package:traveling_social_app/view_model/user_viewmodel.dart';
 import 'package:traveling_social_app/widgets/already_have_account_check.dart';
 import 'package:traveling_social_app/widgets/custom_input_field.dart';
@@ -41,9 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _setErrorMessage('password must not be empty');
       return;
     }
-    //form valid
     _showLoadingIndicator(true);
-
     try {
       await _userService.login(username, password);
       await context.read<UserViewModel>().fetchUserDetail();
@@ -93,6 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
           isLoading: _isLoading,
           child: SingleChildScrollView(
             child: Container(
+              alignment: Alignment.center,
               height: size.height,
               constraints: const BoxConstraints(maxWidth: 600),
               child: Column(

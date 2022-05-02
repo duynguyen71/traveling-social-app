@@ -40,6 +40,11 @@ dependencies:
   fluttertoast: ^8.0.7
   http: ^0.13.4
   flutter_secure_storage: ^5.0.2
+  palette_generator: ^0.3.3
+  image_picker: ^0.8.5
+  mime: ^1.0.1
+  mime_type: ^1.0.0
+  cached_network_image: ^3.2.0
 
 dev_dependencies:
   flutter_test:
