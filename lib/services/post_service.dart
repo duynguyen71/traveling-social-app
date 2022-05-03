@@ -8,8 +8,9 @@ import 'package:http/http.dart' as http;
 class PostService {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
-  Future<List<Post>> getPosts() async {
-    var url = Uri.parse(baseUrl + "/api/v1/member/users/me/stories");
+  Future<List<Post>> getPosts({int? page,int? pageSize}) async {
+    var url = Uri.parse(baseUrl +
+        "/api/v1/member/users/me/stories?page=$page&pageSize=$pageSize");
     final resp = await http.get(url, headers: {
       "Authorization": 'Bearer ${await _storage.read(key: 'accessToken')}',
     });

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
+import 'package:traveling_social_app/screens/home/components/add_story_card.dart';
 import 'package:traveling_social_app/screens/home/components/custom_tab_title.dart';
 import 'package:traveling_social_app/screens/home/components/home_stories.dart';
 import 'package:traveling_social_app/screens/home/components/post_entry.dart';
@@ -10,7 +11,9 @@ import 'package:traveling_social_app/screens/home/components/trending_post.dart'
 import 'package:traveling_social_app/screens/story/stories_screen.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
+import 'package:traveling_social_app/view_model/post_viewmodel.dart';
 import 'package:traveling_social_app/widgets/heading_with_icon.dart';
+import 'package:provider/provider.dart';
 
 class HomeBody extends StatefulWidget {
   const HomeBody({Key? key}) : super(key: key);
@@ -20,6 +23,11 @@ class HomeBody extends StatefulWidget {
 }
 
 class _HomeBodyState extends State<HomeBody> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -102,16 +110,7 @@ class _HomeBodyState extends State<HomeBody> {
           //POSTS
           Column(
             // mainAxisSize: MainAxisSize.max,
-            children: [
-              PostEntry(),
-              PostEntry(
-                image:
-                    'https://images.pexels.com/photos/4158/apple-iphone-smartphone-desk.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-              ),
-              PostEntry(),
-              PostEntry(),
-              PostEntry(),
-            ],
+            children: [],
           ),
           //TRENDING POST
           Container(

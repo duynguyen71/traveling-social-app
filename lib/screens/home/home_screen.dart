@@ -11,6 +11,7 @@ import 'package:traveling_social_app/screens/profile/current_user_profile_screen
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/view_model/post_viewmodel.dart';
 import 'package:traveling_social_app/view_model/user_viewmodel.dart';
+import 'package:traveling_social_app/widgets/user_avt.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -22,7 +23,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late UserViewModel _userViewModel;
   late User _user;
-  bool _isLoading = false;
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -33,10 +33,14 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_userViewModel.user == null) {
       ApplicationUtility.pushAndReplace(context, const LoginScreen());
     }
-    context.read<PostViewModel>().fetchStories();
+    PostViewModel postViewModel = context.read<PostViewModel>();
+    if (postViewModel.stories.isEmpty) {
+      postViewModel.fetchStories(page: 0, pageSize: 5);
+    }
     _user = _userViewModel.user!;
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -79,19 +83,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(
                   width: 10,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    ApplicationUtility.navigateToScreen(
-                        context, const CurrentUserProfileScreen());
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    child: Consumer<UserViewModel>(
-                      builder: (context, value, child) => CircleAvatar(
-                        backgroundImage: NetworkImage(value.user?.avt == null
-                            ? "https://images.pexels.com/photos/4429452/pexels-photo-4429452.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-                            : 'https://images.pexels.com/photos/7929829/pexels-photo-7929829.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'),
-                      ),
+                Container(
+                  margin: const EdgeInsets.only(right: 10),
+                  child: Consumer<UserViewModel>(
+                    builder: (context, value, child) => UserAvatar(
+                      size: 25,
+                      user: _user,
+                      onTap: () => ApplicationUtility.navigateToScreen(
+                          context, const CurrentUserProfileScreen()),
                     ),
                   ),
                 )
@@ -101,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
             //  END OF APP BAR
             const SliverToBoxAdapter(
               child: HomeBody(),
-            )
+            ),
           ],
         ),
       ),

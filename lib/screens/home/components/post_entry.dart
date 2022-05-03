@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:traveling_social_app/models/Post.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
 
 class PostEntry extends StatefulWidget {
-  const PostEntry({Key? key, this.image}) : super(key: key);
+  const PostEntry({Key? key, this.image, required this.post}) : super(key: key);
 
   final String? image;
+  final Post post;
 
   @override
   State<PostEntry> createState() => _PostEntryState();
@@ -35,7 +37,7 @@ class _PostEntryState extends State<PostEntry> with TickerProviderStateMixin {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const UserAvatar(size: 40),
+                 UserAvatar(size: 40,user: widget.post.user!,),
                 const SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

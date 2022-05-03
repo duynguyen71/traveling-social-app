@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
+import 'package:traveling_social_app/models/User.dart';
 import 'package:traveling_social_app/screens/create_story/create_story_screen.dart';
 import 'package:traveling_social_app/screens/home/home_screen.dart';
 import 'package:traveling_social_app/screens/profile/components/background.dart';
+import 'package:traveling_social_app/screens/profile/components/follow_count.dart';
 import 'package:traveling_social_app/screens/story/story_card.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/view_model/user_viewmodel.dart';
+import 'package:traveling_social_app/widgets/user_avt.dart';
 import 'components/button_edit_profile.dart';
 import 'components/title_with_number.dart';
 import 'package:provider/provider.dart';
@@ -107,7 +110,7 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
               centerTitle: true,
               title: Text(
                 _userViewModel.user!.username.toString(),
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.black87,
                   fontWeight: FontWeight.w400,
                 ),
@@ -214,19 +217,17 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
                                     ),
                                   ),
                                 ),
+                                //CURRENT USER VATAR
                                 Positioned(
                                   bottom: 0,
                                   left: kDefaultPadding,
-                                  child: Container(
-                                    width: 100,
-                                    height: 100,
-                                    padding: const EdgeInsets.all(5),
-                                    child: const ClipOval(
-                                      child: Image(
-                                        fit: BoxFit.cover,
-                                        image: NetworkImage(
-                                            "https://images.pexels.com/photos/40465/pexels-photo-40465.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"),
-                                      ),
+                                  child: Selector<UserViewModel, User>(
+                                    selector: (p0, p1) => p1.user!,
+                                    builder: (context, value, child) =>
+                                        UserAvatar(
+                                      user: value,
+                                      size: 150,
+                                      onTap: () {},
                                     ),
                                   ),
                                 ),
@@ -249,11 +250,78 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
                             ),
                           ),
                           //STORIES
-                          Row(
-                            children: [
-                              // StoryCard(image: 'https://images.pexels.com/photos/5981369/pexels-photo-5981369.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',)
-                            ],
-                          ),
+
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  //FULL NAME
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                    child: Selector<UserViewModel, String>(
+                                      builder: (BuildContext context, value,
+                                          Widget? child) =>
+                                          const Text(
+                                            'Nguyen Khanh Duy',
+                                            style: TextStyle(
+                                                color: Colors.black87,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18),
+                                          ),
+                                      selector: (p0, p1) =>
+                                          p1.user!.username.toString(),
+                                    ),
+                                  ),
+                                  //USERNAME
+                                  Selector<UserViewModel, String>(
+                                    builder: (BuildContext context, value,
+                                            Widget? child) =>
+                                        Text(
+                                      '@$value',
+                                      style: const TextStyle(
+                                          color: Colors.black54,
+                                          fontSize: 15),
+                                    ),
+                                    selector: (p0, p1) =>
+                                        p1.user!.username.toString(),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Selector<UserViewModel, int?>(
+                                          builder: (BuildContext context, value,
+                                                  Widget? child) =>
+                                              FollowCount(
+                                                  title: "Following",
+                                                  count: value.toString()),
+                                          selector: (p0, p1) =>
+                                              p1.user!.followingCounts,
+                                        ),
+                                        Selector<UserViewModel, int?>(
+                                          builder: (BuildContext context, value,
+                                                  Widget? child) =>
+                                              FollowCount(
+                                                  title: "Follower",
+                                                  count: value.toString()),
+                                          selector: (p0, p1) =>
+                                              p1.user!.followerCounts,
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                  //
+                                ],
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ],
@@ -275,11 +343,6 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
                 transitionDuration: const Duration(milliseconds: 500),
                 pageBuilder: (context, animation, secondaryAnimation) {
                   return const HomeScreen();
-                  // return ChatScreen(
-                  //   guessId: "this.userData.uid",
-                  //   roomId: "fd",
-                  //   roomData: RoomChatModel(roomId: "fd", users: []),
-                  // );
                 },
                 transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {

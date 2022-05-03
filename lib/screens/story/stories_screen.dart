@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/models/Post.dart';
+import 'package:traveling_social_app/screens/create_story/create_story_screen.dart';
 import 'package:traveling_social_app/screens/story/stories_scroll_screen.dart';
 import 'package:traveling_social_app/screens/story/story_card.dart';
 import 'package:provider/provider.dart';
@@ -15,10 +16,12 @@ class StoriesScreen extends StatefulWidget {
 }
 
 class _StoriesScreenState extends State<StoriesScreen> {
-
   @override
   void initState() {
-    context.read<PostViewModel>().fetchStories();
+    if (context.read<PostViewModel>().stories.isEmpty) {
+      print('fetcj story');
+      context.read<PostViewModel>().fetchStories();
+    }
     super.initState();
   }
 
@@ -30,7 +33,10 @@ class _StoriesScreenState extends State<StoriesScreen> {
         appBar: _buildAppBar(),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            ApplicationUtility.navigateToScreen(
+                context, const CreateStoryScreen());
+          },
           elevation: 1,
           backgroundColor: kPrimaryLightColor,
           child: const Icon(
@@ -58,8 +64,15 @@ class _StoriesScreenState extends State<StoriesScreen> {
                             key: Key(index.toString()),
                             story: stories[index],
                             onClick: () {
+                              context
+                                  .read<PostViewModel>()
+                                  .setCurrentStoryIndex = index;
                               ApplicationUtility.navigateToScreen(
-                                  context, const StoriesScrollScreen());
+                                context,
+                                StoriesScrollScreen(
+                                  initialIndex: index,
+                                ),
+                              );
                             },
                           );
                         }, childCount: stories.length),

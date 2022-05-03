@@ -1,10 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
+import 'package:traveling_social_app/models/Content.dart';
 import 'package:traveling_social_app/models/Post.dart';
-import 'package:traveling_social_app/view_model/post_viewmodel.dart';
 import 'package:traveling_social_app/widgets/expandable_text.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
-import 'package:provider/provider.dart';
 
 class StoryFullScreen extends StatefulWidget {
   const StoryFullScreen({Key? key, required this.post}) : super(key: key);
@@ -15,39 +16,64 @@ class StoryFullScreen extends StatefulWidget {
   _StoryFullScreenState createState() => _StoryFullScreenState();
 }
 
-class _StoryFullScreenState extends State<StoryFullScreen> {
-  final PostViewModel _postViewModel = PostViewModel();
+class _StoryFullScreenState extends State<StoryFullScreen>
+    with AutomaticKeepAliveClientMixin {
+  int currentIndex = 0;
+  String? currentImg;
+  int itemCount = 0;
 
-  late String text;
+  nextImage() {
+    if (currentIndex != itemCount - 1) {
+      currentIndex = currentIndex + 1;
+      _getImage(currentIndex);
+    }
+  }
 
-  nextImage() {}
+  prevImages() {
+    if (currentIndex >= 1) {
+      currentIndex = currentIndex - 1;
+      _getImage(currentIndex);
+    }
+  }
 
-  prevImages() {}
+  int countContents() {
+    if (widget.post.contents != null) {
+      setState(() {
+        itemCount = widget.post.contents!.length;
+      });
+    }
+    return 0;
+  }
 
-  _onClose() {
-    _postViewModel.setCurrentStoryIndex = 0;
+  _getImage(int i) {
+    List<Contents>? contents = widget.post.contents;
+    if (contents != null &&
+        contents.isNotEmpty &&
+        contents[i].attachment != null) {
+      String? string = contents[i].attachment?.name.toString();
+      setState(() {
+        currentImg = string;
+      });
+    }
   }
 
   @override
   void initState() {
-    text = 'There are many variations of passages of Lorem Ipsum available, '
-        'but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t '
-        'look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t '
-        'anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat '
-        'predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over '
-        '200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. '
-        'The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.';
+    countContents();
+    _getImage(currentIndex);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     Size size = MediaQuery.of(context).size;
     return Material(
       child: SizedBox(
         width: size.width,
         height: size.height,
         child: Stack(
+          alignment: Alignment.center,
           children: [
             Center(
               child: Container(
@@ -63,8 +89,7 @@ class _StoryFullScreenState extends State<StoryFullScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       //DIVIDER
-                      widget.post.contents != null &&
-                              widget.post.contents!.length > 1
+                      itemCount > 1
                           ? Center(
                               child: Container(
                                 alignment: Alignment.center,
@@ -74,26 +99,46 @@ class _StoryFullScreenState extends State<StoryFullScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: widget.post.contents == null
                                       ? []
-                                      : widget.post.contents!
-                                          .map(
-                                            (e) => Container(
-                                              width: (size.width ~/
-                                                      (widget.post.contents
-                                                              ?.length ??
-                                                          1))
-                                                  .toDouble(),
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 5),
-                                              height: 2,
-                                              child: const Divider(
-                                                  height: 2,
-                                                  thickness: 2,
-                                                  color: Colors.white),
-                                            ),
-                                          )
-                                          .toList(),
+                                      : List.generate(
+                                          itemCount,
+                                          (index) => Container(
+                                            width: (size.width ~/
+                                                    (widget.post.contents
+                                                            ?.length ??
+                                                        1))
+                                                .toDouble(),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 5),
+                                            height: 2,
+                                            child: Divider(
+                                                height: 2,
+                                                thickness: 2,
+                                                color: currentIndex == index
+                                                    ? Colors.white
+                                                    : Colors.grey),
+                                          ),
+                                        ),
                                 ),
+                                // : widget.post.contents!
+                                //     .map(
+                                //       (e) => Container(
+                                //         width: (size.width ~/
+                                //                 (widget.post.contents
+                                //                         ?.length ??
+                                //                     1))
+                                //             .toDouble(),
+                                //         padding:
+                                //             const EdgeInsets.symmetric(
+                                //                 horizontal: 5),
+                                //         height: 2,
+                                //         child: const Divider(
+                                //             height: 2,
+                                //             thickness: 2,
+                                //             color: Colors.white),
+                                //       ),
+                                //     )
+                                //     .toList(),
+                                // ),
                               ),
                             )
                           : const SizedBox.shrink(),
@@ -103,11 +148,13 @@ class _StoryFullScreenState extends State<StoryFullScreen> {
                         aspectRatio: 3 / 4,
                         child: Container(
                           width: double.infinity,
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
                             image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: NetworkImage(
-                                "https://images.pexels.com/photos/11780519/pexels-photo-11780519.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+                              image: CachedNetworkImageProvider(
+                                currentImg != null
+                                    ? (imageUrl + currentImg.toString())
+                                    : "https://images.pexels.com/photos/11780519/pexels-photo-11780519.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
                               ),
                             ),
                           ),
@@ -157,7 +204,10 @@ class _StoryFullScreenState extends State<StoryFullScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const UserAvatar(size: 35),
+                          UserAvatar(
+                            size: 35,
+                            user: widget.post.user!,
+                          ),
                           const SizedBox(width: 10),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -193,18 +243,34 @@ class _StoryFullScreenState extends State<StoryFullScreen> {
               ),
             ),
             //STORY CAPTION
-            Positioned(
-              child: SizedBox(
-                width: size.width,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ExpandableText(
-                    text: text,
-                  ),
-                ),
-              ),
-              bottom: 80,
-            ),
+            widget.post.contents!.isEmpty
+                ? Positioned.fill(
+                    child: Center(
+                      child: ExpandableText(
+                        text: widget.post.caption.toString(),
+                        textStyle: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                            fontSize: 30),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  )
+                : const SizedBox.shrink(),
+            (widget.post.caption != null && widget.post.contents!.isNotEmpty)
+                ? Positioned(
+                    child: SizedBox(
+                      width: size.width,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ExpandableText(
+                          text: widget.post.caption.toString(),
+                        ),
+                      ),
+                    ),
+                    bottom: 80,
+                  )
+                : const SizedBox.shrink(),
             //COMMENT INPUT
             Positioned(
               child: Container(
@@ -256,4 +322,7 @@ class _StoryFullScreenState extends State<StoryFullScreen> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -8,12 +8,29 @@ class PostViewModel extends ChangeNotifier {
   List<Post> _stories = [];
 
   int _currentStoryIndex = 0;
+  int _currentPage = 0;
 
-  void fetchStories() async {
-    print('fetch stor');
-    _stories = await _postService.getPosts();
-    print(_stories);
-    notifyListeners();
+  void fetchStories({int? page, int? pageSize}) async {
+    _currentPage = 0;
+    _stories =
+        await _postService.getPosts(page: page ?? 0, pageSize: pageSize ?? 5);
+    if (stories.isNotEmpty) {
+      print(_stories);
+      notifyListeners();
+      return;
+    }
+  }
+
+  void updateStories() async {
+    _currentPage = _currentPage + 1;
+    List<Post> resp =
+        await _postService.getPosts(page: _currentPage, pageSize: 5);
+    if (resp.isNotEmpty) {
+      _stories.addAll(resp);
+      notifyListeners();
+    } else {
+      _currentPage = _currentPage - 1;
+    }
   }
 
   set setCurrentStoryIndex(index) {
@@ -22,7 +39,6 @@ class PostViewModel extends ChangeNotifier {
 
   removeStory(int storyId) {
     _stories.removeWhere((story) => story.id == storyId);
-    print('item remain ${_stories.length}');
     notifyListeners();
   }
 

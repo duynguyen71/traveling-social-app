@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/story/stories_screen.dart';
+import 'package:traveling_social_app/screens/story/stories_scroll_screen.dart';
 import 'package:traveling_social_app/screens/story/story_card.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/view_model/post_viewmodel.dart';
@@ -17,14 +18,21 @@ class HomeStories extends StatefulWidget {
 }
 
 class _HomeStoriesState extends State<HomeStories> {
+  final _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        context.read<PostViewModel>().updateStories();
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // var stories = context.select((PostViewModel p) => p.stories);
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(color: Colors.white),
@@ -37,14 +45,52 @@ class _HomeStoriesState extends State<HomeStories> {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: [
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    const AddStoryCard(),
-                    ...stories.map((e) => StoryCard(story: e, onClick: () {}))
-                  ],
+              NotificationListener<ScrollEndNotification>(
+                child: SingleChildScrollView(
+                  controller: _scrollController,
+                  scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
+                  child: Row(
+                    children: [
+                      const AddStoryCard(),
+                      ...List.generate(
+                        stories.length + 1,
+                        (index) {
+                          if (index == stories.length) {
+                            return const SizedBox(
+                                width: 100,
+                                child: CupertinoActivityIndicator());
+                          }
+                          return StoryCard(
+                            story: stories[index],
+                            onClick: () {
+                              context.read<PostViewModel>().setCurrentStoryIndex = index;
+                              ApplicationUtility.navigateToScreen(
+                                context,
+                                StoriesScrollScreen(
+                                  initialIndex: index,
+                                ),
+                              );
+                            },
+                            // key: ValueKey(stories[index].id),
+                          );
+                        },
+                        // growable: true,
+                      ),
+                    ],
+                  ),
                 ),
+                onNotification: (scrollEnd) {
+                  final metrics = scrollEnd.metrics;
+                  if (metrics.atEdge) {
+                    bool isTop = metrics.pixels == 0;
+                    if (isTop) {
+                    } else {
+                      // context.read<PostViewModel>().updateStories();
+                    }
+                  }
+                  return true;
+                },
               ),
               stories.isNotEmpty && stories.length > 1
                   ? Align(

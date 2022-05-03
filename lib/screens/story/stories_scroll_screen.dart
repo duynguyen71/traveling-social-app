@@ -6,24 +6,30 @@ import 'package:traveling_social_app/screens/story/story_full_screen.dart';
 import 'package:traveling_social_app/view_model/post_viewmodel.dart';
 
 class StoriesScrollScreen extends StatefulWidget {
-  const StoriesScrollScreen({Key? key}) : super(key: key);
+  const StoriesScrollScreen({Key? key, this.initialIndex = 0})
+      : super(key: key);
+
+  final int initialIndex;
 
   @override
   _StoriesScrollScreenState createState() => _StoriesScrollScreenState();
 }
 
-class _StoriesScrollScreenState extends State<StoriesScrollScreen> {
-  final _listController = ScrollController();
+class _StoriesScrollScreenState extends State<StoriesScrollScreen>
+    with AutomaticKeepAliveClientMixin {
+  late ScrollController _listController;
 
-  late List<Post> stories;
   late PostViewModel _postViewModel;
 
   @override
   void initState() {
-    print('SCROLL SCREEN INIT');
-    _postViewModel = context.read<PostViewModel>();
-    stories = _postViewModel.stories;
     super.initState();
+    _postViewModel = context.read<PostViewModel>();
+    _listController = ScrollController(
+        initialScrollOffset: _postViewModel.currentStoryIndex *
+            MediaQueryData.fromWindow(WidgetsBinding.instance!.window)
+                .size
+                .height);
   }
 
   late DragStartDetails startVerticalDragDetails;
@@ -31,6 +37,7 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onVerticalDragStart: (dragDetails) {
@@ -40,8 +47,7 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen> {
         updateVerticalDragDetails = dragDetails;
       },
       onVerticalDragEnd: (endDetails) {
-        var currentStoryIndex = _postViewModel.currentStoryIndex;
-        print('CURRENT STORY INDEX $currentStoryIndex');
+        var currentStoryIndex = context.read<PostViewModel>().currentStoryIndex;
         double dx = updateVerticalDragDetails.globalPosition.dx -
             startVerticalDragDetails.globalPosition.dx;
         double dy = updateVerticalDragDetails.globalPosition.dy -
@@ -53,25 +59,28 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen> {
         if (dy < 0) dy = -dy;
         //Swiping UP
         int i = currentStoryIndex;
+        var stories = context.read<PostViewModel>().stories;
         if (velocity < 0) {
           if (i < (stories.length - 1)) {
+            print('swip up');
             i = i + 1;
             _listController.animateTo(
                 double.parse((i * size.height).toString()),
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeInToLinear);
-            _postViewModel.setCurrentStoryIndex = i;
+            context.read<PostViewModel>().setCurrentStoryIndex = i;
           }
         }
         //SWIPING DOWN
         if (velocity > 0) {
           if (i >= 1) {
+            print('swip down');
             i = i - 1;
             _listController.animateTo(
                 double.parse((i * size.height).toString()),
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeInToLinear);
-            _postViewModel.setCurrentStoryIndex = i;
+            context.read<PostViewModel>().setCurrentStoryIndex = i;
           }
         }
       },
@@ -84,10 +93,10 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen> {
             controller: _listController,
             itemBuilder: (context, index) {
               return StoryFullScreen(
-                post: stories[_postViewModel.currentStoryIndex],
+                post: context.read<PostViewModel>().stories[index],
               );
             },
-            itemCount: stories.length),
+            itemCount: context.read<PostViewModel>().stories.length),
       ),
     );
   }
@@ -98,4 +107,7 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen> {
     _listController.dispose();
     super.dispose();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
