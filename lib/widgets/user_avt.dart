@@ -5,19 +5,20 @@ import 'package:traveling_social_app/models/User.dart';
 
 class UserAvatar extends StatelessWidget {
   const UserAvatar(
-      {Key? key, required this.size, required this.user, this.onTap})
+      {Key? key, required this.size, required this.user, this.onTap, this.margin})
       : super(key: key);
 
   final double size;
   final User user;
   final Function? onTap;
+  final EdgeInsets? margin;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => onTap != null ? onTap!() : null,
       child: Container(
-        margin: const EdgeInsets.all(5),
+        margin:margin?? const EdgeInsets.all(5),
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(size),

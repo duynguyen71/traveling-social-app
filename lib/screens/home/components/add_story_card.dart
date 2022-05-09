@@ -19,9 +19,13 @@ class AddStoryCard extends StatelessWidget {
       constraints: const BoxConstraints(
         minHeight: 180,
       ),
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(5),
+      ),
       margin: const EdgeInsets.symmetric(horizontal: 1),
       padding: const EdgeInsets.all(5),
-      color: Colors.transparent,
+      // color: Colors.transparent,
       child: Material(
         color: Colors.transparent,
         child: InkWell(
@@ -31,7 +35,10 @@ class AddStoryCard extends StatelessWidget {
                 () => _handleAddStory(context));
           },
           child: Ink(
-            color: Colors.black12,
+            decoration: BoxDecoration(
+              color: Colors.black12,
+              borderRadius: BorderRadius.circular(5),
+            ),
             child: AspectRatio(
               aspectRatio: 9 / 16,
               // aspectRatio: 9 / 14,
@@ -45,7 +52,11 @@ class AddStoryCard extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(100.0),
                   ),
-                  child: const Icon(Icons.add, color: kPrimaryLightColor,size: 26,),
+                  child: const Icon(
+                    Icons.add,
+                    color: kPrimaryLightColor,
+                    size: 26,
+                  ),
                 ),
               ),
             ),

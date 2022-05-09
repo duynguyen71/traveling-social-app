@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:traveling_social_app/models/Post.dart';
 import 'package:traveling_social_app/services/post_service.dart';
 
-class PostViewModel extends ChangeNotifier {
+class StoryViewModel extends ChangeNotifier {
   final PostService _postService = PostService();
 
   List<Post> _stories = [];
@@ -13,7 +13,7 @@ class PostViewModel extends ChangeNotifier {
   void fetchStories({int? page, int? pageSize}) async {
     _currentPage = 0;
     _stories =
-        await _postService.getPosts(page: page ?? 0, pageSize: pageSize ?? 5);
+        await _postService.getStories(page: page ?? 0, pageSize: pageSize ?? 5);
     if (stories.isNotEmpty) {
       print(_stories);
       notifyListeners();
@@ -24,7 +24,7 @@ class PostViewModel extends ChangeNotifier {
   void updateStories() async {
     _currentPage = _currentPage + 1;
     List<Post> resp =
-        await _postService.getPosts(page: _currentPage, pageSize: 5);
+        await _postService.getStories(page: _currentPage, pageSize: 5);
     if (resp.isNotEmpty) {
       _stories.addAll(resp);
       notifyListeners();

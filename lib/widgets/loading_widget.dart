@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LoadingWidget extends StatelessWidget {
@@ -14,7 +15,7 @@ class LoadingWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: Colors.deepPurpleAccent.withOpacity(0.05)),
                 child: const Align(
-                  child: CircularProgressIndicator(),
+                  child: CupertinoActivityIndicator(),
                   alignment: Alignment.center,
                 ),
               ),

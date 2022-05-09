@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
-import 'package:traveling_social_app/view_model/post_viewmodel.dart';
+import 'package:traveling_social_app/view_model/story_viewmodel.dart';
 import 'package:traveling_social_app/view_model/user_viewmodel.dart';
 import 'package:traveling_social_app/widgets/loading_widget.dart';
 import 'package:provider/provider.dart';
@@ -55,7 +55,7 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
       "caption": caption,
       "type": 0,
     }, images);
-    context.read<PostViewModel>().addStory(story);
+    context.read<StoryViewModel>().addStory(story);
     Navigator.of(context).pop();
     setState(() {
       _isLoading = false;
@@ -136,8 +136,8 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
                               decoration: const InputDecoration(
                                   hintText: "caption...",
                                   border: InputBorder.none),
-                              maxLines: null,
                               controller: _captionController,
+                              maxLines: null,
                               keyboardType: TextInputType.multiline,
                             ),
                             const SizedBox(height: 10),

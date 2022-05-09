@@ -6,7 +6,7 @@ import 'package:traveling_social_app/screens/story/stories_scroll_screen.dart';
 import 'package:traveling_social_app/screens/story/story_card.dart';
 import 'package:provider/provider.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
-import 'package:traveling_social_app/view_model/post_viewmodel.dart';
+import 'package:traveling_social_app/view_model/story_viewmodel.dart';
 
 class StoriesScreen extends StatefulWidget {
   const StoriesScreen({Key? key}) : super(key: key);
@@ -18,9 +18,8 @@ class StoriesScreen extends StatefulWidget {
 class _StoriesScreenState extends State<StoriesScreen> {
   @override
   void initState() {
-    if (context.read<PostViewModel>().stories.isEmpty) {
-      print('fetcj story');
-      context.read<PostViewModel>().fetchStories();
+    if (context.read<StoryViewModel>().stories.isEmpty) {
+      context.read<StoryViewModel>().fetchStories();
     }
     super.initState();
   }
@@ -55,37 +54,24 @@ class _StoriesScreenState extends State<StoriesScreen> {
           child: CustomScrollView(
             slivers: [
               const SliverPadding(padding: EdgeInsets.only(top: 10)),
-              Consumer<PostViewModel>(builder: (context, value, child) {
-                List<Post> stories = value.stories;
-                return stories.isNotEmpty
-                    ? SliverGrid(
-                        delegate: SliverChildBuilderDelegate((context, index) {
-                          return StoryCard(
-                            key: Key(index.toString()),
-                            story: stories[index],
-                            onClick: () {
-                              context
-                                  .read<PostViewModel>()
-                                  .setCurrentStoryIndex = index;
-                              ApplicationUtility.navigateToScreen(
-                                context,
-                                StoriesScrollScreen(
-                                  initialIndex: index,
-                                ),
-                              );
-                            },
-                          );
-                        }, childCount: stories.length),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          mainAxisSpacing: 10,
-                          crossAxisSpacing: 10,
-                          // childAspectRatio: 9/16,
-                          childAspectRatio: 10 / 14,
-                        ),
-                      )
-                    : const SliverToBoxAdapter(child: SizedBox.shrink());
+              Consumer<StoryViewModel>(builder: (context, value, child) {
+                var stories = value.stories;
+                return SliverGrid(
+                  delegate: SliverChildListDelegate(stories
+                      .map((e) => StoryCard(
+                            story: e,
+                            onClick: () {},
+                            key: Key(e.id.toString()),
+                          ))
+                      .toList()),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                    // childAspectRatio: 9/16,
+                    childAspectRatio: 10 / 14,
+                  ),
+                );
               }),
             ],
           ),

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'Attachment.dart';
 import 'Content.dart';
 import 'User.dart';
 
@@ -15,7 +14,7 @@ class Post {
     int? status,
     int? active,
     User? user,
-    List<Contents>? contents,
+    List<Content>? contents,
     String? createDate,
     String? updateDate,
     int? likeCounts,}) {
@@ -39,7 +38,7 @@ class Post {
     if (json['contents'] != null) {
       _contents = [];
       json['contents'].forEach((v) {
-        _contents?.add(Contents.fromJson(v));
+        _contents?.add(Content.fromJson(v));
       });
     }
     _createDate = json['createDate'];
@@ -52,7 +51,7 @@ class Post {
   int? _status;
   int? _active;
   User? _user;
-  List<Contents>? _contents;
+  List<Content>? _contents =[];
   String? _createDate;
   String? _updateDate;
   int? _likeCounts;
@@ -62,7 +61,7 @@ class Post {
     int? status,
     int? active,
     User? user,
-    List<Contents>? contents,
+    List<Content>? contents,
     String? createDate,
     String? updateDate,
     int? likeCounts,
@@ -89,7 +88,7 @@ class Post {
 
   User? get user => _user;
 
-  List<Contents>? get contents => _contents;
+  List<Content>? get contents => _contents;
 
   String? get createDate => _createDate;
 

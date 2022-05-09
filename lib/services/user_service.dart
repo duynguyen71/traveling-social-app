@@ -53,11 +53,8 @@ class UserService {
       if (statusCode == 200) {
         final jsonData = jsonDecode(resp.body) as Map<String, dynamic>;
         User user = User.fromJson(jsonData['data']);
-        print('get current user success');
         return user;
       } else {
-        print('failed to get user info');
-        print(jsonDecode(resp.body));
         return null;
       }
     }
@@ -140,6 +137,15 @@ class UserService {
     } else {
       throw 'Failed to upload images';
     }
+  }
+
+  Future<List<FileUpload>> uploadFiles(List<File> file)async{
+    final accessToken = await _storage.read(key: 'accessToken');
+    final uri = Uri.parse(baseUrl + "/api/v1/member/users/me/files");
+    var request = http.MultipartRequest("POST", uri);
+    request.headers['Authorization'] = 'Bearer $accessToken';
+
+    return [];
   }
 
   Future<Post> createStory(

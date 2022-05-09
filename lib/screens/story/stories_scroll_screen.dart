@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:traveling_social_app/models/Post.dart';
 import 'package:traveling_social_app/screens/story/story_full_screen.dart';
-import 'package:traveling_social_app/view_model/post_viewmodel.dart';
+import 'package:traveling_social_app/view_model/story_viewmodel.dart';
 
 class StoriesScrollScreen extends StatefulWidget {
   const StoriesScrollScreen({Key? key, this.initialIndex = 0})
@@ -19,12 +19,12 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen>
     with AutomaticKeepAliveClientMixin {
   late ScrollController _listController;
 
-  late PostViewModel _postViewModel;
+  late StoryViewModel _postViewModel;
 
   @override
   void initState() {
     super.initState();
-    _postViewModel = context.read<PostViewModel>();
+    _postViewModel = context.read<StoryViewModel>();
     _listController = ScrollController(
         initialScrollOffset: _postViewModel.currentStoryIndex *
             MediaQueryData.fromWindow(WidgetsBinding.instance!.window)
@@ -47,7 +47,7 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen>
         updateVerticalDragDetails = dragDetails;
       },
       onVerticalDragEnd: (endDetails) {
-        var currentStoryIndex = context.read<PostViewModel>().currentStoryIndex;
+        var currentStoryIndex = context.read<StoryViewModel>().currentStoryIndex;
         double dx = updateVerticalDragDetails.globalPosition.dx -
             startVerticalDragDetails.globalPosition.dx;
         double dy = updateVerticalDragDetails.globalPosition.dy -
@@ -59,7 +59,7 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen>
         if (dy < 0) dy = -dy;
         //Swiping UP
         int i = currentStoryIndex;
-        var stories = context.read<PostViewModel>().stories;
+        var stories = context.read<StoryViewModel>().stories;
         if (velocity < 0) {
           if (i < (stories.length - 1)) {
             print('swip up');
@@ -68,7 +68,7 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen>
                 double.parse((i * size.height).toString()),
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeInToLinear);
-            context.read<PostViewModel>().setCurrentStoryIndex = i;
+            context.read<StoryViewModel>().setCurrentStoryIndex = i;
           }
         }
         //SWIPING DOWN
@@ -80,7 +80,7 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen>
                 double.parse((i * size.height).toString()),
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeInToLinear);
-            context.read<PostViewModel>().setCurrentStoryIndex = i;
+            context.read<StoryViewModel>().setCurrentStoryIndex = i;
           }
         }
       },
@@ -93,10 +93,10 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen>
             controller: _listController,
             itemBuilder: (context, index) {
               return StoryFullScreen(
-                post: context.read<PostViewModel>().stories[index],
+                post: context.read<StoryViewModel>().stories[index],
               );
             },
-            itemCount: context.read<PostViewModel>().stories.length),
+            itemCount: context.read<StoryViewModel>().stories.length),
       ),
     );
   }

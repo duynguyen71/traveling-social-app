@@ -6,7 +6,7 @@ import 'package:traveling_social_app/screens/story/stories_screen.dart';
 import 'package:traveling_social_app/screens/story/stories_scroll_screen.dart';
 import 'package:traveling_social_app/screens/story/story_card.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
-import 'package:traveling_social_app/view_model/post_viewmodel.dart';
+import 'package:traveling_social_app/view_model/story_viewmodel.dart';
 
 import 'add_story_card.dart';
 
@@ -23,10 +23,14 @@ class _HomeStoriesState extends State<HomeStories> {
   @override
   void initState() {
     super.initState();
+    StoryViewModel storyViewModel = context.read<StoryViewModel>();
+    if (storyViewModel.stories.isEmpty) {
+      storyViewModel.fetchStories(page: 0, pageSize: 5);
+    }
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        context.read<PostViewModel>().updateStories();
+        context.read<StoryViewModel>().updateStories();
       }
     });
   }
@@ -37,7 +41,7 @@ class _HomeStoriesState extends State<HomeStories> {
       width: double.infinity,
       decoration: const BoxDecoration(color: Colors.white),
       padding: const EdgeInsets.all(8),
-      child: Consumer<PostViewModel>(
+      child: Consumer<StoryViewModel>(
         builder: (context, value, child) {
           var stories = value.stories;
           return Column(
@@ -58,13 +62,15 @@ class _HomeStoriesState extends State<HomeStories> {
                         (index) {
                           if (index == stories.length) {
                             return const SizedBox(
-                                width: 100,
-                                child: CupertinoActivityIndicator());
+                                width: 80, child: CupertinoActivityIndicator());
                           }
                           return StoryCard(
+                            key: Key(stories[index].id.toString()),
                             story: stories[index],
                             onClick: () {
-                              context.read<PostViewModel>().setCurrentStoryIndex = index;
+                              context
+                                  .read<StoryViewModel>()
+                                  .setCurrentStoryIndex = index;
                               ApplicationUtility.navigateToScreen(
                                 context,
                                 StoriesScrollScreen(

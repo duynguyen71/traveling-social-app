@@ -3,8 +3,10 @@ import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/home/home_screen.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
+import 'package:traveling_social_app/view_model/user_viewmodel.dart';
 import 'package:traveling_social_app/widgets/loading_widget.dart';
 import 'package:traveling_social_app/widgets/rounded_button.dart';
+import 'package:provider/provider.dart';
 
 class VerificationScreen extends StatefulWidget {
   const VerificationScreen({Key? key}) : super(key: key);
@@ -47,13 +49,13 @@ class _VerificationScreenState extends State<VerificationScreen> {
         _isLoading = true;
       });
       await _userService.verifyAccount(code: '$d1$d2$d3$d4$d5$d6');
-      await _userService.getCurrentUserInfo();
-      ApplicationUtility.pushAndReplace(context, const HomeScreen());
+      await context.read<UserViewModel>().fetchUserDetail();
+      ApplicationUtility.navigateToScreen(context, const HomeScreen());
+      return;
     } catch (e) {
       setState(() {
         errorMessage = e.toString();
       });
-    } finally {
       setState(() {
         _isLoading = false;
       });
@@ -235,7 +237,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                     height: 18,
                   ),
                   const Text(
-                    "Resend New Code",
+                    "Resend new code",
                     style: TextStyle(
                       fontSize: 18,
                       color: kLoginPrimaryColor,

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/models/Content.dart';
@@ -46,7 +47,7 @@ class _StoryFullScreenState extends State<StoryFullScreen>
   }
 
   _getImage(int i) {
-    List<Contents>? contents = widget.post.contents;
+    List<Content>? contents = widget.post.contents;
     if (contents != null &&
         contents.isNotEmpty &&
         contents[i].attachment != null) {
@@ -55,6 +56,10 @@ class _StoryFullScreenState extends State<StoryFullScreen>
         currentImg = string;
       });
     }
+  }
+
+  String _getTimeAgo() {
+    return Jiffy(widget.post.createDate).fromNow();
   }
 
   @override
@@ -81,8 +86,8 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                 height: MediaQuery.of(context).size.height,
                 decoration: const BoxDecoration(color: Colors.black87),
                 child: Container(
-                  padding: const EdgeInsets.only(top: 100),
-                  decoration: const BoxDecoration(color: Colors.black87),
+                  padding: const EdgeInsets.only(top: 90),
+                  // decoration: const BoxDecoration(color: Colors.black87),
                   width: MediaQuery.of(context).size.width - 10,
                   height: MediaQuery.of(context).size.height - 80,
                   child: Column(
@@ -119,44 +124,26 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                                           ),
                                         ),
                                 ),
-                                // : widget.post.contents!
-                                //     .map(
-                                //       (e) => Container(
-                                //         width: (size.width ~/
-                                //                 (widget.post.contents
-                                //                         ?.length ??
-                                //                     1))
-                                //             .toDouble(),
-                                //         padding:
-                                //             const EdgeInsets.symmetric(
-                                //                 horizontal: 5),
-                                //         height: 2,
-                                //         child: const Divider(
-                                //             height: 2,
-                                //             thickness: 2,
-                                //             color: Colors.white),
-                                //       ),
-                                //     )
-                                //     .toList(),
-                                // ),
                               ),
                             )
                           : const SizedBox.shrink(),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 5),
                       //IMAGE
                       AspectRatio(
                         aspectRatio: 3 / 4,
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: CachedNetworkImageProvider(
-                                currentImg != null
-                                    ? (imageUrl + currentImg.toString())
-                                    : "https://images.pexels.com/photos/11780519/pexels-photo-11780519.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-                              ),
-                            ),
+                            image: currentImg != null
+                                ? DecorationImage(
+                                    fit: BoxFit.fitWidth,
+                                    image: CachedNetworkImageProvider(
+                                      currentImg != null
+                                          ? (imageUrl + currentImg.toString())
+                                          : "https://images.pexels.com/photos/11780519/pexels-photo-11780519.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+                                    ),
+                                  )
+                                : null,
                           ),
                         ),
                       )
@@ -211,17 +198,17 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                           const SizedBox(width: 10),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               Text(
-                                "username",
-                                style: TextStyle(
+                                widget.post.user!.username.toString(),
+                                style: const TextStyle(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 16,
                                     color: Colors.white),
                               ),
                               Text(
-                                "30m ago",
-                                style: TextStyle(
+                                _getTimeAgo(),
+                                style: const TextStyle(
                                     color: Colors.white, fontSize: 14),
                               ),
                             ],
@@ -246,17 +233,21 @@ class _StoryFullScreenState extends State<StoryFullScreen>
             widget.post.contents!.isEmpty
                 ? Positioned.fill(
                     child: Center(
-                      child: ExpandableText(
-                        text: widget.post.caption.toString(),
-                        textStyle: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                            fontSize: 30),
-                        textAlign: TextAlign.center,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ExpandableText(
+                          text: widget.post.caption.toString(),
+                          textStyle: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              fontSize: 30),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                   )
                 : const SizedBox.shrink(),
+            //
             (widget.post.caption != null && widget.post.contents!.isNotEmpty)
                 ? Positioned(
                     child: SizedBox(
@@ -279,7 +270,11 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                 alignment: Alignment.center,
                 width: size.width,
                 padding: const EdgeInsets.all(10),
-                decoration: const BoxDecoration(color: Colors.black87),
+                decoration: const BoxDecoration(
+                    color: Colors.black87,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10))),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,

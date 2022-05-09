@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'Attachment.dart';
 
-Contents contentsFromJson(String str) => Contents.fromJson(json.decode(str));
-String contentsToJson(Contents data) => json.encode(data.toJson());
-class Contents {
-  Contents({
+Content contentsFromJson(String str) => Content.fromJson(json.decode(str));
+String contentsToJson(Content data) => json.encode(data.toJson());
+class Content {
+  Content({
     int? id,
     String? caption,
     Attachment? attachment,
@@ -18,7 +18,7 @@ class Contents {
     _updateDate = updateDate;
   }
 
-  Contents.fromJson(dynamic json) {
+  Content.fromJson(dynamic json) {
     _id = json['id'];
     _caption = json['caption'];
     _attachment = json['attachment'] != null ? Attachment.fromJson(json['attachment']) : null;
@@ -30,12 +30,12 @@ class Contents {
   Attachment? _attachment;
   String? _createDate;
   String? _updateDate;
-  Contents copyWith({  int? id,
+  Content copyWith({  int? id,
     String? caption,
     Attachment? attachment,
     String? createDate,
     String? updateDate,
-  }) => Contents(  id: id ?? _id,
+  }) => Content(  id: id ?? _id,
     caption: caption ?? _caption,
     attachment: attachment ?? _attachment,
     createDate: createDate ?? _createDate,
