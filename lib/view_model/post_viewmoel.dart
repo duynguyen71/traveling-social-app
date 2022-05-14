@@ -6,20 +6,20 @@ import '../services/post_service.dart';
 class PostViewModel with ChangeNotifier {
   final PostService _postService = PostService();
 
-  List<Post> _posts = [];
+  Set<Post> _posts = <Post>{};
 
   int _page = 0;
 
   void fetchPosts() async {
     _page = 0;
-    var data = await _postService.getPosts(page: _page, pageSize: 5);
-    _posts = data;
+    var data = await _postService.getPosts(page: _page, pageSize: 4);
+    _posts.addAll(data);
     notifyListeners();
   }
 
   void fetchMorePosts() async {
     _page = _page + 1;
-    var data = await _postService.getPosts(page: _page, pageSize: 5);
+    var data = await _postService.getPosts(page: _page, pageSize: 4);
     _posts.addAll(data);
     if (data.isEmpty) {
       _page = _page - 1;
@@ -27,6 +27,15 @@ class PostViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  void addPost(Post post) {
+    _posts = <Post>{post}.union(_posts);
+    notifyListeners();
+  }
+
+  clear() {
+    _posts = <Post>{};
+  }
+
   //getters
-  List<Post> get posts => _posts;
+  Set<Post> get posts => _posts;
 }

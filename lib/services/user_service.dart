@@ -2,13 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/models/FileUpload.dart';
 import 'package:traveling_social_app/models/Post.dart';
 import 'package:traveling_social_app/models/User.dart';
 import 'package:http/http.dart' as http;
-import 'package:mime/mime.dart';
+import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
 
 class UserService {
@@ -31,7 +30,6 @@ class UserService {
       final data = jsonDecode(resp.body) as Map<String, dynamic>;
       //save token to secure storage
       await saveToken(data);
-      print("Login success!");
       return data;
     }
     print("Failed to login!");
@@ -46,15 +44,17 @@ class UserService {
   Future<User?> getCurrentUserInfo() async {
     final accessToken = await _storage.read(key: 'accessToken');
     if (accessToken != null) {
-      final resp = await http.get(
-          Uri.parse(baseUrl + '/api/v1/member/users/me'),
-          headers: {"Authorization": 'Bearer $accessToken'});
-      final statusCode = resp.statusCode;
-      if (statusCode == 200) {
-        final jsonData = jsonDecode(resp.body) as Map<String, dynamic>;
-        User user = User.fromJson(jsonData['data']);
-        return user;
-      } else {
+      try {
+        final resp = await http.get(
+            Uri.parse(baseUrl + '/api/v1/member/users/me'),
+            headers: {"Authorization": 'Bearer $accessToken'});
+        final statusCode = resp.statusCode;
+        if (statusCode == 200) {
+          final jsonData = jsonDecode(resp.body) as Map<String, dynamic>;
+          User user = User.fromJson(jsonData['data']);
+          return user;
+        }
+      } on SocketException catch (e) {
         return null;
       }
     }
@@ -115,17 +115,16 @@ class UserService {
     }
   }
 
-  Future<FileUpload> uploadImage(XFile file) async {
+  Future<FileUpload> uploadImage(File file) async {
     final accessToken = await _storage.read(key: 'accessToken');
     final uri = Uri.parse(baseUrl + "/api/v1/member/users/me/files");
     var request = http.MultipartRequest("POST", uri);
 
-    // request.headers['Content-Type'] = 'multipart/form-data';
+    request.headers['Content-Type'] = 'multipart/form-data';
     request.headers['Authorization'] = 'Bearer $accessToken';
-
     var path = file.path;
     var f = http.MultipartFile.fromBytes('file', File(path).readAsBytesSync(),
-        filename: file.name, contentType: MediaType('image', 'jpeg'));
+        filename: basename(file.path), contentType: MediaType('image', 'jpeg'));
 
     request.files.add(f);
     final streamResp = await request.send();
@@ -139,17 +138,16 @@ class UserService {
     }
   }
 
-  Future<List<FileUpload>> uploadFiles(List<File> file)async{
+  Future<List<FileUpload>> uploadFiles(List<File> file) async {
     final accessToken = await _storage.read(key: 'accessToken');
     final uri = Uri.parse(baseUrl + "/api/v1/member/users/me/files");
     var request = http.MultipartRequest("POST", uri);
     request.headers['Authorization'] = 'Bearer $accessToken';
-
     return [];
   }
 
   Future<Post> createStory(
-      Map<String, dynamic> story, List<XFile> attachments) async {
+      Map<String, dynamic> story, List<File> attachments) async {
     var url = Uri.parse(baseUrl + "/api/v1/member/users/me/posts");
     List<int> attachmentIds = [];
     if (attachments.isNotEmpty) {
@@ -161,7 +159,7 @@ class UserService {
     var accessToken = await _storage.read(key: 'accessToken');
     var body = <String, dynamic>{
       "id": story['id'],
-      "caption": story['caption'],
+      "caption": story['caption'].toString().trim(),
       "type": story['type'],
       "contents": attachmentIds
           .asMap()
@@ -170,7 +168,7 @@ class UserService {
                 "attachmentId": e.value,
                 "pos": e.key,
                 "active": 1,
-                "caption": story['caption']
+                "caption": story['caption'].toString().trim()
               })
           .toList(),
     };

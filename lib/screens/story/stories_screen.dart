@@ -18,8 +18,9 @@ class StoriesScreen extends StatefulWidget {
 class _StoriesScreenState extends State<StoriesScreen> {
   @override
   void initState() {
-    if (context.read<StoryViewModel>().stories.isEmpty) {
-      context.read<StoryViewModel>().fetchStories();
+    var stories = context.read<StoryViewModel>().stories;
+    if (stories.isEmpty || stories.length < 10) {
+      context.read<StoryViewModel>().updateStories(pageSize: 8);
     }
     super.initState();
   }
@@ -60,7 +61,10 @@ class _StoriesScreenState extends State<StoriesScreen> {
                   delegate: SliverChildListDelegate(stories
                       .map((e) => StoryCard(
                             story: e,
-                            onClick: () {},
+                            onClick: () {
+                              ApplicationUtility.navigateToScreen(
+                                  context, const StoriesScrollScreen());
+                            },
                             key: Key(e.id.toString()),
                           ))
                       .toList()),

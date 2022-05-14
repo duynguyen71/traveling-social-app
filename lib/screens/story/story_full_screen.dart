@@ -232,16 +232,22 @@ class _StoryFullScreenState extends State<StoryFullScreen>
             //STORY CAPTION
             widget.post.contents!.isEmpty
                 ? Positioned.fill(
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ExpandableText(
-                          text: widget.post.caption.toString(),
-                          textStyle: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                              fontSize: 30),
-                          textAlign: TextAlign.center,
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: size.height * .1),
+                      alignment: Alignment.center,
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SingleChildScrollView(
+                            child: ExpandableText(
+                              text: widget.post.caption.toString(),
+                              textStyle: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                  fontSize: 30),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
                         ),
                       ),
                     ),

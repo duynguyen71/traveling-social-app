@@ -2,12 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/home/components/custom_tab_title.dart';
-import 'package:traveling_social_app/screens/home/components/home_posts.dart';
 import 'package:traveling_social_app/screens/home/components/home_stories.dart';
 import 'package:traveling_social_app/screens/home/components/search_section.dart';
-import 'package:provider/provider.dart';
-
-import '../../../view_model/story_viewmodel.dart';
 
 class HomeBody extends StatefulWidget {
   const HomeBody({Key? key}) : super(key: key);

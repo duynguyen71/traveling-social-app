@@ -64,18 +64,20 @@ class _HomeStoriesState extends State<HomeStories> {
                             return const SizedBox(
                                 width: 80, child: CupertinoActivityIndicator());
                           }
+                          var story=       stories.elementAt(index);
+                          // var story = stories[index];
                           return StoryCard(
-                            key: Key(stories[index].id.toString()),
-                            story: stories[index],
+                            // key: ValueKey(stories[index].id.toString()),
+                            // story: stories[index],
+                            key: ValueKey(story.id.toString()),
+                            story: story,
                             onClick: () {
                               context
                                   .read<StoryViewModel>()
                                   .setCurrentStoryIndex = index;
                               ApplicationUtility.navigateToScreen(
                                 context,
-                                StoriesScrollScreen(
-                                  initialIndex: index,
-                                ),
+                                const StoriesScrollScreen(),
                               );
                             },
                             // key: ValueKey(stories[index].id),

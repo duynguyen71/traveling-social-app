@@ -1,12 +1,8 @@
-import 'dart:convert';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-
-import 'package:traveling_social_app/widgets/rounded_button.dart';
 import 'package:traveling_social_app/widgets/rounded_icon_button.dart';
 
 class MediaFileContainer extends StatelessWidget {
@@ -31,29 +27,39 @@ class MediaFileContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       height: height,
       width: width,
+      constraints: const BoxConstraints(minWidth: 100),
+      decoration: BoxDecoration(color: Colors.grey.withOpacity(.1)),
       child: Stack(
           alignment: Alignment.center,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.file(
-                file,
-                height: height,
-                fit: boxFit,
-                width: width,
-              ),
-            ),
-            //
+                borderRadius: BorderRadius.circular(10),
+                // child: Image.file(
+                //   file,
+                //   height: height,
+                //   fit: boxFit,
+                //   width: width,
+                child: CachedNetworkImage(
+                  imageUrl: '',
+                  placeholder: (context, url) =>
+                    const  Center(child: CupertinoActivityIndicator()),
+                  errorWidget: (context, url, error) => Image.file(
+                    file,
+                    height: height,
+                    fit: boxFit,
+                    width: width,
+                  ),
+                )),
             Positioned(
               bottom: 10,
               left: 10,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  RoundedIconButton(onClick: (){}, icon: Icons.description),
+                  RoundedIconButton(onClick: () {}, icon: Icons.description),
                   const SizedBox(width: 10),
                   RoundedIconButton(
                     onClick: () async {

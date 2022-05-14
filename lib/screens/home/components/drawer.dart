@@ -4,7 +4,10 @@ import 'package:traveling_social_app/models/NavigationItem.dart';
 import 'package:traveling_social_app/models/User.dart';
 import 'package:traveling_social_app/screens/home/components/drawer_header.dart';
 import 'package:traveling_social_app/screens/login/login_screen.dart';
+import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
+import 'package:traveling_social_app/view_model/post_viewmoel.dart';
+import 'package:traveling_social_app/view_model/story_viewmodel.dart';
 import 'package:traveling_social_app/view_model/user_viewmodel.dart';
 import 'package:provider/provider.dart';
 
@@ -79,6 +82,8 @@ class HomeDrawer extends StatelessWidget {
         }
       case 5: //sign out
         {
+          context.read<PostViewModel>().clear();
+          context.read<StoryViewModel>().clear();
           ApplicationUtility.pushAndReplace(context, const LoginScreen());
           context.read<UserViewModel>().signOut();
           // context.read<AuthenticateService>().signOut();

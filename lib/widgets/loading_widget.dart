@@ -13,7 +13,7 @@ class LoadingWidget extends StatelessWidget {
             child: Center(
               child: Container(
                 decoration: BoxDecoration(
-                    color: Colors.deepPurpleAccent.withOpacity(0.05)),
+                    color: Colors.deepPurpleAccent.withOpacity(0.04)),
                 child: const Align(
                   child: CupertinoActivityIndicator(),
                   alignment: Alignment.center,

@@ -7,6 +7,7 @@ import 'package:traveling_social_app/view_model/post_viewmoel.dart';
 import 'package:traveling_social_app/view_model/story_viewmodel.dart';
 import 'package:traveling_social_app/view_model/user_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -23,7 +24,6 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<StoryViewModel>(create: (_) => StoryViewModel()),
         ChangeNotifierProvider<PostViewModel>(create: (_) => PostViewModel()),
-
       ],
       builder: (context, child) {
         return MaterialApp(
@@ -43,9 +43,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class AuthWrapper extends StatelessWidget {
+class AuthWrapper extends StatefulWidget {
   const AuthWrapper({Key? key}) : super(key: key);
 
+  @override
+  State<AuthWrapper> createState() => _AuthWrapperState();
+}
+
+class _AuthWrapperState extends State<AuthWrapper> {
   @override
   Widget build(BuildContext context) {
     final _userViewModel = context.read<UserViewModel>();
@@ -55,7 +60,7 @@ class AuthWrapper extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           return snapshot.hasData ? const HomeScreen() : const LoginScreen();
         }
-        return const  Scaffold(
+        return const Scaffold(
           body: Align(
             alignment: Alignment.center,
             child: CupertinoActivityIndicator(),

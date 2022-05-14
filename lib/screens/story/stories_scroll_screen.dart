@@ -6,10 +6,7 @@ import 'package:traveling_social_app/screens/story/story_full_screen.dart';
 import 'package:traveling_social_app/view_model/story_viewmodel.dart';
 
 class StoriesScrollScreen extends StatefulWidget {
-  const StoriesScrollScreen({Key? key, this.initialIndex = 0})
-      : super(key: key);
-
-  final int initialIndex;
+  const StoriesScrollScreen({Key? key}) : super(key: key);
 
   @override
   _StoriesScrollScreenState createState() => _StoriesScrollScreenState();
@@ -19,17 +16,30 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen>
     with AutomaticKeepAliveClientMixin {
   late ScrollController _listController;
 
-  late StoryViewModel _postViewModel;
+  late StoryViewModel _storyViewModel;
 
   @override
   void initState() {
     super.initState();
-    _postViewModel = context.read<StoryViewModel>();
+    _storyViewModel = context.read<StoryViewModel>();
     _listController = ScrollController(
-        initialScrollOffset: _postViewModel.currentStoryIndex *
+        initialScrollOffset: _storyViewModel.currentStoryIndex *
             MediaQueryData.fromWindow(WidgetsBinding.instance!.window)
                 .size
                 .height);
+    _listController.addListener(() {
+      var pixels2 = _listController.position.pixels;
+      // print("pixel " + pixels2.toString());
+      var maxScrollExtent2 = _listController.position.maxScrollExtent;
+      // print("maxScrollExtent " + maxScrollExtent2.toString());
+      if ((maxScrollExtent2 - pixels2) <=
+          MediaQueryData.fromWindow(WidgetsBinding.instance!.window)
+              .size
+              .height) {
+        // print('end of list');
+        _storyViewModel.updateStories();
+      }
+    });
   }
 
   late DragStartDetails startVerticalDragDetails;
@@ -47,7 +57,8 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen>
         updateVerticalDragDetails = dragDetails;
       },
       onVerticalDragEnd: (endDetails) {
-        var currentStoryIndex = context.read<StoryViewModel>().currentStoryIndex;
+        var currentStoryIndex =
+            context.read<StoryViewModel>().currentStoryIndex;
         double dx = updateVerticalDragDetails.globalPosition.dx -
             startVerticalDragDetails.globalPosition.dx;
         double dy = updateVerticalDragDetails.globalPosition.dy -
@@ -62,7 +73,6 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen>
         var stories = context.read<StoryViewModel>().stories;
         if (velocity < 0) {
           if (i < (stories.length - 1)) {
-            print('swip up');
             i = i + 1;
             _listController.animateTo(
                 double.parse((i * size.height).toString()),
@@ -74,7 +84,6 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen>
         //SWIPING DOWN
         if (velocity > 0) {
           if (i >= 1) {
-            print('swip down');
             i = i - 1;
             _listController.animateTo(
                 double.parse((i * size.height).toString()),
@@ -87,23 +96,28 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen>
       child: SizedBox(
         width: size.width,
         height: size.height,
-        child: ListView.builder(
-            padding: EdgeInsets.zero,
-            physics: const NeverScrollableScrollPhysics(),
-            controller: _listController,
-            itemBuilder: (context, index) {
-              return StoryFullScreen(
-                post: context.read<StoryViewModel>().stories[index],
-              );
-            },
-            itemCount: context.read<StoryViewModel>().stories.length),
+        child: Consumer<StoryViewModel>(
+            builder: (context, value, child) => ListView.builder(
+                padding: EdgeInsets.zero,
+                physics: const NeverScrollableScrollPhysics(),
+                controller: _listController,
+                itemBuilder: (context, index) {
+                  var stories = value.stories;
+                  // var story = stories[index];
+                  var story = stories.elementAt(index);
+                  return StoryFullScreen(
+                    // post: context.read<StoryViewModel>().stories[index],
+                    post: story,
+                  );
+                },
+                itemCount: value.stories.length)),
       ),
     );
   }
 
   @override
   void dispose() {
-    _postViewModel.setCurrentStoryIndex = 0;
+    _storyViewModel.setCurrentStoryIndex = 0;
     _listController.dispose();
     super.dispose();
   }

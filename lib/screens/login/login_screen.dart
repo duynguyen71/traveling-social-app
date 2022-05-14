@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
@@ -47,6 +49,8 @@ class _LoginScreenState extends State<LoginScreen> {
       await _userService.login(username, password);
       await context.read<UserViewModel>().fetchUserDetail();
       ApplicationUtility.pushAndReplace(context, const HomeScreen());
+    } on SocketException catch (e) {
+      print("OS ERROR");
     } catch (e) {
       _setErrorMessage(e.toString());
     } finally {

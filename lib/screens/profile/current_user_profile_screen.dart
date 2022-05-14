@@ -1,20 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
-import 'package:traveling_social_app/models/User.dart';
-import 'package:traveling_social_app/screens/create_post/create_post_screen.dart';
-import 'package:traveling_social_app/screens/create_story/create_story_screen.dart';
 import 'package:traveling_social_app/screens/home/home_screen.dart';
 import 'package:traveling_social_app/screens/profile/components/background.dart';
 import 'package:traveling_social_app/screens/profile/components/follow_count.dart';
 import 'package:traveling_social_app/screens/profile/components/profile_avt_and_cover.dart';
-import 'package:traveling_social_app/screens/story/story_card.dart';
-import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/view_model/user_viewmodel.dart';
-import 'package:traveling_social_app/widgets/user_avt.dart';
-import 'components/button_edit_profile.dart';
 import 'components/profile_app_bar.dart';
-import 'components/title_with_number.dart';
 import 'package:provider/provider.dart';
 
 class CurrentUserProfileScreen extends StatefulWidget {
@@ -45,7 +36,7 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
         body: CustomScrollView(
           slivers: [
             //APPBAR
-            ProfileAppbar(),
+        const    ProfileAppbar(),
             //BODY
             SliverToBoxAdapter(
               child: CurrentUserProfileBackground(

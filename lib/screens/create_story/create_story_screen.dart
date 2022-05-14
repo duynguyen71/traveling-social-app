@@ -11,6 +11,8 @@ import 'package:traveling_social_app/view_model/user_viewmodel.dart';
 import 'package:traveling_social_app/widgets/loading_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../../widgets/media_file_container.dart';
+
 class CreateStoryScreen extends StatefulWidget {
   const CreateStoryScreen({Key? key}) : super(key: key);
 
@@ -19,32 +21,32 @@ class CreateStoryScreen extends StatefulWidget {
 }
 
 class _CreateStoryScreenState extends State<CreateStoryScreen> {
-  List<XFile> images = [];
+  List<File> _pickedFiles = [];
   final _imagePicker = ImagePicker();
   final _captionController = TextEditingController();
   bool _isLoading = false;
 
   _handlePickImage(ImageSource source) async {
     XFile? file = await _imagePicker.pickImage(source: source);
-    if (file != null) _addImage(file);
+    if (file != null) _addImage(File(file.path));
   }
 
-  _addImage(XFile image) {
+  _addImage(File image) {
     setState(() {
-      images.add(image);
+      _pickedFiles.add(image);
     });
   }
 
-  _removeImage(int index) {
-    setState(() {
-      images.removeAt(index);
-    });
-  }
+  // _removeImage(int index) {
+  //   setState(() {
+  //     images.removeAt(index);
+  //   });
+  // }
 
   Future<void> _handlePostStory() async {
     ApplicationUtility.hideKeyboard();
     String caption = _captionController.text.toString();
-    if (caption.isEmpty && images.isEmpty) {
+    if (caption.isEmpty && _pickedFiles.isEmpty) {
       return;
     }
     setState(() {
@@ -54,7 +56,7 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
     var story = await userService.createStory(<String, dynamic>{
       "caption": caption,
       "type": 0,
-    }, images);
+    }, _pickedFiles);
     context.read<StoryViewModel>().addStory(story);
     Navigator.of(context).pop();
     setState(() {
@@ -69,18 +71,13 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
         "User: ${userViewModel.user!.username.toString()}" +
             userViewModel.user!.id.toString() +
             " post at " +
-            DateTime
-                .now()
-                .millisecondsSinceEpoch
-                .toString();
+            DateTime.now().millisecondsSinceEpoch.toString();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -141,24 +138,56 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
                               keyboardType: TextInputType.multiline,
                             ),
                             const SizedBox(height: 10),
-                            GridView.count(
-                              crossAxisCount: 2,
-                              childAspectRatio: (16 / 9),
-                              shrinkWrap: true,
-                              children: List.generate(images.length, (index) {
-                                XFile? file = images.asMap()[index];
-                                return Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: FileImage(File(file!.path)),
-                                      ),
+                            // GridView.count(
+                            //   crossAxisCount: 2,
+                            //   childAspectRatio: (16 / 9),
+                            //   shrinkWrap: true,
+                            //   children: List.generate(images.length, (index) {
+                            //     XFile? file = images.asMap()[index];
+                            //     return Padding(
+                            //       padding: const EdgeInsets.all(4.0),
+                            //       child: Container(
+                            //         decoration: BoxDecoration(
+                            //           image: DecorationImage(
+                            //             fit: BoxFit.cover,
+                            //             image: FileImage(File(file!.path)),
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     );
+                            //   }),
+                            // ),
+                            // _pickedFiles.
+                            SizedBox(
+                              width: size.width,
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                physics: const BouncingScrollPhysics(),
+                                child: Row(
+                                    children: List.generate(_pickedFiles.length,
+                                        (index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: MediaFileContainer(
+                                      ratio: 16 / 9,
+                                      boxFit: BoxFit.fitHeight,
+                                      file: _pickedFiles[index],
+                                      height: 180,
+                                      onClick: () {
+                                        setState(() {
+                                          _pickedFiles.removeAt(index);
+                                        });
+                                      },
+                                      width: null,
+                                      modifiedFile: (File f) {
+                                        setState(() {
+                                          _pickedFiles[index] = f;
+                                        });
+                                      },
                                     ),
-                                  ),
-                                );
-                              }),
+                                  );
+                                })),
+                              ),
                             ),
 
                             Container(
@@ -170,8 +199,8 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
                                       padding: EdgeInsets.zero,
                                       constraints: const BoxConstraints(),
                                       onPressed: () async =>
-                                      await _handlePickImage(
-                                          ImageSource.camera),
+                                          await _handlePickImage(
+                                              ImageSource.camera),
                                       icon: const Icon(
                                         Icons.add_a_photo,
                                         size: 25,

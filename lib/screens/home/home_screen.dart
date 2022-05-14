@@ -10,6 +10,7 @@ import 'package:traveling_social_app/screens/home/components/home_body.dart';
 import 'package:traveling_social_app/screens/login/login_screen.dart';
 import 'package:traveling_social_app/screens/profile/current_user_profile_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
+import 'package:traveling_social_app/view_model/post_viewmoel.dart';
 import 'package:traveling_social_app/view_model/story_viewmodel.dart';
 import 'package:traveling_social_app/view_model/user_viewmodel.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
@@ -39,191 +40,135 @@ class _HomeScreenState extends State<HomeScreen> {
       ApplicationUtility.pushAndReplace(context, const LoginScreen());
     }
     _user = _userViewModel.user!;
+    context.read<PostViewModel>().fetchPosts();
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels  ==
-          _scrollController.position.maxScrollExtent ) {
-        context.read<StoryViewModel>().updateStories();
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        context.read<PostViewModel>().fetchMorePosts();
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        key: _scaffoldKey,
-        drawer: HomeDrawer(user: _user),
-        body: Builder(
-          builder: (context) =>
-              //     NestedScrollView(
-              //     floatHeaderSlivers: true,
-              //     headerSliverBuilder: (context, innerBoxIsScrolled) => [
-              //           SliverAppBar(
-              //             pinned: true,
-              //             bottom: PreferredSize(
-              //               preferredSize: const Size(double.infinity, 1),
-              //               child: Divider(
-              //                 color: kPrimaryColor.withOpacity(.2),
-              //                 height: 1,
-              //               ),
-              //             ),
-              //             backgroundColor: Colors.white,
-              //             // title: Text('Traveling Crew',style: TextStyle(color: Colors.black,fontSize: 20),),
-              //             floating: true,
-              //             leading: IconButton(
-              //               focusColor: kPrimaryColor,
-              //               hoverColor: kPrimaryColor,
-              //               icon: SvgPicture.asset("assets/icons/menu.svg",
-              //                   color: Colors.black),
-              //               color: Colors.black,
-              //               onPressed: () {
-              //                 _scaffoldKey.currentState!.openDrawer();
-              //               },
-              //             ),
-              //             actions: [
-              //               IconButton(
-              //                 onPressed: () {},
-              //                 icon: SvgPicture.asset(
-              //                   "assets/icons/search.svg",
-              //                   color: Colors.black87,
-              //                 ),
-              //               ),
-              //               const SizedBox(
-              //                 width: 10,
-              //               ),
-              //               Container(
-              //                 margin: const EdgeInsets.only(right: 10),
-              //                 child: Consumer<UserViewModel>(
-              //                   builder: (context, value, child) => UserAvatar(
-              //                     size: 25,
-              //                     user: _user,
-              //                     onTap: () => ApplicationUtility.navigateToScreen(
-              //                         context, const CurrentUserProfileScreen()),
-              //                   ),
-              //                 ),
-              //               ),
-              //             ],
-              //             // expandedHeight: 250,
-              //
-              //           ),
-              //
-              //         ],
-              //     body: HomeBody(),
-              //
-              //
-              // ),
-              CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              //APP BAR
-              SliverAppBar(
-                bottom: PreferredSize(
-                  preferredSize: const Size(double.infinity, 1),
-                  child: Divider(
-                    color: kPrimaryColor.withOpacity(.2),
-                    height: 1,
+    return Scaffold(
+      key: _scaffoldKey,
+      drawer: HomeDrawer(user: _user),
+      body: Builder(
+        builder: (context) => CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            //APP BAR
+            SliverAppBar(
+              bottom: PreferredSize(
+                preferredSize: const Size(double.infinity, 1),
+                child: Divider(
+                  color: kPrimaryColor.withOpacity(.2),
+                  height: 1,
+                ),
+              ),
+              backgroundColor: Colors.white,
+              floating: true,
+              leading: IconButton(
+                focusColor: kPrimaryColor,
+                hoverColor: kPrimaryColor,
+                icon: SvgPicture.asset("assets/icons/menu.svg",
+                    color: Colors.black),
+                color: Colors.black,
+                onPressed: () {
+                  _scaffoldKey.currentState!.openDrawer();
+                },
+              ),
+              actions: [
+                IconButton(
+                  onPressed: () {},
+                  icon: SvgPicture.asset(
+                    "assets/icons/search.svg",
+                    color: Colors.black87,
                   ),
                 ),
-                backgroundColor: Colors.white,
-                floating: true,
-                leading: IconButton(
-                  focusColor: kPrimaryColor,
-                  hoverColor: kPrimaryColor,
-                  icon: SvgPicture.asset("assets/icons/menu.svg",
-                      color: Colors.black),
-                  color: Colors.black,
-                  onPressed: () {
-                    _scaffoldKey.currentState!.openDrawer();
-                  },
+                const SizedBox(
+                  width: 10,
                 ),
-                actions: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: SvgPicture.asset(
-                      "assets/icons/search.svg",
-                      color: Colors.black87,
+                Container(
+                  margin: const EdgeInsets.only(right: 10),
+                  child: Consumer<UserViewModel>(
+                    builder: (context, value, child) => UserAvatar(
+                      size: 25,
+                      user: _user,
+                      onTap: () => ApplicationUtility.navigateToScreen(
+                          context, const CurrentUserProfileScreen()),
                     ),
                   ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    child: Consumer<UserViewModel>(
-                      builder: (context, value, child) => UserAvatar(
-                        size: 25,
-                        user: _user,
-                        onTap: () => ApplicationUtility.navigateToScreen(
-                            context, const CurrentUserProfileScreen()),
-                      ),
-                    ),
-                  )
-                ],
-                // expandedHeight: 250,
-              ),
-
-              //  END OF APP BAR
-              const SliverToBoxAdapter(
-                child: HomeBody(),
-              ),
-              Consumer<StoryViewModel>(
-                builder: (context, value, child) => SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      var stories = value.stories;
-                      if (index == stories.length) {
-                        return const Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: CupertinoActivityIndicator(),
-                        );
-                      }
-                      return PostEntry(
-                        post: value.stories[index],
-                        key: ValueKey(value.stories[index].id),
+                )
+              ],
+              // expandedHeight: 250,
+            ),
+            //  END OF APP BAR
+            const SliverToBoxAdapter(
+              child: HomeBody(),
+            ),
+            //HOME POST
+            Consumer<PostViewModel>(
+              builder: (context, value, child) => SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    var stories = value.posts;
+                    if (index == stories.length) {
+                      return const Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: CupertinoActivityIndicator(),
                       );
-                    },
-                    childCount: value.stories.length + 1,
-                    addAutomaticKeepAlives: true,
-                  ),
+                    }
+                    var posts = value.posts;
+                    return PostEntry(
+                      // post: value.posts[index],
+                      // key: ValueKey(value.posts[index].id),
+                      post:posts.elementAt(index),
+                      key: ValueKey(posts.elementAt(index)),
+                    );
+                  },
+                  childCount: value.posts.length + 1,
+                  addAutomaticKeepAlives: true,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-        // bottomNavigationBar: BottomNavigationBar(
-        //   type: BottomNavigationBarType.fixed,
-        //   items: const <BottomNavigationBarItem>[
-        //     BottomNavigationBarItem(
-        //       icon: Icon(Icons.home),
-        //       title: Text(
-        //         'Home',
-        //         style: TextStyle(color: Colors.black),
-        //       ),
-        //     ),
-        //     BottomNavigationBarItem(
-        //       icon: Icon(Icons.card_giftcard),
-        //       title: Text(
-        //         'Deals',
-        //         style: TextStyle(color: Colors.black),
-        //       ),
-        //     ),
-        //     BottomNavigationBarItem(
-        //       icon: Icon(Icons.favorite),
-        //       title: Text(
-        //         'Favourites',
-        //         style: TextStyle(color: Colors.black),
-        //       ),
-        //     ),
-        //     BottomNavigationBarItem(
-        //       icon: Icon(Icons.portrait),
-        //       title: Text(
-        //         'Profile',
-        //         style: TextStyle(color: Colors.black),
-        //       ),
-        //     ),
-        //   ],
-        // ),
       ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   type: BottomNavigationBarType.fixed,
+      //   items: const <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home),
+      //       title: Text(
+      //         'Home',
+      //         style: TextStyle(color: Colors.black),
+      //       ),
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.card_giftcard),
+      //       title: Text(
+      //         'Deals',
+      //         style: TextStyle(color: Colors.black),
+      //       ),
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.favorite),
+      //       title: Text(
+      //         'Favourites',
+      //         style: TextStyle(color: Colors.black),
+      //       ),
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.portrait),
+      //       title: Text(
+      //         'Profile',
+      //         style: TextStyle(color: Colors.black),
+      //       ),
+      //     ),
+      //   ],
+      // ),
     );
   }
 }

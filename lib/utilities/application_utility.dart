@@ -26,4 +26,16 @@ class ApplicationUtility {
     }
     return null;
   }
+
+  static Future<dynamic> showModelBottomDialog(
+      BuildContext context, Widget widget) async {
+    showModalBottomSheet(
+      context: context,
+      barrierColor: Colors.grey.withOpacity(.2),
+      builder: (context) {
+        return widget;
+      },
+      backgroundColor: Colors.transparent,
+    );
+  }
 }
