@@ -19,21 +19,24 @@ class UserService {
 
   //login
   Future<Map<String, dynamic>> login(username, password) async {
-    final resp = await http.post(Uri.parse(baseUrl + "/api/v1/auth/login"),
-        headers: {
-          "Content-Type": "application/json",
-          'Access-Control-Allow-Origin': '*'
-        },
-        body: jsonEncode({'email': username, 'password': password}));
-    final statusCode = resp.statusCode;
-    if (statusCode == 200) {
-      final data = jsonDecode(resp.body) as Map<String, dynamic>;
-      //save token to secure storage
-      await saveToken(data);
-      return data;
+    try {
+      final resp = await http.post(Uri.parse(baseUrl + "/api/v1/auth/login"),
+          headers: {
+            "Content-Type": "application/json",
+            'Access-Control-Allow-Origin': '*'
+          },
+          body: jsonEncode({'email': username, 'password': password}));
+      final statusCode = resp.statusCode;
+      if (statusCode == 200) {
+        final data = jsonDecode(resp.body) as Map<String, dynamic>;
+        //save token to secure storage
+        await saveToken(data);
+        return data;
+      }
+    } on Exception catch (e) {
+      throw e.toString();
     }
-    print("Failed to login!");
-    throw 'Username or password not correct';
+    throw 'Failed to login';
   }
 
   Future<void> saveToken(Map<String, dynamic> data) async {

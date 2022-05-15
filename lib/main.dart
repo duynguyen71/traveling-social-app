@@ -34,9 +34,7 @@ class MyApp extends StatelessWidget {
             brightness: Brightness.light,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-
           home: const AuthWrapper(),
-          // home: const HomeScreen(),qs
         );
       },
     );

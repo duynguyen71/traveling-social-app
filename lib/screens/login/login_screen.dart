@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
       await context.read<UserViewModel>().fetchUserDetail();
       ApplicationUtility.pushAndReplace(context, const HomeScreen());
     } on SocketException catch (e) {
-      print("OS ERROR");
+      print("Socket Exception " + e.toString());
     } catch (e) {
       _setErrorMessage(e.toString());
     } finally {

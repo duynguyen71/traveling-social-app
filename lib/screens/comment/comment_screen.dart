@@ -36,25 +36,29 @@ class _CommentScreenState extends State<CommentScreen> {
   final TextEditingController _commentController = TextEditingController();
 
   _sendComment() async {
-    try {
-      isLoading = true;
-      var commentText = _commentController.text;
-      if (commentText.toString().isNotEmpty) {
-        final commentResp = await _commentService.commentPost(
-            postId: widget.postId,
-            commentId: null,
-            contentText: commentText.toString().trim(),
-            parentCommentId: null);
-        setState(() {
-          _comments.add(commentResp);
-        });
-      }
-    } on Exception catch (e) {
-      throw Exception(e.toString());
-    } finally {
-      ApplicationUtility.hideKeyboard();
-      _commentController.clear();
-      isLoading = false;
+    // try {
+    //   isLoading = true;
+    //   var commentText = _commentController.text;
+    //   if (commentText.toString().isNotEmpty) {
+    //     final commentResp = await _commentService.commentPost(
+    //         postId: widget.postId,
+    //         commentId: null,
+    //         contentText: commentText.toString().trim(),
+    //         parentCommentId: null);
+    //     setState(() {
+    //       _comments.add(commentResp);
+    //     });
+    //   }
+    // } on Exception catch (e) {
+    //   throw Exception(e.toString());
+    // } finally {
+    //   ApplicationUtility.hideKeyboard();
+    //   _commentController.clear();
+    //   isLoading = false;
+    // }
+    if (_replyingComment != null) {
+      Comment comment = _comments
+          .firstWhere((element) => element.id == _replyingComment?.id!);
     }
   }
 
@@ -69,10 +73,16 @@ class _CommentScreenState extends State<CommentScreen> {
     _commentController.selection = TextSelection.fromPosition(
         TextPosition(offset: _commentController.text.length));
     _replyingComment = c;
-    print('reply to comment : ' + c.content.toString());
   }
 
-  _sendReplyingComment() async {
+  Future<Comment?> _sendReplyingComment(
+      {required int parentCmtId, required String content}) async {
+    if (!_isReplying()) {
+      ApplicationUtility.hideKeyboard();
+      _replyingComment = null;
+      _commentController.clear();
+      return null;
+    }
     try {
       isLoading = true;
       var commentText = _commentController.text;
@@ -80,19 +90,20 @@ class _CommentScreenState extends State<CommentScreen> {
         final commentResp = await _commentService.commentPost(
             postId: widget.postId,
             commentId: null,
-            contentText: commentText.toString().trim(),
-            parentCommentId: null);
-        setState(() {
-          _comments.add(commentResp);
-        });
+            contentText: content,
+            parentCommentId: parentCmtId);
+        // setState(() {
+        //   _comments.add(commentResp);
+        // });
+        return commentResp;
       }
     } on Exception catch (e) {
       throw Exception(e.toString());
     } finally {
       ApplicationUtility.hideKeyboard();
-      isLoading = false;
       _replyingComment = null;
       _commentController.clear();
+      isLoading = false;
     }
   }
 
@@ -145,6 +156,8 @@ class _CommentScreenState extends State<CommentScreen> {
     });
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -154,23 +167,11 @@ class _CommentScreenState extends State<CommentScreen> {
         backgroundColor: Colors.grey.withOpacity(.1),
         body: Container(
           height: size.height,
-          // alignment: Alignment.bottomCenter,
           color: Colors.transparent,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Expanded(
-                flex: 2,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    color: Colors.grey.withOpacity(.1),
-                  ),
-                ),
-              ),
+              _buildSpace(),
               Expanded(
                 flex: 10,
                 child: Container(
@@ -207,7 +208,14 @@ class _CommentScreenState extends State<CommentScreen> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0, vertical: 10),
                                   child: CommentEntry(
+                                    // onClickCallback: (e) => _onClickCallBack(e),
                                     comment: _comments.elementAt(index),
+                                    postId: widget.postId,
+                                    // controller: _commentController,
+                                    // focusNode: inputNode,
+                                    // replyingComment: _replyingComment,
+                                    setReplyingComment: setReplyComment,
+                                    level: 0,
                                     key:
                                         ValueKey(_comments.elementAt(index).id),
                                   ),
@@ -220,13 +228,11 @@ class _CommentScreenState extends State<CommentScreen> {
                       //
                       Positioned(
                         child: CommentInputWidget(
-                          focusNode: inputNode,
-                          onSendButtonClick: () => _sendComment(),
-                          placeHolderText: 'Write your comment',
-                          controller: _commentController,
-                        ),
+                            focusNode: inputNode,
+                            onSendButtonClick: () => _sendComment()),
                         bottom: MediaQuery.of(context).viewInsets.bottom,
                       ),
+
                       _isLoading
                           ? const Positioned.fill(
                               child:
@@ -238,6 +244,37 @@ class _CommentScreenState extends State<CommentScreen> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  String sendCommetcb() {
+    return ('success');
+  }
+
+  setReplyComment(Comment c) {
+    _replyingComment = c;
+    print('replying comment  ${c.content.toString()}');
+  }
+
+  Future<String> _onClickCallBack(Comment c) async {
+    _replyCommentRequest(c);
+    var string = c.content.toString();
+    print(string);
+    return string;
+  }
+
+  Widget _buildSpace() {
+    return Expanded(
+      flex: 2,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).pop();
+        },
+        child: Container(
+          width: double.infinity,
+          color: Colors.grey.withOpacity(.1),
         ),
       ),
     );

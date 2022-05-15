@@ -8,16 +8,38 @@ import 'package:provider/provider.dart';
 import '../models/Comment.dart';
 import 'package:flutter/services.dart';
 
+import '../models/User.dart';
 import '../services/comment_service.dart';
+import 'package:provider/provider.dart';
 
 class CommentEntry extends StatefulWidget {
-  const CommentEntry({Key? key, required this.comment, this.level})
-      : super(key: key);
+  const CommentEntry({
+    Key? key,
+    required this.comment,
+    required this.level,
+    // required this.controller,
+    required this.postId,
+    required this.setReplyingComment,
+    // required this.focusNode,
+    // this.replyingComment,
+    // required this.setReplyComment,
+    // required this.onClickCallback,
+  }) : super(key: key);
 
   final Comment comment;
-  final int? level;
+  final int level;
+
+  // final TextEditingController controller;
+  final int postId;
+
+  // final FocusNode focusNode;
+  // final Comment? replyingComment;
+  // final Function setReplyComment;
+
+  // final Function onClickCallback;
 
   // final Function replyComment;
+  final Function setReplyingComment;
 
   @override
   State<CommentEntry> createState() => _CommentEntryState();
@@ -25,8 +47,9 @@ class CommentEntry extends StatefulWidget {
 
 class _CommentEntryState extends State<CommentEntry> {
   final CommentService _commentService = CommentService();
-
   final Set<Comment> _childrenComment = <Comment>{};
+  final FocusNode inputNode = FocusNode();
+  final GlobalKey<_CommentEntryState> _myKey = GlobalKey();
 
   _getReplyComments() async {
     List<Comment> rs =
@@ -42,7 +65,7 @@ class _CommentEntryState extends State<CommentEntry> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Padding(
-      padding: widget.level != null
+      padding: (widget.level <= 3 && widget.level > 0)
           ? const EdgeInsets.only(left: 40, top: 5)
           : EdgeInsets.zero,
       child: Column(
@@ -64,7 +87,6 @@ class _CommentEntryState extends State<CommentEntry> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  //CONTENT
                   Material(
                     color: Colors.transparent,
                     child: InkWell(
@@ -73,14 +95,31 @@ class _CommentEntryState extends State<CommentEntry> {
                           context,
                           BottomSelectDialog(
                             items: [
-                              SelectItem(title: 'Reply', onClick: () {}),
+                              //REPLY COMMENT BUTTON
                               SelectItem(
-                                  title: 'Copy',
+                                  title: 'Reply',
                                   onClick: () {
-                                    Clipboard.setData(ClipboardData(
-                                        text:
-                                            widget.comment.content.toString()));
-                                  },),
+                                    widget.setReplyingComment(widget.comment);
+                                    // widget.setReplyComment(widget.comment);
+                                    // widget.comment;
+                                    //     widget.onClickCallback(widget.comment);
+                                    // Comment commetn = Comment(
+                                    //     id: DateTime.now()
+                                    //         .millisecondsSinceEpoch,
+                                    //     content: 'sd' + 'callback',
+                                    //     createDate: null);
+                                    // setState(() {
+                                    //   _childrenComment.add(commetn);
+                                    // });
+                                    // print('rep');
+                                  }),
+                              SelectItem(
+                                title: 'Copy',
+                                onClick: () {
+                                  Clipboard.setData(ClipboardData(
+                                      text: widget.comment.content.toString()));
+                                },
+                              ),
                             ],
                           ),
                         );
@@ -89,8 +128,10 @@ class _CommentEntryState extends State<CommentEntry> {
                       child: Ink(
                         child: Container(
                           constraints: BoxConstraints(
-                            maxWidth: size.width * .7,
-                            minWidth: 200,
+                            maxWidth: widget.level >= 2
+                                ? size.width * .5
+                                : size.width * .7,
+                            minWidth: size.width * .5,
                           ),
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
@@ -109,12 +150,26 @@ class _CommentEntryState extends State<CommentEntry> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text('Like'),
                         SizedBox(
                           width: 20,
                         ),
-                        Text('Answer')
+                        GestureDetector(
+                          child: Text('Answer'),
+                          onTap: () {
+                            // String rep =
+                            //     await
+                            // widget.onClickCallback(widget.comment);
+                            Comment commetn = Comment(
+                                id: DateTime.now().millisecondsSinceEpoch,
+                                content: 'sd' + 'callback',
+                                createDate: null);
+                            setState(() {
+                              _childrenComment.add(commetn);
+                            });
+                          },
+                        )
                       ],
                     ),
                   ),
@@ -145,12 +200,22 @@ class _CommentEntryState extends State<CommentEntry> {
           ),
           ..._childrenComment.map(
             (e) => CommentEntry(
+              key:ValueKey(e.id.toString()),
+              postId: widget.postId,
+              setReplyingComment: widget.setReplyingComment,
+              // focusNode: widget.focusNode,
+              // replyingComment: e,
+              // setReplyComment: widget.setReplyComment,
               comment: e,
-              level: 1,
+              level: (widget.level + 1),
+              // controller: widget.controller,
+              // onClickCallback: (e) async => await widget.onClickCallback(e),
             ),
           ),
+          // ...widget.children
         ],
       ),
     );
   }
 }
+typedef void MyCallback(int foo);

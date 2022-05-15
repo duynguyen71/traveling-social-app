@@ -24,7 +24,9 @@ class Comment {
   Comment.fromJson(dynamic json) {
     _id = json['id'];
     _content = json['content'];
-    _user = json['user'] != null ? User.fromJson(json['user']) : null;
+    if(json['user'] !=null){
+      _user = User.fromJson(json['user']);
+    }
     _createDate = json['createDate'];
     _replyCount = json['replyCount'];
   }
@@ -84,4 +86,9 @@ class Comment {
         user: user ?? _user,
         createDate: createDate ?? _createDate,
       );
+
+  @override
+  String toString() {
+    return 'id: $id; content: $content; user: $user';
+  }
 }
