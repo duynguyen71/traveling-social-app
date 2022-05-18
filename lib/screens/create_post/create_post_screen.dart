@@ -101,7 +101,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             backgroundColor: Colors.white.withOpacity(.8),
           ),
           body: Container(
-            padding: const EdgeInsets.only(top: 70),
+            padding: const EdgeInsets.only(top: 100),
             width: double.infinity,
             height: size.height,
             child: Stack(
@@ -192,17 +192,19 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   ),
                 ),
                 // MediaQuery.of(context).viewInsets.bottom > 0
-                MediaQuery.of(context).viewInsets.bottom == 0
+                MediaQuery.of(context).viewInsets.bottom > 0
                     ? Positioned(
                         child: Container(
                           width: size.width,
                           decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border(
-                                  top: BorderSide(
+                            color: Colors.white,
+                            border: Border(
+                              top: BorderSide(
                                 color: Colors.grey.shade300,
                                 width: .5,
-                              ))),
+                              ),
+                            ),
+                          ),
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 5),
                           child: Row(

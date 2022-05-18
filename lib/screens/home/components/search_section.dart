@@ -4,8 +4,22 @@ import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/search/search_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 
-class SearchSection extends StatelessWidget {
+class SearchSection extends StatefulWidget {
   const SearchSection({Key? key}) : super(key: key);
+
+  @override
+  State<SearchSection> createState() => _SearchSectionState();
+}
+
+class _SearchSectionState extends State<SearchSection> {
+  late AssetImage _assetImage;
+
+  @override
+  void didChangeDependencies() {
+    _assetImage = const AssetImage('assets/images/home_bg.png');
+    precacheImage(_assetImage, context);
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +49,10 @@ class SearchSection extends StatelessWidget {
     return Container(
       height: size.height * .3,
       constraints: const BoxConstraints(minHeight: 250),
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-            image: AssetImage("assets/images/home_bg.png"), fit: BoxFit.cover),
+      decoration: BoxDecoration(
+        image: DecorationImage(image: _assetImage, fit: BoxFit.cover),
         color: Colors.black,
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(50),
           bottomRight: Radius.circular(50),
         ),

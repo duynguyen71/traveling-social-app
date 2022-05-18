@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traveling_social_app/widgets/my_divider.dart';
 
 class BottomSelectDialog extends StatelessWidget {
   const BottomSelectDialog({Key? key, required this.items}) : super(key: key);
@@ -37,7 +38,8 @@ class BottomSelectDialog extends StatelessWidget {
                             Navigator.of(context).pop();
                           },
                           child: Ink(
-                            child: SizedBox(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
                               width: double.infinity,
                               child: TextButton(
                                 style: ElevatedButton.styleFrom(
@@ -57,7 +59,7 @@ class BottomSelectDialog extends StatelessWidget {
                       ),
                       (index + 1) == items.length
                           ? const SizedBox.shrink()
-                          : const SizedBox(child: Divider()),
+                          : const SizedBox(child: MyDivider()),
                     ],
                   );
                 })

@@ -12,6 +12,7 @@ class StoryViewModel extends ChangeNotifier {
 
   int _currentStoryIndex = 0;
   int _currentPage = 0;
+  bool _isLoadMoreStories = false;
 
   void fetchStories({int? page, int? pageSize}) async {
     _currentPage = 0;
@@ -25,20 +26,24 @@ class StoryViewModel extends ChangeNotifier {
   }
 
   void updateStories({int? pageSize}) async {
+    _isLoadMoreStories = true;
     _currentPage = _currentPage + 1;
-    List<Post> resp =
-        await _postService.getStories(page: _currentPage, pageSize: pageSize??5);
+    List<Post> resp = await _postService.getStories(
+        page: _currentPage, pageSize: pageSize ?? 5);
     if (resp.isNotEmpty) {
       _stories.addAll(resp);
       notifyListeners();
     } else {
       _currentPage = _currentPage - 1;
     }
+    _isLoadMoreStories = false;
   }
 
   set setCurrentStoryIndex(index) {
     _currentStoryIndex = index;
   }
+
+  bool get isLoading => _isLoadMoreStories;
 
   removeStory(int storyId) {
     _stories.removeWhere((story) => story.id == storyId);

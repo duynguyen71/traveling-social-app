@@ -30,7 +30,10 @@ class _HomeStoriesState extends State<HomeStories> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        context.read<StoryViewModel>().updateStories();
+        if (!context.read<StoryViewModel>().isLoading) {
+          print("LOAD MORE STORIES");
+          context.read<StoryViewModel>().updateStories();
+        }
       }
     });
   }
@@ -64,7 +67,7 @@ class _HomeStoriesState extends State<HomeStories> {
                             return const SizedBox(
                                 width: 80, child: CupertinoActivityIndicator());
                           }
-                          var story=       stories.elementAt(index);
+                          var story = stories.elementAt(index);
                           // var story = stories[index];
                           return StoryCard(
                             // key: ValueKey(stories[index].id.toString()),

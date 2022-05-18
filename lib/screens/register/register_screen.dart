@@ -114,127 +114,125 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Scaffold(
-        body: RegisterBackground(
-          isLoading: _isLoading,
-          child: SingleChildScrollView(
-            child: Container(
-              alignment: Alignment.center,
-              width: double.infinity,
-              constraints: const BoxConstraints(maxWidth: 600),
-              child: Form(
-                key: _formKey,
-                // autovalidateMode: AutovalidateMode.always,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'REGISTER',
-                      style: TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1,
+    return Scaffold(
+      body: RegisterBackground(
+        isLoading: _isLoading,
+        child: SingleChildScrollView(
+          child: Container(
+            alignment: Alignment.center,
+            width: double.infinity,
+            constraints: const BoxConstraints(maxWidth: 600),
+            child: Form(
+              key: _formKey,
+              // autovalidateMode: AutovalidateMode.always,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text(
+                    'REGISTER',
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                  SizedBox(height: size.height * .03),
+                  //USERNAME INPUT
+                  RoundedInputContainer(
+                    child: CustomTextFormField(
+                      validator: (value) {},
+                      controller: _usernameController,
+                      hintText: 'enter your username ',
+                      iconData: Icons.person,
+                      onChange: (String value) {
+                        onInputValueChange('username');
+                      },
+                    ),
+                  ),
+                  SizedBox(height: size.height * .015),
+                  //EMAIL INPUT
+                  RoundedInputContainer(
+                    child: CustomTextFormField(
+                      validator: (value) {},
+                      controller: _emailController,
+                      hintText: 'enter your email ',
+                      iconData: Icons.person,
+                      onChange: (String value) {
+                        onInputValueChange('email');
+                      },
+                    ),
+                  ),
+                  SizedBox(height: size.height * .015),
+                  //PASSWORD INPUT
+                  RoundedInputContainer(
+                    child: TextFormField(
+                      validator: (text) {
+                        // if (text == null) {
+                        //   return "Required password";
+                        // } else if (text.length < 3) {
+                        //   return "Password must be at least 4 characters or more";
+                        // }
+                      },
+                      controller: _passwordController,
+                      obscureText: _isHidePassword,
+                      decoration: InputDecoration(
+                        hintText: "Password",
+                        hintStyle: const TextStyle(color: Colors.white),
+                        border: InputBorder.none,
+                        icon: const Icon(
+                          Icons.lock,
+                          color: Colors.white,
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(_isHidePassword
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                          color: Colors.white,
+                          onPressed: () {
+                            setState(() {
+                              _isHidePassword = !_isHidePassword;
+                            });
+                          },
+                        ),
                       ),
                     ),
-                    SizedBox(height: size.height * .03),
-                    //USERNAME INPUT
-                    RoundedInputContainer(
-                      child: CustomTextFormField(
-                        validator: (value) {},
-                        controller: _usernameController,
-                        hintText: 'enter your username ',
-                        iconData: Icons.person,
-                        onChange: (String value) {
-                          onInputValueChange('username');
-                        },
-                      ),
-                    ),
-                    SizedBox(height: size.height * .015),
-                    //EMAIL INPUT
-                    RoundedInputContainer(
-                      child: CustomTextFormField(
-                        validator: (value) {},
-                        controller: _emailController,
-                        hintText: 'enter your email ',
-                        iconData: Icons.person,
-                        onChange: (String value) {
-                          onInputValueChange('email');
-                        },
-                      ),
-                    ),
-                    SizedBox(height: size.height * .015),
-                    //PASSWORD INPUT
-                    RoundedInputContainer(
-                      child: TextFormField(
-                        validator: (text) {
-                          // if (text == null) {
-                          //   return "Required password";
-                          // } else if (text.length < 3) {
-                          //   return "Password must be at least 4 characters or more";
-                          // }
-                        },
-                        controller: _passwordController,
-                        obscureText: _isHidePassword,
-                        decoration: InputDecoration(
-                          hintText: "Password",
-                          hintStyle: const TextStyle(color: Colors.white),
-                          border: InputBorder.none,
-                          icon: const Icon(
-                            Icons.lock,
-                            color: Colors.white,
-                          ),
-                          suffixIcon: IconButton(
-                            icon: Icon(_isHidePassword
-                                ? Icons.visibility
-                                : Icons.visibility_off),
-                            color: Colors.white,
-                            onPressed: () {
-                              setState(() {
-                                _isHidePassword = !_isHidePassword;
-                              });
-                            },
+                  ),
+                  SizedBox(height: size.height * .015),
+                  //ERR MESSAGE
+                  SizedBox(
+                    width: size.width * .8,
+                    height: size.height * .03,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Visibility(
+                        visible: _errorMessage != null,
+                        child: Text(
+                          _errorMessage.toString(),
+                          style: TextStyle(
+                            color: Colors.red[500],
+                            fontStyle: FontStyle.italic,
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(height: size.height * .015),
-                    //ERR MESSAGE
-                    SizedBox(
-                      width: size.width * .8,
-                      height: size.height * .03,
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Visibility(
-                          visible: _errorMessage != null,
-                          child: Text(
-                            _errorMessage.toString(),
-                            style: TextStyle(
-                              color: Colors.red[500],
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    //  END OF ERR MSG
-                    SizedBox(height: size.height * .03),
-                    //REGISTER BUTTON
-                    RoundedButton(
-                      text: 'Register',
-                      onPress: () async => await handleRegister(),
-                      textColor: Colors.white,
-                      bgColor: kLoginPrimaryColor,
-                    ),
-                    //Already have account check
-                    SizedBox(height: size.height * .03),
-                    AlreadyHaveAccountCheck(
-                        isLogin: false,
-                        onPress: () => ApplicationUtility.pushAndReplace(
-                            context, const LoginScreen())),
-                  ],
-                ),
+                  ),
+                  //  END OF ERR MSG
+                  SizedBox(height: size.height * .03),
+                  //REGISTER BUTTON
+                  RoundedButton(
+                    text: 'Register',
+                    onPress: () async => await handleRegister(),
+                    textColor: Colors.white,
+                    bgColor: kLoginPrimaryColor,
+                  ),
+                  //Already have account check
+                  SizedBox(height: size.height * .03),
+                  AlreadyHaveAccountCheck(
+                      isLogin: false,
+                      onPress: () => ApplicationUtility.pushAndReplace(
+                          context, const LoginScreen())),
+                ],
               ),
             ),
           ),

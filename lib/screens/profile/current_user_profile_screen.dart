@@ -19,7 +19,6 @@ class CurrentUserProfileScreen extends StatefulWidget {
 class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
   bool _isLoading = false;
 
-
   late UserViewModel _userViewModel;
 
   @override
@@ -31,145 +30,142 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            //APPBAR
-        const    ProfileAppbar(),
-            //BODY
-            SliverToBoxAdapter(
-              child: CurrentUserProfileBackground(
-                isLoading: _isLoading,
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        children: [
-                          //AVT
-                          const ProfileAvtAndCover(),
-                          //STORIES
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  //FULL NAME
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8.0),
-                                    child: Selector<UserViewModel, String>(
-                                      builder: (BuildContext context, value,
-                                              Widget? child) =>
-                                          const Text(
-                                        'Nguyen Khanh Duy',
-                                        style: TextStyle(
-                                            color: Colors.black87,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18),
-                                      ),
-                                      selector: (p0, p1) =>
-                                          p1.user!.username.toString(),
-                                    ),
-                                  ),
-                                  //USERNAME
-                                  Selector<UserViewModel, String>(
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          //APPBAR
+          const ProfileAppbar(),
+          //BODY
+          SliverToBoxAdapter(
+            child: CurrentUserProfileBackground(
+              isLoading: _isLoading,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      children: [
+                        //AVT
+                        const ProfileAvtAndCover(),
+                        //STORIES
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                //FULL NAME
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Selector<UserViewModel, String>(
                                     builder: (BuildContext context, value,
                                             Widget? child) =>
-                                        Text(
-                                      '@$value',
-                                      style: const TextStyle(
-                                          color: Colors.black54, fontSize: 15),
+                                        const Text(
+                                      'Nguyen Khanh Duy',
+                                      style: TextStyle(
+                                          color: Colors.black87,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18),
                                     ),
                                     selector: (p0, p1) =>
                                         p1.user!.username.toString(),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Selector<UserViewModel, int?>(
-                                          builder: (BuildContext context, value,
-                                                  Widget? child) =>
-                                              FollowCount(
-                                                  title: "Following",
-                                                  count: value.toString()),
-                                          selector: (p0, p1) =>
-                                              p1.user!.followingCounts,
-                                        ),
-                                        Selector<UserViewModel, int?>(
-                                          builder: (BuildContext context, value,
-                                                  Widget? child) =>
-                                              FollowCount(
-                                                  title: "Follower",
-                                                  count: value.toString()),
-                                          selector: (p0, p1) =>
-                                              p1.user!.followerCounts,
-                                        ),
-                                      ],
-                                    ),
+                                ),
+                                //USERNAME
+                                Selector<UserViewModel, String>(
+                                  builder: (BuildContext context, value,
+                                          Widget? child) =>
+                                      Text(
+                                    '@$value',
+                                    style: const TextStyle(
+                                        color: Colors.black54, fontSize: 15),
                                   ),
-                                  SizedBox(
-                                    child: Divider(indent: 1, thickness: 1),
-                                    width: size.width * .7,
+                                  selector: (p0, p1) =>
+                                      p1.user!.username.toString(),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Selector<UserViewModel, int?>(
+                                        builder: (BuildContext context, value,
+                                                Widget? child) =>
+                                            FollowCount(
+                                                title: "Following",
+                                                count: value.toString()),
+                                        selector: (p0, p1) =>
+                                            p1.user!.followingCounts,
+                                      ),
+                                      Selector<UserViewModel, int?>(
+                                        builder: (BuildContext context, value,
+                                                Widget? child) =>
+                                            FollowCount(
+                                                title: "Follower",
+                                                count: value.toString()),
+                                        selector: (p0, p1) =>
+                                            p1.user!.followerCounts,
+                                      ),
+                                    ],
                                   ),
-                                  const Text(
-                                    'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ',
-                                    style: TextStyle(
-                                      color: Colors.black87,
-                                    ),
+                                ),
+                                SizedBox(
+                                  child: Divider(indent: 1, thickness: 1),
+                                  width: size.width * .7,
+                                ),
+                                const Text(
+                                  'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ',
+                                  style: TextStyle(
+                                    color: Colors.black87,
                                   ),
+                                ),
 
-                                  //
-                                ],
-                              ),
+                                //
+                              ],
                             ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
                 ),
               ),
-            )
-          ],
-        ),
-        floatingActionButton: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(40),
-            color: kPrimaryColor,
-          ),
-          child: IconButton(
-            onPressed: () => Navigator.push(
-              context,
-              PageRouteBuilder(
-                transitionDuration: const Duration(milliseconds: 500),
-                pageBuilder: (context, animation, secondaryAnimation) {
-                  return const HomeScreen();
-                },
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  var begin = const Offset(0.0, 1.0);
-                  var end = Offset.zero;
-                  var tween = Tween(begin: begin, end: end);
-                  var offsetAnimation = animation.drive(tween);
-
-                  return SlideTransition(
-                    position: offsetAnimation,
-                    child: child,
-                  );
-                },
-              ),
             ),
-            icon: const Icon(Icons.chat, color: Colors.white),
+          )
+        ],
+      ),
+      floatingActionButton: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(40),
+          color: kPrimaryColor,
+        ),
+        child: IconButton(
+          onPressed: () => Navigator.push(
+            context,
+            PageRouteBuilder(
+              transitionDuration: const Duration(milliseconds: 500),
+              pageBuilder: (context, animation, secondaryAnimation) {
+                return const HomeScreen();
+              },
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                var begin = const Offset(0.0, 1.0);
+                var end = Offset.zero;
+                var tween = Tween(begin: begin, end: end);
+                var offsetAnimation = animation.drive(tween);
+
+                return SlideTransition(
+                  position: offsetAnimation,
+                  child: child,
+                );
+              },
+            ),
           ),
+          icon: const Icon(Icons.chat, color: Colors.white),
         ),
       ),
     );

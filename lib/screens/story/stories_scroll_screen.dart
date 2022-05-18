@@ -15,7 +15,6 @@ class StoriesScrollScreen extends StatefulWidget {
 class _StoriesScrollScreenState extends State<StoriesScrollScreen>
     with AutomaticKeepAliveClientMixin {
   late ScrollController _listController;
-
   late StoryViewModel _storyViewModel;
 
   @override
@@ -29,14 +28,11 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen>
                 .height);
     _listController.addListener(() {
       var pixels2 = _listController.position.pixels;
-      // print("pixel " + pixels2.toString());
       var maxScrollExtent2 = _listController.position.maxScrollExtent;
-      // print("maxScrollExtent " + maxScrollExtent2.toString());
       if ((maxScrollExtent2 - pixels2) <=
           MediaQueryData.fromWindow(WidgetsBinding.instance!.window)
               .size
               .height) {
-        // print('end of list');
         _storyViewModel.updateStories();
       }
     });

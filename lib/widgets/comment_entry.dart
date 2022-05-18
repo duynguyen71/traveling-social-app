@@ -4,42 +4,37 @@ import 'package:traveling_social_app/view_model/user_viewmodel.dart';
 import 'package:traveling_social_app/widgets/bottom_select_dialog.dart';
 import 'package:traveling_social_app/widgets/expandable_text.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
-import 'package:provider/provider.dart';
 import '../models/Comment.dart';
 import 'package:flutter/services.dart';
-
-import '../models/User.dart';
-import '../services/comment_service.dart';
 import 'package:provider/provider.dart';
+import '../services/comment_service.dart';
 
 class CommentEntry extends StatefulWidget {
   const CommentEntry({
     Key? key,
     required this.comment,
     required this.level,
-    // required this.controller,
     required this.postId,
-    required this.setReplyingComment,
-    // required this.focusNode,
-    // this.replyingComment,
-    // required this.setReplyComment,
-    // required this.onClickCallback,
+    required this.isShowChildren,
+    required this.replyCommentRequest,
+    this.currentReplyComment,
+    required this.hideComment,
+    required this.editCommentRequest,
+    this.editedComment,
   }) : super(key: key);
 
   final Comment comment;
   final int level;
-
-  // final TextEditingController controller;
   final int postId;
+  final bool isShowChildren;
 
-  // final FocusNode focusNode;
-  // final Comment? replyingComment;
-  // final Function setReplyComment;
+  final Comment? currentReplyComment;
+  final Function replyCommentRequest;
 
-  // final Function onClickCallback;
+  final Function editCommentRequest;
+  final Function hideComment;
 
-  // final Function replyComment;
-  final Function setReplyingComment;
+  final Comment? editedComment;
 
   @override
   State<CommentEntry> createState() => _CommentEntryState();
@@ -48,12 +43,12 @@ class CommentEntry extends StatefulWidget {
 class _CommentEntryState extends State<CommentEntry> {
   final CommentService _commentService = CommentService();
   final Set<Comment> _childrenComment = <Comment>{};
-  final FocusNode inputNode = FocusNode();
-  final GlobalKey<_CommentEntryState> _myKey = GlobalKey();
+
+  bool _hiding = false;
 
   _getReplyComments() async {
-    List<Comment> rs =
-        await _commentService.getReplyComment(parentCommentId: comment.id!);
+    List<Comment> rs = await _commentService.getReplyComment(
+        parentCommentId: widget.comment.id!);
     setState(() {
       _childrenComment.addAll(rs);
     });
@@ -62,160 +57,204 @@ class _CommentEntryState extends State<CommentEntry> {
   Comment get comment => widget.comment;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant CommentEntry oldWidget) {
+    if (widget.isShowChildren &&
+        (widget.currentReplyComment != null &&
+            widget.currentReplyComment!.id == comment.id)) {
+      _getReplyComments();
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  int get level => widget.level;
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Padding(
-      padding: (widget.level <= 3 && widget.level > 0)
-          ? const EdgeInsets.only(left: 40, top: 5)
-          : EdgeInsets.zero,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              //USER AVT
-              UserAvatar(
-                size: 30,
-                user:
-                    widget.comment.user ?? context.read<UserViewModel>().user!,
-                margin: EdgeInsets.zero,
-              ),
-              const SizedBox(width: 10),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+    return _hiding
+        ? const SizedBox.shrink()
+        : Padding(
+            padding: level == 0
+                ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10)
+                : EdgeInsets.zero,
+            child: Padding(
+              padding: (level <= 3 && level > 0)
+                  ? const EdgeInsets.only(left: 40, top: 5)
+                  : EdgeInsets.zero,
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () {
-                        ApplicationUtility.showModelBottomDialog(
-                          context,
-                          BottomSelectDialog(
-                            items: [
-                              //REPLY COMMENT BUTTON
-                              SelectItem(
-                                  title: 'Reply',
-                                  onClick: () {
-                                    widget.setReplyingComment(widget.comment);
-                                    // widget.setReplyComment(widget.comment);
-                                    // widget.comment;
-                                    //     widget.onClickCallback(widget.comment);
-                                    // Comment commetn = Comment(
-                                    //     id: DateTime.now()
-                                    //         .millisecondsSinceEpoch,
-                                    //     content: 'sd' + 'callback',
-                                    //     createDate: null);
-                                    // setState(() {
-                                    //   _childrenComment.add(commetn);
-                                    // });
-                                    // print('rep');
-                                  }),
-                              SelectItem(
-                                title: 'Copy',
-                                onClick: () {
-                                  Clipboard.setData(ClipboardData(
-                                      text: widget.comment.content.toString()));
-                                },
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                      //COMMENT TEXT
-                      child: Ink(
-                        child: Container(
-                          constraints: BoxConstraints(
-                            maxWidth: widget.level >= 2
-                                ? size.width * .5
-                                : size.width * .7,
-                            minWidth: size.width * .5,
-                          ),
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(.1),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: ExpandableText(
-                              text: widget.comment.content.toString(),
-                              textColor: Colors.black87),
-                        ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      //USER AVT
+                      UserAvatar(
+                        size: 30,
+                        user: widget.comment.user != null
+                            ? widget.comment.user!
+                            : context.read<UserViewModel>().user!,
+                        margin: EdgeInsets.zero,
                       ),
-                    ),
-                  ),
-                  //
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Like'),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        GestureDetector(
-                          child: Text('Answer'),
-                          onTap: () {
-                            // String rep =
-                            //     await
-                            // widget.onClickCallback(widget.comment);
-                            Comment commetn = Comment(
-                                id: DateTime.now().millisecondsSinceEpoch,
-                                content: 'sd' + 'callback',
-                                createDate: null);
-                            setState(() {
-                              _childrenComment.add(commetn);
-                            });
-                          },
-                        )
-                      ],
-                    ),
-                  ),
-                  (comment.replyCount != null &&
-                          comment.replyCount! > 0 &&
-                          _childrenComment.isEmpty)
-                      ? Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Material(
+                      const SizedBox(width: 10),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Material(
                             color: Colors.transparent,
                             child: InkWell(
-                              onTap: () async {
-                                await _getReplyComments();
+                              onTap: () {
+                                ApplicationUtility.showModelBottomDialog(
+                                  context,
+                                  (widget.comment.user != null) &&
+                                          (widget.comment.user!.id !=
+                                              context
+                                                  .read<UserViewModel>()
+                                                  .user!
+                                                  .id)
+                                      ? BottomSelectDialog(
+                                          items: [
+                                            //REPLY COMMENT BUTTON
+                                            SelectItem(
+                                                title: 'Reply',
+                                                onClick: () {
+                                                  widget.replyCommentRequest(
+                                                      widget.comment);
+                                                }),
+                                            SelectItem(
+                                              title: 'Copy',
+                                              onClick: () {
+                                                Clipboard.setData(ClipboardData(
+                                                    text: widget.comment.content
+                                                        .toString()));
+                                              },
+                                            ),
+                                          ],
+                                        )
+                                      : BottomSelectDialog(
+                                          items: [
+                                            // SelectItem(
+                                            //     title: 'Edit',
+                                            //     onClick: () {
+                                            //       widget.editCommentRequest(
+                                            //           widget.comment);
+                                            //     }),
+                                            SelectItem(
+                                                title: 'Hide',
+                                                onClick: () {
+                                                  widget.hideComment(
+                                                      widget.comment);
+                                                  setState(() {
+                                                    _hiding = true;
+                                                  });
+                                                }),
+                                            SelectItem(
+                                              title: 'Copy',
+                                              onClick: () {
+                                                Clipboard.setData(ClipboardData(
+                                                    text: widget.comment.content
+                                                        .toString()));
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                );
                               },
+                              //COMMENT TEXT
                               child: Ink(
-                                child: Text(
-                                  'View all ${widget.comment.replyCount} reply',
-                                  style: const TextStyle(color: Colors.black54),
+                                child: Container(
+                                  constraints: BoxConstraints(
+                                    maxWidth: widget.level >= 2
+                                        ? size.width * .5
+                                        : size.width * .7,
+                                    minWidth: size.width * .5,
+                                  ),
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey.shade100,
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: ExpandableText(
+                                      text: widget.comment.content.toString(),
+                                      textStyle: const TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                      textColor: Colors.black87),
                                 ),
                               ),
                             ),
                           ),
-                        )
-                      : const SizedBox.shrink(),
+                          //
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('Like'),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                GestureDetector(
+                                  child: const Text('Answer'),
+                                  onTap: () => widget
+                                      .replyCommentRequest(widget.comment),
+                                )
+                              ],
+                            ),
+                          ),
+                          (widget.comment.replyCount != null &&
+                                  widget.comment.replyCount! > 0 &&
+                                  _childrenComment.isEmpty)
+                              ? Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () async {
+                                        await _getReplyComments();
+                                      },
+                                      child: Ink(
+                                        child: Text(
+                                          'View all ${widget.comment.replyCount} reply',
+                                          style: const TextStyle(
+                                              color: Colors.black54),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
+                        ],
+                      ),
+                    ],
+                  ),
+                  ..._childrenComment.map(
+                    (e) => CommentEntry(
+                      isShowChildren: (widget.currentReplyComment != null &&
+                          widget.currentReplyComment!.id == e.id),
+                      key: ValueKey(e.id.toString()),
+                      postId: widget.postId,
+                      replyCommentRequest: (e) => widget.replyCommentRequest(e),
+                      currentReplyComment: widget.currentReplyComment,
+                      comment: e,
+                      level: (widget.level + 1),
+                      hideComment: (e) => widget.hideComment(e),
+                      editCommentRequest: (e) => widget.editCommentRequest(e),
+                      editedComment: widget.editedComment != null &&
+                              widget.editedComment!.id == e.id
+                          ? widget.editedComment
+                          : null,
+                    ),
+                  ),
                 ],
               ),
-            ],
-          ),
-          ..._childrenComment.map(
-            (e) => CommentEntry(
-              key:ValueKey(e.id.toString()),
-              postId: widget.postId,
-              setReplyingComment: widget.setReplyingComment,
-              // focusNode: widget.focusNode,
-              // replyingComment: e,
-              // setReplyComment: widget.setReplyComment,
-              comment: e,
-              level: (widget.level + 1),
-              // controller: widget.controller,
-              // onClickCallback: (e) async => await widget.onClickCallback(e),
             ),
-          ),
-          // ...widget.children
-        ],
-      ),
-    );
+          );
   }
 }
-typedef void MyCallback(int foo);

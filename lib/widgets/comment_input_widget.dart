@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traveling_social_app/models/Comment.dart';
 
 
 class CommentInputWidget extends StatelessWidget {
@@ -13,7 +14,7 @@ class CommentInputWidget extends StatelessWidget {
       this.inputBorderColor,
       this.inputBgColor,
       this.sendBtnColor,
-      this.controller, this.focusNode})
+      this.controller, this.focusNode, required this.onChange})
       : super(key: key);
 
   final Function onSendButtonClick;
@@ -27,6 +28,7 @@ class CommentInputWidget extends StatelessWidget {
       sendBtnColor;
   final TextEditingController? controller;
   final FocusNode? focusNode;
+  final Function onChange;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +54,7 @@ class CommentInputWidget extends StatelessWidget {
         children: [
           Expanded(
             child: TextField(
+              onChanged: (text) => onChange(text),
               focusNode: focusNode,
               controller: controller,
               style: TextStyle(color: placeHolderColor ?? Colors.black87),

@@ -9,6 +9,13 @@ Comment commentFromJson(String str) => Comment.fromJson(json.decode(str));
 String commentToJson(Comment data) => json.encode(data.toJson());
 
 class Comment {
+  int? _id;
+  String? _content;
+  User? _user;
+  String? _createDate;
+  int? _replyCount;
+  List<Comment> _replies = [];
+
   Comment({
     int? id,
     String? content,
@@ -24,18 +31,12 @@ class Comment {
   Comment.fromJson(dynamic json) {
     _id = json['id'];
     _content = json['content'];
-    if(json['user'] !=null){
-      _user = User.fromJson(json['user']);
+    if (json['user'] != null) {
+      _user = User.fromJson(json['user'] as Map<String, dynamic>);
     }
     _createDate = json['createDate'];
     _replyCount = json['replyCount'];
   }
-
-  int? _id;
-  String? _content;
-  User? _user;
-  String? _createDate;
-  int? _replyCount;
 
   int? get id => _id;
 
@@ -74,6 +75,13 @@ class Comment {
     _id = t;
   }
 
+  set replies(List<Comment> replies) {
+    _replies = replies;
+  }
+
+  List<Comment> get replies => _replies;
+  // set content(String? content) => _content  = content;
+
   Comment copyWith({
     int? id,
     String? content,
@@ -91,4 +99,6 @@ class Comment {
   String toString() {
     return 'id: $id; content: $content; user: $user';
   }
+
+  set user(User? user) => _user = user;
 }

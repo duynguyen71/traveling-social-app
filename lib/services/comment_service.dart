@@ -9,8 +9,10 @@ import 'package:http/http.dart' as http;
 class CommentService {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
-  Future<List<Comment>> getRootCommentsOnPost({required int postId}) async {
-    final url = Uri.parse(baseUrl + "/api/v1/member/posts/$postId/comments");
+  Future<List<Comment>> getRootCommentsOnPost(
+      {required int postId, int? page}) async {
+    final url = Uri.parse(baseUrl +
+        "/api/v1/member/posts/$postId/comments?page=$page&pageSize=12");
     final resp = await http.get(url, headers: await authorizationHeader());
     if (resp.statusCode == 200) {
       final jsonBody = jsonDecode(resp.body) as Map<String, dynamic>;
@@ -33,7 +35,6 @@ class CommentService {
       var data = listComment
           .map((e) => Comment.fromJson(e as Map<String, dynamic>))
           .toList();
-      print(data);
       return data;
     }
     return [];
@@ -46,15 +47,19 @@ class CommentService {
       int? attachmentId,
       int? parentCommentId}) async {
     final url = Uri.parse(baseUrl + "/api/v1/member/posts/$postId/comments");
-    final resp = await http.post(url,
-        headers: await authorizationHeader(),
-        body: jsonEncode({
+    final resp = await http.post(
+      url,
+      headers: await authorizationHeader(),
+      body: jsonEncode(
+        {
           "id": commentId,
           "postId": postId,
           "attachmentId": attachmentId,
           "parentCommentId": parentCommentId,
           "content": contentText,
-        }));
+        },
+      ),
+    );
     if (resp.statusCode == 200) {
       final jsonBody = jsonDecode(resp.body) as Map<String, dynamic>;
       Comment comment =
@@ -62,6 +67,18 @@ class CommentService {
       return comment;
     }
     throw 'Failed to post comment';
+  }
+
+  Future<void> hideComment({required int commentId}) async {
+    final url =
+        Uri.parse(baseUrl + "/api/v1/member/comments/$commentId/status/0");
+
+    final resp = await http.put(url, headers: await authorizationHeader());
+    if (resp.statusCode == 200) {
+      print('hide comment $commentId');
+    } else {
+      print('hide comment failed' + resp.body);
+    }
   }
 
   Future<Map<String, String>> authorizationHeader() async {

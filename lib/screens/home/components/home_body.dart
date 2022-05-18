@@ -93,7 +93,7 @@ class _HomeBodyState extends State<HomeBody> {
         ),
         //STORY
 
-        const HomeStories(),
+        // const HomeStories(),
 
         //  Trending
         // const HomePost(),

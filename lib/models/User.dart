@@ -74,7 +74,6 @@ class User with ChangeNotifier {
 
   @override
   String toString() {
-    // TODO: implement toString
-    return 'id: $id, username: $username';
+    return '{id: $id, username: $username, avt: $avt}';
   }
 }

@@ -11,7 +11,6 @@ import 'package:traveling_social_app/screens/login/login_screen.dart';
 import 'package:traveling_social_app/screens/profile/current_user_profile_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/view_model/post_viewmoel.dart';
-import 'package:traveling_social_app/view_model/story_viewmodel.dart';
 import 'package:traveling_social_app/view_model/user_viewmodel.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
 
@@ -44,7 +43,9 @@ class _HomeScreenState extends State<HomeScreen> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        context.read<PostViewModel>().fetchMorePosts();
+        if(!context.read<PostViewModel>().isLoading){
+          context.read<PostViewModel>().fetchMorePosts();
+        }
       }
     });
   }

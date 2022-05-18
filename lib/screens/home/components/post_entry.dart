@@ -26,36 +26,37 @@ class PostEntry extends StatefulWidget {
 
 class _PostEntryState extends State<PostEntry>
     with AutomaticKeepAliveClientMixin {
-  bool isFavorite = false;
-  PostService _postService = PostService();
+  bool _isFavorite = false;
+  final PostService _postService = PostService();
+  final List<Attachment> _attachments = [];
 
-  int currentContentIndex = 0;
-  Attachment? attachment;
-  int likeCount = 0;
+  int _attachmentIndex = 0;
+  int _likeCount = 0;
+
 
   @override
   void initState() {
-    likeCount = widget.post.reactionCount;
-    isFavorite = (myReaction != null);
-    getAttachment(currentContentIndex);
-    // getReaction();
+    _likeCount = widget.post.reactionCount;
+    _isFavorite = (myReaction != null);
+    _getAttachments();
     super.initState();
   }
 
-  // getReaction(){
-  //   setState(() {
-  //     _myReaction = widget.post.myReaction;
-  //   });
-  // }
-
-  Attachment? getAttachment(int i) {
-    var contents = widget.post.contents;
-    if (contents != null && contents.asMap().containsKey(i)) {
-      setState(() {
-        attachment = contents[i].attachment;
-      });
+  _getAttachments() {
+    List<Content>? contents = widget.post.contents;
+    List<Attachment> attachments = [];
+    if (contents != null && contents.isNotEmpty) {
+      for (int i = 0; i < contents.length; i++) {
+        var content = contents[i];
+        var attachment = content.attachment;
+        if (attachment != null) {
+          attachments.add(attachment);
+        }
+      }
     }
-    return null;
+    setState(() {
+      _attachments.addAll(attachments);
+    });
   }
 
   List<Content> getContents() {
@@ -157,11 +158,12 @@ class _PostEntryState extends State<PostEntry>
                 padding: const EdgeInsets.only(top: 4, bottom: 8.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: attachment == null
+                  child:( _attachments[_attachmentIndex] ==null)
                       ? const SizedBox.shrink()
                       : CachedNetworkImage(
                           fit: BoxFit.contain,
-                          imageUrl: imageUrl + attachment!.name.toString(),
+                          imageUrl: imageUrl +
+                              _attachments[_attachmentIndex].name.toString(),
                           placeholder: (context, url) {
                             return AspectRatio(
                               aspectRatio: 4 / 5,
@@ -177,30 +179,38 @@ class _PostEntryState extends State<PostEntry>
                         ),
                 ),
               ),
-              getContents().length > 1
+              _attachments.length > 1
                   ? Positioned(
                       child: RoundedIconButton(
                         onClick: () {
-                          if (currentContentIndex < getContents().length - 1) {
-                            currentContentIndex = currentContentIndex + 1;
-                            getAttachment(currentContentIndex);
+                          if (_attachmentIndex < getContents().length - 1) {
+                            setState(() {
+                              _attachmentIndex = _attachmentIndex + 1;
+                            });
                           }
                         },
                         icon: Icons.arrow_forward_ios,
+                        iconColor: _attachmentIndex < 1
+                            ? Colors.black12
+                            : Colors.white,
                       ),
                       right: 10,
                     )
                   : const SizedBox.shrink(),
-              getContents().length > 1
+              _attachments.length > 1
                   ? Positioned(
                       child: RoundedIconButton(
                         onClick: () {
-                          if (currentContentIndex >= 1) {
-                            currentContentIndex = currentContentIndex - 1;
-                            getAttachment(currentContentIndex);
+                          if (_attachmentIndex >= 1) {
+                            setState(() {
+                              _attachmentIndex = _attachmentIndex - 1;
+                            });
                           }
                         },
                         icon: Icons.arrow_back_ios,
+                        iconColor: _attachmentIndex <= (_attachments.length - 1)
+                            ? Colors.black12
+                            : Colors.white,
                       ),
                       left: 10,
                     )
@@ -225,14 +235,14 @@ class _PostEntryState extends State<PostEntry>
                         onPressed: () async {
                           _postService.reactionPost(
                               postId: widget.post.id!,
-                              reactionId: isFavorite ? null : 1);
+                              reactionId: _isFavorite ? null : 1);
                           setState(() {
-                            if (isFavorite) {
-                              isFavorite = false;
-                              likeCount--;
+                            if (_isFavorite) {
+                              _isFavorite = false;
+                              _likeCount--;
                             } else {
-                              isFavorite = true;
-                              likeCount++;
+                              _isFavorite = true;
+                              _likeCount++;
                             }
                           });
                         },
@@ -242,14 +252,14 @@ class _PostEntryState extends State<PostEntry>
                               ScaleTransition(
                             scale: child.key == const ValueKey('icon1')
                                 ? Tween<double>(
-                                        begin: !isFavorite ? 1 : 1.5, end: 1)
+                                        begin: !_isFavorite ? 1 : 1.5, end: 1)
                                     .animate(animation)
                                 : Tween<double>(
-                                        begin: isFavorite ? 1 : 1.5, end: 1)
+                                        begin: _isFavorite ? 1 : 1.5, end: 1)
                                     .animate(animation),
                             child: child,
                           ),
-                          child: isFavorite
+                          child: _isFavorite
                               ? const Icon(
                                   Icons.favorite,
                                   color: Colors.red,
@@ -262,25 +272,26 @@ class _PostEntryState extends State<PostEntry>
                                 ),
                         ),
                       ),
-                      Text(likeCount.toString()),
+                      Text(_likeCount.toString()),
                     ],
                   ),
                   Row(
                     children: [
                       IconButton(
-                          onPressed: () {
-                            Navigator.of(context).push(PageRouteBuilder(
-                                opaque: false,
-                                pageBuilder: (BuildContext context, _, __) =>
-                                    CommentScreen(
-                                      postId: widget.post.id!,
-                                      myComments: widget.post.myComments,
-                                    )));
-                          },
-                          icon: const Icon(
-                            Icons.chat_bubble_outline,
-                            color: Colors.black45,
-                          ),),
+                        onPressed: () {
+                          Navigator.of(context).push(PageRouteBuilder(
+                              opaque: false,
+                              pageBuilder: (BuildContext context, _, __) =>
+                                  CommentScreen(
+                                    postId: widget.post.id!,
+                                    myComments: widget.post.myComments,
+                                  ),),);
+                        },
+                        icon: const Icon(
+                          Icons.chat_bubble_outline,
+                          color: Colors.black45,
+                        ),
+                      ),
                       Text(
                         widget.post.commentCount.toString(),
                       ),
@@ -293,7 +304,7 @@ class _PostEntryState extends State<PostEntry>
                           icon: const Icon(
                             Icons.share,
                             color: Colors.black45,
-                          )),
+                          ),),
                       const Text('Share'),
                     ],
                   ),
