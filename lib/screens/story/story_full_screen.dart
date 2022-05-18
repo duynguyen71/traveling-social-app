@@ -8,6 +8,12 @@ import 'package:traveling_social_app/models/Post.dart';
 import 'package:traveling_social_app/widgets/expandable_text.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
 
+import '../../utilities/application_utility.dart';
+import '../../view_model/user_viewmodel.dart';
+import '../profile/current_user_profile_screen.dart';
+import '../profile/profile_screen.dart';
+import 'package:provider/provider.dart';
+
 class StoryFullScreen extends StatefulWidget {
   const StoryFullScreen({Key? key, required this.post}) : super(key: key);
 
@@ -194,6 +200,16 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                           UserAvatar(
                             size: 35,
                             user: widget.post.user!,
+                            onTap: () {
+                              ApplicationUtility.navigateToScreen(
+                                  context,
+                                  context
+                                          .read<UserViewModel>()
+                                          .equal(widget.post.user)
+                                      ? const CurrentUserProfileScreen()
+                                      : ProfileScreen(
+                                          userId: widget.post.user!.id!));
+                            },
                           ),
                           const SizedBox(width: 10),
                           Column(

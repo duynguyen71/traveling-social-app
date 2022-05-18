@@ -31,6 +31,7 @@ class MediaFileContainer extends StatelessWidget {
       height: height,
       width: width,
       constraints: const BoxConstraints(minWidth: 100),
+      margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(color: Colors.grey.withOpacity(.1)),
       child: Stack(
           alignment: Alignment.center,

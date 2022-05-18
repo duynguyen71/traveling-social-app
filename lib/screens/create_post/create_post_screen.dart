@@ -21,18 +21,22 @@ class CreatePostScreen extends StatefulWidget {
 
 class _CreatePostScreenState extends State<CreatePostScreen> {
   final PostService _postService = PostService();
+  final _imagePickerQty = 60;
   final _imagePicker = ImagePicker();
   List<XFile>? _xFiles = [];
   final List<File> _pickedFiles = [];
   final _captionController = TextEditingController();
   bool _isLoading = false;
+  bool _isCaptionEmpty = true;
+  final FocusNode _focusNode = FocusNode();
 
   _handleAddPost() async {
-    ApplicationUtility.hideKeyboard();
-    isLoading = true;
-    if (_captionController.text.toString().isEmpty && _pickedFiles.isEmpty) {
+    //check post valid
+    if (_isCaptionEmpty && _pickedFiles.isEmpty) {
       return;
     }
+    ApplicationUtility.hideKeyboard();
+    isLoading = true;
     Map<String, dynamic> post = {};
     post['caption'] = _captionController.text.toString();
     post['type'] = 1;
@@ -55,6 +59,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   }
 
   @override
+  void initState() {
+    _focusNode.requestFocus();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Stack(
@@ -70,24 +80,40 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 'Cancel',
                 textAlign: TextAlign.left,
                 style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
+                    fontSize: 18,
+                    color: Colors.black87,
                     fontWeight: FontWeight.normal),
               ),
             ),
             leadingWidth: 80,
             elevation: 0,
             actions: [
+              !_isCaptionEmpty
+                  ? const SizedBox.shrink()
+                  : TextButton(
+                      onPressed: () {
+                        _handleAddPost();
+                      },
+                      child: const Text(
+                        'Drafts',
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.lightBlue,
+                            fontWeight: FontWeight.normal),
+                      ),
+                    ),
               TextButton(
                 onPressed: () {
                   _handleAddPost();
                 },
                 child: Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                   decoration: BoxDecoration(
-                      color: kPrimaryLightColor,
-                      borderRadius: BorderRadius.circular(5)),
+                      color: _isCaptionEmpty
+                          ? Colors.blueAccent.withOpacity(.5)
+                          : Colors.blueAccent,
+                      borderRadius: BorderRadius.circular(50)),
                   child: const Text(
                     'Post',
                     style: TextStyle(
@@ -101,7 +127,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             backgroundColor: Colors.white.withOpacity(.8),
           ),
           body: Container(
-            padding: const EdgeInsets.only(top: 100),
+            padding: const EdgeInsets.only(top: 100, left: 10),
             width: double.infinity,
             height: size.height,
             child: Stack(
@@ -121,6 +147,20 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 5),
                             margin: EdgeInsets.zero,
                             child: TextField(
+                              focusNode: _focusNode,
+                              onChanged: (value) {
+                                if (value.isEmpty && !_isCaptionEmpty) {
+                                  setState(() {
+                                    _isCaptionEmpty = true;
+                                  });
+                                } else {
+                                  if (value.isNotEmpty && _isCaptionEmpty) {
+                                    setState(() {
+                                      _isCaptionEmpty = false;
+                                    });
+                                  }
+                                }
+                              },
                               controller: _captionController,
                               maxLines: null,
                               keyboardType: TextInputType.multiline,
@@ -137,39 +177,44 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               ),
                             ),
                           ),
+                          //END OF INPUT CONTAINER
                           const SizedBox(height: 5),
                           //MEDIA FILES
                           SizedBox(
-                            width: size.width,
-                            child: SingleChildScrollView(
+                            height: 180,
+                            child: ReorderableListView.builder(
                               scrollDirection: Axis.horizontal,
                               physics: const BouncingScrollPhysics(),
-                              child: Row(
-                                  children: List.generate(_pickedFiles.length,
-                                      (index) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: MediaFileContainer(
-                                    ratio: 16 / 9,
-                                    boxFit: BoxFit.fitHeight,
-                                    file: _pickedFiles[index],
-                                    height: 180,
-                                    onClick: () {
-                                      setState(() {
-                                        _pickedFiles.removeAt(index);
-                                      });
-                                    },
-                                    width: null,
-                                    modifiedFile: (File f) {
-                                      setState(() {
-                                        _pickedFiles[index] = f;
-                                      });
-                                    },
-                                  ),
+                              onReorder: ((oldIndex, newIndex) {
+                                if (newIndex > oldIndex) {
+                                  newIndex = newIndex - 1;
+                                }
+                                final element = _pickedFiles.removeAt(oldIndex);
+                                _pickedFiles.insert(newIndex, element);
+                              }),
+                              itemBuilder: (context, index) {
+                                return MediaFileContainer(
+                                  key: ValueKey(_pickedFiles[index]),
+                                  ratio: 16 / 9,
+                                  boxFit: BoxFit.fitHeight,
+                                  file: _pickedFiles[index],
+                                  height: 180,
+                                  onClick: () {
+                                    setState(() {
+                                      _pickedFiles.removeAt(index);
+                                    });
+                                  },
+                                  width: null,
+                                  modifiedFile: (File f) {
+                                    setState(() {
+                                      _pickedFiles[index] = f;
+                                    });
+                                  },
                                 );
-                              })),
+                              },
+                              itemCount: _pickedFiles.length,
                             ),
-                          )
+                          ),
                         ],
                       ),
                       Padding(
@@ -187,10 +232,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                             )
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
+                //IMAGE SELECTED
+
                 // MediaQuery.of(context).viewInsets.bottom > 0
                 MediaQuery.of(context).viewInsets.bottom > 0
                     ? Positioned(
@@ -209,27 +256,30 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               horizontal: 10, vertical: 5),
                           child: Row(
                             children: [
+                              //PICK IMAGES FROM GALLERY
                               IconButton(
-                                  onPressed: () async {
-                                    _xFiles =
-                                        await _imagePicker.pickMultiImage();
-                                    if (_xFiles != null &&
-                                        _xFiles!.isNotEmpty) {
-                                      setState(() {
-                                        _pickedFiles.addAll(_xFiles!
-                                            .map((e) => File(e.path))
-                                            .toList());
-                                      });
-                                    }
-                                  },
-                                  icon: const Icon(
-                                    Icons.photo_album_outlined,
-                                    color: Colors.black87,
-                                  )),
+                                onPressed: () async {
+                                  _xFiles = await _imagePicker.pickMultiImage(
+                                      imageQuality: _imagePickerQty);
+                                  if (_xFiles != null && _xFiles!.isNotEmpty) {
+                                    setState(() {
+                                      _pickedFiles.addAll(_xFiles!
+                                          .map((e) => File(e.path))
+                                          .toList());
+                                    });
+                                  }
+                                },
+                                icon: const Icon(
+                                  Icons.photo_album_outlined,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              //PICK IMAGES FROM CAMERA
                               IconButton(
                                   onPressed: () async {
                                     XFile? xFile = await _imagePicker.pickImage(
-                                        source: ImageSource.camera);
+                                        source: ImageSource.camera,
+                                        imageQuality: _imagePickerQty);
                                     if (xFile != null) {
                                       setState(() {
                                         _pickedFiles.add(File(xFile.path));

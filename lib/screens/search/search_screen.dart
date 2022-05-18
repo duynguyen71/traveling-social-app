@@ -24,48 +24,46 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          bottom: PreferredSize(
-            preferredSize: const Size(double.infinity, 1),
-            child: Divider(
-              color: kPrimaryColor.withOpacity(.2),
-              height: 1,
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        bottom: PreferredSize(
+          preferredSize: const Size(double.infinity, 1),
+          child: Divider(
+            color: kPrimaryColor.withOpacity(.2),
+            height: 1,
           ),
-          primary: false,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: kPrimaryColor,
-            ),
-          ),
-          title: RoundedInputContainer(
-            margin: EdgeInsets.zero,
-            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
-            child: CustomInputField(
-              onChange: (String value) {},
-              controller: _searchController,
-            ),
-          ),
-          titleSpacing: 3,
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.search, color: kPrimaryLightColor),
-            ),
-          ],
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [],
+        primary: false,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: kPrimaryColor,
           ),
+        ),
+        title: RoundedInputContainer(
+          margin: EdgeInsets.zero,
+          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+          child: CustomInputField(
+            onChange: (String value) {},
+            controller: _searchController,
+          ),
+        ),
+        titleSpacing: 3,
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.search, color: kPrimaryLightColor),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [],
         ),
       ),
     );

@@ -21,4 +21,11 @@ class UserViewModel extends ChangeNotifier {
     _userService.signOut();
     notifyListeners();
   }
+
+  bool equal(User? user) {
+    if (user == null) {
+      return true;
+    }
+    return _user == user;
+  }
 }

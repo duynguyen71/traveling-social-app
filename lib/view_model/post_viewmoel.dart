@@ -36,6 +36,11 @@ class PostViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  void removePost({required postId}) {
+    _posts.removeWhere((element) => element.id == postId);
+    notifyListeners();
+  }
+
   void removeComment({required postId, required commentId}) {
     Post? rs = _posts.singleWhereOrNull((element) => element.id == postId);
     if (rs != null) {

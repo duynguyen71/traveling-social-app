@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
+import 'package:traveling_social_app/models/Post.dart';
+import 'package:traveling_social_app/screens/home/components/post_entry.dart';
 import 'package:traveling_social_app/screens/home/home_screen.dart';
 import 'package:traveling_social_app/screens/profile/components/background.dart';
 import 'package:traveling_social_app/screens/profile/components/follow_count.dart';
+import 'package:traveling_social_app/screens/profile/components/icon_with_text.dart';
 import 'package:traveling_social_app/screens/profile/components/profile_avt_and_cover.dart';
+import 'package:traveling_social_app/services/post_service.dart';
 import 'package:traveling_social_app/view_model/user_viewmodel.dart';
 import 'components/profile_app_bar.dart';
 import 'package:provider/provider.dart';
@@ -20,11 +24,25 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
   bool _isLoading = false;
 
   late UserViewModel _userViewModel;
+  final PostService _postService = PostService();
+  List<Post> _posts = [];
+  int page = 0;
 
   @override
   void initState() {
-    super.initState();
     _userViewModel = context.read<UserViewModel>();
+    _getPosts();
+    super.initState();
+  }
+
+  _getPosts() async {
+    final posts =
+        await _postService.getCurrentUserPosts(page: page, pageSize: 5);
+    print("get post success");
+    print(posts.length);
+    setState(() {
+      _posts = posts;
+    });
   }
 
   @override
@@ -36,105 +54,14 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
           //APPBAR
           const ProfileAppbar(),
           //BODY
-          SliverToBoxAdapter(
-            child: CurrentUserProfileBackground(
-              isLoading: _isLoading,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      children: [
-                        //AVT
-                        const ProfileAvtAndCover(),
-                        //STORIES
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                //FULL NAME
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8.0),
-                                  child: Selector<UserViewModel, String>(
-                                    builder: (BuildContext context, value,
-                                            Widget? child) =>
-                                        const Text(
-                                      'Nguyen Khanh Duy',
-                                      style: TextStyle(
-                                          color: Colors.black87,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18),
-                                    ),
-                                    selector: (p0, p1) =>
-                                        p1.user!.username.toString(),
-                                  ),
-                                ),
-                                //USERNAME
-                                Selector<UserViewModel, String>(
-                                  builder: (BuildContext context, value,
-                                          Widget? child) =>
-                                      Text(
-                                    '@$value',
-                                    style: const TextStyle(
-                                        color: Colors.black54, fontSize: 15),
-                                  ),
-                                  selector: (p0, p1) =>
-                                      p1.user!.username.toString(),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Selector<UserViewModel, int?>(
-                                        builder: (BuildContext context, value,
-                                                Widget? child) =>
-                                            FollowCount(
-                                                title: "Following",
-                                                count: value.toString()),
-                                        selector: (p0, p1) =>
-                                            p1.user!.followingCounts,
-                                      ),
-                                      Selector<UserViewModel, int?>(
-                                        builder: (BuildContext context, value,
-                                                Widget? child) =>
-                                            FollowCount(
-                                                title: "Follower",
-                                                count: value.toString()),
-                                        selector: (p0, p1) =>
-                                            p1.user!.followerCounts,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  child: Divider(indent: 1, thickness: 1),
-                                  width: size.width * .7,
-                                ),
-                                const Text(
-                                  'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ',
-                                  style: TextStyle(
-                                    color: Colors.black87,
-                                  ),
-                                ),
+          _buildCoverBackground(size),
 
-                                //
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
+          SliverToBoxAdapter(
+            child: Column(
+                children: List.generate(_posts.length, (index) {
+              var post = _posts[index];
+              return PostEntry(post: post, key: ValueKey(post.id));
+            },),),
           )
         ],
       ),
@@ -166,6 +93,122 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
             ),
           ),
           icon: const Icon(Icons.chat, color: Colors.white),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCoverBackground(Size size) {
+    return SliverToBoxAdapter(
+      child: Container(
+        decoration:const BoxDecoration(
+          color: Colors.white,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            //AVT
+            const ProfileAvtAndCover(),
+            //USER INFO
+            Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    //FULL NAME
+                    Selector<UserViewModel, String>(
+                      builder:
+                          (BuildContext context, value, Widget? child) =>
+                              const Text(
+                        'Nguyen Khanh Duy',
+                        style: TextStyle(
+                            color: Colors.black87,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18),
+                      ),
+                      selector: (p0, p1) => p1.user!.username.toString(),
+                    ),
+                    //USERNAME
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                      child: Selector<UserViewModel, String>(
+                        builder: (BuildContext context, value,
+                                Widget? child) =>
+                            Text(
+                          '@$value',
+                          style: const TextStyle(
+                              color: Colors.black54, fontSize: 15),
+                        ),
+                        selector: (p0, p1) =>
+                            p1.user!.username.toString(),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Selector<UserViewModel, int?>(
+                          builder: (BuildContext context, value,
+                                  Widget? child) =>
+                              FollowCount(
+                                  title: "Following",
+                                  count: value.toString()),
+                          selector: (p0, p1) => p1.user!.followingCounts,
+                        ),
+                        Selector<UserViewModel, int?>(
+                          builder: (BuildContext context, value,
+                                  Widget? child) =>
+                              FollowCount(
+                                  title: "Follower",
+                                  count: value.toString()),
+                          selector: (p0, p1) => p1.user!.followerCounts,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 5),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: const [
+                              IconWithText(
+                                  text: "Ho Chi Minh city",
+                                  icon: Icons.location_on_outlined),
+                              SizedBox(width: 10),
+                              IconWithText(
+                                  text: "Ho Chi Minh city",
+                                  icon: Icons.location_on_outlined),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(
+                      child: const Divider(indent: 1, thickness: 1),
+                      width: size.width * .7,
+                    ),
+                    const Text(
+                      'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ',
+                      style: TextStyle(
+                        color: Colors.black87,
+                      ),
+                    ),
+
+                    //
+                  ],
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );

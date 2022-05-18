@@ -29,38 +29,6 @@ class ProfileAvtAndCover extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            child: Container(
-              height: double.infinity,
-              padding: const EdgeInsets.all(8.0),
-              child: Stack(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
-                      TitleWithNumber(title: "Follower", number: 100),
-                      TitleWithNumber(title: "Following", number: 12),
-                    ],
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: kDefaultPadding / 2,
-                    child: Row(
-                      children: const [
-                        Icon(
-                          IconData(0xe3ab, fontFamily: "MaterialIcons"),
-                          color: Colors.white24,
-                        ),
-                        Text(
-                          "position",
-                          style: TextStyle(color: Colors.white24),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
           ),
           //CURRENT USER VATAR
           Positioned(

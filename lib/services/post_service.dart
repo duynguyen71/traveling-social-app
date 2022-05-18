@@ -165,4 +165,16 @@ class PostService {
       throw 'Failed to upload images';
     }
   }
+
+  Future<void> hidePost({required int postId}) async {
+    final url = Uri.parse(baseUrl + "/api/v1/members/posts/$postId/status/0");
+    final resp = await http.put(url, headers: await authorizationHeader());
+    if (resp.statusCode == 200) {
+      print("Hide post id $postId");
+    } else {
+      print("Failed to hide post id $postId");
+    }
+  }
+
+
 }

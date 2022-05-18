@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:traveling_social_app/screens/profile/current_user_profile_screen.dart';
+import 'package:traveling_social_app/screens/profile/profile_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/view_model/user_viewmodel.dart';
 import 'package:traveling_social_app/widgets/bottom_select_dialog.dart';
@@ -7,6 +9,7 @@ import 'package:traveling_social_app/widgets/user_avt.dart';
 import '../models/Comment.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import '../models/User.dart';
 import '../services/comment_service.dart';
 
 class CommentEntry extends StatefulWidget {
@@ -73,6 +76,10 @@ class _CommentEntryState extends State<CommentEntry> {
 
   int get level => widget.level;
 
+  User? get user => widget.comment.user;
+
+  User? get currentUser=> context.read<UserViewModel>().user;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -95,6 +102,13 @@ class _CommentEntryState extends State<CommentEntry> {
                     children: [
                       //USER AVT
                       UserAvatar(
+                        onTap: () {
+                          ApplicationUtility.navigateToScreen(
+                              context,
+                              context.read<UserViewModel>().equal(widget.comment.user)
+                                  ? const CurrentUserProfileScreen()
+                                  : ProfileScreen(userId: widget.comment.user!.id!));
+                        },
                         size: 30,
                         user: widget.comment.user != null
                             ? widget.comment.user!
@@ -112,8 +126,8 @@ class _CommentEntryState extends State<CommentEntry> {
                               onTap: () {
                                 ApplicationUtility.showModelBottomDialog(
                                   context,
-                                  (widget.comment.user != null) &&
-                                          (widget.comment.user!.id !=
+                                  (user != null) &&
+                                          (user!.id !=
                                               context
                                                   .read<UserViewModel>()
                                                   .user!

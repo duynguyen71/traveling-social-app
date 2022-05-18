@@ -6,13 +6,21 @@ import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/models/Attachment.dart';
 import 'package:traveling_social_app/models/Post.dart';
 import 'package:traveling_social_app/screens/comment/comment_screen.dart';
+import 'package:traveling_social_app/screens/profile/current_user_profile_screen.dart';
+import 'package:traveling_social_app/screens/profile/profile_screen.dart';
+import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/expandable_text.dart';
+import 'package:traveling_social_app/widgets/popup_menu_item.dart';
 import 'package:traveling_social_app/widgets/rounded_icon_button.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
 
 import '../../../models/Content.dart';
 import '../../../models/Reaction.dart';
+import '../../../models/User.dart';
 import '../../../services/post_service.dart';
+import 'package:provider/provider.dart';
+
+import '../../../view_model/user_viewmodel.dart';
 
 class PostEntry extends StatefulWidget {
   const PostEntry({Key? key, this.image, required this.post}) : super(key: key);
@@ -32,7 +40,6 @@ class _PostEntryState extends State<PostEntry>
 
   int _attachmentIndex = 0;
   int _likeCount = 0;
-
 
   @override
   void initState() {
@@ -66,18 +73,29 @@ class _PostEntryState extends State<PostEntry>
     return [];
   }
 
+  _hide() {}
+
   Reaction? get myReaction => widget.post.myReaction;
 
   String? get mainCaption => widget.post.caption;
+
+  User? get currentUser => context.read<UserViewModel>().user;
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Container(
-      margin: const EdgeInsets.all(5),
+      margin: const EdgeInsets.symmetric(vertical: 10),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(0)),
+          color: Colors.white,
+          border: Border(
+              top: BorderSide(
+                color: Colors.grey.shade100,
+              ),
+              bottom: BorderSide(
+                color: Colors.grey.shade100,
+              ))),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,6 +110,13 @@ class _PostEntryState extends State<PostEntry>
                 size: 40,
                 user: widget.post.user!,
                 margin: EdgeInsets.zero,
+                onTap: () {
+                  ApplicationUtility.navigateToScreen(
+                      context,
+                      context.read<UserViewModel>().equal(widget.post.user!)
+                          ? const CurrentUserProfileScreen()
+                          : ProfileScreen(userId: widget.post.user!.id!));
+                },
               ),
               const SizedBox(width: 10),
               Column(
@@ -102,7 +127,7 @@ class _PostEntryState extends State<PostEntry>
                     widget.post.user!.username.toString(),
                     style: const TextStyle(
                       fontWeight: FontWeight.w500,
-                      fontSize: 16,
+                      fontSize: 18,
                     ),
                   ),
                   Text(
@@ -119,34 +144,52 @@ class _PostEntryState extends State<PostEntry>
                   alignment: Alignment.centerRight,
                   child: const Icon(Icons.more_horiz, color: Colors.black87),
                 ),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
+                  ),
+                ),
+                color: Colors.grey.shade50,
                 itemBuilder: (context) => <PopupMenuEntry<String>>[
                   const PopupMenuItem<String>(
-                    value: 'Value1',
-                    child: Text('Choose value 1'),
+                    value: 'EDIT',
+                    child: MyPopupMenuItem(title: 'Edit', iconData: Icons.edit),
                   ),
                   const PopupMenuItem<String>(
                     value: 'Value2',
                     child: Text('Choose value 2'),
                   ),
                   const PopupMenuItem<String>(
-                    value: 'Value3',
-                    child: Text('Choose value 3'),
+                    value: 'HIDE',
+                    child: MyPopupMenuItem(
+                        title: 'Hide', iconData: Icons.visibility_off),
                   ),
                 ],
                 onSelected: (string) {
-                  print(string);
+                  switch (string) {
+                    case "EDIT":
+                      {
+                        break;
+                      }
+                    case "HIDE":
+                      {
+                        break;
+                      }
+                  }
                 },
                 padding: EdgeInsets.zero,
                 elevation: 0,
               )
             ],
           ),
+          //CAPTION
           mainCaption.toString().isNotEmpty
               ? Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: ExpandableText(
                     text: mainCaption.toString().trim(),
-                    textColor: Colors.black54,
+                    textStyle:
+                        const TextStyle(fontSize: 16, color: Colors.black87),
                   ),
                 )
               : const SizedBox.shrink(),
@@ -158,7 +201,7 @@ class _PostEntryState extends State<PostEntry>
                 padding: const EdgeInsets.only(top: 4, bottom: 8.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child:( _attachments[_attachmentIndex] ==null)
+                  child: (_attachments[_attachmentIndex] == null)
                       ? const SizedBox.shrink()
                       : CachedNetworkImage(
                           fit: BoxFit.contain,
@@ -215,6 +258,26 @@ class _PostEntryState extends State<PostEntry>
                       left: 10,
                     )
                   : const SizedBox.shrink(),
+              _attachments.length > 1
+                  ? Positioned(
+                      right: 10,
+                      top: 10,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: Colors.black87.withOpacity(.3),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: RichText(
+                          text: TextSpan(children: [
+                            TextSpan(text: '${_attachmentIndex + 1}'),
+                            TextSpan(text: ' / ${_attachments.length}')
+                          ], style: const TextStyle(color: Colors.white)),
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink()
             ],
           ),
           //BUTTONS
@@ -279,13 +342,16 @@ class _PostEntryState extends State<PostEntry>
                     children: [
                       IconButton(
                         onPressed: () {
-                          Navigator.of(context).push(PageRouteBuilder(
+                          Navigator.of(context).push(
+                            PageRouteBuilder(
                               opaque: false,
                               pageBuilder: (BuildContext context, _, __) =>
                                   CommentScreen(
-                                    postId: widget.post.id!,
-                                    myComments: widget.post.myComments,
-                                  ),),);
+                                postId: widget.post.id!,
+                                myComments: widget.post.myComments,
+                              ),
+                            ),
+                          );
                         },
                         icon: const Icon(
                           Icons.chat_bubble_outline,
@@ -300,11 +366,12 @@ class _PostEntryState extends State<PostEntry>
                   Row(
                     children: [
                       IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.share,
-                            color: Colors.black45,
-                          ),),
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.share,
+                          color: Colors.black45,
+                        ),
+                      ),
                       const Text('Share'),
                     ],
                   ),

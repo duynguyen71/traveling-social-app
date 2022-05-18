@@ -36,7 +36,7 @@ class _HomeBodyState extends State<HomeBody> {
           child: Container(
             alignment: Alignment.center,
             width: size.width * .8,
-            decoration: BoxDecoration(boxShadow: [kDefaultShadow]),
+            // decoration: BoxDecoration(boxShadow: [kDefaultShadow]),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

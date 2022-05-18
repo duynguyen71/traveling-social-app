@@ -8,7 +8,9 @@ import 'package:traveling_social_app/models/User.dart';
 import 'package:traveling_social_app/screens/home/components/drawer.dart';
 import 'package:traveling_social_app/screens/home/components/home_body.dart';
 import 'package:traveling_social_app/screens/login/login_screen.dart';
+import 'package:traveling_social_app/screens/profile/components/create_post_type_dialog.dart';
 import 'package:traveling_social_app/screens/profile/current_user_profile_screen.dart';
+import 'package:traveling_social_app/screens/search/search_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/view_model/post_viewmoel.dart';
 import 'package:traveling_social_app/view_model/user_viewmodel.dart';
@@ -32,7 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    super.initState();
     ApplicationUtility.hideKeyboard();
     _userViewModel = context.read<UserViewModel>();
     if (_userViewModel.user == null) {
@@ -43,17 +44,20 @@ class _HomeScreenState extends State<HomeScreen> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        if(!context.read<PostViewModel>().isLoading){
+        if (!context.read<PostViewModel>().isLoading) {
           context.read<PostViewModel>().fetchMorePosts();
         }
       }
     });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      backgroundColor: Colors.grey.shade50,
+      resizeToAvoidBottomInset: false,
       drawer: HomeDrawer(user: _user),
       body: Builder(
         builder: (context) => CustomScrollView(
@@ -82,14 +86,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               actions: [
                 IconButton(
-                  onPressed: () {},
+                    onPressed: () => ApplicationUtility.showModelBottomDialog(
+                        context, const CreatePostTypeDialog()),
+                    icon: const Icon(Icons.edit, color: Colors.black45)),
+                IconButton(
+                  onPressed: () => ApplicationUtility.navigateToScreen(
+                      context, const SearchScreen(keyword: '')),
                   icon: SvgPicture.asset(
                     "assets/icons/search.svg",
                     color: Colors.black87,
                   ),
-                ),
-                const SizedBox(
-                  width: 10,
                 ),
                 Container(
                   margin: const EdgeInsets.only(right: 10),
@@ -125,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     return PostEntry(
                       // post: value.posts[index],
                       // key: ValueKey(value.posts[index].id),
-                      post:posts.elementAt(index),
+                      post: posts.elementAt(index),
                       key: ValueKey(posts.elementAt(index)),
                     );
                   },

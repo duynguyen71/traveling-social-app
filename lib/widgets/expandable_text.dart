@@ -60,9 +60,11 @@ class _ExpandableTextState extends State<ExpandableText> {
                   style: const TextStyle(color: Colors.blueGrey),
                 ),
                 style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    alignment: Alignment.centerLeft),
+                  minimumSize: Size.zero,
+                  padding: EdgeInsets.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  alignment: Alignment.centerLeft,
+                ),
               )
             : const SizedBox.shrink(),
       ],
