@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/widgets/my_divider.dart';
 
-class BottomSelectDialog extends StatelessWidget {
-  const BottomSelectDialog({Key? key, required this.items}) : super(key: key);
+class MyBottomDialog extends StatelessWidget {
+  const MyBottomDialog({Key? key, required this.items}) : super(key: key);
 
-  final List<SelectItem> items;
+  final List<BottomDialogItem> items;
 
   @override
   Widget build(BuildContext context) {
@@ -87,10 +87,10 @@ class BottomSelectDialog extends StatelessWidget {
   }
 }
 
-class SelectItem {
+class BottomDialogItem {
   String title;
 
   Function onClick;
 
-  SelectItem({required this.title, required this.onClick});
+  BottomDialogItem({required this.title, required this.onClick});
 }

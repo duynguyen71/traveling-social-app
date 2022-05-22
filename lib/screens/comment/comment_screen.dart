@@ -21,33 +21,27 @@ class CommentScreen extends StatefulWidget {
   State<CommentScreen> createState() => _CommentScreenState();
 }
 
-class _CommentScreenState extends State<CommentScreen> {
+class _CommentScreenState extends State<CommentScreen>
+    with AutomaticKeepAliveClientMixin {
   int _currentPage = 0;
 
   final CommentService _commentService = CommentService();
 
   final Set<Comment> _comments = <Comment>{};
-
   final FocusNode _focusNode = FocusNode();
-
   final ScrollController _scrollController = ScrollController();
-
   bool _isLoading = false;
 
   List<Comment> get myComments => widget.myComments;
-
   final TextEditingController _commentController = TextEditingController();
-
   bool _isLoadMoreComment = false;
-
   Comment? _currentReplyComment;
   Comment? _currentFocusReplyComment;
-
   Comment? _currentFocusEditComment;
-
   String? editedMessage;
 
   _sendComment() async {
+    print("SEND COMMENT");
     int? parentCommentId;
     if (_currentFocusReplyComment != null) {
       parentCommentId = _currentFocusReplyComment!.id;
@@ -72,6 +66,9 @@ class _CommentScreenState extends State<CommentScreen> {
           _scrollController
               .jumpTo(_scrollController.position.maxScrollExtent + 80);
         }
+        context
+            .read<PostViewModel>()
+            .incrementCommentCount(postId: widget.postId);
       }
     } on Exception catch (e) {
       throw Exception(e.toString());
@@ -129,7 +126,7 @@ class _CommentScreenState extends State<CommentScreen> {
       });
     }
     //get comments
-    _getComments();
+    _getOtherUserComments();
     _commentController.text =
         DateTime.now().millisecond.toString() + " comment";
     _scrollController.addListener(() async {
@@ -160,9 +157,7 @@ class _CommentScreenState extends State<CommentScreen> {
     super.initState();
   }
 
-  bool _isMessageEmpty = false;
-
-  _getComments() async {
+  _getOtherUserComments() async {
     isLoading = true;
     var comments =
         await _commentService.getRootCommentsOnPost(postId: widget.postId);
@@ -180,6 +175,7 @@ class _CommentScreenState extends State<CommentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -279,9 +275,7 @@ class _CommentScreenState extends State<CommentScreen> {
                             ? _currentFocusReplyComment!.user
                             : context.read<UserViewModel>().user,
                         onChange: (text) {},
-                        sendBtnColor: !_isMessageEmpty
-                            ? kPrimaryLightColor
-                            : Colors.black12,
+                        sendBtnColor: kPrimaryLightColor,
                         controller: _commentController,
                         focusNode: _focusNode,
                         onSendButtonClick: () {
@@ -332,4 +326,7 @@ class _CommentScreenState extends State<CommentScreen> {
     _scrollController.dispose();
     super.dispose();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

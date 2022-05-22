@@ -21,27 +21,40 @@ class CreateStoryScreen extends StatefulWidget {
 }
 
 class _CreateStoryScreenState extends State<CreateStoryScreen> {
-  List<File> _pickedFiles = [];
+  final List<File> _pickedFiles = [];
   final _imagePicker = ImagePicker();
   final _captionController = TextEditingController();
   bool _isLoading = false;
 
-  _handlePickImage(ImageSource source) async {
-    XFile? file = await _imagePicker.pickImage(source: source);
-    if (file != null) _addImage(File(file.path));
+  final int _compressQuality = 20;
+
+  _getImageFromCamera() async {
+    XFile? file = await _imagePicker.pickImage(source: ImageSource.camera);
+    if (file != null) {
+      File? compressed =
+          await ApplicationUtility.compressImage(file.path, quality: 50);
+      if (compressed != null) {
+        setState(() {
+          _pickedFiles.add(compressed);
+        });
+      }
+    }
   }
 
-  _addImage(File image) {
-    setState(() {
-      _pickedFiles.add(image);
-    });
+  _getImagesFromGallery() async {
+    List<XFile>? files = await _imagePicker.pickMultiImage(imageQuality: 80);
+    if (files != null) {
+      for (int i = 0; i < files.length; i++) {
+        File? compressed = await ApplicationUtility.compressImage(files[0].path,
+            quality: _compressQuality);
+        if (compressed != null) {
+          setState(() {
+            _pickedFiles.add(compressed);
+          });
+        }
+      }
+    }
   }
-
-  // _removeImage(int index) {
-  //   setState(() {
-  //     images.removeAt(index);
-  //   });
-  // }
 
   Future<void> _handlePostStory() async {
     ApplicationUtility.hideKeyboard();
@@ -138,89 +151,106 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
                               keyboardType: TextInputType.multiline,
                             ),
                             const SizedBox(height: 10),
-                            // GridView.count(
-                            //   crossAxisCount: 2,
-                            //   childAspectRatio: (16 / 9),
-                            //   shrinkWrap: true,
-                            //   children: List.generate(images.length, (index) {
-                            //     XFile? file = images.asMap()[index];
-                            //     return Padding(
-                            //       padding: const EdgeInsets.all(4.0),
-                            //       child: Container(
-                            //         decoration: BoxDecoration(
-                            //           image: DecorationImage(
-                            //             fit: BoxFit.cover,
-                            //             image: FileImage(File(file!.path)),
-                            //           ),
+                            // SizedBox(
+                            //   width: size.width,
+                            //   child: SingleChildScrollView(
+                            //     scrollDirection: Axis.horizontal,
+                            //     physics: const BouncingScrollPhysics(),
+                            //     child: Row(
+                            //         children: List.generate(_pickedFiles.length,
+                            //             (index) {
+                            //       return Padding(
+                            //         padding: const EdgeInsets.all(8.0),
+                            //         child: MediaFileContainer(
+                            //           ratio: 16 / 9,
+                            //           boxFit: BoxFit.fitHeight,
+                            //           file: _pickedFiles[index],
+                            //           height: 180,
+                            //           onClick: () {
+                            //             setState(() {
+                            //               _pickedFiles.removeAt(index);
+                            //             });
+                            //           },
+                            //           width: null,
+                            //           modifiedFile: (File f) {
+                            //             setState(() {
+                            //               _pickedFiles[index] = f;
+                            //             });
+                            //           },
                             //         ),
-                            //       ),
-                            //     );
-                            //   }),
+                            //       );
+                            //     },),),
+                            //   ),
                             // ),
-                            // _pickedFiles.
-                            SizedBox(
-                              width: size.width,
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                physics: const BouncingScrollPhysics(),
-                                child: Row(
-                                    children: List.generate(_pickedFiles.length,
-                                        (index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: MediaFileContainer(
-                                      ratio: 16 / 9,
-                                      boxFit: BoxFit.fitHeight,
-                                      file: _pickedFiles[index],
-                                      height: 180,
-                                      onClick: () {
-                                        setState(() {
-                                          _pickedFiles.removeAt(index);
-                                        });
+                            //MEDIA FILES
+                            _pickedFiles.isNotEmpty
+                                ? SizedBox(
+                                    height: 180,
+                                    child: ReorderableListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      onReorder: ((oldIndex, newIndex) {
+                                        if (newIndex > oldIndex) {
+                                          newIndex = newIndex - 1;
+                                        }
+                                        final element =
+                                            _pickedFiles.removeAt(oldIndex);
+                                        _pickedFiles.insert(newIndex, element);
+                                      }),
+                                      itemBuilder: (context, index) {
+                                        return MediaFileContainer(
+                                          key: ValueKey(_pickedFiles[index]),
+                                          ratio: 16 / 9,
+                                          boxFit: BoxFit.fitHeight,
+                                          file: _pickedFiles[index],
+                                          height: 180,
+                                          onClick: () {
+                                            setState(() {
+                                              _pickedFiles.removeAt(index);
+                                            });
+                                          },
+                                          width: null,
+                                          modifiedFile: (File f) {
+                                            setState(() {
+                                              _pickedFiles[index] = f;
+                                            });
+                                          },
+                                        );
                                       },
-                                      width: null,
-                                      modifiedFile: (File f) {
-                                        setState(() {
-                                          _pickedFiles[index] = f;
-                                        });
-                                      },
+                                      itemCount: _pickedFiles.length,
                                     ),
-                                  );
-                                })),
-                              ),
-                            ),
-
+                                  )
+                                : const SizedBox.shrink(),
                             Container(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
+                                  //PICK FROM CAMERA
                                   IconButton(
-                                      padding: EdgeInsets.zero,
-                                      constraints: const BoxConstraints(),
-                                      onPressed: () async =>
-                                          await _handlePickImage(
-                                              ImageSource.camera),
-                                      icon: const Icon(
-                                        Icons.add_a_photo,
-                                        size: 25,
-                                        color: Colors.lightBlue,
-                                      )),
+                                    padding: EdgeInsets.zero,
+                                    constraints: const BoxConstraints(),
+                                    onPressed: () => _getImageFromCamera(),
+                                    icon: const Icon(
+                                      Icons.add_a_photo,
+                                      size: 25,
+                                      color: Colors.lightBlue,
+                                    ),
+                                  ),
                                   const SizedBox(width: 20),
+                                  //PICK FROM GALLERY
                                   IconButton(
-                                      padding: EdgeInsets.zero,
-                                      constraints: const BoxConstraints(),
-                                      onPressed: () async =>
-                                          _handlePickImage(ImageSource.gallery),
-                                      icon: const Icon(
-                                        Icons.add_photo_alternate_outlined,
-                                        size: 25,
-                                        color: Colors.lightBlue,
-                                      ))
+                                    padding: EdgeInsets.zero,
+                                    constraints: const BoxConstraints(),
+                                    onPressed: () => _getImagesFromGallery(),
+                                    icon: const Icon(
+                                      Icons.add_photo_alternate_outlined,
+                                      size: 25,
+                                      color: Colors.lightBlue,
+                                    ),
+                                  )
                                 ],
                               ),
                             ),
-                            //IMAGE PICKER
                           ],
                         ),
                       ),

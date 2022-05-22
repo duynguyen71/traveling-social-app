@@ -38,6 +38,7 @@ class PostViewModel with ChangeNotifier {
 
   void removePost({required postId}) {
     _posts.removeWhere((element) => element.id == postId);
+    print('remove post success');
     notifyListeners();
   }
 
@@ -46,6 +47,18 @@ class PostViewModel with ChangeNotifier {
     if (rs != null) {
       rs.myComments.removeWhere((element) => element.id == commentId);
     }
+    notifyListeners();
+  }
+
+  void incrementCommentCount({required postId}) {
+    Post post = _posts.singleWhere((element) => element.id == postId);
+    post.commentCount = post.commentCount + 1;
+    notifyListeners();
+  }
+
+  void decrementCommentCount({required postId}) {
+    Post post = _posts.singleWhere((element) => element.id == postId);
+    post.commentCount = post.commentCount - 1;
     notifyListeners();
   }
 

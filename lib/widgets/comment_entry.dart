@@ -132,16 +132,16 @@ class _CommentEntryState extends State<CommentEntry> {
                                                   .read<UserViewModel>()
                                                   .user!
                                                   .id)
-                                      ? BottomSelectDialog(
+                                      ? MyBottomDialog(
                                           items: [
                                             //REPLY COMMENT BUTTON
-                                            SelectItem(
+                                            BottomDialogItem(
                                                 title: 'Reply',
                                                 onClick: () {
                                                   widget.replyCommentRequest(
                                                       widget.comment);
                                                 }),
-                                            SelectItem(
+                                            BottomDialogItem(
                                               title: 'Copy',
                                               onClick: () {
                                                 Clipboard.setData(ClipboardData(
@@ -151,7 +151,7 @@ class _CommentEntryState extends State<CommentEntry> {
                                             ),
                                           ],
                                         )
-                                      : BottomSelectDialog(
+                                      : MyBottomDialog(
                                           items: [
                                             // SelectItem(
                                             //     title: 'Edit',
@@ -159,7 +159,7 @@ class _CommentEntryState extends State<CommentEntry> {
                                             //       widget.editCommentRequest(
                                             //           widget.comment);
                                             //     }),
-                                            SelectItem(
+                                            BottomDialogItem(
                                                 title: 'Hide',
                                                 onClick: () {
                                                   widget.hideComment(
@@ -168,7 +168,7 @@ class _CommentEntryState extends State<CommentEntry> {
                                                     _hiding = true;
                                                   });
                                                 }),
-                                            SelectItem(
+                                            BottomDialogItem(
                                               title: 'Copy',
                                               onClick: () {
                                                 Clipboard.setData(ClipboardData(

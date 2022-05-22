@@ -10,7 +10,7 @@ import 'package:traveling_social_app/widgets/user_avt.dart';
 
 import '../../utilities/application_utility.dart';
 import '../../view_model/user_viewmodel.dart';
-import '../profile/current_user_profile_screen.dart';
+import '../../widgets/current_user_avt.dart';
 import '../profile/profile_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -78,7 +78,9 @@ class _StoryFullScreenState extends State<StoryFullScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     return Material(
       child: SizedBox(
         width: size.width,
@@ -88,73 +90,39 @@ class _StoryFullScreenState extends State<StoryFullScreen>
           children: [
             Center(
               child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height,
                 decoration: const BoxDecoration(color: Colors.black87),
-                child: Container(
-                  padding: const EdgeInsets.only(top: 90),
-                  // decoration: const BoxDecoration(color: Colors.black87),
-                  width: MediaQuery.of(context).size.width - 10,
-                  height: MediaQuery.of(context).size.height - 80,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      //DIVIDER
-                      itemCount > 1
-                          ? Center(
-                              child: Container(
-                                alignment: Alignment.center,
-                                width: size.width,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: widget.post.contents == null
-                                      ? []
-                                      : List.generate(
-                                          itemCount,
-                                          (index) => Container(
-                                            width: (size.width ~/
-                                                    (widget.post.contents
-                                                            ?.length ??
-                                                        1))
-                                                .toDouble(),
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 5),
-                                            height: 2,
-                                            child: Divider(
-                                                height: 2,
-                                                thickness: 2,
-                                                color: currentIndex == index
-                                                    ? Colors.white
-                                                    : Colors.grey),
-                                          ),
-                                        ),
-                                ),
-                              ),
-                            )
-                          : const SizedBox.shrink(),
-                      const SizedBox(height: 5),
-                      //IMAGE
-                      AspectRatio(
-                        aspectRatio: 3 / 4,
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            image: currentImg != null
-                                ? DecorationImage(
-                                    fit: BoxFit.fitWidth,
-                                    image: CachedNetworkImageProvider(
-                                      currentImg != null
-                                          ? (imageUrl + currentImg.toString())
-                                          : "https://images.pexels.com/photos/11780519/pexels-photo-11780519.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-                                    ),
-                                  )
-                                : null,
-                          ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    //IMAGE
+                    AspectRatio(
+                      aspectRatio: 3 / 4,
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          image: currentImg != null
+                              ? DecorationImage(
+                            fit: BoxFit.fitWidth,
+                            image: CachedNetworkImageProvider(
+                                currentImg != null
+                                    ? (imageUrl + currentImg.toString())
+                                    : "https://images.pexels.com/photos/11780519/pexels-photo-11780519.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+                                cacheKey: currentImg.toString()),
+                          )
+                              : null,
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),
@@ -183,106 +151,160 @@ class _StoryFullScreenState extends State<StoryFullScreen>
             ),
             //USER AVATAR
             Positioned(
-              top: 0,
-              child: Container(
-                alignment: Alignment.center,
-                width: size.width,
-                padding:
+              top: size.height * .05,
+              child: Column(
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    width: size.width,
+                    padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          UserAvatar(
-                            size: 35,
-                            user: widget.post.user!,
-                            onTap: () {
-                              ApplicationUtility.navigateToScreen(
-                                  context,
-                                  context
-                                          .read<UserViewModel>()
-                                          .equal(widget.post.user)
-                                      ? const CurrentUserProfileScreen()
-                                      : ProfileScreen(
-                                          userId: widget.post.user!.id!));
-                            },
-                          ),
-                          const SizedBox(width: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(
-                                widget.post.user!.username.toString(),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 16,
-                                    color: Colors.white),
+                              context.read<UserViewModel>().equal(
+                                  widget.post.user)
+                                  ? CurrentUserAvt(
+                                margin: EdgeInsets.zero,
+                                size: 40,
+                                onTap: () {},
+                              )
+                                  : UserAvatar(
+                                size: 40,
+                                user: widget.post.user!,
+                                margin: EdgeInsets.zero,
+                                onTap: () {
+                                  ApplicationUtility.pushAndReplace(
+                                      context,
+                                      ProfileScreen(
+                                          userId: widget.post.user!.id!));
+                                },
                               ),
-                              Text(
-                                _getTimeAgo(),
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 14),
+                              const SizedBox(width: 10),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.post.user!.username.toString(),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 16,
+                                        color: Colors.white),
+                                  ),
+                                  Text(
+                                    _getTimeAgo(),
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 14),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.of(context, rootNavigator: true).pop();
+                          },
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          icon: const Icon(
+                            Icons.more_horiz,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.of(context, rootNavigator: true).pop();
+                          },
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+
+                          icon: const Icon(
+                            Icons.close,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  itemCount > 1
+                      ? Center(
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: size.width,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: widget.post.contents == null
+                            ? []
+                            : List.generate(
+                          itemCount,
+                              (index) =>
+                              Container(
+                                width: (size.width ~/
+                                    (widget.post.contents
+                                        ?.length ??
+                                        1))
+                                    .toDouble(),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 5),
+                                height: 2,
+                                child: Divider(
+                                    thickness: currentIndex == index ? 1.5 : 1,
+                                    color: currentIndex == index
+                                        ? Colors.white
+                                        : Colors.grey.withOpacity(.5)),
+                              ),
+                        ),
                       ),
                     ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.of(context, rootNavigator: true).pop();
-                      },
-                      icon: const Icon(
-                        Icons.close,
-                        color: Colors.white,
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                      : const SizedBox.shrink(),
+                ],
               ),
             ),
             //STORY CAPTION
             widget.post.contents!.isEmpty
                 ? Positioned.fill(
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: size.height * .1),
-                      alignment: Alignment.center,
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SingleChildScrollView(
-                            child: ExpandableText(
-                              text: widget.post.caption.toString(),
-                              textStyle: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                  fontSize: 30),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
+              child: Container(
+                margin: EdgeInsets.symmetric(vertical: size.height * .1),
+                alignment: Alignment.center,
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SingleChildScrollView(
+                      child: ExpandableText(
+                        text: widget.post.caption.toString(),
+                        textStyle: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                            fontSize: 30),
+                        textAlign: TextAlign.center,
                       ),
                     ),
-                  )
+                  ),
+                ),
+              ),
+            )
                 : const SizedBox.shrink(),
             //
             (widget.post.caption != null && widget.post.contents!.isNotEmpty)
                 ? Positioned(
-                    child: SizedBox(
-                      width: size.width,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ExpandableText(
-                          text: widget.post.caption.toString(),
-                        ),
-                      ),
-                    ),
-                    bottom: 80,
-                  )
+              child: SizedBox(
+                width: size.width,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ExpandableText(
+                    text: widget.post.caption.toString(),
+                  ),
+                ),
+              ),
+              bottom: 80,
+            )
                 : const SizedBox.shrink(),
             //COMMENT INPUT
             Positioned(
@@ -307,14 +329,14 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(50)),
+                              BorderRadius.all(Radius.circular(50)),
                               borderSide: BorderSide(
                                 width: 1,
                               ),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(50)),
+                              BorderRadius.all(Radius.circular(50)),
                               borderSide: BorderSide(
                                   width: 1, color: kPrimaryLightColor),
                             ),
@@ -332,7 +354,10 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                   ],
                 ),
               ),
-              bottom: MediaQuery.of(context).viewInsets.bottom,
+              bottom: MediaQuery
+                  .of(context)
+                  .viewInsets
+                  .bottom,
             ),
           ],
         ),

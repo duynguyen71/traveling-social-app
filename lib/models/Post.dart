@@ -112,4 +112,6 @@ class Post {
 
   @override
   int get hashCode => id.hashCode;
+
+  set commentCount(int i) => _commentCount = i;
 }

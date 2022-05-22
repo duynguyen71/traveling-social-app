@@ -65,9 +65,10 @@ class PostService {
     return [];
   }
 
-  Future<List<Post>> getCurrentUserPosts({int? page, int? pageSize}) async {
+  Future<List<Post>> getCurrentUserPosts(
+      {int? page, int? pageSize, int? status}) async {
     var url = Uri.parse(baseUrl +
-        "/api/v1/member/users/me/posts?page=$page&pageSize=$pageSize");
+        "/api/v1/member/users/me/posts?page=$page&pageSize=$pageSize&status=$status");
     final resp = await http.get(url, headers: {
       "Authorization": 'Bearer ${await _storage.read(key: 'accessToken')}',
     });
@@ -123,7 +124,7 @@ class PostService {
           .asMap()
           .entries
           .map((e) => {
-                "attachmentId": e.value,
+                "attachment": {"id": e.value},
                 "pos": e.key,
                 "active": 1,
                 "caption": post['caption'].toString().trim()

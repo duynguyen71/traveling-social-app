@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:traveling_social_app/constants/api_constants.dart';
 import 'dart:io';
 import 'package:traveling_social_app/widgets/rounded_icon_button.dart';
 
@@ -37,23 +38,24 @@ class MediaFileContainer extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                // child: Image.file(
-                //   file,
-                //   height: height,
-                //   fit: boxFit,
-                //   width: width,
-                child: CachedNetworkImage(
-                  imageUrl: '',
-                  placeholder: (context, url) =>
-                    const  Center(child: CupertinoActivityIndicator()),
-                  errorWidget: (context, url, error) => Image.file(
-                    file,
-                    height: height,
-                    fit: boxFit,
-                    width: width,
-                  ),
-                )),
+              borderRadius: BorderRadius.circular(10),
+              // child: Image.file(
+              //   file,
+              //   height: height,
+              //   fit: boxFit,
+              //   width: width,
+              child: CachedNetworkImage(
+                imageUrl: '$imageUrl${file.path}',
+                placeholder: (context, url) =>
+                    const Center(child: CupertinoActivityIndicator()),
+                errorWidget: (context, url, error) => Image.file(
+                  file,
+                  height: height,
+                  fit: boxFit,
+                  width: width,
+                ),
+              ),
+            ),
             Positioned(
               bottom: 10,
               left: 10,
@@ -77,8 +79,6 @@ class MediaFileContainer extends StatelessWidget {
                         uiSettings: [
                           AndroidUiSettings(
                               toolbarTitle: 'Cropper',
-                              toolbarColor: Colors.deepOrange,
-                              toolbarWidgetColor: Colors.white,
                               initAspectRatio: CropAspectRatioPreset.original,
                               lockAspectRatio: false),
                           IOSUiSettings(

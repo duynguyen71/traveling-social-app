@@ -58,25 +58,13 @@ class _HomeBodyState extends State<HomeBody> {
                   iconData: Icons.message,
                   label: "Messages",
                   onTap: () {
-                    // Timer(Duration(milliseconds: 500), () {
-                    //   Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //           builder: (context) => InBoxScreen()));
-                    // });
+
                   },
-                  // count: "2",
                 ),
                 CustomTabTitle(
                   iconData: Icons.reviews,
                   label: "Blog",
                   onTap: () {
-                    // Timer(Duration(milliseconds: 500), () {
-                    //   Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //           builder: (context) => BlogScreen()));
-                    // });
                   },
                 ),
               ],
@@ -92,12 +80,7 @@ class _HomeBodyState extends State<HomeBody> {
           ),
         ),
         //STORY
-
-        // const HomeStories(),
-
-        //  Trending
-        // const HomePost(),
-
+        const HomeStories(),
         //POSTS
 
         //TRENDING POST

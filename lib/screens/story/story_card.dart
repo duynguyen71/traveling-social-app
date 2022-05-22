@@ -6,6 +6,9 @@ import 'package:traveling_social_app/models/Content.dart';
 import 'package:traveling_social_app/models/Post.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
 import 'package:palette_generator/palette_generator.dart';
+import 'package:provider/provider.dart';
+import '../../view_model/user_viewmodel.dart';
+import '../../widgets/current_user_avt.dart';
 
 class StoryCard extends StatefulWidget {
   const StoryCard({Key? key, required this.story, required this.onClick})
@@ -58,9 +61,6 @@ class _StoryCardState extends State<StoryCard>
       padding: const EdgeInsets.all(5),
       child: AspectRatio(
         aspectRatio: 9 / 16,
-        // aspectRatio: 9 / 14,
-        // aspectRatio: 10 / 14,
-        // aspectRatio:1.91/1,
         child: Stack(
           alignment: Alignment.center,
           children: [
@@ -121,10 +121,18 @@ class _StoryCardState extends State<StoryCard>
             Positioned(
               bottom: 8,
               right: 8,
-              child: UserAvatar(
-                size: 25,
-                user: widget.story.user!,
-              ),
+              child: context.read<UserViewModel>().equal(widget.story.user)
+                  ? CurrentUserAvt(
+                      margin: EdgeInsets.zero,
+                      size: 25,
+                      onTap: () {},
+                    )
+                  : UserAvatar(
+                      size: 25,
+                      user: widget.story.user!,
+                      margin: EdgeInsets.zero,
+                      onTap: () {},
+                    ),
             ),
           ],
         ),

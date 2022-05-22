@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/models/Post.dart';
 import 'package:traveling_social_app/screens/home/components/post_entry.dart';
 import 'package:traveling_social_app/screens/home/home_screen.dart';
-import 'package:traveling_social_app/screens/profile/components/background.dart';
 import 'package:traveling_social_app/screens/profile/components/follow_count.dart';
 import 'package:traveling_social_app/screens/profile/components/icon_with_text.dart';
 import 'package:traveling_social_app/screens/profile/components/profile_avt_and_cover.dart';
@@ -21,25 +21,19 @@ class CurrentUserProfileScreen extends StatefulWidget {
 }
 
 class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
-  bool _isLoading = false;
-
-  late UserViewModel _userViewModel;
   final PostService _postService = PostService();
   List<Post> _posts = [];
   int page = 0;
 
   @override
   void initState() {
-    _userViewModel = context.read<UserViewModel>();
-    _getPosts();
     super.initState();
+    _getPosts();
   }
 
   _getPosts() async {
     final posts =
         await _postService.getCurrentUserPosts(page: page, pageSize: 5);
-    print("get post success");
-    print(posts.length);
     setState(() {
       _posts = posts;
     });
@@ -55,13 +49,16 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
           const ProfileAppbar(),
           //BODY
           _buildCoverBackground(size),
-
           SliverToBoxAdapter(
             child: Column(
-                children: List.generate(_posts.length, (index) {
-              var post = _posts[index];
-              return PostEntry(post: post, key: ValueKey(post.id));
-            },),),
+              children: List.generate(
+                _posts.length,
+                (index) {
+                  var post = _posts[index];
+                  return PostEntry(post: post, key: ValueKey(post.id));
+                },
+              ),
+            ),
           )
         ],
       ),
@@ -101,7 +98,7 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
   Widget _buildCoverBackground(Size size) {
     return SliverToBoxAdapter(
       child: Container(
-        decoration:const BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
         ),
         child: Column(
@@ -120,51 +117,35 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    //FULL NAME
-                    Selector<UserViewModel, String>(
-                      builder:
-                          (BuildContext context, value, Widget? child) =>
-                              const Text(
-                        'Nguyen Khanh Duy',
-                        style: TextStyle(
-                            color: Colors.black87,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
-                      ),
-                      selector: (p0, p1) => p1.user!.username.toString(),
-                    ),
-                    //USERNAME
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 12.0),
                       child: Selector<UserViewModel, String>(
-                        builder: (BuildContext context, value,
-                                Widget? child) =>
+                        builder: (BuildContext context, value, Widget? child) =>
                             Text(
                           '@$value',
                           style: const TextStyle(
-                              color: Colors.black54, fontSize: 15),
+                              color: Colors.black54, fontSize: 18),
                         ),
-                        selector: (p0, p1) =>
-                            p1.user!.username.toString(),
+                        selector: (p0, p1) => p1.user!.username.toString(),
                       ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Selector<UserViewModel, int?>(
-                          builder: (BuildContext context, value,
-                                  Widget? child) =>
-                              FollowCount(
-                                  title: "Following",
-                                  count: value.toString()),
+                          builder:
+                              (BuildContext context, value, Widget? child) =>
+                                  FollowCount(
+                                      title: "Following",
+                                      count: value.toString()),
                           selector: (p0, p1) => p1.user!.followingCounts,
                         ),
                         Selector<UserViewModel, int?>(
-                          builder: (BuildContext context, value,
-                                  Widget? child) =>
-                              FollowCount(
-                                  title: "Follower",
-                                  count: value.toString()),
+                          builder:
+                              (BuildContext context, value, Widget? child) =>
+                                  FollowCount(
+                                      title: "Follower",
+                                      count: value.toString()),
                           selector: (p0, p1) => p1.user!.followerCounts,
                         ),
                       ],
@@ -176,6 +157,20 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              IconWithText(
+                                  text: "Ho Chi Minh city",
+                                  icon: Icons.location_on_outlined),
+                              SizedBox(width: 10),
+                              IconWithText(
+                                  text:
+                                      'Joined date ${Jiffy(context.read<UserViewModel>().user!.createDate.toString()).format('dd-MM-yyyy')}',
+                                  icon: Icons.calendar_today_outlined),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: const [
@@ -191,15 +186,18 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
                         ],
                       ),
                     ),
-
+                    //BIO
                     SizedBox(
                       child: const Divider(indent: 1, thickness: 1),
                       width: size.width * .7,
                     ),
-                    const Text(
-                      'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ',
-                      style: TextStyle(
-                        color: Colors.black87,
+                    Selector<UserViewModel, String?>(
+                      selector: ((p0, p1) => p1.user!.bio.toString()),
+                      builder: (context, value, child) => Text(
+                        value.toString().trim(),
+                        style: const TextStyle(
+                          color: Colors.black87,
+                        ),
                       ),
                     ),
 

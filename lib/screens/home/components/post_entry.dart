@@ -9,6 +9,8 @@ import 'package:traveling_social_app/screens/comment/comment_screen.dart';
 import 'package:traveling_social_app/screens/profile/current_user_profile_screen.dart';
 import 'package:traveling_social_app/screens/profile/profile_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
+import 'package:traveling_social_app/view_model/post_viewmoel.dart';
+import 'package:traveling_social_app/widgets/current_user_avt.dart';
 import 'package:traveling_social_app/widgets/expandable_text.dart';
 import 'package:traveling_social_app/widgets/popup_menu_item.dart';
 import 'package:traveling_social_app/widgets/rounded_icon_button.dart';
@@ -43,10 +45,10 @@ class _PostEntryState extends State<PostEntry>
 
   @override
   void initState() {
+    super.initState();
     _likeCount = widget.post.reactionCount;
     _isFavorite = (myReaction != null);
     _getAttachments();
-    super.initState();
   }
 
   _getAttachments() {
@@ -88,36 +90,42 @@ class _PostEntryState extends State<PostEntry>
       margin: const EdgeInsets.symmetric(vertical: 10),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(
-              top: BorderSide(
-                color: Colors.grey.shade100,
-              ),
-              bottom: BorderSide(
-                color: Colors.grey.shade100,
-              ))),
+        color: Colors.white,
+        border: Border(
+          top: BorderSide(
+            color: Colors.grey.shade100,
+          ),
+          bottom: BorderSide(
+            color: Colors.grey.shade100,
+          ),
+        ),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          //  AVT
+          // USER AVT AVT
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
-              UserAvatar(
-                size: 40,
-                user: widget.post.user!,
-                margin: EdgeInsets.zero,
-                onTap: () {
-                  ApplicationUtility.navigateToScreen(
-                      context,
-                      context.read<UserViewModel>().equal(widget.post.user!)
-                          ? const CurrentUserProfileScreen()
-                          : ProfileScreen(userId: widget.post.user!.id!));
-                },
-              ),
+              context.read<UserViewModel>().equal(widget.post.user)
+                  ? CurrentUserAvt(
+                      margin: EdgeInsets.zero,
+                      size: 40,
+                      onTap: () => ApplicationUtility.navigateToScreen(
+                          context, const CurrentUserProfileScreen()),
+                    )
+                  : UserAvatar(
+                      size: 40,
+                      user: widget.post.user!,
+                      margin: EdgeInsets.zero,
+                      onTap: () {
+                        ApplicationUtility.navigateToScreen(context,
+                            ProfileScreen(userId: widget.post.user!.id!));
+                      },
+                    ),
               const SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,6 +181,10 @@ class _PostEntryState extends State<PostEntry>
                       }
                     case "HIDE":
                       {
+                        //TODO :SEND SERVER
+                        context
+                            .read<PostViewModel>()
+                            .removePost(postId: widget.post.id!);
                         break;
                       }
                   }
@@ -204,6 +216,8 @@ class _PostEntryState extends State<PostEntry>
                   child: (_attachments[_attachmentIndex] == null)
                       ? const SizedBox.shrink()
                       : CachedNetworkImage(
+                          cacheKey:
+                              _attachments[_attachmentIndex].name.toString(),
                           fit: BoxFit.contain,
                           imageUrl: imageUrl +
                               _attachments[_attachmentIndex].name.toString(),
@@ -213,8 +227,7 @@ class _PostEntryState extends State<PostEntry>
                               child: Container(
                                   color: Colors.grey[400],
                                   child: const Center(
-                                      child:
-                                          const CupertinoActivityIndicator())),
+                                      child: CupertinoActivityIndicator())),
                             );
                           },
                           errorWidget: (context, url, error) =>

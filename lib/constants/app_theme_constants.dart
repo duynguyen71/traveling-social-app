@@ -19,3 +19,5 @@ const kImg =
 const kLoginPrimaryColor = Color(0xFF6A62B7);
 const kLoginPrimaryLightColor = Color(0xFFE5E5E5);
 const weatherAPIKey = "ad84ccee2e8fcc04efbf74a5a6d5f91a";
+
+const kbottomSheetBackgroundColor = Color.fromRGBO(247, 247, 247, 1);

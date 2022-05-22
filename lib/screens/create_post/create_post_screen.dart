@@ -1,16 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/home/home_screen.dart';
-import 'package:traveling_social_app/services/user_service.dart';
+import 'package:traveling_social_app/services/navigation_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/view_model/post_viewmoel.dart';
+import 'package:traveling_social_app/widgets/bottom_select_dialog.dart';
 import 'package:traveling_social_app/widgets/media_file_container.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
 import '../../services/post_service.dart';
 import '../../widgets/loading_widget.dart';
+import 'components/user_draft_posts.dart';
 
 class CreatePostScreen extends StatefulWidget {
   const CreatePostScreen({Key? key}) : super(key: key);
@@ -23,7 +24,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   final PostService _postService = PostService();
   final _imagePickerQty = 60;
   final _imagePicker = ImagePicker();
-  List<XFile>? _xFiles = [];
   final List<File> _pickedFiles = [];
   final _captionController = TextEditingController();
   bool _isLoading = false;
@@ -40,7 +40,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     Map<String, dynamic> post = {};
     post['caption'] = _captionController.text.toString();
     post['type'] = 1;
-
+    post['status'] = 1;
     try {
       final resp = await _postService.createPost(post, _pickedFiles);
       context.read<PostViewModel>().addPost(resp);
@@ -60,8 +60,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   @override
   void initState() {
-    _focusNode.requestFocus();
     super.initState();
+    s.add(BottomDialogItem(
+        title: 'Delete',
+        onClick: () {
+          _focusNode.unfocus();
+          discard();
+        }));
+    _focusNode.requestFocus();
   }
 
   @override
@@ -75,7 +81,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             leading: TextButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: _handleCancelPress,
               child: const Text(
                 'Cancel',
                 textAlign: TextAlign.left,
@@ -88,18 +94,24 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             leadingWidth: 80,
             elevation: 0,
             actions: [
-              !_isCaptionEmpty
+              (!_isCaptionEmpty || _pickedFiles.isNotEmpty)
                   ? const SizedBox.shrink()
                   : TextButton(
-                      onPressed: () {
-                        _handleAddPost();
-                      },
-                      child: const Text(
-                        'Drafts',
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.lightBlue,
-                            fontWeight: FontWeight.normal),
+                      onPressed: _showDrafts,
+                      child: const Tooltip(
+                        message: "Choose your previous drafts",
+                        waitDuration: Duration(seconds: 1),
+                        showDuration: Duration(seconds: 2),
+                        padding: EdgeInsets.all(12),
+                        height: 35,
+                        preferBelow: true,
+                        child: Text(
+                          'Drafts',
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.lightBlue,
+                              fontWeight: FontWeight.normal),
+                        ),
                       ),
                     ),
               TextButton(
@@ -110,7 +122,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                   decoration: BoxDecoration(
-                      color: _isCaptionEmpty
+                      color: (_isCaptionEmpty && _pickedFiles.isEmpty)
                           ? Colors.blueAccent.withOpacity(.5)
                           : Colors.blueAccent,
                       borderRadius: BorderRadius.circular(50)),
@@ -180,41 +192,43 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           //END OF INPUT CONTAINER
                           const SizedBox(height: 5),
                           //MEDIA FILES
-                          SizedBox(
-                            height: 180,
-                            child: ReorderableListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              physics: const BouncingScrollPhysics(),
-                              onReorder: ((oldIndex, newIndex) {
-                                if (newIndex > oldIndex) {
-                                  newIndex = newIndex - 1;
-                                }
-                                final element = _pickedFiles.removeAt(oldIndex);
-                                _pickedFiles.insert(newIndex, element);
-                              }),
-                              itemBuilder: (context, index) {
-                                return MediaFileContainer(
-                                  key: ValueKey(_pickedFiles[index]),
-                                  ratio: 16 / 9,
-                                  boxFit: BoxFit.fitHeight,
-                                  file: _pickedFiles[index],
+                          _pickedFiles.isNotEmpty
+                              ? SizedBox(
                                   height: 180,
-                                  onClick: () {
-                                    setState(() {
-                                      _pickedFiles.removeAt(index);
-                                    });
-                                  },
-                                  width: null,
-                                  modifiedFile: (File f) {
-                                    setState(() {
-                                      _pickedFiles[index] = f;
-                                    });
-                                  },
-                                );
-                              },
-                              itemCount: _pickedFiles.length,
-                            ),
-                          ),
+                                  child: ReorderableListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    onReorder: ((oldIndex, newIndex) {
+                                      if (newIndex > oldIndex) {
+                                        newIndex = newIndex - 1;
+                                      }
+                                      final element =
+                                          _pickedFiles.removeAt(oldIndex);
+                                      _pickedFiles.insert(newIndex, element);
+                                    }),
+                                    itemBuilder: (context, index) {
+                                      return MediaFileContainer(
+                                        key: ValueKey(_pickedFiles[index]),
+                                        ratio: 16 / 9,
+                                        boxFit: BoxFit.fitHeight,
+                                        file: _pickedFiles[index],
+                                        height: 180,
+                                        onClick: () {
+                                          setState(() {
+                                            _pickedFiles.removeAt(index);
+                                          });
+                                        },
+                                        width: null,
+                                        modifiedFile: (File f) {
+                                          setState(() {
+                                            _pickedFiles[index] = f;
+                                          });
+                                        },
+                                      );
+                                    },
+                                    itemCount: _pickedFiles.length,
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
                         ],
                       ),
                       Padding(
@@ -259,15 +273,20 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               //PICK IMAGES FROM GALLERY
                               IconButton(
                                 onPressed: () async {
-                                  _xFiles = await _imagePicker.pickMultiImage(
-                                      imageQuality: _imagePickerQty);
-                                  if (_xFiles != null && _xFiles!.isNotEmpty) {
-                                    setState(() {
-                                      _pickedFiles.addAll(_xFiles!
-                                          .map((e) => File(e.path))
-                                          .toList());
-                                    });
+                                  List<XFile>? xFiles =
+                                      await _imagePicker.pickMultiImage(
+                                          imageQuality: _imagePickerQty);
+                                  if (xFiles != null && xFiles.isNotEmpty) {
+                                    for (int i = 0; i < xFiles.length; i++) {
+                                      File? file = await ApplicationUtility
+                                          .compressImage(xFiles[0].path,
+                                              quality: 20);
+                                      setState(() {
+                                        _pickedFiles.add(file!);
+                                      });
+                                    }
                                   }
+                                  _focusNode.requestFocus();
                                 },
                                 icon: const Icon(
                                   Icons.photo_album_outlined,
@@ -285,6 +304,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                         _pickedFiles.add(File(xFile.path));
                                       });
                                     }
+                                    _focusNode.requestFocus();
                                   },
                                   icon: const Icon(
                                     Icons.camera_alt_outlined,
@@ -309,5 +329,36 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         LoadingWidget(isLoading: _isLoading)
       ],
     );
+  }
+
+  _showDrafts() async {
+    ApplicationUtility.showModelBottomDialog(context, const UserDraftPosts());
+  }
+
+  discard() async {
+    if (_focusNode.hasFocus) {
+      _focusNode.unfocus();
+    }
+    Navigator.of(context).pop();
+  }
+
+  List<BottomDialogItem> s = [
+    BottomDialogItem(title: 'Save as draft', onClick: () {}),
+  ];
+
+  _handleCancelPress() {
+    ApplicationUtility.showModelBottomDialog(
+      NavigationService.navigatorKey.currentContext!,
+      MyBottomDialog(
+        items: s,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    _captionController.dispose();
+    super.dispose();
   }
 }

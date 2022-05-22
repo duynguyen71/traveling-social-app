@@ -23,16 +23,6 @@ class User with ChangeNotifier {
     _followingCounts = followingCounts;
   }
 
-  // User.coppy(User user) {
-  //   _id = user.id;
-  //   _username = user.username;
-  //   _avt = user.avt;
-  //   _email = user.email;
-  //   _followerCounts = user.followerCounts;
-  //   _followingCounts = user.followingCounts;
-  //   notifyListeners();
-  // }
-
   User.fromJson(dynamic json) {
     _id = json['id'];
     _username = json['username'];
@@ -40,6 +30,9 @@ class User with ChangeNotifier {
     _email = json['email'];
     _followerCounts = json['followerCounts'];
     _followingCounts = json['followingCounts'];
+    _bio = json['bio'];
+    _background = json['background'];
+    _createDate = json['createDate'];
   }
 
   int? _id;
@@ -48,6 +41,9 @@ class User with ChangeNotifier {
   String? _email;
   int? _followerCounts;
   int? _followingCounts;
+  String? _bio;
+  String? _background;
+  String? _createDate;
 
   int? get id => _id;
 
@@ -55,11 +51,17 @@ class User with ChangeNotifier {
 
   String? get avt => _avt;
 
+  String? get background => _background;
+
+  String? get bio => _bio;
+
   String? get email => _email;
 
   int? get followerCounts => _followerCounts;
 
   int? get followingCounts => _followingCounts;
+
+  String? get createDate => _createDate;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -84,4 +86,12 @@ class User with ChangeNotifier {
 
   @override
   int get hashCode => id.hashCode;
+
+  set avt(String? avt) {
+    _avt = avt;
+  }
+
+  set background(String? bg) {
+    _background = bg;
+  }
 }

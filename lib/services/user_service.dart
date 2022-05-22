@@ -163,12 +163,12 @@ class UserService {
     var body = <String, dynamic>{
       "id": story['id'],
       "caption": story['caption'].toString().trim(),
-      "type": story['type'],
+      "type": 0,
       "contents": attachmentIds
           .asMap()
           .entries
           .map((e) => {
-                "attachmentId": e.value,
+                "attachment": {"id": e.value},
                 "pos": e.key,
                 "active": 1,
                 "caption": story['caption'].toString().trim()
@@ -196,5 +196,53 @@ class UserService {
       "Authorization": 'Bearer $accessToken',
       "Content-Type": 'application/json',
     };
+  }
+
+  Future<FileUpload> updateAvt({required File file}) async {
+    final accessToken = await _storage.read(key: 'accessToken');
+    final uri = Uri.parse(baseUrl + "/api/v1/member/users/me/avt");
+    var request = http.MultipartRequest("PUT", uri);
+
+    request.headers['Content-Type'] = 'multipart/form-data';
+    request.headers['Authorization'] = 'Bearer $accessToken';
+    var path = file.path;
+    var f = http.MultipartFile.fromBytes('file', File(path).readAsBytesSync(),
+        filename: basename(file.path), contentType: MediaType('image', 'jpeg'));
+
+    request.files.add(f);
+    final streamResp = await request.send();
+    final resp = await http.Response.fromStream(streamResp);
+    if (resp.statusCode == 200) {
+      var body = jsonDecode(resp.body) as Map<String, dynamic>;
+      FileUpload fileUpload = FileUpload.fromJson(body['data']);
+      print('update avt success');
+      return fileUpload;
+    } else {
+      throw 'Failed to upload images';
+    }
+  }
+
+  Future<FileUpload> updateBackground({required File file}) async {
+    final accessToken = await _storage.read(key: 'accessToken');
+    final uri = Uri.parse(baseUrl + "/api/v1/member/users/me/background");
+    var request = http.MultipartRequest("PUT", uri);
+
+    request.headers['Content-Type'] = 'multipart/form-data';
+    request.headers['Authorization'] = 'Bearer $accessToken';
+    var path = file.path;
+    var f = http.MultipartFile.fromBytes('file', File(path).readAsBytesSync(),
+        filename: basename(file.path), contentType: MediaType('image', 'jpeg'));
+
+    request.files.add(f);
+    final streamResp = await request.send();
+    final resp = await http.Response.fromStream(streamResp);
+    if (resp.statusCode == 200) {
+      var body = jsonDecode(resp.body) as Map<String, dynamic>;
+      FileUpload fileUpload = FileUpload.fromJson(body['data']);
+      print('update background success');
+      return fileUpload;
+    } else {
+      throw 'Failed to upload background';
+    }
   }
 }

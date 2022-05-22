@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:traveling_social_app/models/User.dart';
 
-import 'BaseUserInfo.dart';
 
 Comment commentFromJson(String str) => Comment.fromJson(json.decode(str));
 

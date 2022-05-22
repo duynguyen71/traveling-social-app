@@ -32,7 +32,7 @@ class Background extends StatelessWidget {
           child: Image.asset("assets/images/bottom_right.png"),
           width: size.width * .35,
         ),
-        this.child,
+        child,
       ],
     );
   }

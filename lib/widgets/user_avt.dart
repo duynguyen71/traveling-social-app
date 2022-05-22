@@ -1,11 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
+import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/models/User.dart';
 
 class UserAvatar extends StatelessWidget {
   const UserAvatar(
-      {Key? key, required this.size, required this.user, this.onTap, this.margin})
+      {Key? key,
+      required this.size,
+      required this.user,
+      this.onTap,
+      this.margin})
       : super(key: key);
 
   final double size;
@@ -18,11 +23,12 @@ class UserAvatar extends StatelessWidget {
     return GestureDetector(
       onTap: () => onTap != null ? onTap!() : null,
       child: Container(
-        margin:margin?? const EdgeInsets.all(5),
+        margin: margin ?? const EdgeInsets.all(5),
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(size),
-            border: Border.all(color: Colors.black12)),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(size),
+          // border: Border.all(color: Colors.black12),
+        ),
         child: ClipOval(
           clipBehavior: Clip.hardEdge,
           child: FittedBox(
@@ -44,20 +50,5 @@ class UserAvatar extends StatelessWidget {
         ),
       ),
     );
-    // return SizedBox(
-    //   height: 30,
-    //   width: 30,
-    //   child: CircleAvatar(
-    //     backgroundColor: Colors.white,
-    //     backgroundImage: user.avt != null
-    //         ? CachedNetworkImageProvider(imageUrl + user.avt!)
-    //         : Image.asset(
-    //             'assets/images/blank-profile-picture.png',
-    //             height: size,
-    //             width: size,
-    //             fit: BoxFit.cover,
-    //           ) as ImageProvider,
-    //   ),
-    // );
   }
 }

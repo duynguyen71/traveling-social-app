@@ -25,7 +25,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMixin {
   late UserViewModel _userViewModel;
   late User _user;
 
@@ -54,6 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.grey.shade50,
@@ -107,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           context, const CurrentUserProfileScreen()),
                     ),
                   ),
-                )
+                ),
               ],
               // expandedHeight: 250,
             ),
@@ -129,10 +130,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
                     var posts = value.posts;
                     return PostEntry(
-                      // post: value.posts[index],
-                      // key: ValueKey(value.posts[index].id),
                       post: posts.elementAt(index),
-                      key: ValueKey(posts.elementAt(index)),
+                      key: ValueKey(posts.elementAt(index).id),
                     );
                   },
                   childCount: value.posts.length + 1,
@@ -178,4 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

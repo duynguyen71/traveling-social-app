@@ -17,9 +17,12 @@ class IconWithText extends StatelessWidget {
           color: Colors.black87,
           size: 16,
         ),
-        Text(
-          text,
-          style: const TextStyle(fontSize: 14, color: Colors.black54),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: Text(
+            text,
+            style: const TextStyle(fontSize: 14, color: Colors.black54),
+          ),
         )
       ],
     );

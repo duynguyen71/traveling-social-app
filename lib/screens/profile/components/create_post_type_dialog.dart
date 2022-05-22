@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/widgets/my_divider.dart';
 
 import '../../../utilities/application_utility.dart';
@@ -19,7 +20,7 @@ class CreatePostTypeDialog extends StatelessWidget {
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: kbottomSheetBackgroundColor.withOpacity(.9),
               borderRadius: BorderRadius.circular(5),
             ),
             margin: const EdgeInsets.all(10),

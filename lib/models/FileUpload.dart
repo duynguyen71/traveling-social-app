@@ -22,7 +22,7 @@ class FileUpload {
     _id = json['id'];
     _name = json['name'];
     _contentType = json['contentType'];
-    _uploadDate = json['uploadDate'];
+    _uploadDate = json['createDate'];
   }
 
   late int _id;
