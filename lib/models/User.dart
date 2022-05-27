@@ -7,59 +7,61 @@ User afvFromJson(String str) => User.fromJson(json.decode(str));
 String afvToJson(User data) => json.encode(data.toJson());
 
 class User with ChangeNotifier {
+
   User({
     required int id,
     String? username,
     String? avt,
     required String email,
-    int? followerCounts,
-    int? followingCounts,
+    int followerCounts = 0,
+    int followingCounts = 0,
+    bool isFollowed = false
   }) {
     _id = id;
     _username = username;
-    _avt = avt;
+    avt = avt;
     _email = email;
     _followerCounts = followerCounts;
     _followingCounts = followingCounts;
+    isFollowed = isFollowed;
   }
 
   User.fromJson(dynamic json) {
     _id = json['id'];
     _username = json['username'];
-    _avt = json['avt'];
+    avt = json['avt'];
     _email = json['email'];
-    _followerCounts = json['followerCounts'];
-    _followingCounts = json['followingCounts'];
+    _followerCounts = json['followerCounts'] ?? 0;
+    _followingCounts = json['followingCounts'] ?? 0;
     _bio = json['bio'];
-    _background = json['background'];
+    background = json['background'];
     _createDate = json['createDate'];
+    isFollowed = json['isFollowed']??false;
   }
 
   int? _id;
   String? _username;
-  String? _avt;
+  String? avt;
   String? _email;
-  int? _followerCounts;
-  int? _followingCounts;
+  int _followerCounts = 0;
+  int _followingCounts = 0;
   String? _bio;
-  String? _background;
+  String? background;
   String? _createDate;
+  bool isFollowed = false;
 
   int? get id => _id;
 
   String? get username => _username;
 
-  String? get avt => _avt;
-
-  String? get background => _background;
 
   String? get bio => _bio;
 
   String? get email => _email;
 
-  int? get followerCounts => _followerCounts;
+  int get followerCounts => _followerCounts;
 
-  int? get followingCounts => _followingCounts;
+  int get followingCounts => _followingCounts;
 
   String? get createDate => _createDate;
 
@@ -67,7 +69,7 @@ class User with ChangeNotifier {
     final map = <String, dynamic>{};
     map['id'] = _id;
     map['username'] = _username;
-    map['avt'] = _avt;
+    map['avt'] = avt;
     map['email'] = _email;
     map['followerCounts'] = _followerCounts;
     map['followingCounts'] = _followingCounts;
@@ -87,11 +89,5 @@ class User with ChangeNotifier {
   @override
   int get hashCode => id.hashCode;
 
-  set avt(String? avt) {
-    _avt = avt;
-  }
 
-  set background(String? bg) {
-    _background = bg;
-  }
 }

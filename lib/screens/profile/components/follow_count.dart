@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 class FollowCount extends StatelessWidget {
   const FollowCount({Key? key, required this.title, required this.count}) : super(key: key);
 final String title;
-final String count;
+final int count;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Text(
-          count,
+      count.toString(),
           style: const TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 12,

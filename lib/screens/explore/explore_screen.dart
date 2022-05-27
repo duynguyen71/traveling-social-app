@@ -15,7 +15,6 @@ import '../home/components/drawer.dart';
 import '../profile/components/create_post_type_dialog.dart';
 import '../profile/current_user_profile_screen.dart';
 import '../search/search_screen.dart';
-import '../review/components/review_post.dart';
 import 'package:provider/provider.dart';
 
 class ExploreScreen extends StatefulWidget {
@@ -54,6 +53,17 @@ class _ExploreScreenState extends State<ExploreScreen>
     });
   }
 
+
+  onTapFunction(BuildContext context) async {
+    final reLoadPage = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CurrentUserProfileScreen()),
+    );
+    if (reLoadPage) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,12 +98,10 @@ class _ExploreScreenState extends State<ExploreScreen>
                       builder: (context, value, child) => UserAvatar(
                         size: 20,
                         user: context.read<UserViewModel>().user,
-                        onTap: () => ApplicationUtility.navigateToScreen(
-                            context, const CurrentUserProfileScreen()),
-                      ),
+                        onTap:() => onTapFunction(context),
                     ),
                   ),
-                ],
+                  ),],
                 backgroundColor: Colors.white,
                 floating: true,
                 snap: true,
@@ -228,19 +236,4 @@ class TopDestination extends StatelessWidget {
   }
 }
 
-class CustomTabBarViewScrollPhysics extends ScrollPhysics {
-  const CustomTabBarViewScrollPhysics({ScrollPhysics? parent})
-      : super(parent: parent);
 
-  @override
-  CustomTabBarViewScrollPhysics applyTo(ScrollPhysics? ancestor) {
-    return CustomTabBarViewScrollPhysics(parent: buildParent(ancestor)!);
-  }
-
-  @override
-  SpringDescription get spring => const SpringDescription(
-        mass: 50,
-        stiffness: 100,
-        damping: 0.8,
-      );
-}

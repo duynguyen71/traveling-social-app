@@ -65,6 +65,18 @@ class UserService {
     return null;
   }
 
+  Future<User?> getUserDetail({required int userId})async{
+    final url = Uri.parse(baseUrl + "/api/v1/member/users/$userId");
+    final resp = await http.get(url,headers: await authorizationHeader());
+    if(resp.statusCode==200){
+      final json = jsonDecode(resp.body) as Map<String,dynamic>;
+      final data = json['data'] as Map<String,dynamic>;
+      return User.fromJson(data);
+    }
+    print(jsonDecode(resp.body));
+    return null;
+  }
+
   Future<void> register(
       {required String username,
       required String email,
@@ -266,4 +278,6 @@ class UserService {
       "Content-Type": "application/json",
     };
   }
+
+
 }

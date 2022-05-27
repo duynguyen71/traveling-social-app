@@ -136,7 +136,7 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
                               (BuildContext context, value, Widget? child) =>
                                   FollowCount(
                                       title: "Following",
-                                      count: value.toString()),
+                                      count: value??0),
                           selector: (p0, p1) => p1.user!.followingCounts,
                         ),
                         Selector<UserViewModel, int?>(
@@ -144,7 +144,7 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
                               (BuildContext context, value, Widget? child) =>
                                   FollowCount(
                                       title: "Follower",
-                                      count: value.toString()),
+                                      count: value??0),
                           selector: (p0, p1) => p1.user!.followerCounts,
                         ),
                       ],

@@ -4,7 +4,7 @@ import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/models/User.dart';
 
-class UserAvatar extends StatelessWidget {
+class UserAvatar extends StatefulWidget {
   const UserAvatar(
       {Key? key,
       required this.size,
@@ -19,35 +19,44 @@ class UserAvatar extends StatelessWidget {
   final EdgeInsets? margin;
 
   @override
+  State<UserAvatar> createState() => _UserAvatarState();
+}
+
+class _UserAvatarState extends State<UserAvatar> with AutomaticKeepAliveClientMixin{
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return GestureDetector(
-      onTap: () => onTap != null ? onTap!() : null,
+      onTap: () => widget.onTap != null ? widget.onTap!() : null,
       child: Container(
-        margin: margin ?? const EdgeInsets.all(5),
+        margin: widget.margin ?? const EdgeInsets.all(5),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(size),
+          borderRadius: BorderRadius.circular(widget.size),
         ),
         child: ClipOval(
           clipBehavior: Clip.hardEdge,
           child: FittedBox(
               alignment: Alignment.center,
               clipBehavior: Clip.hardEdge,
-              child: user?.avt != null
+              child: widget.user?.avt != null
                   ? CachedNetworkImage(
-                      imageUrl: imageUrl + user!.avt.toString(),
-                      height: size,
-                      width: size,
+                      imageUrl: imageUrl + widget.user!.avt.toString(),
+                      height: widget.size,
+                      width: widget.size,
                       fit: BoxFit.cover,
                     )
                   : Image.asset(
                       'assets/images/blank-profile-picture.png',
-                      height: size,
-                      width: size,
+                      height: widget.size,
+                      width: widget.size,
                       fit: BoxFit.cover,
                     )),
         ),
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

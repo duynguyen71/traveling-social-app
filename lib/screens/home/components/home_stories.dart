@@ -17,7 +17,7 @@ class HomeStories extends StatefulWidget {
   State<HomeStories> createState() => _HomeStoriesState();
 }
 
-class _HomeStoriesState extends State<HomeStories> {
+class _HomeStoriesState extends State<HomeStories>  with AutomaticKeepAliveClientMixin{
   final _scrollController = ScrollController();
 
   @override
@@ -40,6 +40,7 @@ class _HomeStoriesState extends State<HomeStories> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(color: Colors.white),
@@ -131,4 +132,7 @@ class _HomeStoriesState extends State<HomeStories> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive =>true;
 }

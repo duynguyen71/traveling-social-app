@@ -78,7 +78,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   color: kPrimaryColor,
                 ),
               ),
-              bottom:  PreferredSize(
+              bottom: PreferredSize(
                 preferredSize: const Size(double.infinity, 1),
                 child: Divider(
                   color: kPrimaryColor.withOpacity(.2),
@@ -112,99 +112,99 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
           ];
         },
-        body: CustomScrollView(slivers: [
-          SliverToBoxAdapter(
-            child: (_isNotFound && _users.isEmpty)
-                ? Container(
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height * .4,
-              padding: const EdgeInsets.all(8.0),
-              child: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text(
-                      'Oops We Couldn’t Find Matching Credential :(',
-                      style: TextStyle(
-                        color: Colors.black54,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-            )
-                : const SizedBox.shrink(),
-          ),
-          SliverToBoxAdapter(
-            child: Column(
-              children: _users
-                  .map((e) =>
-                  Material(
-                    color: Colors.white,
-                    child: InkWell(
-                      onTap: () {
-                        ApplicationUtility.navigateToScreen(
-                            context, ProfileScreen(userId: e.id!));
-                      },
-                      child: Ink(
+        body: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: (_isNotFound && _users.isEmpty)
+                  ? Container(
+                      height: MediaQuery.of(context).size.height * .4,
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
                         child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  ClipOval(
-                                    clipBehavior: Clip.hardEdge,
-                                    child: FittedBox(
-                                        alignment: Alignment.center,
-                                        clipBehavior: Clip.hardEdge,
-                                        child: e.avt != null
-                                            ? CachedNetworkImage(
-                                          imageUrl: imageUrl +
-                                              e.avt.toString(),
-                                          height: 40,
-                                          width: 40,
-                                          fit: BoxFit.cover,
-                                        )
-                                            : Image.asset(
-                                          'assets/images/blank-profile-picture.png',
-                                          height: 40,
-                                          width: 40,
-                                          fit: BoxFit.cover,
-                                        )),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.center,
-                                    children: [
-                                      Text(e.username.toString()),
-                                    ],
-                                  ),
-                                  const Spacer(),
-                                  IconButton(
-                                      onPressed: () {},
-                                      icon:
-                                      const Icon(Icons.person_add_alt)),
-                                ],
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Text(
+                              'Oops We Couldn’t Find Matching Credential :(',
+                              style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
                               ),
+                              textAlign: TextAlign.center,
                             ),
                           ],
                         ),
                       ),
-                    ),
-                  ))
-                  .toList(),
+                    )
+                  : const SizedBox.shrink(),
             ),
-          ),
-        ], controller: _scrollController,
+            SliverToBoxAdapter(
+              child: Column(
+                children: _users
+                    .map((e) => Material(
+                          color: Colors.white,
+                          child: InkWell(
+                            onTap: () {
+                              ApplicationUtility.navigateToScreen(
+                                  context, ProfileScreen(userId: e.id!));
+                            },
+                            child: Ink(
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: [
+                                        ClipOval(
+                                          clipBehavior: Clip.hardEdge,
+                                          child: FittedBox(
+                                              alignment: Alignment.center,
+                                              clipBehavior: Clip.hardEdge,
+                                              child: e.avt != null
+                                                  ? CachedNetworkImage(
+                                                      imageUrl: imageUrl +
+                                                          e.avt.toString(),
+                                                      height: 40,
+                                                      width: 40,
+                                                      fit: BoxFit.cover,
+                                                    )
+                                                  : Image.asset(
+                                                      'assets/images/blank-profile-picture.png',
+                                                      height: 40,
+                                                      width: 40,
+                                                      fit: BoxFit.cover,
+                                                    )),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(e.username.toString()),
+                                          ],
+                                        ),
+                                        const Spacer(),
+                                        e.isFollowed
+                                            ? const SizedBox.shrink()
+                                            : IconButton(
+                                                onPressed: () {},
+                                                icon: const Icon(
+                                                    Icons.person_add_alt)),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ))
+                    .toList(),
+              ),
             ),
+          ],
+          controller: _scrollController,
+        ),
       ),
     );
   }

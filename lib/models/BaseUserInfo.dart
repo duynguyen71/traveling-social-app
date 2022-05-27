@@ -1,33 +1,38 @@
-
 import 'dart:convert';
 
-BaseUserInfo userFromJson(String str) => BaseUserInfo.fromJson(json.decode(str));
+BaseUserInfo userFromJson(String str) =>
+    BaseUserInfo.fromJson(json.decode(str));
+
 String userToJson(BaseUserInfo data) => json.encode(data.toJson());
+
 class BaseUserInfo {
-  BaseUserInfo({
-    int? id,
-    String? username,
-    String? avt,}) {
+  BaseUserInfo(
+      {int? id, String? username, String? avt, bool isFollowed = false}) {
     _id = id;
     _username = username;
     _avt = avt;
+    _isFollowed = isFollowed;
   }
 
   BaseUserInfo.fromJson(dynamic json) {
     _id = json['id'];
     _username = json['username'];
     _avt = json['avt'];
+    _isFollowed = json['isFollowed'];
   }
 
   int? _id;
   String? _username;
   String? _avt;
+  bool _isFollowed = false;
 
-  BaseUserInfo copyWith({ int? id,
+  BaseUserInfo copyWith({
+    int? id,
     String? username,
     String? avt,
   }) =>
-      BaseUserInfo(id: id ?? _id,
+      BaseUserInfo(
+        id: id ?? _id,
         username: username ?? _username,
         avt: avt ?? _avt,
       );
@@ -38,11 +43,14 @@ class BaseUserInfo {
 
   String? get avt => _avt;
 
+  bool get isFollowed => _isFollowed;
+
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['id'] = _id;
     map['username'] = _username;
     map['avt'] = _avt;
+    map['isFollowed'] = _isFollowed;
     return map;
   }
 }

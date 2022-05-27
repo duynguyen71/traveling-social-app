@@ -35,7 +35,7 @@ class ProfileAppbar extends StatelessWidget {
       ),
       leading: IconButton(
         onPressed: () {
-          Navigator.of(context).pop();
+          Navigator.of(context).pop([true]);
         },
         icon: const Icon(
           Icons.arrow_back_ios,

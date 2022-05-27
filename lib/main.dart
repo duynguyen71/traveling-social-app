@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:traveling_social_app/screens/explore/explore_screen.dart';
-import 'package:traveling_social_app/screens/home/home_screen.dart';
 import 'package:traveling_social_app/screens/login/login_screen.dart';
 import 'package:traveling_social_app/services/navigation_service.dart';
 import 'package:traveling_social_app/view_model/current_user_post_view_model.dart';
