@@ -9,7 +9,7 @@ import 'package:traveling_social_app/widgets/expandable_text.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
 
 import '../../utilities/application_utility.dart';
-import '../../view_model/user_viewmodel.dart';
+import '../../view_model/user_view_model.dart';
 import '../../widgets/current_user_avt.dart';
 import '../profile/profile_screen.dart';
 import 'package:provider/provider.dart';

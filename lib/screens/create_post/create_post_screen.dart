@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:traveling_social_app/screens/home/home_screen.dart';
 import 'package:traveling_social_app/services/navigation_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
-import 'package:traveling_social_app/view_model/post_viewmoel.dart';
+import 'package:traveling_social_app/view_model/current_user_post_view_model.dart';
+import 'package:traveling_social_app/view_model/post_view_model.dart';
 import 'package:traveling_social_app/widgets/bottom_select_dialog.dart';
 import 'package:traveling_social_app/widgets/media_file_container.dart';
 import 'dart:io';
@@ -44,7 +44,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     try {
       final resp = await _postService.createPost(post, _pickedFiles);
       context.read<PostViewModel>().addPost(resp);
-      ApplicationUtility.pushAndReplace(context, const HomeScreen());
+      context.read<CurrentUserPostViewModel>().addPost(resp);
+      // ApplicationUtility.pushAndReplace(context, const HomeScreen());
+      Navigator.pop(context);
     } catch (e) {
       print("Failed to create post :" + e.toString());
     } finally {
@@ -311,11 +313,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                     color: Colors.black87,
                                   )),
                               IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.location_on_outlined,
-                                    color: Colors.black87,
-                                  ))
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.location_on_outlined,
+                                  color: Colors.black87,
+                                ),
+                              )
                             ],
                           ),
                         ),

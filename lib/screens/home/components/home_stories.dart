@@ -44,6 +44,7 @@ class _HomeStoriesState extends State<HomeStories> {
       width: double.infinity,
       decoration: const BoxDecoration(color: Colors.white),
       padding: const EdgeInsets.all(8),
+      margin: const EdgeInsets.symmetric(vertical: 10),
       child: Consumer<StoryViewModel>(
         builder: (context, value, child) {
           var stories = value.stories;
@@ -65,13 +66,10 @@ class _HomeStoriesState extends State<HomeStories> {
                         (index) {
                           if (index == stories.length) {
                             return const SizedBox(
-                                width: 80, child: CupertinoActivityIndicator());
+                                child: CupertinoActivityIndicator());
                           }
                           var story = stories.elementAt(index);
-                          // var story = stories[index];
                           return StoryCard(
-                            // key: ValueKey(stories[index].id.toString()),
-                            // story: stories[index],
                             key: ValueKey(story.id.toString()),
                             story: story,
                             onClick: () {

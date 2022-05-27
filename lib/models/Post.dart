@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:traveling_social_app/models/Comment.dart';
 import 'package:traveling_social_app/models/Reaction.dart';
 
@@ -8,7 +9,7 @@ import 'User.dart';
 
 Post postFromJson(String str) => Post.fromJson(json.decode(str));
 
-class Post {
+class Post with ChangeNotifier {
   int? _id;
   String? _caption;
   int? _status;

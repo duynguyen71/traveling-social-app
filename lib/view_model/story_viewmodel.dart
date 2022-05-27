@@ -5,14 +5,17 @@ import 'package:traveling_social_app/models/Post.dart';
 import 'package:traveling_social_app/services/post_service.dart';
 
 class StoryViewModel extends ChangeNotifier {
+  StoryViewModel() {
+    fetchStories();
+  }
+
   final PostService _postService = PostService();
 
-  // List<Post> _stories = [];
   Set<Post> _stories = <Post>{};
 
   int _currentStoryIndex = 0;
   int _currentPage = 0;
-  bool _isLoadMoreStories = false;
+  bool _isLoading = false;
 
   void fetchStories({int? page, int? pageSize}) async {
     _currentPage = 0;
@@ -21,12 +24,10 @@ class StoryViewModel extends ChangeNotifier {
     if (rs.isNotEmpty) {
       _stories.addAll(rs);
       notifyListeners();
-      return;
     }
   }
 
   void updateStories({int? pageSize}) async {
-    _isLoadMoreStories = true;
     _currentPage = _currentPage + 1;
     List<Post> resp = await _postService.getStories(
         page: _currentPage, pageSize: pageSize ?? 5);
@@ -36,14 +37,13 @@ class StoryViewModel extends ChangeNotifier {
     } else {
       _currentPage = _currentPage - 1;
     }
-    _isLoadMoreStories = false;
   }
 
   set setCurrentStoryIndex(index) {
     _currentStoryIndex = index;
   }
 
-  bool get isLoading => _isLoadMoreStories;
+  bool get isLoading => _isLoading;
 
   removeStory(int storyId) {
     _stories.removeWhere((story) => story.id == storyId);

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:traveling_social_app/screens/explore/explore_screen.dart';
 import 'package:traveling_social_app/screens/home/home_screen.dart';
 import 'package:traveling_social_app/screens/login/login_screen.dart';
 import 'package:traveling_social_app/services/navigation_service.dart';
-import 'package:traveling_social_app/view_model/post_viewmoel.dart';
+import 'package:traveling_social_app/view_model/current_user_post_view_model.dart';
+import 'package:traveling_social_app/view_model/post_view_model.dart';
 import 'package:traveling_social_app/view_model/story_viewmodel.dart';
-import 'package:traveling_social_app/view_model/user_viewmodel.dart';
+import 'package:traveling_social_app/view_model/user_view_model.dart';
 import 'package:flutter/cupertino.dart';
 
 void main() {
@@ -24,6 +26,7 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<StoryViewModel>(create: (_) => StoryViewModel()),
         ChangeNotifierProvider<PostViewModel>(create: (_) => PostViewModel()),
+        ChangeNotifierProvider<CurrentUserPostViewModel>(create: (_) => CurrentUserPostViewModel()),
       ],
       builder: (context, child) {
         return MaterialApp(
@@ -31,8 +34,7 @@ class MyApp extends StatelessWidget {
           navigatorKey: NavigationService.navigatorKey,
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            scaffoldBackgroundColor: Colors.grey[100],
-            brightness: Brightness.light,
+            scaffoldBackgroundColor: Colors.white,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
           home: const AuthWrapper(),
@@ -57,7 +59,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
       future: _userViewModel.fetchUserDetail(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return snapshot.hasData ? const HomeScreen() : const LoginScreen();
+          return snapshot.hasData ? const ExploreScreen() : const LoginScreen();
         }
         return const Scaffold(
           body: Align(

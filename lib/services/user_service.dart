@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
+import 'package:traveling_social_app/models/BaseUserInfo.dart';
 import 'package:traveling_social_app/models/FileUpload.dart';
 import 'package:traveling_social_app/models/Post.dart';
 import 'package:traveling_social_app/models/User.dart';
@@ -244,5 +245,25 @@ class UserService {
     } else {
       throw 'Failed to upload background';
     }
+  }
+
+  Future<List<BaseUserInfo>> searchUsers(
+      {String? username, String? email, String? phone}) async {
+    final url = Uri.parse(baseUrl +
+        "/api/v1/member/users/searching?username=$username");
+    final resp = await http.get(url, headers: await authorizationHeader());
+    if (resp.statusCode == 200) {
+      final json = jsonDecode(resp.body) as Map<String, dynamic>;
+      final data = json['data'] as List<dynamic>;
+      return data.map((e) => BaseUserInfo.fromJson(e)).toList();
+    }
+    return [];
+  }
+
+  Future<Map<String, String>> authorizationHeader() async {
+    return {
+      "Authorization": 'Bearer ${await _storage.read(key: 'accessToken')}',
+      "Content-Type": "application/json",
+    };
   }
 }

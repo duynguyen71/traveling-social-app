@@ -7,7 +7,7 @@ import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/view_model/story_viewmodel.dart';
-import 'package:traveling_social_app/view_model/user_viewmodel.dart';
+import 'package:traveling_social_app/view_model/user_view_model.dart';
 import 'package:traveling_social_app/widgets/loading_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +32,7 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
     XFile? file = await _imagePicker.pickImage(source: ImageSource.camera);
     if (file != null) {
       File? compressed =
-          await ApplicationUtility.compressImage(file.path, quality: 50);
+          await ApplicationUtility.compressImage(file.path, quality: 100);
       if (compressed != null) {
         setState(() {
           _pickedFiles.add(compressed);
@@ -42,10 +42,10 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
   }
 
   _getImagesFromGallery() async {
-    List<XFile>? files = await _imagePicker.pickMultiImage(imageQuality: 80);
+    List<XFile>? files = await _imagePicker.pickMultiImage(imageQuality: 100);
     if (files != null) {
       for (int i = 0; i < files.length; i++) {
-        File? compressed = await ApplicationUtility.compressImage(files[0].path,
+        File? compressed = await ApplicationUtility.compressImage(files[i].path,
             quality: _compressQuality);
         if (compressed != null) {
           setState(() {
@@ -151,37 +151,6 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
                               keyboardType: TextInputType.multiline,
                             ),
                             const SizedBox(height: 10),
-                            // SizedBox(
-                            //   width: size.width,
-                            //   child: SingleChildScrollView(
-                            //     scrollDirection: Axis.horizontal,
-                            //     physics: const BouncingScrollPhysics(),
-                            //     child: Row(
-                            //         children: List.generate(_pickedFiles.length,
-                            //             (index) {
-                            //       return Padding(
-                            //         padding: const EdgeInsets.all(8.0),
-                            //         child: MediaFileContainer(
-                            //           ratio: 16 / 9,
-                            //           boxFit: BoxFit.fitHeight,
-                            //           file: _pickedFiles[index],
-                            //           height: 180,
-                            //           onClick: () {
-                            //             setState(() {
-                            //               _pickedFiles.removeAt(index);
-                            //             });
-                            //           },
-                            //           width: null,
-                            //           modifiedFile: (File f) {
-                            //             setState(() {
-                            //               _pickedFiles[index] = f;
-                            //             });
-                            //           },
-                            //         ),
-                            //       );
-                            //     },),),
-                            //   ),
-                            // ),
                             //MEDIA FILES
                             _pickedFiles.isNotEmpty
                                 ? SizedBox(

@@ -6,7 +6,7 @@ import 'package:traveling_social_app/constants/api_constants.dart';
 import 'dart:io';
 import 'package:traveling_social_app/widgets/rounded_icon_button.dart';
 
-class MediaFileContainer extends StatelessWidget {
+class MediaFileContainer extends StatefulWidget {
   const MediaFileContainer(
       {Key? key,
       required this.ratio,
@@ -27,10 +27,17 @@ class MediaFileContainer extends StatelessWidget {
   final Function? modifiedFile;
 
   @override
+  State<MediaFileContainer> createState() => _MediaFileContainerState();
+}
+
+class _MediaFileContainerState extends State<MediaFileContainer>
+    with AutomaticKeepAliveClientMixin {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
-      height: height,
-      width: width,
+      height: widget.height,
+      width: widget.width,
       constraints: const BoxConstraints(minWidth: 100),
       margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(color: Colors.grey.withOpacity(.1)),
@@ -39,20 +46,15 @@ class MediaFileContainer extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              // child: Image.file(
-              //   file,
-              //   height: height,
-              //   fit: boxFit,
-              //   width: width,
               child: CachedNetworkImage(
-                imageUrl: '$imageUrl${file.path}',
+                imageUrl: '$imageUrl${widget.file.path}',
                 placeholder: (context, url) =>
                     const Center(child: CupertinoActivityIndicator()),
                 errorWidget: (context, url, error) => Image.file(
-                  file,
-                  height: height,
-                  fit: boxFit,
-                  width: width,
+                  widget.file,
+                  height: widget.height,
+                  fit: widget.boxFit,
+                  width: widget.width,
                 ),
               ),
             ),
@@ -67,7 +69,7 @@ class MediaFileContainer extends StatelessWidget {
                   RoundedIconButton(
                     onClick: () async {
                       CroppedFile? croppedFile = await ImageCropper().cropImage(
-                        sourcePath: file.path,
+                        sourcePath: widget.file.path,
                         aspectRatioPresets: [
                           CropAspectRatioPreset.square,
                           CropAspectRatioPreset.ratio3x2,
@@ -88,7 +90,9 @@ class MediaFileContainer extends StatelessWidget {
                       );
                       if (croppedFile != null) {
                         File file = File(croppedFile.path);
-                        modifiedFile != null ? modifiedFile!(file) : null;
+                        widget.modifiedFile != null
+                            ? widget.modifiedFile!(file)
+                            : null;
                       }
                     },
                     icon: Icons.brush_outlined,
@@ -106,7 +110,7 @@ class MediaFileContainer extends StatelessWidget {
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: IconButton(
-                  onPressed: () => onClick(),
+                  onPressed: () => widget.onClick(),
                   constraints: const BoxConstraints(),
                   padding: EdgeInsets.zero,
                   icon: const Icon(
@@ -121,4 +125,7 @@ class MediaFileContainer extends StatelessWidget {
           clipBehavior: Clip.hardEdge),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

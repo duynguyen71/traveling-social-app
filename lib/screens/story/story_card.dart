@@ -7,7 +7,7 @@ import 'package:traveling_social_app/models/Post.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
-import '../../view_model/user_viewmodel.dart';
+import '../../view_model/user_view_model.dart';
 import '../../widgets/current_user_avt.dart';
 
 class StoryCard extends StatefulWidget {

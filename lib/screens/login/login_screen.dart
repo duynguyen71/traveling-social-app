@@ -8,8 +8,7 @@ import 'package:traveling_social_app/screens/login/components/login_background.d
 import 'package:traveling_social_app/screens/register/register_screen.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
-import 'package:traveling_social_app/view_model/loading_viewmodel.dart';
-import 'package:traveling_social_app/view_model/user_viewmodel.dart';
+import 'package:traveling_social_app/view_model/user_view_model.dart';
 import 'package:traveling_social_app/widgets/already_have_account_check.dart';
 import 'package:traveling_social_app/widgets/custom_input_field.dart';
 import 'package:traveling_social_app/widgets/rounded_button.dart';
@@ -104,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 //APP NAME
                 const Text(
-                  'Traveling Crew',
+                  'TC TRAVEL',
                   style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,

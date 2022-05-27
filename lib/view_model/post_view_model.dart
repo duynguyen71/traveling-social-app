@@ -5,6 +5,10 @@ import '../models/Comment.dart';
 import '../services/post_service.dart';
 
 class PostViewModel with ChangeNotifier {
+
+  PostViewModel(){
+    fetchPosts();
+  }
   final PostService _postService = PostService();
 
   Set<Post> _posts = <Post>{};
@@ -38,7 +42,7 @@ class PostViewModel with ChangeNotifier {
 
   void removePost({required postId}) {
     _posts.removeWhere((element) => element.id == postId);
-    print('remove post success');
+    _postService.hidePost(postId: postId);
     notifyListeners();
   }
 

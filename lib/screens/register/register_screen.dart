@@ -130,7 +130,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Text(
-                    'REGISTER',
+                    'TC TRAVEL',
                     style: TextStyle(
                       fontSize: 26,
                       fontWeight: FontWeight.bold,

@@ -5,6 +5,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/models/Post.dart';
 import 'package:http/http.dart' as http;
+import 'package:traveling_social_app/models/ReviewPost.dart';
+import 'package:traveling_social_app/models/ReviewPostDetail.dart';
 
 import '../models/FileUpload.dart';
 import 'package:path/path.dart';
@@ -42,7 +44,6 @@ class PostService {
       var list = respBody['data'] as List<dynamic>;
       final rs =
           list.map((e) => Post.fromJson((e as Map<String, dynamic>))).toList();
-      print(rs);
       return rs;
     }
     return [];
@@ -168,14 +169,37 @@ class PostService {
   }
 
   Future<void> hidePost({required int postId}) async {
-    final url = Uri.parse(baseUrl + "/api/v1/members/posts/$postId/status/0");
+    final url = Uri.parse(baseUrl + "/api/v1/member/posts/$postId/status/0");
     final resp = await http.put(url, headers: await authorizationHeader());
     if (resp.statusCode == 200) {
       print("Hide post id $postId");
     } else {
       print("Failed to hide post id $postId");
+      print(jsonDecode(resp.body));
     }
   }
 
+  Future<List<ReviewPost>> getReviewPosts() async {
+    final url = Uri.parse(baseUrl + "/api/v1/member/reviews");
+    final resp = await http.get(url, headers: await authorizationHeader());
+    if (resp.statusCode == 200) {
+      final json = jsonDecode(resp.body) as Map<String, dynamic>;
+      final data = json['data'] as List<dynamic>;
+      List<ReviewPost> list = data.map((e) => ReviewPost.fromJson(e)).toList();
+      return list;
+    }
 
+    return [];
+  }
+
+  Future<ReviewPostDetail?> getReviewPostDetail({required int id}) async {
+    final url = Uri.parse(baseUrl + "/api/v1/member/reviews/$id");
+    final resp = await http.get(url, headers: await authorizationHeader());
+    if (resp.statusCode == 200) {
+      final json = jsonDecode(resp.body) as Map<String, dynamic>;
+      final data = json['data'] as Map<String, dynamic>;
+      return ReviewPostDetail.fromJson(data);
+    }
+    return null;
+  }
 }

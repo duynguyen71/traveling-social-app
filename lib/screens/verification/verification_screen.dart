@@ -1,9 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/home/home_screen.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
-import 'package:traveling_social_app/view_model/user_viewmodel.dart';
+import 'package:traveling_social_app/view_model/user_view_model.dart';
 import 'package:traveling_social_app/widgets/loading_widget.dart';
 import 'package:traveling_social_app/widgets/rounded_button.dart';
 import 'package:provider/provider.dart';
@@ -190,6 +191,11 @@ class _VerificationScreenState extends State<VerificationScreen> {
                                 onChange: () => onChange()),
                           ],
                         ),
+                        Wrap(
+                          alignment: WrapAlignment.spaceAround,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [],
+                        ),
                         const SizedBox(
                           height: 11,
                         ),
@@ -260,7 +266,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
       required controller,
       required Function onChange}) {
     return SizedBox(
-      height: 50,
+      height: 40,
       child: AspectRatio(
         aspectRatio: 1,
         child: TextField(

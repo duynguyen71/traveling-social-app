@@ -6,7 +6,7 @@ class CustomInputField extends StatelessWidget {
       this.hintText,
       this.iconData,
       required this.onChange,
-      required this.controller,
+      required this.controller, this.focusNode,
 })
       : super(key: key);
 
@@ -14,11 +14,13 @@ class CustomInputField extends StatelessWidget {
   final IconData? iconData;
   final ValueChanged<String> onChange;
   final TextEditingController controller;
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      focusNode: focusNode,
       onChanged: (text) => onChange(text),
       decoration: InputDecoration(
         hintText: hintText ?? '',

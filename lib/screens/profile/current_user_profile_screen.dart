@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
-import 'package:traveling_social_app/models/Post.dart';
 import 'package:traveling_social_app/screens/home/components/post_entry.dart';
 import 'package:traveling_social_app/screens/home/home_screen.dart';
 import 'package:traveling_social_app/screens/profile/components/follow_count.dart';
 import 'package:traveling_social_app/screens/profile/components/icon_with_text.dart';
 import 'package:traveling_social_app/screens/profile/components/profile_avt_and_cover.dart';
-import 'package:traveling_social_app/services/post_service.dart';
-import 'package:traveling_social_app/view_model/user_viewmodel.dart';
+import 'package:traveling_social_app/view_model/current_user_post_view_model.dart';
+import 'package:traveling_social_app/view_model/user_view_model.dart';
 import 'components/profile_app_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -21,22 +20,14 @@ class CurrentUserProfileScreen extends StatefulWidget {
 }
 
 class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
-  final PostService _postService = PostService();
-  List<Post> _posts = [];
-  int page = 0;
-
   @override
   void initState() {
     super.initState();
-    _getPosts();
-  }
-
-  _getPosts() async {
-    final posts =
-        await _postService.getCurrentUserPosts(page: page, pageSize: 5);
-    setState(() {
-      _posts = posts;
-    });
+    var postViewModel = context.read<CurrentUserPostViewModel>();
+    if (!postViewModel.isFetched) {
+      print("Get user posts");
+      postViewModel.getPosts();
+    }
   }
 
   @override
@@ -47,19 +38,27 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
         slivers: [
           //APPBAR
           const ProfileAppbar(),
-          //BODY
           _buildCoverBackground(size),
+          //CURRENT USER POSTS
           SliverToBoxAdapter(
-            child: Column(
-              children: List.generate(
-                _posts.length,
-                (index) {
-                  var post = _posts[index];
-                  return PostEntry(post: post, key: ValueKey(post.id));
-                },
-              ),
+            child: Consumer<CurrentUserPostViewModel>(
+              builder: (context, value, child) {
+                var posts = value.posts;
+                return Column(
+                  children: List.generate(
+                    posts.length,
+                    (index) {
+                      var post = posts.elementAt(index);
+                      return PostEntry(
+                        post: post,
+                        key: ValueKey(post.id),
+                      );
+                    },
+                  ),
+                );
+              },
             ),
-          )
+          ),
         ],
       ),
       floatingActionButton: Container(
@@ -160,10 +159,10 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              IconWithText(
+                              const IconWithText(
                                   text: "Ho Chi Minh city",
                                   icon: Icons.location_on_outlined),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               IconWithText(
                                   text:
                                       'Joined date ${Jiffy(context.read<UserViewModel>().user!.createDate.toString()).format('dd-MM-yyyy')}',
@@ -192,7 +191,7 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
                       width: size.width * .7,
                     ),
                     Selector<UserViewModel, String?>(
-                      selector: ((p0, p1) => p1.user!.bio.toString()),
+                      selector: ((context, p1) => p1.user!.bio.toString()),
                       builder: (context, value, child) => Text(
                         value.toString().trim(),
                         style: const TextStyle(
@@ -200,8 +199,6 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
                         ),
                       ),
                     ),
-
-                    //
                   ],
                 ),
               ),

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/models/Post.dart';
 import 'package:provider/provider.dart';
-import 'package:traveling_social_app/view_model/post_viewmoel.dart';
+import 'package:traveling_social_app/view_model/post_view_model.dart';
 
 import '../../../models/Content.dart';
 

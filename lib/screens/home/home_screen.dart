@@ -12,8 +12,8 @@ import 'package:traveling_social_app/screens/profile/components/create_post_type
 import 'package:traveling_social_app/screens/profile/current_user_profile_screen.dart';
 import 'package:traveling_social_app/screens/search/search_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
-import 'package:traveling_social_app/view_model/post_viewmoel.dart';
-import 'package:traveling_social_app/view_model/user_viewmodel.dart';
+import 'package:traveling_social_app/view_model/post_view_model.dart';
+import 'package:traveling_social_app/view_model/user_view_model.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
 
 import 'components/post_entry.dart';
@@ -25,7 +25,8 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMixin {
+class _HomeScreenState extends State<HomeScreen>
+    with AutomaticKeepAliveClientMixin {
   late UserViewModel _userViewModel;
   late User _user;
 
@@ -121,14 +122,13 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
               builder: (context, value, child) => SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    var stories = value.posts;
-                    if (index == stories.length) {
+                    var posts = value.posts;
+                    if (index == posts.length) {
                       return const Padding(
                         padding: EdgeInsets.all(10.0),
                         child: CupertinoActivityIndicator(),
                       );
                     }
-                    var posts = value.posts;
                     return PostEntry(
                       post: posts.elementAt(index),
                       key: ValueKey(posts.elementAt(index).id),

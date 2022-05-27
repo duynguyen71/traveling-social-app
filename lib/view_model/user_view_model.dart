@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:traveling_social_app/models/User.dart';
+import 'package:traveling_social_app/services/post_service.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 
 import '../models/FileUpload.dart';
+import '../models/Post.dart';
 
 class UserViewModel extends ChangeNotifier {
   final UserService _userService = UserService();
@@ -25,6 +27,7 @@ class UserViewModel extends ChangeNotifier {
     _user!.avt = fileUpload.name.toString();
     notifyListeners();
   }
+
   void changeUserBackgroundPhoto(File file) async {
     FileUpload fileUpload = await _userService.updateBackground(file: file);
     _user!.background = fileUpload.name.toString();
@@ -43,4 +46,6 @@ class UserViewModel extends ChangeNotifier {
     }
     return _user == user;
   }
+
+
 }

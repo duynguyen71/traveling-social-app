@@ -9,7 +9,8 @@ import 'package:traveling_social_app/screens/comment/comment_screen.dart';
 import 'package:traveling_social_app/screens/profile/current_user_profile_screen.dart';
 import 'package:traveling_social_app/screens/profile/profile_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
-import 'package:traveling_social_app/view_model/post_viewmoel.dart';
+import 'package:traveling_social_app/view_model/current_user_post_view_model.dart';
+import 'package:traveling_social_app/view_model/post_view_model.dart';
 import 'package:traveling_social_app/widgets/current_user_avt.dart';
 import 'package:traveling_social_app/widgets/expandable_text.dart';
 import 'package:traveling_social_app/widgets/popup_menu_item.dart';
@@ -22,14 +23,15 @@ import '../../../models/User.dart';
 import '../../../services/post_service.dart';
 import 'package:provider/provider.dart';
 
-import '../../../view_model/user_viewmodel.dart';
+import '../../../view_model/user_view_model.dart';
+import '../../../widgets/my_dialog.dart';
 
 class PostEntry extends StatefulWidget {
-  const PostEntry({Key? key, this.image, required this.post}) : super(key: key);
+  const PostEntry({Key? key, this.image, required this.post, this.padding}) : super(key: key);
 
   final String? image;
   final Post post;
-
+final Padding? padding;
   @override
   State<PostEntry> createState() => _PostEntryState();
 }
@@ -87,7 +89,7 @@ class _PostEntryState extends State<PostEntry>
   Widget build(BuildContext context) {
     super.build(context);
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -108,7 +110,6 @@ class _PostEntryState extends State<PostEntry>
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
             children: [
               context.read<UserViewModel>().equal(widget.post.user)
                   ? CurrentUserAvt(
@@ -157,34 +158,37 @@ class _PostEntryState extends State<PostEntry>
                     Radius.circular(10.0),
                   ),
                 ),
-                color: Colors.grey.shade50,
-                itemBuilder: (context) => <PopupMenuEntry<String>>[
-                  const PopupMenuItem<String>(
-                    value: 'EDIT',
-                    child: MyPopupMenuItem(title: 'Edit', iconData: Icons.edit),
-                  ),
-                  const PopupMenuItem<String>(
-                    value: 'Value2',
-                    child: Text('Choose value 2'),
-                  ),
-                  const PopupMenuItem<String>(
-                    value: 'HIDE',
-                    child: MyPopupMenuItem(
-                        title: 'Hide', iconData: Icons.visibility_off),
-                  ),
-                ],
+                color: Colors.grey.shade100,
+                itemBuilder: (context) {
+                  return context.read<UserViewModel>().equal(widget.post.user)
+                      ? const <PopupMenuEntry<String>>[
+                          PopupMenuItem<String>(
+                            value: 'DELETE',
+                            child: MyPopupMenuItem(
+                                title: 'DELETE',
+                                iconData: Icons.visibility_off),
+                          ),
+                        ]
+                      : <PopupMenuEntry<String>>[
+                          PopupMenuItem<String>(
+                            value: 'FOLLOW',
+                            child: MyPopupMenuItem(
+                                title:
+                                    'Follow ${widget.post.user!.username.toString()}',
+                                iconData: Icons.person),
+                          ),
+                          const PopupMenuItem<String>(
+                            value: 'LOVE',
+                            child: MyPopupMenuItem(
+                                title: 'Love', iconData: Icons.person),
+                          ),
+                        ];
+                },
                 onSelected: (string) {
                   switch (string) {
-                    case "EDIT":
+                    case "DELETE":
                       {
-                        break;
-                      }
-                    case "HIDE":
-                      {
-                        //TODO :SEND SERVER
-                        context
-                            .read<PostViewModel>()
-                            .removePost(postId: widget.post.id!);
+                        showHidePostAlert(context);
                         break;
                       }
                   }
@@ -197,7 +201,7 @@ class _PostEntryState extends State<PostEntry>
           //CAPTION
           mainCaption.toString().isNotEmpty
               ? Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: ExpandableText(
                     text: mainCaption.toString().trim(),
                     textStyle:
@@ -209,13 +213,14 @@ class _PostEntryState extends State<PostEntry>
           Stack(
             alignment: Alignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 4, bottom: 8.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: (_attachments[_attachmentIndex] == null)
-                      ? const SizedBox.shrink()
-                      : CachedNetworkImage(
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: (_attachments.isEmpty ||
+                        !_attachments.asMap().containsKey(_attachmentIndex))
+                    ? const SizedBox.shrink()
+                    : Padding(
+                        padding: const EdgeInsets.only(top: 4, bottom: 8.0),
+                        child: CachedNetworkImage(
                           cacheKey:
                               _attachments[_attachmentIndex].name.toString(),
                           fit: BoxFit.contain,
@@ -233,7 +238,7 @@ class _PostEntryState extends State<PostEntry>
                           errorWidget: (context, url, error) =>
                               const AspectRatio(aspectRatio: 4 / 5),
                         ),
-                ),
+                      ),
               ),
               _attachments.length > 1
                   ? Positioned(
@@ -396,6 +401,41 @@ class _PostEntryState extends State<PostEntry>
       ),
     );
   }
+
+  void showHidePostAlert(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext dialogContext) {
+        return CupertinoAlertDialog(
+          title: const Text("Delete Post"),
+          content: const Text("Are you sure you want to delete this Post"),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: const Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              child: const Text("Delete",
+                  style: TextStyle(color: Colors.redAccent)),
+              onPressed: () {
+                context.read<PostViewModel>().removePost(postId: postId!);
+                context
+                    .read<CurrentUserPostViewModel>()
+                    .removePost(postId: postId!);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  int? get postId => widget.post.id;
 
   @override
   bool get wantKeepAlive => true;

@@ -8,6 +8,7 @@ import 'components/background.dart';
 import 'package:provider/provider.dart';
 
 import 'components/dialog_edit_image.dart';
+import 'package:provider/provider.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -17,10 +18,9 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  var usernameController = new TextEditingController();
-  var locationController = new TextEditingController();
-  var phoneController = new TextEditingController();
+  final usernameController = TextEditingController();
 
+  final bioController = TextEditingController();
 
   @override
   void initState() {
@@ -32,39 +32,35 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return SafeArea(
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          iconTheme: const IconThemeData(
-            color: kPrimaryColor,
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(
+          color: kPrimaryColor,
         ),
-        body: SizedBox(
-          width: double.infinity,
-          height: size.height,
-          child: Background(
-            child: SingleChildScrollView(
-              child: Container(
-                margin: const EdgeInsets.only(top: 56),
-                width: double.infinity,
-                alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    AvatarWithEditButton(
-                      onPressed: () {
-                        buildDialog(context);
-                      },
-                    ),
-                    SizedBox(height: size.height * .02),
-                  ],
-                ),
-              ),
-            ),
+      ),
+      body: Background(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+
+            children: [
+
+              SizedBox(height: size.height * .02),
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text("Username"),
+                    ],
+                  ),
+                ],
+              )
+            ],
           ),
         ),
       ),

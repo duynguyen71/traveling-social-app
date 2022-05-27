@@ -8,13 +8,13 @@ class UserAvatar extends StatelessWidget {
   const UserAvatar(
       {Key? key,
       required this.size,
-      required this.user,
+       this.user,
       this.onTap,
       this.margin})
       : super(key: key);
 
   final double size;
-  final User user;
+  final User? user;
   final Function? onTap;
   final EdgeInsets? margin;
 
@@ -27,16 +27,15 @@ class UserAvatar extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(size),
-          // border: Border.all(color: Colors.black12),
         ),
         child: ClipOval(
           clipBehavior: Clip.hardEdge,
           child: FittedBox(
               alignment: Alignment.center,
               clipBehavior: Clip.hardEdge,
-              child: user.avt != null
+              child: user?.avt != null
                   ? CachedNetworkImage(
-                      imageUrl: imageUrl + user.avt!,
+                      imageUrl: imageUrl + user!.avt.toString(),
                       height: size,
                       width: size,
                       fit: BoxFit.cover,

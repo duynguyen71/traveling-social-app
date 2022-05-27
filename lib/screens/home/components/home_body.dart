@@ -1,6 +1,8 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
+import 'package:traveling_social_app/screens/explore/explore_screen.dart';
 import 'package:traveling_social_app/screens/home/components/custom_tab_title.dart';
 import 'package:traveling_social_app/screens/home/components/home_stories.dart';
 import 'package:traveling_social_app/screens/home/components/search_section.dart';
@@ -45,27 +47,24 @@ class _HomeBodyState extends State<HomeBody> {
                   iconData: Icons.explore,
                   label: "Explore",
                   onTap: () {
-                    // Timer(Duration(milliseconds: 500), () {
-                    //   Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //           builder: (context) => ExploreScreen()));
-                    // });
+                    Timer(const Duration(milliseconds: 500), () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ExploreScreen()));
+                    });
                   },
                   // count: '',
                 ),
                 CustomTabTitle(
                   iconData: Icons.message,
                   label: "Messages",
-                  onTap: () {
-
-                  },
+                  onTap: () {},
                 ),
                 CustomTabTitle(
                   iconData: Icons.reviews,
                   label: "Blog",
-                  onTap: () {
-                  },
+                  onTap: () {},
                 ),
               ],
             ),

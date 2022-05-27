@@ -12,7 +12,7 @@ import '../../../constants/api_constants.dart';
 import '../../../constants/app_theme_constants.dart';
 import 'package:provider/provider.dart';
 
-import '../../../view_model/user_viewmodel.dart';
+import '../../../view_model/user_view_model.dart';
 import 'button_edit_profile.dart';
 
 class ProfileAvtAndCover extends StatefulWidget {
