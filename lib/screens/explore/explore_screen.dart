@@ -1,16 +1,13 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/physics.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:traveling_social_app/models/ReviewPost.dart';
+import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/feed/my_feed.dart';
 import 'package:traveling_social_app/screens/review/review_screen.dart';
 import 'package:traveling_social_app/view_model/user_view_model.dart';
+import 'package:traveling_social_app/widgets/current_user_avt.dart';
 
-import '../../services/post_service.dart';
 import '../../utilities/application_utility.dart';
-import '../../widgets/user_avt.dart';
 import '../home/components/drawer.dart';
 import '../profile/components/create_post_type_dialog.dart';
 import '../profile/current_user_profile_screen.dart';
@@ -25,10 +22,7 @@ class ExploreScreen extends StatefulWidget {
 }
 
 class _ExploreScreenState extends State<ExploreScreen>
-    with SingleTickerProviderStateMixin {
-  final _postService = PostService();
-  final List<ReviewPost> _posts = [];
-
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late TabController _tabController;
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -37,35 +31,17 @@ class _ExploreScreenState extends State<ExploreScreen>
 
   @override
   void initState() {
-    super.initState();
-    getReviewPosts();
     _tabController = TabController(
         vsync: this,
-        length: 4,
+        length: 2,
         initialIndex: 0,
         animationDuration: Duration.zero);
-  }
-
-  getReviewPosts() async {
-    final resp = await _postService.getReviewPosts();
-    setState(() {
-      _posts.addAll(resp);
-    });
-  }
-
-
-  onTapFunction(BuildContext context) async {
-    final reLoadPage = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => CurrentUserProfileScreen()),
-    );
-    if (reLoadPage) {
-      setState(() {});
-    }
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       key: _scaffoldKey,
       drawer: HomeDrawer(user: context.read<UserViewModel>().user!),
@@ -81,8 +57,13 @@ class _ExploreScreenState extends State<ExploreScreen>
                     icon: const Icon(Icons.menu)),
                 actions: [
                   IconButton(
-                      onPressed: () => ApplicationUtility.showModelBottomDialog(
-                          context, const CreatePostTypeDialog()),
+                      onPressed: () => showModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return const CreatePostTypeDialog();
+                            },
+                            backgroundColor: Colors.transparent,
+                          ),
                       icon: const Icon(Icons.edit, color: Colors.black45)),
                   IconButton(
                     onPressed: () => ApplicationUtility.navigateToScreen(
@@ -94,20 +75,24 @@ class _ExploreScreenState extends State<ExploreScreen>
                   ),
                   Container(
                     margin: const EdgeInsets.only(right: 10),
-                    child: Consumer<UserViewModel>(
-                      builder: (context, value, child) => UserAvatar(
-                        size: 20,
-                        user: context.read<UserViewModel>().user,
-                        onTap:() => onTapFunction(context),
+                    child: CurrentUserAvt(
+                      size: 20,
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const CurrentUserProfileScreen(),
+                          ),
+                        );
+                      },
                     ),
                   ),
-                  ),],
+                ],
                 backgroundColor: Colors.white,
                 floating: true,
                 snap: true,
                 //
                 // pinned: true,
-
                 // title: Text("Title"),
                 bottom: PreferredSize(
                   preferredSize: const Size.fromHeight(56),
@@ -120,7 +105,7 @@ class _ExploreScreenState extends State<ExploreScreen>
                       borderRadius: BorderRadius.circular(
                         25.0,
                       ),
-                      color: Colors.green,
+                      color: kPrimaryLightColor.withOpacity(.8),
                     ),
                     indicatorSize: TabBarIndicatorSize.tab,
                     indicatorPadding:
@@ -135,12 +120,6 @@ class _ExploreScreenState extends State<ExploreScreen>
                       Tab(
                         text: 'Review',
                       ),
-                      Tab(
-                        text: 'Popular',
-                      ),
-                      Tab(
-                        text: 'W',
-                      ),
                     ],
                   ),
                 ),
@@ -153,16 +132,10 @@ class _ExploreScreenState extends State<ExploreScreen>
             child: TabBarView(
               controller: _tabController,
               // physics:const NeverScrollableScrollPhysics(),
-              physics: NeverScrollableScrollPhysics(),
-              children: [
-                const MyFeed(),
-                const ReviewScreen(),
-                Container(
-                  child: Text("data"),
-                ),
-                Container(
-                  child: Text("data"),
-                ),
+              physics: const NeverScrollableScrollPhysics(),
+              children: const [
+                MyFeed(),
+                ReviewScreen(),
               ],
             ),
           ),
@@ -177,63 +150,7 @@ class _ExploreScreenState extends State<ExploreScreen>
     _scrollViewController.dispose();
     super.dispose();
   }
-}
-
-class TopDestination extends StatelessWidget {
-  const TopDestination({
-    Key? key,
-  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Container(
-      margin: const EdgeInsets.only(right: 10),
-      padding: const EdgeInsets.all(8),
-      width: size.width * .5,
-      decoration: BoxDecoration(
-        color: Colors.blue[50],
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(right: 10),
-            width: size.width * .2,
-            height: size.width * .2,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              image: DecorationImage(
-                image: NetworkImage(
-                    "https://images.pexels.com/photos/2325446/pexels-photo-2325446.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          Column(
-            children: [
-              Text("data",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                  )),
-              Text("data", style: TextStyle(color: Colors.black54)),
-              Row(
-                children: [
-                  Icon(
-                    Icons.favorite,
-                    size: 12,
-                    color: Colors.red,
-                  ),
-                  Text("4.5"),
-                ],
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
+  bool get wantKeepAlive => true;
 }
-
-

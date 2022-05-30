@@ -6,6 +6,8 @@ import 'package:traveling_social_app/services/post_service.dart';
 
 class StoryViewModel extends ChangeNotifier {
   StoryViewModel() {
+    print("FETCH STORIES");
+
     fetchStories();
   }
 
@@ -47,18 +49,29 @@ class StoryViewModel extends ChangeNotifier {
 
   removeStory(int storyId) {
     _stories.removeWhere((story) => story.id == storyId);
+    _postService.hidePost(postId: storyId);
     notifyListeners();
   }
 
   addStory(Post story) {
-    // _stories.insert(0, story);
-    // _stories.add(story);
     _stories = <Post>{story}.union(_stories);
     notifyListeners();
   }
 
   clear() {
     _stories = <Post>{};
+  }
+
+  bool next() {
+    if (stories.length - 1 == _currentStoryIndex) {
+      return false;
+    } else {
+      // print('next');
+      stories.removeWhere((element) => element.id==_stories.elementAt(_currentStoryIndex).id);
+      // setCurrentStoryIndex = _currentStoryIndex+1;
+      notifyListeners();
+      return true;
+    }
   }
 
   //getters

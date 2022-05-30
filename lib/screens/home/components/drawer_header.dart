@@ -13,7 +13,7 @@ class DrawerHeaderUserCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Column(
         children: [
-          UserAvatar(size: 50, user: user)
+          UserAvatar(size: 50, user: user,onTap: (){})
           // ClipOval(
           //   clipBehavior: Clip.hardEdge,
           //   child: Image.network(

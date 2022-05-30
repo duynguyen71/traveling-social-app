@@ -26,13 +26,13 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
   final _captionController = TextEditingController();
   bool _isLoading = false;
 
-  final int _compressQuality = 20;
+  final int _compressQuality = 10;
 
   _getImageFromCamera() async {
     XFile? file = await _imagePicker.pickImage(source: ImageSource.camera);
     if (file != null) {
-      File? compressed =
-          await ApplicationUtility.compressImage(file.path, quality: 100);
+      File? compressed = await ApplicationUtility.compressImage(file.path,
+          quality: _compressQuality);
       if (compressed != null) {
         setState(() {
           _pickedFiles.add(compressed);
@@ -42,7 +42,7 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
   }
 
   _getImagesFromGallery() async {
-    List<XFile>? files = await _imagePicker.pickMultiImage(imageQuality: 100);
+    List<XFile>? files = await _imagePicker.pickMultiImage();
     if (files != null) {
       for (int i = 0; i < files.length; i++) {
         File? compressed = await ApplicationUtility.compressImage(files[i].path,

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/rendering/sliver_multi_box_adaptor.dart';
 import 'package:provider/provider.dart';
+import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/home/components/home_stories.dart';
 
 import '../../view_model/post_view_model.dart';
@@ -18,7 +19,9 @@ class _MyFeedState extends State<MyFeed> with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
-    print("MY FEED INIT");
+    if (context.read<PostViewModel>().posts.isEmpty) {
+      context.read<PostViewModel>().fetchPosts();
+    }
   }
 
   @override
@@ -59,7 +62,6 @@ class _MyFeedState extends State<MyFeed> with AutomaticKeepAliveClientMixin {
                     );
                   },
                   childCount: value.posts.length + 1,
-                  addAutomaticKeepAlives: true,
                 ),
               );
             },

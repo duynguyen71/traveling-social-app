@@ -20,7 +20,7 @@ class CreatePostTypeDialog extends StatelessWidget {
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              color: kbottomSheetBackgroundColor.withOpacity(.9),
+              color: kbottomSheetBackgroundColor,
               borderRadius: BorderRadius.circular(5),
             ),
             margin: const EdgeInsets.all(10),

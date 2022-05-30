@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
+import 'package:traveling_social_app/screens/explore/explore_screen.dart';
 import 'package:traveling_social_app/screens/home/home_screen.dart';
 import 'package:traveling_social_app/screens/login/components/login_background.dart';
 import 'package:traveling_social_app/screens/register/register_screen.dart';
@@ -47,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await _userService.login(username, password);
       await context.read<UserViewModel>().fetchUserDetail();
-      ApplicationUtility.pushAndReplace(context, const HomeScreen());
+      ApplicationUtility.pushAndReplace(context, const ExploreScreen());
     } on SocketException catch (e) {
       print("Socket Exception " + e.toString());
     } catch (e) {

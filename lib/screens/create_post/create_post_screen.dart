@@ -281,7 +281,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                   if (xFiles != null && xFiles.isNotEmpty) {
                                     for (int i = 0; i < xFiles.length; i++) {
                                       File? file = await ApplicationUtility
-                                          .compressImage(xFiles[0].path,
+                                          .compressImage(xFiles[i].path,
                                               quality: 20);
                                       setState(() {
                                         _pickedFiles.add(file!);
@@ -302,9 +302,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                         source: ImageSource.camera,
                                         imageQuality: _imagePickerQty);
                                     if (xFile != null) {
-                                      setState(() {
-                                        _pickedFiles.add(File(xFile.path));
-                                      });
+                                      File? f = await ApplicationUtility
+                                          .compressImage(xFile.path,
+                                              quality: 10);
+                                      if (f != null) {
+                                        setState(() {
+                                          _pickedFiles.add(f);
+                                        });
+                                      }
                                     }
                                     _focusNode.requestFocus();
                                   },

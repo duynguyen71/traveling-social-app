@@ -324,6 +324,7 @@ class _CommentScreenState extends State<CommentScreen>
     _commentController.dispose();
     _focusNode.dispose();
     _scrollController.dispose();
+
     super.dispose();
   }
 

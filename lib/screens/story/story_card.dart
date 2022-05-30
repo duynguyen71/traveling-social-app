@@ -6,9 +6,7 @@ import 'package:traveling_social_app/models/Content.dart';
 import 'package:traveling_social_app/models/Post.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
 import 'package:palette_generator/palette_generator.dart';
-import 'package:provider/provider.dart';
-import '../../view_model/user_view_model.dart';
-import '../../widgets/current_user_avt.dart';
+import '../../models/User.dart';
 
 class StoryCard extends StatefulWidget {
   const StoryCard({Key? key, required this.story, required this.onClick})
@@ -27,15 +25,17 @@ class _StoryCardState extends State<StoryCard>
   List<Color>? gradientBgColors;
 
   String? image;
+  late String userAvt;
 
   @override
   void initState() {
+    super.initState();
     List<Content>? contents = widget.story.contents;
     if (contents != null && contents.isNotEmpty) {
       image = (contents[0].attachment?.name.toString());
     }
-    // _updateGradientBgColors();
-    super.initState();
+    userAvt = widget.story.user!.avt.toString();
+
   }
 
   _updateGradientBgColors() async {
@@ -48,6 +48,8 @@ class _StoryCardState extends State<StoryCard>
       });
     }
   }
+
+  User get user => widget.story.user!;
 
   @override
   Widget build(BuildContext context) {
@@ -90,11 +92,7 @@ class _StoryCardState extends State<StoryCard>
                       image: image != null
                           ? DecorationImage(
                               fit: BoxFit.fitWidth,
-                              image: CachedNetworkImageProvider(
-                                image != null
-                                    ? (imageUrl + '$image')
-                                    : 'https://images.pexels.com/photos/15286/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-                              ),
+                              image: CachedNetworkImageProvider(imageUrl + '$image'),
                             )
                           : null,
                       borderRadius: const BorderRadius.all(Radius.circular(5)),
@@ -118,22 +116,17 @@ class _StoryCardState extends State<StoryCard>
                 ),
               ),
             ),
+            //AVT
             Positioned(
               bottom: 8,
               right: 8,
-              child: context.read<UserViewModel>().equal(widget.story.user)
-                  ? CurrentUserAvt(
-                      margin: EdgeInsets.zero,
-                      size: 25,
-                      onTap: () {},
-                    )
-                  : UserAvatar(
-                      size: 25,
-                      user: widget.story.user!,
-                      margin: EdgeInsets.zero,
-                      onTap: () {},
-                    ),
-            ),
+              child: UserAvatar(
+                size: 25,
+                user: widget.story.user!,
+                margin: EdgeInsets.zero,
+                onTap: () {},
+              ),
+            )
           ],
         ),
       ),

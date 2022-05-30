@@ -27,11 +27,13 @@ import '../../../view_model/user_view_model.dart';
 import '../../../widgets/my_dialog.dart';
 
 class PostEntry extends StatefulWidget {
-  const PostEntry({Key? key, this.image, required this.post, this.padding}) : super(key: key);
+  const PostEntry({Key? key, this.image, required this.post, this.padding})
+      : super(key: key);
 
   final String? image;
   final Post post;
-final Padding? padding;
+  final Padding? padding;
+
   @override
   State<PostEntry> createState() => _PostEntryState();
 }
@@ -47,10 +49,10 @@ class _PostEntryState extends State<PostEntry>
 
   @override
   void initState() {
-    super.initState();
     _likeCount = widget.post.reactionCount;
     _isFavorite = (myReaction != null);
     _getAttachments();
+    super.initState();
   }
 
   _getAttachments() {
@@ -76,8 +78,6 @@ class _PostEntryState extends State<PostEntry>
     }
     return [];
   }
-
-  _hide() {}
 
   Reaction? get myReaction => widget.post.myReaction;
 
@@ -111,22 +111,15 @@ class _PostEntryState extends State<PostEntry>
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              context.read<UserViewModel>().equal(widget.post.user)
-                  ? CurrentUserAvt(
-                      margin: EdgeInsets.zero,
-                      size: 40,
-                      onTap: () => ApplicationUtility.navigateToScreen(
-                          context, const CurrentUserProfileScreen()),
-                    )
-                  : UserAvatar(
-                      size: 40,
-                      user: widget.post.user!,
-                      margin: EdgeInsets.zero,
-                      onTap: () {
-                        ApplicationUtility.navigateToScreen(context,
-                            ProfileScreen(userId: widget.post.user!.id!));
-                      },
-                    ),
+              UserAvatar(
+                size: 40,
+                user: widget.post.user!,
+                margin: EdgeInsets.zero,
+                onTap: () {
+                  ApplicationUtility.navigateToScreen(
+                      context, ProfileScreen(userId: widget.post.user!.id!));
+                },
+              ),
               const SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -221,8 +214,6 @@ class _PostEntryState extends State<PostEntry>
                     : Padding(
                         padding: const EdgeInsets.only(top: 4, bottom: 8.0),
                         child: CachedNetworkImage(
-                          cacheKey:
-                              _attachments[_attachmentIndex].name.toString(),
                           fit: BoxFit.contain,
                           imageUrl: imageUrl +
                               _attachments[_attachmentIndex].name.toString(),

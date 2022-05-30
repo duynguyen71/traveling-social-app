@@ -8,8 +8,6 @@ import 'package:traveling_social_app/screens/story/story_card.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/view_model/story_viewmodel.dart';
 
-import 'add_story_card.dart';
-
 class HomeStories extends StatefulWidget {
   const HomeStories({Key? key}) : super(key: key);
 
@@ -17,15 +15,15 @@ class HomeStories extends StatefulWidget {
   State<HomeStories> createState() => _HomeStoriesState();
 }
 
-class _HomeStoriesState extends State<HomeStories>  with AutomaticKeepAliveClientMixin{
-  final _scrollController = ScrollController();
+class _HomeStoriesState extends State<HomeStories>
+    with AutomaticKeepAliveClientMixin {
 
+  final _scrollController = ScrollController();
   @override
   void initState() {
     super.initState();
-    StoryViewModel storyViewModel = context.read<StoryViewModel>();
-    if (storyViewModel.stories.isEmpty) {
-      storyViewModel.fetchStories(page: 0, pageSize: 5);
+    if(context.read<StoryViewModel>().stories.isEmpty){
+      context.read<StoryViewModel>().fetchStories(pageSize: 5);
     }
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -54,53 +52,34 @@ class _HomeStoriesState extends State<HomeStories>  with AutomaticKeepAliveClien
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: [
-              NotificationListener<ScrollEndNotification>(
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  scrollDirection: Axis.horizontal,
-                  physics: const BouncingScrollPhysics(),
-                  child: Row(
-                    children: [
-                      const AddStoryCard(),
-                      ...List.generate(
-                        stories.length + 1,
-                        (index) {
-                          if (index == stories.length) {
-                            return const SizedBox(
-                                child: CupertinoActivityIndicator());
-                          }
-                          var story = stories.elementAt(index);
-                          return StoryCard(
-                            key: ValueKey(story.id.toString()),
-                            story: story,
-                            onClick: () {
-                              context
-                                  .read<StoryViewModel>()
-                                  .setCurrentStoryIndex = index;
-                              ApplicationUtility.navigateToScreen(
-                                context,
-                                const StoriesScrollScreen(),
-                              );
-                            },
-                            // key: ValueKey(stories[index].id),
+              SizedBox(
+                height: 180,
+                child: Consumer<StoryViewModel>(
+                  builder: (context, value, child) {
+                    return ListView.builder(
+                      controller: _scrollController,
+                      itemBuilder: (context, index) {
+                        if (index == value.stories.length) {
+                          return const Center(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20.0),
+                              child: CupertinoActivityIndicator(),
+                            ),
                           );
-                        },
-                        // growable: true,
-                      ),
-                    ],
-                  ),
+                        }
+                        return StoryCard(
+                            key: ValueKey(value.stories.elementAt(index).id),
+                            story: value.stories.elementAt(index),
+                            onClick: () {
+                              context.read<StoryViewModel>().setCurrentStoryIndex = index;
+                              ApplicationUtility.navigateToScreen(context,  const StoriesScrollScreen());
+                            });
+                      },
+                      itemCount: value.stories.length + 1,
+                      scrollDirection: Axis.horizontal,
+                    );
+                  },
                 ),
-                onNotification: (scrollEnd) {
-                  final metrics = scrollEnd.metrics;
-                  if (metrics.atEdge) {
-                    bool isTop = metrics.pixels == 0;
-                    if (isTop) {
-                    } else {
-                      // context.read<PostViewModel>().updateStories();
-                    }
-                  }
-                  return true;
-                },
               ),
               stories.isNotEmpty && stories.length > 1
                   ? Align(
@@ -134,5 +113,5 @@ class _HomeStoriesState extends State<HomeStories>  with AutomaticKeepAliveClien
   }
 
   @override
-  bool get wantKeepAlive =>true;
+  bool get wantKeepAlive => true;
 }

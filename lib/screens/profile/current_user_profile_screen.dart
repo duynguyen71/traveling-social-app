@@ -25,7 +25,6 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
     super.initState();
     var postViewModel = context.read<CurrentUserPostViewModel>();
     if (!postViewModel.isFetched) {
-      print("Get user posts");
       postViewModel.getPosts();
     }
   }

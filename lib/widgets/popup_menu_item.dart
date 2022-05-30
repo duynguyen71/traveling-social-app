@@ -12,8 +12,7 @@ class MyPopupMenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      constraints: const BoxConstraints(minWidth: 100.0),
+      constraints: const BoxConstraints(minWidth: 100.0,),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
@@ -27,12 +26,12 @@ class MyPopupMenuItem extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(color: Colors.black54, fontSize: 16),
+            style: const TextStyle(color: Colors.black87, fontSize: 14),
           ),
           const SizedBox(width: 10),
           Icon(
             iconData,
-            size: 18,
+            size: 14,
             color: Colors.black54,
           ),
         ],

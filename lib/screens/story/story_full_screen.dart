@@ -6,6 +6,7 @@ import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/models/Content.dart';
 import 'package:traveling_social_app/models/Post.dart';
 import 'package:traveling_social_app/widgets/expandable_text.dart';
+import 'package:traveling_social_app/widgets/story_context_menu.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
 
 import '../../utilities/application_utility.dart';
@@ -70,17 +71,15 @@ class _StoryFullScreenState extends State<StoryFullScreen>
 
   @override
   void initState() {
-    countContents();
-    _getImage(currentIndex);
     super.initState();
+    // countContents();
+    // _getImage(currentIndex);
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     return Material(
       child: SizedBox(
         width: size.width,
@@ -90,14 +89,8 @@ class _StoryFullScreenState extends State<StoryFullScreen>
           children: [
             Center(
               child: Container(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height,
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
                 decoration: const BoxDecoration(color: Colors.black87),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,17 +102,28 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                       child: Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
-                          image: currentImg != null
-                              ? DecorationImage(
-                            fit: BoxFit.fitWidth,
-                            image: CachedNetworkImageProvider(
-                                currentImg != null
-                                    ? (imageUrl + currentImg.toString())
-                                    : "https://images.pexels.com/photos/11780519/pexels-photo-11780519.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-                                cacheKey: currentImg.toString()),
-                          )
-                              : null,
-                        ),
+                            // image: currentImg != null
+                            //     ? DecorationImage(
+                            //         fit: BoxFit.fitWidth,
+                            //         image: CachedNetworkImageProvider(
+                            //           currentImg != null
+                            //               ? (imageUrl + currentImg.toString())
+                            //               : "https://images.pexels.com/photos/11780519/pexels-photo-11780519.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+                            //         ),
+                            //       )
+                            //     : null,
+                            image: (widget.post.contents != null &&
+                                    widget.post.contents!.isNotEmpty)
+                                ? (widget.post.contents?[currentIndex]
+                                            .attachment?.name !=
+                                        null
+                                    ? DecorationImage(
+                                        fit: BoxFit.fitWidth,
+                                        image: CachedNetworkImageProvider(
+                                            '$imageUrl${widget.post.contents?[currentIndex].attachment?.name}'),
+                                      )
+                                    : null)
+                                : null),
                       ),
                     )
                   ],
@@ -157,8 +161,8 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                   Container(
                     alignment: Alignment.center,
                     width: size.width,
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -167,14 +171,7 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              context.read<UserViewModel>().equal(
-                                  widget.post.user)
-                                  ? CurrentUserAvt(
-                                margin: EdgeInsets.zero,
-                                size: 40,
-                                onTap: () {},
-                              )
-                                  : UserAvatar(
+                              UserAvatar(
                                 size: 40,
                                 user: widget.post.user!,
                                 margin: EdgeInsets.zero,
@@ -206,15 +203,12 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                             ],
                           ),
                         ),
-                        IconButton(
-                          onPressed: () {
-                            Navigator.of(context, rootNavigator: true).pop();
-                          },
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          icon: const Icon(
-                            Icons.more_horiz,
-                            color: Colors.white,
-                          ),
+                        StoryContextMenu(
+                          isCurrentUser: context
+                              .read<UserViewModel>()
+                              .equal(widget.post.user),
+                          user: widget.post.user!,
+                          storyId: widget.post.id!,
                         ),
                         const SizedBox(width: 10),
                         IconButton(
@@ -222,7 +216,6 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                             Navigator.of(context, rootNavigator: true).pop();
                           },
                           padding: const EdgeInsets.symmetric(horizontal: 10),
-
                           icon: const Icon(
                             Icons.close,
                             color: Colors.white,
@@ -231,38 +224,38 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                       ],
                     ),
                   ),
-                  itemCount > 1
+                  (widget.post.contents != null &&
+                          widget.post.contents!.length > 1)
                       ? Center(
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: size.width,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: widget.post.contents == null
-                            ? []
-                            : List.generate(
-                          itemCount,
-                              (index) =>
-                              Container(
-                                width: (size.width ~/
-                                    (widget.post.contents
-                                        ?.length ??
-                                        1))
-                                    .toDouble(),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 5),
-                                height: 2,
-                                child: Divider(
-                                    thickness: currentIndex == index ? 1.5 : 1,
-                                    color: currentIndex == index
-                                        ? Colors.white
-                                        : Colors.grey.withOpacity(.5)),
-                              ),
-                        ),
-                      ),
-                    ),
-                  )
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: size.width,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: widget.post.contents == null
+                                  ? []
+                                  : List.generate(
+                                      widget.post.contents!.length,
+                                      (index) => Container(
+                                        width: (size.width ~/
+                                                (widget.post.contents?.length ??
+                                                    1))
+                                            .toDouble(),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 5),
+                                        height: 2,
+                                        child: Divider(
+                                            thickness:
+                                                currentIndex == index ? 1.5 : 1,
+                                            color: currentIndex == index
+                                                ? Colors.white
+                                                : Colors.grey.withOpacity(.5)),
+                                      ),
+                                    ),
+                            ),
+                          ),
+                        )
                       : const SizedBox.shrink(),
                 ],
               ),
@@ -270,41 +263,41 @@ class _StoryFullScreenState extends State<StoryFullScreen>
             //STORY CAPTION
             widget.post.contents!.isEmpty
                 ? Positioned.fill(
-              child: Container(
-                margin: EdgeInsets.symmetric(vertical: size.height * .1),
-                alignment: Alignment.center,
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SingleChildScrollView(
-                      child: ExpandableText(
-                        text: widget.post.caption.toString(),
-                        textStyle: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                            fontSize: 30),
-                        textAlign: TextAlign.center,
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: size.height * .1),
+                      alignment: Alignment.center,
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SingleChildScrollView(
+                            child: ExpandableText(
+                              text: widget.post.caption.toString(),
+                              textStyle: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                  fontSize: 30),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ),
-            )
+                  )
                 : const SizedBox.shrink(),
             //
             (widget.post.caption != null && widget.post.contents!.isNotEmpty)
                 ? Positioned(
-              child: SizedBox(
-                width: size.width,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ExpandableText(
-                    text: widget.post.caption.toString(),
-                  ),
-                ),
-              ),
-              bottom: 80,
-            )
+                    child: SizedBox(
+                      width: size.width,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ExpandableText(
+                          text: widget.post.caption.toString(),
+                        ),
+                      ),
+                    ),
+                    bottom: 80,
+                  )
                 : const SizedBox.shrink(),
             //COMMENT INPUT
             Positioned(
@@ -329,14 +322,14 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(50)),
+                                  BorderRadius.all(Radius.circular(50)),
                               borderSide: BorderSide(
                                 width: 1,
                               ),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(50)),
+                                  BorderRadius.all(Radius.circular(50)),
                               borderSide: BorderSide(
                                   width: 1, color: kPrimaryLightColor),
                             ),
@@ -354,10 +347,7 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                   ],
                 ),
               ),
-              bottom: MediaQuery
-                  .of(context)
-                  .viewInsets
-                  .bottom,
+              bottom: MediaQuery.of(context).viewInsets.bottom,
             ),
           ],
         ),

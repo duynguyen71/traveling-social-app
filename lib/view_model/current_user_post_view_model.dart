@@ -47,4 +47,8 @@ class CurrentUserPostViewModel with ChangeNotifier {
     _posts = <Post>{post}.union(_posts);
     notifyListeners();
   }
+
+  clear(){
+    _posts.clear();
+  }
 }

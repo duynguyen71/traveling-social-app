@@ -150,7 +150,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             });
                                           }else{
                                             setState(() {
-                                              _user.isFollowed = false;
+                                              _user.isFollowed = true;
                                               // _user.followingCounts = _user.followingCounts+1;
                                             });
                                           }

@@ -42,9 +42,7 @@ class _ProfileAvtAndCoverState extends State<ProfileAvtAndCover> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     return SizedBox(
       height: size.height * .4,
       width: double.infinity,
@@ -62,35 +60,34 @@ class _ProfileAvtAndCoverState extends State<ProfileAvtAndCover> {
                 aspectRatio: 16 / 9,
                 child: Selector<UserViewModel, String>(
                   selector: ((p0, p1) => p1.user!.background.toString()),
-                  builder: (context, value, child) =>
-                      CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        imageUrl: imageUrl + value.toString(),
-                        errorWidget: (context, url, error) =>
-                            Image.asset(
-                              "assets/images/home_bg.png",
-                              fit: BoxFit.cover,
-                            ),
-                      ),
+                  builder: (context, value, child) => CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    imageUrl: imageUrl + value.toString(),
+                    errorWidget: (context, url, error) => Image.asset(
+                      "assets/images/home_bg.png",
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
           //CURRENT USER AVT
           Positioned(
-              bottom: 0,
-              left: kDefaultPadding,
-              child: CurrentUserAvt(
-                size: 150,
-                onTap: () {
-                  ApplicationUtility.showModelBottomDialog(
-                    context,
-                    MyBottomDialog(
-                      items: _bottomDialogItems,
-                    ),
-                  );
-                },
-              )),
+            bottom: 0,
+            left: kDefaultPadding,
+            child: CurrentUserAvt(
+              onTap: () {
+                ApplicationUtility.showModelBottomDialog(
+                  context,
+                  MyBottomDialog(
+                    items: _bottomDialogItems,
+                  ),
+                );
+              },
+              size: 150,
+            ),
+          ),
           Positioned(
             bottom: 0,
             right: kDefaultPadding / 2,
@@ -106,13 +103,14 @@ class _ProfileAvtAndCoverState extends State<ProfileAvtAndCover> {
     );
   }
 
-  Future<File?> _pickImageFromGallery({required CropStyle cropStyle,
-    required List<CropAspectRatioPreset> presets}) async {
+  Future<File?> _pickImageFromGallery(
+      {required CropStyle cropStyle,
+      required List<CropAspectRatioPreset> presets}) async {
     XFile? pickedFile =
-    await ImagePicker().pickImage(source: ImageSource.gallery);
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       File? file =
-      await ApplicationUtility.compressImage(pickedFile.path, quality: 70);
+          await ApplicationUtility.compressImage(pickedFile.path, quality: 70);
       if (file == null) {
         return null;
       }

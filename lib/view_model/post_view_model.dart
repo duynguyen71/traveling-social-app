@@ -7,6 +7,7 @@ import '../services/post_service.dart';
 class PostViewModel with ChangeNotifier {
 
   PostViewModel(){
+    print("FETCH POSTS");
     fetchPosts();
   }
   final PostService _postService = PostService();
