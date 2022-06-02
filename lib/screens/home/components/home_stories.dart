@@ -17,12 +17,12 @@ class HomeStories extends StatefulWidget {
 
 class _HomeStoriesState extends State<HomeStories>
     with AutomaticKeepAliveClientMixin {
-
   final _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
-    if(context.read<StoryViewModel>().stories.isEmpty){
+    if (context.read<StoryViewModel>().stories.isEmpty) {
       context.read<StoryViewModel>().fetchStories(pageSize: 5);
     }
     _scrollController.addListener(() {
@@ -62,7 +62,7 @@ class _HomeStoriesState extends State<HomeStories>
                         if (index == value.stories.length) {
                           return const Center(
                             child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 20.0),
+                              padding: EdgeInsets.symmetric(horizontal: 40.0),
                               child: CupertinoActivityIndicator(),
                             ),
                           );
@@ -71,8 +71,11 @@ class _HomeStoriesState extends State<HomeStories>
                             key: ValueKey(value.stories.elementAt(index).id),
                             story: value.stories.elementAt(index),
                             onClick: () {
-                              context.read<StoryViewModel>().setCurrentStoryIndex = index;
-                              ApplicationUtility.navigateToScreen(context,  const StoriesScrollScreen());
+                              context
+                                  .read<StoryViewModel>()
+                                  .setCurrentStoryIndex = index;
+                              ApplicationUtility.navigateToScreen(
+                                  context, const StoriesScrollScreen());
                             });
                       },
                       itemCount: value.stories.length + 1,

@@ -133,7 +133,7 @@ class _CommentScreenState extends State<CommentScreen>
       var pixels2 = _scrollController.position.pixels;
       var maxScrollExtent2 = _scrollController.position.maxScrollExtent;
       if ((maxScrollExtent2 - pixels2) <=
-          MediaQueryData.fromWindow(WidgetsBinding.instance!.window)
+          MediaQueryData.fromWindow(WidgetsBinding.instance.window)
                   .size
                   .height *
               .3) {

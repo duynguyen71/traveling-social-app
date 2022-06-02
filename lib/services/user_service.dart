@@ -65,12 +65,12 @@ class UserService {
     return null;
   }
 
-  Future<User?> getUserDetail({required int userId})async{
+  Future<User?> getUserDetail({required int userId}) async {
     final url = Uri.parse(baseUrl + "/api/v1/member/users/$userId");
-    final resp = await http.get(url,headers: await authorizationHeader());
-    if(resp.statusCode==200){
-      final json = jsonDecode(resp.body) as Map<String,dynamic>;
-      final data = json['data'] as Map<String,dynamic>;
+    final resp = await http.get(url, headers: await authorizationHeader());
+    if (resp.statusCode == 200) {
+      final json = jsonDecode(resp.body) as Map<String, dynamic>;
+      final data = json['data'] as Map<String, dynamic>;
       return User.fromJson(data);
     }
     print(jsonDecode(resp.body));
@@ -261,8 +261,8 @@ class UserService {
 
   Future<List<BaseUserInfo>> searchUsers(
       {String? username, String? email, String? phone}) async {
-    final url = Uri.parse(baseUrl +
-        "/api/v1/member/users/searching?username=$username");
+    final url = Uri.parse(
+        baseUrl + "/api/v1/member/users/searching?username=$username");
     final resp = await http.get(url, headers: await authorizationHeader());
     if (resp.statusCode == 200) {
       final json = jsonDecode(resp.body) as Map<String, dynamic>;
@@ -279,5 +279,39 @@ class UserService {
     };
   }
 
+  Future<List<BaseUserInfo>> getTopActiveUsers() async {
+    final url = Uri.parse(baseUrl + "/api/v1/member/users");
+    final resp = await http.get(url, headers: await authorizationHeader());
+    if (resp.statusCode == 200) {
+      final json = (jsonDecode(resp.body) as Map<String, dynamic>)['data']
+          as List<dynamic>;
+      var list = json.map((u) => BaseUserInfo.fromJson(u)).toList();
+      print('get top user success $list'
+          '');
+      return list;
+    }
+    return [];
+  }
 
+  Future<bool> follow({required int userId}) async {
+    final url = Uri.parse(baseUrl + "/api/v1/member/users/me/follow/$userId");
+    final resp = await http.get(url, headers: await authorizationHeader());
+    if (resp.statusCode == 200) {
+      print("Follow user id $userId success!");
+      return true;
+    }
+    print('Failed to follow user');
+    return false;
+  }
+
+  Future<bool> unFollow({required int userId}) async {
+    final url = Uri.parse(baseUrl + "/api/v1/member/users/me/unfollow/$userId");
+    final resp = await http.get(url, headers: await authorizationHeader());
+    if (resp.statusCode == 200) {
+      print("Unfollow user id $userId success!");
+      return true;
+    }
+    print('Failed to unfollow user');
+    return false;
+  }
 }

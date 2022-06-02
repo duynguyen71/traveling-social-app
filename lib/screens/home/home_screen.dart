@@ -14,8 +14,8 @@ import 'package:traveling_social_app/screens/search/search_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/view_model/post_view_model.dart';
 import 'package:traveling_social_app/view_model/user_view_model.dart';
-import 'package:traveling_social_app/widgets/user_avt.dart';
 
+import '../../widgets/user_avt.dart';
 import 'components/post_entry.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -104,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen>
                   child: Consumer<UserViewModel>(
                     builder: (context, value, child) => UserAvatar(
                       size: 25,
-                      user: _user,
+                      avt: _user.avt.toString(),
                       onTap: () => ApplicationUtility.navigateToScreen(
                           context, const CurrentUserProfileScreen()),
                     ),

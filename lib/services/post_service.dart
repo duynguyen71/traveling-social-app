@@ -202,4 +202,17 @@ class PostService {
     }
     return null;
   }
+
+  Future<List<Post>> getUserPosts({required int userId,int? page = 0,int? pageSize = 5}) async {
+    final url = Uri.parse(baseUrl + "/api/v1/member/users/$userId/posts?page=$page&pageSize=$pageSize");
+    final resp = await http.get(url, headers: await authorizationHeader());
+    if (resp.statusCode == 200) {
+      print('get user id $userId post success');
+      final data = (jsonDecode(resp.body) as Map<String, dynamic>)['data']
+          as List<dynamic>;
+      List<Post> posts = data.map((e) => Post.fromJson(e)).toList();
+      return posts;
+    }
+    return [];
+  }
 }

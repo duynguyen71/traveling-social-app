@@ -4,8 +4,8 @@ import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/models/Content.dart';
 import 'package:traveling_social_app/models/Post.dart';
-import 'package:traveling_social_app/widgets/user_avt.dart';
 import 'package:palette_generator/palette_generator.dart';
+import 'package:traveling_social_app/widgets/user_avt.dart';
 import '../../models/User.dart';
 
 class StoryCard extends StatefulWidget {
@@ -69,12 +69,12 @@ class _StoryCardState extends State<StoryCard>
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: gradientBgColors ?? [Colors.black87, Colors.black54],
+                  colors: gradientBgColors ?? [Colors.black87, Colors.black45],
                   begin: Alignment.topRight,
                   end: Alignment.bottomLeft,
                 ),
                 border: Border.all(
-                  color: kPrimaryLightColor.withOpacity(.5),
+                  color: Colors.black12,
                   width: 1,
                 ),
                 borderRadius: const BorderRadius.all(Radius.circular(5)),
@@ -122,8 +122,7 @@ class _StoryCardState extends State<StoryCard>
               right: 8,
               child: UserAvatar(
                 size: 25,
-                user: widget.story.user!,
-                margin: EdgeInsets.zero,
+                avt: '${widget.story.user!.avt}',
                 onTap: () {},
               ),
             )

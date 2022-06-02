@@ -34,9 +34,9 @@ class HomeDrawer extends StatelessWidget {
                 ),
               ),
               padding: const EdgeInsets.all(kDefaultPadding),
-              child: Column(
-                children: [DrawerHeaderUserCard(user: user)],
-              ),
+              // child: Column(
+              //   children: [DrawerHeaderUserCard(user: user)],
+              // ),
             ),
             Expanded(
               child: ListView.builder(

@@ -11,7 +11,6 @@ import 'package:traveling_social_app/screens/profile/profile_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/view_model/current_user_post_view_model.dart';
 import 'package:traveling_social_app/view_model/post_view_model.dart';
-import 'package:traveling_social_app/widgets/current_user_avt.dart';
 import 'package:traveling_social_app/widgets/expandable_text.dart';
 import 'package:traveling_social_app/widgets/popup_menu_item.dart';
 import 'package:traveling_social_app/widgets/rounded_icon_button.dart';
@@ -24,7 +23,6 @@ import '../../../services/post_service.dart';
 import 'package:provider/provider.dart';
 
 import '../../../view_model/user_view_model.dart';
-import '../../../widgets/my_dialog.dart';
 
 class PostEntry extends StatefulWidget {
   const PostEntry({Key? key, this.image, required this.post, this.padding})
@@ -90,7 +88,7 @@ class _PostEntryState extends State<PostEntry>
     super.build(context);
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(10),
+      // padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(
@@ -107,98 +105,100 @@ class _PostEntryState extends State<PostEntry>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // USER AVT AVT
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              UserAvatar(
-                size: 40,
-                user: widget.post.user!,
-                margin: EdgeInsets.zero,
-                onTap: () {
-                  ApplicationUtility.navigateToScreen(
-                      context, ProfileScreen(userId: widget.post.user!.id!));
-                },
-              ),
-              const SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    widget.post.user!.username.toString(),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                UserAvatar(
+                  size: 40,
+                  avt: '${widget.post.user!.avt}',
+                  onTap: () {
+                    ApplicationUtility.navigateToScreen(
+                        context, ProfileScreen(userId: widget.post.user!.id!));
+                  },
+                ),
+                const SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      widget.post.user!.username.toString(),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18,
+                      ),
+                    ),
+                    Text(
+                      Jiffy(widget.post.createDate).fromNow(),
+                      style: TextStyle(color: Colors.grey[800], fontSize: 14),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                PopupMenuButton(
+                  child: Container(
+                    height: 36,
+                    width: 48,
+                    alignment: Alignment.centerRight,
+                    child: const Icon(Icons.more_horiz, color: Colors.black87),
+                  ),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
                     ),
                   ),
-                  Text(
-                    Jiffy(widget.post.createDate).fromNow(),
-                    style: TextStyle(color: Colors.grey[800], fontSize: 14),
-                  ),
-                ],
-              ),
-              const Spacer(),
-              PopupMenuButton(
-                child: Container(
-                  height: 36,
-                  width: 48,
-                  alignment: Alignment.centerRight,
-                  child: const Icon(Icons.more_horiz, color: Colors.black87),
-                ),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10.0),
-                  ),
-                ),
-                color: Colors.grey.shade100,
-                itemBuilder: (context) {
-                  return context.read<UserViewModel>().equal(widget.post.user)
-                      ? const <PopupMenuEntry<String>>[
-                          PopupMenuItem<String>(
-                            value: 'DELETE',
-                            child: MyPopupMenuItem(
-                                title: 'DELETE',
-                                iconData: Icons.visibility_off),
-                          ),
-                        ]
-                      : <PopupMenuEntry<String>>[
-                          PopupMenuItem<String>(
-                            value: 'FOLLOW',
-                            child: MyPopupMenuItem(
-                                title:
-                                    'Follow ${widget.post.user!.username.toString()}',
-                                iconData: Icons.person),
-                          ),
-                          const PopupMenuItem<String>(
-                            value: 'LOVE',
-                            child: MyPopupMenuItem(
-                                title: 'Love', iconData: Icons.person),
-                          ),
-                        ];
-                },
-                onSelected: (string) {
-                  switch (string) {
-                    case "DELETE":
-                      {
-                        showHidePostAlert(context);
-                        break;
-                      }
-                  }
-                },
-                padding: EdgeInsets.zero,
-                elevation: 0,
-              )
-            ],
+                  color: Colors.grey.shade100,
+                  itemBuilder: (context) {
+                    return context.read<UserViewModel>().equal(widget.post.user)
+                        ? const <PopupMenuEntry<String>>[
+                            PopupMenuItem<String>(
+                              value: 'DELETE',
+                              child: MyPopupMenuItem(
+                                  title: 'DELETE',
+                                  iconData: Icons.visibility_off),
+                            ),
+                          ]
+                        : <PopupMenuEntry<String>>[
+                            PopupMenuItem<String>(
+                              value: 'FOLLOW',
+                              child: MyPopupMenuItem(
+                                  title:
+                                      'Follow ${widget.post.user!.username.toString()}',
+                                  iconData: Icons.person),
+                            ),
+                            const PopupMenuItem<String>(
+                              value: 'LOVE',
+                              child: MyPopupMenuItem(
+                                  title: 'Love', iconData: Icons.person),
+                            ),
+                          ];
+                  },
+                  onSelected: (string) {
+                    switch (string) {
+                      case "DELETE":
+                        {
+                          showHidePostAlert(context);
+                          break;
+                        }
+                    }
+                  },
+                  padding: EdgeInsets.zero,
+                  elevation: 0,
+                )
+              ],
+            ),
           ),
           //CAPTION
           mainCaption.toString().isNotEmpty
               ? Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  padding: const EdgeInsets.only(left: 8, bottom: 8.0),
                   child: ExpandableText(
                     text: mainCaption.toString().trim(),
                     textStyle:
-                        const TextStyle(fontSize: 16, color: Colors.black87),
+                        const TextStyle(fontSize: 18, color: Colors.black87),
                   ),
                 )
               : const SizedBox.shrink(),
@@ -206,31 +206,26 @@ class _PostEntryState extends State<PostEntry>
           Stack(
             alignment: Alignment.center,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: (_attachments.isEmpty ||
-                        !_attachments.asMap().containsKey(_attachmentIndex))
-                    ? const SizedBox.shrink()
-                    : Padding(
-                        padding: const EdgeInsets.only(top: 4, bottom: 8.0),
-                        child: CachedNetworkImage(
-                          fit: BoxFit.contain,
-                          imageUrl: imageUrl +
-                              _attachments[_attachmentIndex].name.toString(),
-                          placeholder: (context, url) {
-                            return AspectRatio(
-                              aspectRatio: 4 / 5,
-                              child: Container(
-                                  color: Colors.grey[400],
-                                  child: const Center(
-                                      child: CupertinoActivityIndicator())),
-                            );
-                          },
-                          errorWidget: (context, url, error) =>
-                              const AspectRatio(aspectRatio: 4 / 5),
-                        ),
-                      ),
-              ),
+              //CONTENTS
+              (_attachments.isEmpty ||
+                      !_attachments.asMap().containsKey(_attachmentIndex))
+                  ? const SizedBox.shrink()
+                  : CachedNetworkImage(
+                      fit: BoxFit.fitWidth,
+                      imageUrl: imageUrl +
+                          _attachments[_attachmentIndex].name.toString(),
+                      placeholder: (context, url) {
+                        return AspectRatio(
+                          aspectRatio: 4 / 5,
+                          child: Container(
+                              color: Colors.grey.shade50,
+                              child: const Center(
+                                  child: CupertinoActivityIndicator())),
+                        );
+                      },
+                      errorWidget: (context, url, error) =>
+                          const SizedBox.shrink(),
+                    ),
               _attachments.length > 1
                   ? Positioned(
                       child: RoundedIconButton(
@@ -295,97 +290,95 @@ class _PostEntryState extends State<PostEntry>
               color: Colors.lightBlueAccent.withOpacity(.05),
               borderRadius: BorderRadius.circular(40),
             ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () async {
-                          _postService.reactionPost(
-                              postId: widget.post.id!,
-                              reactionId: _isFavorite ? null : 1);
-                          setState(() {
-                            if (_isFavorite) {
-                              _isFavorite = false;
-                              _likeCount--;
-                            } else {
-                              _isFavorite = true;
-                              _likeCount++;
-                            }
-                          });
-                        },
-                        icon: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 200),
-                          transitionBuilder: (child, animation) =>
-                              ScaleTransition(
-                            scale: child.key == const ValueKey('icon1')
-                                ? Tween<double>(
-                                        begin: !_isFavorite ? 1 : 1.5, end: 1)
-                                    .animate(animation)
-                                : Tween<double>(
-                                        begin: _isFavorite ? 1 : 1.5, end: 1)
-                                    .animate(animation),
-                            child: child,
-                          ),
-                          child: _isFavorite
-                              ? const Icon(
-                                  Icons.favorite,
-                                  color: Colors.red,
-                                  key: ValueKey('icon1'),
-                                )
-                              : const Icon(
-                                  Icons.favorite_border,
-                                  color: Colors.black45,
-                                  key: ValueKey('icon2'),
-                                ),
+            padding: const EdgeInsets.all(4),
+            margin: const EdgeInsets.all(8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () async {
+                        _postService.reactionPost(
+                            postId: widget.post.id!,
+                            reactionId: _isFavorite ? null : 1);
+                        setState(() {
+                          if (_isFavorite) {
+                            _isFavorite = false;
+                            _likeCount--;
+                          } else {
+                            _isFavorite = true;
+                            _likeCount++;
+                          }
+                        });
+                      },
+                      icon: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 200),
+                        transitionBuilder: (child, animation) =>
+                            ScaleTransition(
+                          scale: child.key == const ValueKey('icon1')
+                              ? Tween<double>(
+                                      begin: !_isFavorite ? 1 : 1.5, end: 1)
+                                  .animate(animation)
+                              : Tween<double>(
+                                      begin: _isFavorite ? 1 : 1.5, end: 1)
+                                  .animate(animation),
+                          child: child,
                         ),
-                      ),
-                      Text(_likeCount.toString()),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
-                              opaque: false,
-                              pageBuilder: (BuildContext context, _, __) =>
-                                  CommentScreen(
-                                postId: widget.post.id!,
-                                myComments: widget.post.myComments,
+                        child: _isFavorite
+                            ? const Icon(
+                                Icons.favorite,
+                                color: Colors.red,
+                                key: ValueKey('icon1'),
+                              )
+                            : const Icon(
+                                Icons.favorite_border,
+                                color: Colors.black45,
+                                key: ValueKey('icon2'),
                               ),
+                      ),
+                    ),
+                    Text(_likeCount.toString()),
+                  ],
+                ),
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          PageRouteBuilder(
+                            opaque: false,
+                            pageBuilder: (BuildContext context, _, __) =>
+                                CommentScreen(
+                              postId: widget.post.id!,
+                              myComments: widget.post.myComments,
                             ),
-                          );
-                        },
-                        icon: const Icon(
-                          Icons.chat_bubble_outline,
-                          color: Colors.black45,
-                        ),
+                          ),
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.chat_bubble_outline,
+                        color: Colors.black87,
                       ),
-                      Text(
-                        widget.post.commentCount.toString(),
+                    ),
+                    Text(
+                      widget.post.commentCount.toString(),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.share,
+                        color: Colors.black87,
                       ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.share,
-                          color: Colors.black45,
-                        ),
-                      ),
-                      const Text('Share'),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           )
         ],

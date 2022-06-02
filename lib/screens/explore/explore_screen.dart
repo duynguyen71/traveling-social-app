@@ -91,9 +91,6 @@ class _ExploreScreenState extends State<ExploreScreen>
                 backgroundColor: Colors.white,
                 floating: true,
                 snap: true,
-                //
-                // pinned: true,
-                // title: Text("Title"),
                 bottom: PreferredSize(
                   preferredSize: const Size.fromHeight(56),
                   child: TabBar(

@@ -110,10 +110,9 @@ class _CommentEntryState extends State<CommentEntry> {
                                   : ProfileScreen(userId: widget.comment.user!.id!));
                         },
                         size: 30,
-                        user: widget.comment.user != null
-                            ? widget.comment.user!
-                            : context.read<UserViewModel>().user!,
-                        margin: EdgeInsets.zero,
+                        avt: widget.comment.user != null
+                            ? widget.comment.user!.avt.toString()
+                            : context.read<UserViewModel>().user!.avt.toString(),
                       ),
                       const SizedBox(width: 10),
                       Column(

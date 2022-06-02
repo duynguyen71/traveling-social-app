@@ -3,15 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
-import 'package:traveling_social_app/models/Content.dart';
 import 'package:traveling_social_app/models/Post.dart';
 import 'package:traveling_social_app/widgets/expandable_text.dart';
 import 'package:traveling_social_app/widgets/story_context_menu.dart';
-import 'package:traveling_social_app/widgets/user_avt.dart';
 
 import '../../utilities/application_utility.dart';
 import '../../view_model/user_view_model.dart';
-import '../../widgets/current_user_avt.dart';
+import '../../widgets/user_avt.dart';
 import '../profile/profile_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -31,49 +29,19 @@ class _StoryFullScreenState extends State<StoryFullScreen>
   int itemCount = 0;
 
   nextImage() {
-    if (currentIndex != itemCount - 1) {
-      currentIndex = currentIndex + 1;
-      _getImage(currentIndex);
+    if (currentIndex < widget.post.contents!.length - 1) {
+      setState(() => currentIndex += 1);
     }
   }
 
   prevImages() {
     if (currentIndex >= 1) {
-      currentIndex = currentIndex - 1;
-      _getImage(currentIndex);
-    }
-  }
-
-  int countContents() {
-    if (widget.post.contents != null) {
-      setState(() {
-        itemCount = widget.post.contents!.length;
-      });
-    }
-    return 0;
-  }
-
-  _getImage(int i) {
-    List<Content>? contents = widget.post.contents;
-    if (contents != null &&
-        contents.isNotEmpty &&
-        contents[i].attachment != null) {
-      String? string = contents[i].attachment?.name.toString();
-      setState(() {
-        currentImg = string;
-      });
+      setState(() => currentIndex -= 1);
     }
   }
 
   String _getTimeAgo() {
     return Jiffy(widget.post.createDate).fromNow();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    // countContents();
-    // _getImage(currentIndex);
   }
 
   @override
@@ -99,33 +67,25 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                     //IMAGE
                     AspectRatio(
                       aspectRatio: 3 / 4,
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            // image: currentImg != null
-                            //     ? DecorationImage(
-                            //         fit: BoxFit.fitWidth,
-                            //         image: CachedNetworkImageProvider(
-                            //           currentImg != null
-                            //               ? (imageUrl + currentImg.toString())
-                            //               : "https://images.pexels.com/photos/11780519/pexels-photo-11780519.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-                            //         ),
-                            //       )
-                            //     : null,
-                            image: (widget.post.contents != null &&
-                                    widget.post.contents!.isNotEmpty)
-                                ? (widget.post.contents?[currentIndex]
-                                            .attachment?.name !=
-                                        null
-                                    ? DecorationImage(
-                                        fit: BoxFit.fitWidth,
-                                        image: CachedNetworkImageProvider(
-                                            '$imageUrl${widget.post.contents?[currentIndex].attachment?.name}'),
-                                      )
-                                    : null)
-                                : null),
-                      ),
-                    )
+                      child: widget.post.contents != null &&
+                              widget.post.contents!
+                                  .asMap()
+                                  .containsKey(currentIndex)
+                          ? CachedNetworkImage(
+                              imageUrl:
+                                  '$imageUrl${widget.post.contents![currentIndex].attachment?.name}',
+                              imageBuilder: (context, a) => Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      fit: BoxFit.fitWidth, image: a),
+                                ),
+                              ),
+                              errorWidget: (context, url, a) =>
+                                  const SizedBox.shrink(),
+                            )
+                          : const SizedBox.shrink(),
+                    ),
                   ],
                 ),
               ),
@@ -173,8 +133,7 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                             children: [
                               UserAvatar(
                                 size: 40,
-                                user: widget.post.user!,
-                                margin: EdgeInsets.zero,
+                                avt: widget.post.user!.avt.toString(),
                                 onTap: () {
                                   ApplicationUtility.pushAndReplace(
                                       context,

@@ -23,14 +23,16 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen>
     _storyViewModel = context.read<StoryViewModel>();
     _listController = ScrollController(
         initialScrollOffset: _storyViewModel.currentStoryIndex *
-            MediaQueryData.fromWindow(WidgetsBinding.instance!.window)
+            MediaQueryData
+                .fromWindow(WidgetsBinding.instance.window)
                 .size
                 .height);
     _listController.addListener(() {
       var pixels2 = _listController.position.pixels;
       var maxScrollExtent2 = _listController.position.maxScrollExtent;
       if ((maxScrollExtent2 - pixels2) <=
-          MediaQueryData.fromWindow(WidgetsBinding.instance!.window)
+          MediaQueryData
+              .fromWindow(WidgetsBinding.instance.window)
               .size
               .height) {
         _storyViewModel.updateStories();
@@ -44,7 +46,9 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     return GestureDetector(
       onVerticalDragStart: (dragDetails) {
         startVerticalDragDetails = dragDetails;
@@ -54,7 +58,9 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen>
       },
       onVerticalDragEnd: (endDetails) {
         var currentStoryIndex =
-            context.read<StoryViewModel>().currentStoryIndex;
+            context
+                .read<StoryViewModel>()
+                .currentStoryIndex;
         double dx = updateVerticalDragDetails.globalPosition.dx -
             startVerticalDragDetails.globalPosition.dx;
         double dy = updateVerticalDragDetails.globalPosition.dy -
@@ -66,7 +72,9 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen>
         if (dy < 0) dy = -dy;
         //Swiping UP
         int i = currentStoryIndex;
-        var stories = context.read<StoryViewModel>().stories;
+        var stories = context
+            .read<StoryViewModel>()
+            .stories;
         if (velocity < 0) {
           if (i < (stories.length - 1)) {
             i = i + 1;
@@ -74,7 +82,9 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen>
                 double.parse((i * size.height).toString()),
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeInToLinear);
-            context.read<StoryViewModel>().setCurrentStoryIndex = i;
+            context
+                .read<StoryViewModel>()
+                .setCurrentStoryIndex = i;
           }
         }
         //SWIPING DOWN
@@ -85,7 +95,9 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen>
                 double.parse((i * size.height).toString()),
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeInToLinear);
-            context.read<StoryViewModel>().setCurrentStoryIndex = i;
+            context
+                .read<StoryViewModel>()
+                .setCurrentStoryIndex = i;
           }
         }
       },
@@ -93,20 +105,21 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen>
         width: size.width,
         height: size.height,
         child: Consumer<StoryViewModel>(
-            builder: (context, value, child) => ListView.builder(
-                padding: EdgeInsets.zero,
-                physics: const NeverScrollableScrollPhysics(),
-                controller: _listController,
-                itemBuilder: (context, index) {
-                  var stories = value.stories;
-                  // var story = stories[index];
-                  var story = stories.elementAt(index);
-                  return StoryFullScreen(
-                    // post: context.read<StoryViewModel>().stories[index],
-                    post: story,
-                  );
-                },
-                itemCount: value.stories.length)),
+            builder: (context, value, child) =>
+                ListView.builder(
+                    padding: EdgeInsets.zero,
+                    physics: const NeverScrollableScrollPhysics(),
+                    controller: _listController,
+                    itemBuilder: (context, index) {
+                      var stories = value.stories;
+                      // var story = stories[index];
+                      var story = stories.elementAt(index);
+                      return StoryFullScreen(
+                        // post: context.read<StoryViewModel>().stories[index],
+                        post: story,
+                      );
+                    },
+                    itemCount: value.stories.length)),
       ),
     );
   }

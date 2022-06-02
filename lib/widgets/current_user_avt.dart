@@ -2,8 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
-import 'package:traveling_social_app/models/User.dart';
-import 'package:traveling_social_app/widgets/user_avt.dart';
 
 import '../view_model/user_view_model.dart';
 

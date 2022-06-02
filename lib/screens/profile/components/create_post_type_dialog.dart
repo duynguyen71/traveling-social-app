@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
+import 'package:traveling_social_app/screens/create_review/create_review_post.dart';
 import 'package:traveling_social_app/widgets/my_divider.dart';
 
 import '../../../utilities/application_utility.dart';
@@ -41,19 +42,28 @@ class CreatePostTypeDialog extends StatelessWidget {
                       Navigator.of(context).pop();
                       ApplicationUtility.navigateToScreen(
                           context, const CreateStoryScreen());
-                    })
+                    }), const SizedBox(child: MyDivider()),
+                BottomModelItem(
+                    title: 'Create review post',
+                    onClick: () {
+                      Navigator.of(context).pop();
+                      ApplicationUtility.navigateToScreen(
+                          context, const CreateReviewPost());
+                    }),
               ],
             ),
           ),
           Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(5),
-            ),
-            margin: const EdgeInsets.all(10),
-            padding: const EdgeInsets.all(5),
-            child: BottomModelItem(title: "Cancel", onClick: ()=> Navigator.of(context).pop(),color: Colors.redAccent,)
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              margin: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(5),
+              child: BottomModelItem(title: "Cancel",
+                onClick: () => Navigator.of(context).pop(),
+                color: Colors.redAccent,)
           )
         ],
       ),
@@ -62,7 +72,8 @@ class CreatePostTypeDialog extends StatelessWidget {
 }
 
 class BottomModelItem extends StatelessWidget {
-  const BottomModelItem({Key? key, required this.title, required this.onClick, this.color})
+  const BottomModelItem(
+      {Key? key, required this.title, required this.onClick, this.color})
       : super(key: key);
 
   final String title;
@@ -77,7 +88,8 @@ class BottomModelItem extends StatelessWidget {
         onPressed: () => onClick(),
         child: Text(
           title,
-          style:  TextStyle(fontSize: 16, fontWeight: FontWeight.normal,color: color),
+          style: TextStyle(
+              fontSize: 16, fontWeight: FontWeight.normal, color: color),
         ),
         style: TextButton.styleFrom(
           minimumSize: Size.zero,

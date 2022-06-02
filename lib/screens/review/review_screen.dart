@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:traveling_social_app/constants/api_constants.dart';
+import 'package:traveling_social_app/models/BaseUserInfo.dart';
 import 'package:traveling_social_app/models/ReviewPost.dart';
-
-import '../../models/Post.dart';
+import 'package:traveling_social_app/screens/profile/profile_screen.dart';
+import 'package:traveling_social_app/utilities/application_utility.dart';
 import '../../services/post_service.dart';
+import '../../services/user_service.dart';
+import '../../widgets/user_avt.dart';
 import 'components/review_post.dart';
 
 class ReviewScreen extends StatefulWidget {
@@ -15,14 +19,31 @@ class ReviewScreen extends StatefulWidget {
 class _ReviewScreenState extends State<ReviewScreen>
     with AutomaticKeepAliveClientMixin {
   final postService = PostService();
+  final _userService = UserService();
   final List<ReviewPost> _posts = [];
+  List<BaseUserInfo> _users = [];
+  bool _isLoading = false;
+
+  set isLoading(bool i) {
+    setState(() {
+      _isLoading = i;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    print("REVIEW SCREEN INIT");
-
     getReviewPosts();
+    getTopActiveUsers();
+  }
+
+  getTopActiveUsers() async {
+    if (_users.isEmpty) {
+      List<BaseUserInfo> users = await _userService.getTopActiveUsers();
+      setState(() {
+        _users = users;
+      });
+    }
   }
 
   getReviewPosts() async {
@@ -39,23 +60,45 @@ class _ReviewScreenState extends State<ReviewScreen>
       child: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: Column(
-                children: [
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: List.generate(_posts.length, (index) {
-                        ReviewPost reviewPost = _posts[index];
-                        return ReviewPlace(reviewPost: reviewPost);
-                      }),
-                    ),
-                  ),
-                ],
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              margin: const EdgeInsets.symmetric(vertical: 8.0),
+              constraints:const BoxConstraints(minHeight: 40,),
+              color: Colors.white,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: _users
+                      .map((e) => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: UserAvatar(
+                            size: 40,
+                            avt: e.avt.toString(),
+                            onTap: () {
+                              ApplicationUtility.navigateToScreen(
+                                  context, ProfileScreen(userId: e.id!));
+                            }),
+                      ))
+                      .toList(),
+                ),
               ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: List.generate(_posts.length, (index) {
+                      ReviewPost reviewPost = _posts[index];
+                      return ReviewPlace(reviewPost: reviewPost);
+                    }),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
