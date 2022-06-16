@@ -1,8 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:traveling_social_app/models/User.dart';
+import 'package:traveling_social_app/models/user.dart';
 import 'package:traveling_social_app/screens/home/components/post_entry.dart';
 import 'package:traveling_social_app/services/post_service.dart';
 import 'package:traveling_social_app/widgets/my_outline_button.dart';
@@ -10,7 +9,7 @@ import 'package:traveling_social_app/widgets/user_avt.dart';
 
 import '../../constants/api_constants.dart';
 import '../../constants/app_theme_constants.dart';
-import '../../models/Post.dart';
+import '../../models/post.dart';
 import '../../services/user_service.dart';
 import 'components/follow_count.dart';
 import 'components/icon_with_text.dart';

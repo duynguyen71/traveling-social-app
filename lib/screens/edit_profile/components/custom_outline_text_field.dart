@@ -29,23 +29,23 @@ class _CustomOutlineTextFieldState extends State<CustomOutlineTextField> {
       width: size.width * .8,
       child: TextFormField(
         onChanged: (value) {
-          if (this.widget.onChange != null) {
-            return this.widget.onChange!(value);
+          if (widget.onChange != null) {
+            return widget.onChange!(value);
           }
         },
         validator: (value) => widget.validate!(value),
-        controller: this.widget.controller,
+        controller: widget.controller,
         decoration: InputDecoration(
           floatingLabelBehavior: FloatingLabelBehavior.always,
           contentPadding: const EdgeInsets.all(10),
-          labelText: this.widget.labelText,
-          hintText: this.widget.hintText,
-          hintStyle: TextStyle(
+          labelText: widget.labelText,
+          hintText: widget.hintText,
+          hintStyle: const TextStyle(
             fontSize: 18,
             color: Colors.black38,
           ),
         ),
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 18,
           color: Colors.black,
           fontWeight: FontWeight.w600,

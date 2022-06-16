@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/feed/my_feed.dart';
+import 'package:traveling_social_app/screens/message/chat_groups_screen.dart';
 import 'package:traveling_social_app/screens/review/review_screen.dart';
 import 'package:traveling_social_app/view_model/user_view_model.dart';
 import 'package:traveling_social_app/widgets/current_user_avt.dart';
@@ -53,9 +54,19 @@ class _ExploreScreenState extends State<ExploreScreen>
               SliverAppBar(
                 iconTheme: const IconThemeData(color: Colors.black),
                 leading: IconButton(
-                    onPressed: () => _scaffoldKey.currentState!.openDrawer(),
-                    icon: const Icon(Icons.menu)),
+                  onPressed: () => _scaffoldKey.currentState!.openDrawer(),
+                  icon: const Icon(Icons.menu),
+                ),
                 actions: [
+                  IconButton(
+                    onPressed: () => ApplicationUtility.navigateToScreen(
+                      context,
+                      const ChatGroupsScreen(),
+                    ),
+                    icon: const Icon(
+                        IconData(0xe5c9, fontFamily: 'MaterialIcons'),
+                        color: Colors.black45),
+                  ),
                   IconButton(
                       onPressed: () => showModalBottomSheet(
                             context: context,
@@ -128,7 +139,6 @@ class _ExploreScreenState extends State<ExploreScreen>
             color: Colors.grey[100],
             child: TabBarView(
               controller: _tabController,
-              // physics:const NeverScrollableScrollPhysics(),
               physics: const NeverScrollableScrollPhysics(),
               children: const [
                 MyFeed(),

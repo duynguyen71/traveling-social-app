@@ -6,11 +6,12 @@ import 'package:traveling_social_app/view_model/user_view_model.dart';
 import 'package:traveling_social_app/widgets/bottom_select_dialog.dart';
 import 'package:traveling_social_app/widgets/expandable_text.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
-import '../models/Comment.dart';
+import '../models/comment.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import '../models/User.dart';
+import '../models/user.dart';
 import '../services/comment_service.dart';
+
 
 class CommentEntry extends StatefulWidget {
   const CommentEntry({
@@ -50,8 +51,7 @@ class _CommentEntryState extends State<CommentEntry> {
   bool _hiding = false;
 
   _getReplyComments() async {
-    List<Comment> rs = await _commentService.getReplyComment(
-        parentCommentId: widget.comment.id!);
+    List<Comment> rs = await _commentService.getReplyComment(parentCommentId: widget.comment.id!);
     setState(() {
       _childrenComment.addAll(rs);
     });

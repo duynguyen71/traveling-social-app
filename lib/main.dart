@@ -4,9 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:traveling_social_app/screens/explore/explore_screen.dart';
 import 'package:traveling_social_app/screens/login/login_screen.dart';
 import 'package:traveling_social_app/services/navigation_service.dart';
+import 'package:traveling_social_app/view_model/chat_group_view_model.dart';
 import 'package:traveling_social_app/view_model/current_user_post_view_model.dart';
 import 'package:traveling_social_app/view_model/post_view_model.dart';
-import 'package:traveling_social_app/view_model/story_viewmodel.dart';
+import 'package:traveling_social_app/view_model/story_view_model.dart';
 import 'package:traveling_social_app/view_model/user_view_model.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -26,11 +27,13 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<StoryViewModel>(create: (_) => StoryViewModel()),
         ChangeNotifierProvider<PostViewModel>(create: (_) => PostViewModel()),
-        ChangeNotifierProvider<CurrentUserPostViewModel>(create: (_) => CurrentUserPostViewModel()),
+        ChangeNotifierProvider<CurrentUserPostViewModel>(
+            create: (_) => CurrentUserPostViewModel()),
+        ChangeNotifierProvider<ChatGroupViewModel>(create: (_) => ChatGroupViewModel()),
       ],
       builder: (context, child) {
         return MaterialApp(
-          title: 'TV Social',
+          title: 'TC Social',
           navigatorKey: NavigationService.navigatorKey,
           debugShowCheckedModeBanner: false,
           theme: ThemeData(

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:traveling_social_app/models/Post.dart';
+import 'package:traveling_social_app/models/post.dart';
 import 'package:collection/collection.dart';
-import '../models/Comment.dart';
 import '../services/post_service.dart';
 
 class PostViewModel with ChangeNotifier {

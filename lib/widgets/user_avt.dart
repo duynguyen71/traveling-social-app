@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
-import 'package:traveling_social_app/models/User.dart';
 
 class UserAvatar extends StatelessWidget {
   const UserAvatar({
@@ -12,7 +11,7 @@ class UserAvatar extends StatelessWidget {
   }) : super(key: key);
 
   final double size;
-  final String avt;
+  final String? avt;
   final Function onTap;
 
   @override
@@ -25,7 +24,7 @@ class UserAvatar extends StatelessWidget {
             color: Colors.grey.shade50),
         constraints: BoxConstraints(minWidth: size, minHeight: size),
         child: CachedNetworkImage(
-          imageUrl: '$imageUrl$avt',
+          imageUrl: avt!=null?'$imageUrl$avt':'',
           imageBuilder: (context, imageProvider) => Container(
             height: size,
             width: size,

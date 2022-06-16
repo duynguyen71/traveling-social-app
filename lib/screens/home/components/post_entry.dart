@@ -3,10 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
-import 'package:traveling_social_app/models/Attachment.dart';
-import 'package:traveling_social_app/models/Post.dart';
+import 'package:traveling_social_app/models/attachment.dart';
+import 'package:traveling_social_app/models/post.dart';
 import 'package:traveling_social_app/screens/comment/comment_screen.dart';
-import 'package:traveling_social_app/screens/profile/current_user_profile_screen.dart';
 import 'package:traveling_social_app/screens/profile/profile_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/view_model/current_user_post_view_model.dart';
@@ -16,9 +15,9 @@ import 'package:traveling_social_app/widgets/popup_menu_item.dart';
 import 'package:traveling_social_app/widgets/rounded_icon_button.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
 
-import '../../../models/Content.dart';
-import '../../../models/Reaction.dart';
-import '../../../models/User.dart';
+import '../../../models/post_content.dart';
+import '../../../models/reaction.dart';
+import '../../../models/user.dart';
 import '../../../services/post_service.dart';
 import 'package:provider/provider.dart';
 

@@ -11,9 +11,10 @@ class NavigationItem{
 }
 List<NavigationItem> navigationItems = [
   NavigationItem(title: "New", iconData: Icons.create),
-  NavigationItem(title: "Calender", iconData: Icons.calendar_today),
+  NavigationItem(title: "Message", iconData: Icons.message_outlined),
   NavigationItem(title: "News", iconData: Icons.ac_unit),
   NavigationItem(title: "Setting", iconData: Icons.settings),
   NavigationItem(title: "About us", iconData: Icons.ac_unit),
   NavigationItem(title: "Log out", iconData: Icons.logout),
 ];
+

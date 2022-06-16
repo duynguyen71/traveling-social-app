@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
-import 'package:traveling_social_app/models/User.dart';
+import 'package:traveling_social_app/models/user.dart';
 import 'package:traveling_social_app/screens/home/components/drawer.dart';
 import 'package:traveling_social_app/screens/home/components/home_body.dart';
 import 'package:traveling_social_app/screens/login/login_screen.dart';

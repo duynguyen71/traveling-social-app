@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:traveling_social_app/models/Comment.dart';
 
 
 class CommentInputWidget extends StatelessWidget {

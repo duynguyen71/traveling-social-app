@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
-import 'package:traveling_social_app/models/NavigationItem.dart';
-import 'package:traveling_social_app/models/User.dart';
-import 'package:traveling_social_app/screens/home/components/drawer_header.dart';
+import 'package:traveling_social_app/models/nav_item.dart';
+import 'package:traveling_social_app/models/user.dart';
 import 'package:traveling_social_app/screens/login/login_screen.dart';
-import 'package:traveling_social_app/services/user_service.dart';
+import 'package:traveling_social_app/screens/message/chat_groups_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/view_model/current_user_post_view_model.dart';
 import 'package:traveling_social_app/view_model/post_view_model.dart';
-import 'package:traveling_social_app/view_model/story_viewmodel.dart';
+import 'package:traveling_social_app/view_model/story_view_model.dart';
 import 'package:traveling_social_app/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -68,6 +67,11 @@ class HomeDrawer extends StatelessWidget {
 
   void onNavigationClickItemPressed(BuildContext context, int index) {
     switch (index) {
+      case 1:
+        {
+          ApplicationUtility.navigateToScreen(context, const ChatGroupsScreen());
+          break;
+        }
       case 3:
         {
           break;

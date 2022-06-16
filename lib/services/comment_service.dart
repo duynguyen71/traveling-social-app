@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:traveling_social_app/models/Comment.dart';
+import 'package:traveling_social_app/models/comment.dart';
 
 import '../constants/api_constants.dart';
 import 'package:http/http.dart' as http;

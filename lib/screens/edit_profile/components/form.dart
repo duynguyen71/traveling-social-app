@@ -1,12 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
-import 'package:traveling_social_app/models/User.dart';
+import 'package:traveling_social_app/models/user.dart';
 
 import 'custom_outline_text_field.dart';
 import 'custom_small_buttom.dart';
-import 'package:provider/provider.dart';
 
 class UserInfoForm extends StatefulWidget {
   const UserInfoForm({
@@ -30,7 +27,7 @@ class _UserInfoFormState extends State<UserInfoForm> {
   String errMesssage = "";
 
   User get getUser {
-    return this.widget.userModel;
+    return widget.userModel;
   }
 
   @override
@@ -74,8 +71,9 @@ class _UserInfoFormState extends State<UserInfoForm> {
             controller: fullNameController,
             hintText: "Fullname",
             validate: (text) {
-              if (text == null || text.length < 4)
+              if (text == null || text.length < 4) {
                 return "Username require more than 3 charactors";
+              }
             },
           ),
           SizedBox(height: size.height * .02),
@@ -131,7 +129,7 @@ class _UserInfoFormState extends State<UserInfoForm> {
                   onPressed: () {
                     FocusScope.of(context).unfocus();
                     final isValid = _formKey.currentState!.validate();
-                    if (isValid && this.errMesssage.isEmpty) {}
+                    if (isValid && errMesssage.isEmpty) {}
                   },
                 ),
               ],

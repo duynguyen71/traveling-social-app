@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../constants/app_theme_constants.dart';
-import '../utilities/application_utility.dart';
 
 class MyOutlineButton extends StatelessWidget {
   const MyOutlineButton(

@@ -2,11 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
-import 'package:traveling_social_app/models/Content.dart';
-import 'package:traveling_social_app/models/Post.dart';
+import 'package:traveling_social_app/models/post_content.dart';
+import 'package:traveling_social_app/models/post.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
-import '../../models/User.dart';
+import '../../models/user.dart';
 
 class StoryCard extends StatefulWidget {
   const StoryCard({Key? key, required this.story, required this.onClick})

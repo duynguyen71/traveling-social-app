@@ -29,7 +29,7 @@ class _CreateReviewPostState extends State<CreateReviewPost> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Text("Create review post"),
+              const Text("Create review post"),
               HtmlEditor(
                 controller: _editorController,
                 htmlToolbarOptions: HtmlToolbarOptions(
@@ -38,13 +38,13 @@ class _CreateReviewPostState extends State<CreateReviewPost> {
                   },
                   defaultToolbarButtons: [
                     // StyleButtons(style: false),
-                    ParagraphButtons(
+                    const ParagraphButtons(
                         caseConverter: false,
                         decreaseIndent: false,
                         increaseIndent: false,
                         lineHeight: false,
                         textDirection: false),
-                    InsertButtons(
+                    const InsertButtons(
                       audio: false,
                       hr: false,
                       link: false,
@@ -55,16 +55,16 @@ class _CreateReviewPostState extends State<CreateReviewPost> {
                     // OtherButtons(),
                   ],
                 ),
-                htmlEditorOptions: HtmlEditorOptions(
+                htmlEditorOptions: const HtmlEditorOptions(
                   hint: "Your text here...",
                   initialText: "text content initial, if any",
                   spellCheck: true,
                 ),
-                otherOptions: OtherOptions(
+                otherOptions: const OtherOptions(
                   height: 400,
                 ),
               ),
-              TextButton(onPressed: save, child: Text("SAVE"))
+              TextButton(onPressed: save, child: const Text("SAVE"))
             ],
           ),
         ),

@@ -6,7 +6,7 @@ import 'package:traveling_social_app/screens/story/stories_screen.dart';
 import 'package:traveling_social_app/screens/story/stories_scroll_screen.dart';
 import 'package:traveling_social_app/screens/story/story_card.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
-import 'package:traveling_social_app/view_model/story_viewmodel.dart';
+import 'package:traveling_social_app/view_model/story_view_model.dart';
 
 class HomeStories extends StatefulWidget {
   const HomeStories({Key? key}) : super(key: key);

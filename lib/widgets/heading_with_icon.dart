@@ -20,10 +20,10 @@ class HeadingWithIcon extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Icon(icon),
-              SizedBox(width: 5),
+              const SizedBox(width: 5),
               Text(
                 title,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   color: Colors.black87,
                   fontWeight: FontWeight.w500,
@@ -34,7 +34,7 @@ class HeadingWithIcon extends StatelessWidget {
         ),
         Center(
           child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 5),
+            margin: const EdgeInsets.symmetric(horizontal: 5),
             child: const Divider(
               height: 1,
               color: kPrimaryLightColor,

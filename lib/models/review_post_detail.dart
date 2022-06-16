@@ -1,6 +1,6 @@
-import 'package:traveling_social_app/models/Attachment.dart';
+import 'package:traveling_social_app/models/attachment.dart';
 
-import 'User.dart';
+import 'user.dart';
 
 class ReviewPostDetail {
   ReviewPostDetail({

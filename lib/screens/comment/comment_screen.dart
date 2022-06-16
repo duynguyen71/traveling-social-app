@@ -4,7 +4,7 @@ import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/services/comment_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/comment_input_reply_widget.dart';
-import '../../models/Comment.dart';
+import '../../models/comment.dart';
 import '../../view_model/post_view_model.dart';
 import '../../view_model/user_view_model.dart';
 import '../../widgets/comment_entry.dart';

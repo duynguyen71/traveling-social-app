@@ -3,12 +3,12 @@ import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
-import 'package:traveling_social_app/models/Post.dart';
+import 'package:traveling_social_app/models/post.dart';
 import 'package:http/http.dart' as http;
-import 'package:traveling_social_app/models/ReviewPost.dart';
-import 'package:traveling_social_app/models/ReviewPostDetail.dart';
+import 'package:traveling_social_app/models/review_post.dart';
+import 'package:traveling_social_app/models/review_post_detail.dart';
 
-import '../models/FileUpload.dart';
+import '../models/file_upload.dart';
 import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
 

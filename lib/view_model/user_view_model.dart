@@ -1,12 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:traveling_social_app/models/User.dart';
-import 'package:traveling_social_app/services/post_service.dart';
+import 'package:traveling_social_app/models/user.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 
-import '../models/FileUpload.dart';
-import '../models/Post.dart';
+import '../models/file_upload.dart';
 
 class UserViewModel extends ChangeNotifier {
   final UserService _userService = UserService();

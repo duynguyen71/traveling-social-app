@@ -169,6 +169,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   RoundedInputContainer(
                     child: TextFormField(
                       validator: (text) {
+                        return null;
+                      
                         // if (text == null) {
                         //   return "Required password";
                         // } else if (text.length < 3) {

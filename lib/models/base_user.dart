@@ -18,7 +18,7 @@ class BaseUserInfo {
     _id = json['id'];
     _username = json['username'];
     _avt = json['avt'];
-    _isFollowed = json['isFollowed'];
+    _isFollowed = json['isFollowed'] ?? false;
   }
 
   int? _id;

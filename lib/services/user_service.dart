@@ -3,10 +3,10 @@ import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
-import 'package:traveling_social_app/models/BaseUserInfo.dart';
-import 'package:traveling_social_app/models/FileUpload.dart';
-import 'package:traveling_social_app/models/Post.dart';
-import 'package:traveling_social_app/models/User.dart';
+import 'package:traveling_social_app/models/base_user.dart';
+import 'package:traveling_social_app/models/file_upload.dart';
+import 'package:traveling_social_app/models/post.dart';
+import 'package:traveling_social_app/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
@@ -58,7 +58,7 @@ class UserService {
           User user = User.fromJson(jsonData['data']);
           return user;
         }
-      } on SocketException catch (e) {
+      } on SocketException {
         return null;
       }
     }

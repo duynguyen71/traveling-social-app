@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/explore/explore_screen.dart';
-import 'package:traveling_social_app/screens/home/home_screen.dart';
 import 'package:traveling_social_app/screens/login/components/login_background.dart';
 import 'package:traveling_social_app/screens/register/register_screen.dart';
 import 'package:traveling_social_app/services/user_service.dart';
@@ -53,6 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
       print("Socket Exception " + e.toString());
     } catch (e) {
       _setErrorMessage(e.toString());
+      print("Failed to login" + e.toString());
     } finally {
       _showLoadingIndicator(false);
     }

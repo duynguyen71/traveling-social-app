@@ -1,7 +1,6 @@
-import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
-import 'package:traveling_social_app/models/Post.dart';
+import 'package:traveling_social_app/models/post.dart';
 import 'package:traveling_social_app/services/post_service.dart';
 
 class StoryViewModel extends ChangeNotifier {
@@ -17,7 +16,7 @@ class StoryViewModel extends ChangeNotifier {
 
   int _currentStoryIndex = 0;
   int _currentPage = 0;
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   void fetchStories({int? page, int? pageSize}) async {
     _currentPage = 0;

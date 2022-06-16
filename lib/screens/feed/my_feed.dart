@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/rendering/sliver_multi_box_adaptor.dart';
 import 'package:provider/provider.dart';
-import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/home/components/home_stories.dart';
 
 import '../../view_model/post_view_model.dart';

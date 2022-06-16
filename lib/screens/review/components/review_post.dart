@@ -1,8 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
-import 'package:traveling_social_app/models/ReviewPost.dart';
+import 'package:traveling_social_app/models/review_post.dart';
 import 'package:traveling_social_app/screens/review/review_post_detail.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 

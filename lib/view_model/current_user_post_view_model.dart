@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:traveling_social_app/services/post_service.dart';
 
-import '../models/Post.dart';
+import '../models/post.dart';
 
 class CurrentUserPostViewModel with ChangeNotifier {
   final PostService _postService = PostService();

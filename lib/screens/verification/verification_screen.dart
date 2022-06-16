@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/home/home_screen.dart';
@@ -194,7 +193,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                         Wrap(
                           alignment: WrapAlignment.spaceAround,
                           crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [],
+                          children: const [],
                         ),
                         const SizedBox(
                           height: 11,

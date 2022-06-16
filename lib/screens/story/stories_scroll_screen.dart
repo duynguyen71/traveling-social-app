@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
-import 'package:traveling_social_app/models/Post.dart';
 import 'package:traveling_social_app/screens/story/story_full_screen.dart';
-import 'package:traveling_social_app/view_model/story_viewmodel.dart';
+import 'package:traveling_social_app/view_model/story_view_model.dart';
 
 class StoriesScrollScreen extends StatefulWidget {
   const StoriesScrollScreen({Key? key}) : super(key: key);

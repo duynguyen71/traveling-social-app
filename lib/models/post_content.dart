@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'Attachment.dart';
+import 'attachment.dart';
 
 Content contentsFromJson(String str) => Content.fromJson(json.decode(str));
 String contentsToJson(Content data) => json.encode(data.toJson());

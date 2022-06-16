@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CustomSmallTextButton extends StatelessWidget {
@@ -17,17 +16,17 @@ class CustomSmallTextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () => this.onPressed(),
+      onPressed: () => onPressed(),
       child: Text(
-        this.text,
-        style: TextStyle(color: this.textColor),
+        text,
+        style: TextStyle(color: textColor),
       ),
       style: TextButton.styleFrom(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
-        backgroundColor: this.backgroundColor,
-        padding: EdgeInsets.symmetric(
+        backgroundColor: backgroundColor,
+        padding: const EdgeInsets.symmetric(
           horizontal: 28,
           vertical: 8,
         ),

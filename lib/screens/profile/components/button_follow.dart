@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 
@@ -33,17 +32,17 @@ class _ButtonFollowState extends State<ButtonFollow> {
                 builder: (BuildContext context) {
                   return AlertDialog(
                     title:
-                        Text("Are you sure unfollow ${this.widget.username}"),
+                        Text("Are you sure unfollow ${widget.username}"),
                     actions: [
                       TextButton(
                           onPressed: () => Navigator.pop(context),
-                          child: Text("Cancel")),
+                          child: const Text("Cancel")),
                       TextButton(
                           onPressed: () {
                             handleFollowBtnClick(context);
                             Navigator.pop(context);
                           },
-                          child: Text("OK"))
+                          child: const Text("OK"))
                     ],
                   );
                 });

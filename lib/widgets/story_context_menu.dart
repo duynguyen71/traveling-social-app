@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:traveling_social_app/models/User.dart';
-import 'package:traveling_social_app/view_model/story_viewmodel.dart';
+import 'package:traveling_social_app/models/user.dart';
+import 'package:traveling_social_app/view_model/story_view_model.dart';
 import 'package:traveling_social_app/widgets/popup_menu_item.dart';
 import 'package:provider/provider.dart';
 

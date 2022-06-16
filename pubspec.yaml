@@ -51,6 +51,8 @@ dependencies:
   flutter_image_compress: ^1.1.0
   html_editor_enhanced: ^2.4.0+1
   flutter_html: ^2.2.1
+  socket_io_client: ^1.0.2
+  stomp_dart_client: ^0.4.4
 
 dev_dependencies:
   flutter_test:

@@ -23,11 +23,9 @@ class ApplicationUtility {
   }
 
   static Future<PaletteGenerator?> getPaletteGenerator(String image) async {
-    if (image != null) {
-      return await PaletteGenerator.fromImageProvider(
-        Image.network(image).image,
-      );
-    }
+    return await PaletteGenerator.fromImageProvider(
+      Image.network(image).image,
+    );
     return null;
   }
 

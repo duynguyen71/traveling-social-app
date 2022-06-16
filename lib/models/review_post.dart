@@ -1,7 +1,6 @@
-import 'package:traveling_social_app/models/Attachment.dart';
-import 'package:traveling_social_app/models/BaseUserInfo.dart';
+import 'package:traveling_social_app/models/attachment.dart';
+import 'package:traveling_social_app/models/base_user.dart';
 
-import 'User.dart';
 
 class ReviewPost {
   ReviewPost({

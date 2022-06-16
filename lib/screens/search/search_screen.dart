@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
-import 'package:traveling_social_app/models/BaseUserInfo.dart';
 import 'package:traveling_social_app/screens/profile/profile_screen.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
@@ -9,6 +8,7 @@ import 'package:traveling_social_app/widgets/custom_input_field.dart';
 import 'package:traveling_social_app/widgets/rounded_input_container.dart';
 
 import '../../constants/api_constants.dart';
+import '../../models/base_user.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key, required this.keyword}) : super(key: key);

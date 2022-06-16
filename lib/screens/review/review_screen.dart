@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:traveling_social_app/constants/api_constants.dart';
-import 'package:traveling_social_app/models/BaseUserInfo.dart';
-import 'package:traveling_social_app/models/ReviewPost.dart';
+import 'package:traveling_social_app/models/base_user.dart';
+import 'package:traveling_social_app/models/review_post.dart';
 import 'package:traveling_social_app/screens/profile/profile_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import '../../services/post_service.dart';

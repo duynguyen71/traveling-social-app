@@ -42,9 +42,9 @@ class AvatarWithEditButton extends StatelessWidget {
             ),
             child: IconButton(
               padding: EdgeInsets.zero,
-              constraints: BoxConstraints(),
-              onPressed: () => this.onPressed(),
-              icon: Icon(Icons.edit),
+              constraints: const BoxConstraints(),
+              onPressed: () => onPressed(),
+              icon: const Icon(Icons.edit),
               color: Colors.white,
             ),
           ),
