@@ -14,7 +14,7 @@ class ApplicationUtility {
   //push new screen
   static Future<dynamic> navigateToScreen(
       BuildContext context, Widget screen) async {
-    return Navigator.push(context, MaterialPageRoute(builder: (c) => screen));
+    return   Navigator.push(context, MaterialPageRoute(builder: (c) => screen));
   }
 
   static Future<dynamic> pushAndReplace(BuildContext context, Widget screen) {

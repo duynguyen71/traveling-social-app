@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
 
 import '../../constants/app_theme_constants.dart';
@@ -14,6 +15,7 @@ class MessageWidget extends StatefulWidget {
   final String timeFormat;
   final Function onDoubleTap;
   final String? avt;
+  final bool hasError;
 
   const MessageWidget({
     Key? key,
@@ -27,6 +29,7 @@ class MessageWidget extends StatefulWidget {
     required this.onDoubleTap,
     required this.timeFormat,
     this.avt,
+    required this.hasError,
   }) : super(key: key);
 
   @override
@@ -52,7 +55,7 @@ class _MessageWidgetState extends State<MessageWidget> {
             )
           : EdgeInsets.zero,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment:
             widget.isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
@@ -154,6 +157,14 @@ class _MessageWidgetState extends State<MessageWidget> {
                 ),
               ),
             ],
+          ),
+          Visibility(
+            child: const Center(
+                child: Icon(
+              Icons.error_outline,
+              color: Colors.red,
+            )),
+            visible: widget.hasError,
           ),
         ],
       ),

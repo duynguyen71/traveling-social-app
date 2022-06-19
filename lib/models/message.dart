@@ -4,12 +4,13 @@ import 'user.dart';
 
 class Message with ChangeNotifier {
   Message({
-      this.id, 
-      this.message, 
-      this.status, 
-      this.user, 
-      this.createDate, 
-      this.replyMessage,});
+    this.id,
+    this.message,
+    this.status,
+    this.user,
+    this.createDate,
+    this.replyMessage,
+  });
 
   Message.fromJson(dynamic json) {
     id = json['id'];
@@ -17,8 +18,11 @@ class Message with ChangeNotifier {
     status = json['status'];
     user = json['user'] != null ? User.fromJson(json['user']) : null;
     createDate = json['createDate'];
-    replyMessage = json['replyMessage'] != null ? Message.fromJson(json['replyMessage']) : null;
+    replyMessage = json['replyMessage'] != null
+        ? Message.fromJson(json['replyMessage'])
+        : null;
   }
+
   int? id;
   String? message;
   int? status;
@@ -41,4 +45,11 @@ class Message with ChangeNotifier {
     return map;
   }
 
+// @override
+// bool operator ==(Object other) =>
+//     identical(this, other) ||
+//     other is Message && runtimeType == other.runtimeType && id == other.id;
+//
+// @override
+// int get hashCode => id.hashCode;
 }

@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'user.dart';
 import 'message.dart';
 
-class ChatGroup with ChangeNotifier {
+class Group with ChangeNotifier {
 
-  ChatGroup.fromJson(dynamic json) {
+  Group.fromJson(dynamic json) {
     id = json['id'];
     _name = json['name'];
     if (json['users'] != null) {
@@ -33,8 +33,9 @@ class ChatGroup with ChangeNotifier {
     map['id'] = id;
     map['name'] = name;
     map['users'] = users.map((v) => v.toJson()).toList();
-    if (lastMessage != null) {
-      map['lastMessage'] = lastMessage?.toJson();
+    var lastMessageJson = map['lastMessage'];
+    if (lastMessageJson != null) {
+       lastMessage = Message.fromJson(lastMessageJson);
     }
     map['createDate'] = createDate;
     map['updateDate'] = updateDate;

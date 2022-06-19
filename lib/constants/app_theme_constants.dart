@@ -21,3 +21,6 @@ const kLoginPrimaryLightColor = Color(0xFFE5E5E5);
 const weatherAPIKey = "ad84ccee2e8fcc04efbf74a5a6d5f91a";
 
 const kbottomSheetBackgroundColor = Color.fromRGBO(247, 247, 247, 1);
+
+const kChatControllerHeight = 60.0;
+const kChatAppBarHeight = 68.0;

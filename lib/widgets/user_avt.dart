@@ -23,8 +23,8 @@ class UserAvatar extends StatelessWidget {
             borderRadius: BorderRadius.circular(size),
             color: Colors.grey.shade50),
         constraints: BoxConstraints(minWidth: size, minHeight: size),
-        child: CachedNetworkImage(
-          imageUrl: avt!=null?'$imageUrl$avt':'',
+        child:avt!=null? CachedNetworkImage(
+          imageUrl: '$imageUrl$avt',
           imageBuilder: (context, imageProvider) => Container(
             height: size,
             width: size,
@@ -46,6 +46,16 @@ class UserAvatar extends StatelessWidget {
                 image: AssetImage('assets/images/blank-profile-picture.png'),
                 fit: BoxFit.cover,
               ),
+            ),
+          ),
+        ): Container(
+          height: size,
+          width: size,
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(100)),
+            image: DecorationImage(
+              image: AssetImage('assets/images/blank-profile-picture.png'),
+              fit: BoxFit.cover,
             ),
           ),
         ),

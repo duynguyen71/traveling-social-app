@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:traveling_social_app/screens/explore/explore_screen.dart';
 import 'package:traveling_social_app/screens/login/login_screen.dart';
 import 'package:traveling_social_app/services/navigation_service.dart';
-import 'package:traveling_social_app/view_model/chat_group_view_model.dart';
+import 'package:traveling_social_app/view_model/chat_room_view_model.dart';
 import 'package:traveling_social_app/view_model/current_user_post_view_model.dart';
 import 'package:traveling_social_app/view_model/post_view_model.dart';
 import 'package:traveling_social_app/view_model/story_view_model.dart';
@@ -27,9 +27,8 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<StoryViewModel>(create: (_) => StoryViewModel()),
         ChangeNotifierProvider<PostViewModel>(create: (_) => PostViewModel()),
-        ChangeNotifierProvider<CurrentUserPostViewModel>(
-            create: (_) => CurrentUserPostViewModel()),
-        ChangeNotifierProvider<ChatGroupViewModel>(create: (_) => ChatGroupViewModel()),
+        ChangeNotifierProvider<CurrentUserPostViewModel>(create: (_) => CurrentUserPostViewModel()),
+        ChangeNotifierProvider<ChatRoomViewModel>(create: (_) => ChatRoomViewModel()),
       ],
       builder: (context, child) {
         return MaterialApp(
@@ -40,6 +39,7 @@ class MyApp extends StatelessWidget {
             scaffoldBackgroundColor: Colors.white,
             visualDensity: VisualDensity.adaptivePlatformDensity,
             textTheme: GoogleFonts.robotoTextTheme(),
+            // textTheme: GoogleFonts.robotoTextTheme(),
           ),
           home: const AuthWrapper(),
         );

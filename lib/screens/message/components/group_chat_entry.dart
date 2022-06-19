@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../models/message.dart';
 import '../../../widgets/user_avt.dart';
 
 class GroupChatEntry extends StatelessWidget {
@@ -7,77 +8,87 @@ class GroupChatEntry extends StatelessWidget {
       {Key? key,
       required this.name,
       required this.onClick,
-      required this.avt,
-      required this.countMember})
+      this.avt,
+      required this.countMember,
+      this.lastMessage})
       : super(key: key);
 
   final String name;
   final Function onClick;
-  final String avt;
+  final String? avt;
   final int countMember;
+  final Message? lastMessage;
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
       width: size.width,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
       decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.grey.shade50))),
+          border: Border(bottom: BorderSide(color: Colors.grey.shade100))),
       child: Row(
         children: [
           Expanded(
             child: GestureDetector(
               onTap: () => onClick(),
-              child: Row(
-                children: [
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      UserAvatar(size: 40, avt: avt, onTap: () {}),
-                      Visibility(
-                        visible: countMember > 2,
-                        child: Positioned(
-                          child: Container(
-                            child: Text(
-                              '$countMember',
-                              style: const TextStyle(color: Colors.white),
+              child: Container(
+                color: Colors.transparent,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        UserAvatar(size: 40, avt: avt, onTap: () {}),
+                        Visibility(
+                          visible: countMember > 2,
+                          child: Positioned(
+                            child: Container(
+                              child: Text(
+                                '$countMember',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.blueAccent,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
-                            decoration: BoxDecoration(
-                              color: Colors.blueAccent,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
+                            top: 0,
+                            right: 0,
                           ),
-                          top: 0,
-                          right: 0,
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        name,
-                        style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const Text(
-                        'last message',
-                        style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 14,
+                      ],
+                    ),
+                    const SizedBox(width: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        //group name
+                        Text(
+                          name,
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                        //lasted message
+                        Text(
+                          lastMessage != null
+                              ? lastMessage!.message.toString()
+                              : '',
+                          style: const TextStyle(
+                            color: Colors.black54,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -85,10 +96,11 @@ class GroupChatEntry extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: IconButton(
                 onPressed: () {},
+              constraints: const BoxConstraints(),
                 icon: const Icon(
                   Icons.more_horiz,
                   color: Colors.black54,
-                )),
+                ),),
           ),
         ],
       ),

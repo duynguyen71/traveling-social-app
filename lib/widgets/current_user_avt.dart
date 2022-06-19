@@ -32,7 +32,7 @@ class CurrentUserAvt extends StatelessWidget {
                 alignment: Alignment.center,
                 clipBehavior: Clip.hardEdge,
                 child: CachedNetworkImage(
-                  imageUrl: '$imageUrl${value.user!.avt}',
+                  imageUrl: '$imageUrl${value.user?.avt}',
                   height: size,
                   width: size,
                   fit: BoxFit.cover,

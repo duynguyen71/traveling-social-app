@@ -2,24 +2,23 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
-import 'package:traveling_social_app/models/chat_group_model.dart';
+import 'package:traveling_social_app/models/group.dart';
 import 'package:http/http.dart' as http;
 import 'package:traveling_social_app/models/message.dart';
 
 class ChatService {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
-  Future<List<ChatGroup>> getChatGroups() async {
+  Future<List<Group>> getChatGroups() async {
     final url = Uri.parse(baseUrl + "/api/v1/member/users/me/chat-groups");
     final resp = await http.get(url, headers: await authorizationHeader());
     if (resp.statusCode == 200) {
-      print('get chat group success');
       final list = (jsonDecode(resp.body) as Map<String, dynamic>)['data']
           as List<dynamic>;
-      return list.map((json) => ChatGroup.fromJson(json)).toList();
+      print(list);
+      return list.map((json) => Group.fromJson(json)).toList();
     }
     print('get chat group failed');
-
     return [];
   }
 
@@ -46,7 +45,7 @@ class ChatService {
     };
   }
 
-  Future<String> getToken()async{
-    return  'Bearer ${await _storage.read(key: 'accessToken')}';
-}
+  Future<String> getToken() async {
+    return 'Bearer ${await _storage.read(key: 'accessToken')}';
+  }
 }

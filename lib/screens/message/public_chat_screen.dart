@@ -30,7 +30,7 @@ class _PublicChatScreenState extends State<PublicChatScreen> {
   final _scrollController = ScrollController();
   int scroll = 0;
   bool isLoading = false;
-  final Set<MessageResponse> _messages = <MessageResponse>{};
+  final Set<Message> _messages = <Message>{};
   late StompClient client;
   final _userService = UserService();
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
@@ -54,7 +54,7 @@ class _PublicChatScreenState extends State<PublicChatScreen> {
           client.subscribe(
             destination: '/topic/news',
             callback: (frame) {
-              var m = MessageResponse.fromJson(
+              var m = Message.fromJson(
                   (jsonDecode(frame.body.toString()) as Map<String, dynamic>));
               setState(() {
                 _messages.add(m);
@@ -70,7 +70,7 @@ class _PublicChatScreenState extends State<PublicChatScreen> {
     client.activate();
   }
 
-  void send() async {
+  void _sendMessage() async {
     var string = _messageController.text.toString();
     var message = Message();
     message.message = string;
@@ -162,16 +162,17 @@ class _PublicChatScreenState extends State<PublicChatScreen> {
                     var fmt = DateFormat('hh:mm a').format(time);
                     var message = _messages.elementAt(index);
                     return MessageWidget(
+                      hasError: false,
                       timeFormat: fmt,
                       onLongPress: () {},
                       isFirst: index == 0,
                       isLast: _messages.length == index + 1,
                       color: context.read<UserViewModel>().user!.username ==
-                              message.sendFrom.toString()
+                              message.user.toString()
                           ? kPrimaryLightColor
                           : kPrimaryLightColor.withOpacity(.7),
                       isSender: context.read<UserViewModel>().user!.username ==
-                          message.sendFrom.toString(),
+                          message.user.toString(),
                       message: message.message.toString(),
                       isFavorite: false,
                       onDoubleTap: () {},
@@ -186,7 +187,7 @@ class _PublicChatScreenState extends State<PublicChatScreen> {
               child: ChatController(
                 size: size,
                 messageController: _messageController,
-                onSendBtnPressed: send,
+                onSendBtnPressed: _sendMessage, isTextMessageEmpty: false,
               ),
               bottom: 0,
               left: 0,

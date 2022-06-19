@@ -44,10 +44,9 @@ class _ExploreScreenState extends State<ExploreScreen>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      key: _scaffoldKey,
-      drawer: HomeDrawer(user: context.read<UserViewModel>().user!),
-      body: Builder(builder: (context) {
-        return NestedScrollView(
+        key: _scaffoldKey,
+        drawer: HomeDrawer(user: context.read<UserViewModel>().user!),
+        body: NestedScrollView(
           controller: _scrollViewController,
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
@@ -146,9 +145,7 @@ class _ExploreScreenState extends State<ExploreScreen>
               ],
             ),
           ),
-        );
-      }),
-    );
+        ));
   }
 
   @override

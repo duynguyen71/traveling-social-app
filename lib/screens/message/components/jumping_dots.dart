@@ -61,7 +61,7 @@ class _JumpingDotsState extends State<JumpingDots>
         }
       });
     }
-    //trigger animtion of first dot to start the whole animation.
+    //trigger animation of first dot to start the whole animation.
     _animationControllers.first.forward();
   }
 

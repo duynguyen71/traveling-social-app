@@ -94,11 +94,11 @@ class UserService {
         }));
     final body = jsonDecode(resp.body) as Map<String, dynamic>;
     var statusCode = resp.statusCode;
-    if (statusCode == 400) {
-      String? errMsg = body['message'];
-      throw errMsg ?? 'Some thing went wrong!';
+    if (statusCode == 200) {
+      return;
     }
-    return;
+    String? errMsg = body['message'];
+    throw errMsg ?? 'Some thing went wrong!';
   }
 
   void signOut() async {

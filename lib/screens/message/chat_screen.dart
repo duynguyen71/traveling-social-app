@@ -1,11 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:stomp_dart_client/stomp.dart';
 import 'package:stomp_dart_client/stomp_config.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';
+import 'package:traveling_social_app/constants/api_constants.dart';
+import 'package:traveling_social_app/models/chat_group_status.dart';
 import 'package:traveling_social_app/models/group_status.dart';
 import 'package:traveling_social_app/screens/message/message_widget.dart';
 
@@ -23,11 +26,11 @@ class ChatScreen extends StatefulWidget {
   const ChatScreen({
     Key? key,
     required this.groupId,
-    required this.tmpGroupName,
+     this.tmpGroupName,
   }) : super(key: key);
 
   final int groupId;
-  final String tmpGroupName;
+  final String? tmpGroupName;
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -36,20 +39,22 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final _chatController = TextEditingController();
   final _scrollController = ScrollController();
-  int scroll = 0;
-  bool isLoading = false;
+  bool _isLoading = false;
   final _chatService = ChatService();
   Set<Message> _messages = <Message>{};
   late StompClient _stompClient;
   final _storage = const FlutterSecureStorage();
   final _focusNode = FocusNode();
   bool _isTyping = false;
+  bool _isTextMessageEmpty = true;
+  int _page = 0;
+  final int _pageSize = 20;
 
   @override
   void initState() {
     super.initState();
-    _getMessages();
-    connectSocket();
+    _getMessages(page: _page, pageSize: _pageSize);
+    _connectSocketServer();
     _chatController.text = 'Message ${DateTime.now().millisecondsSinceEpoch}';
     _focusNode.addListener(() {
       if (_focusNode.hasFocus &&
@@ -58,50 +63,40 @@ class _ChatScreenState extends State<ChatScreen> {
             duration: const Duration(milliseconds: 0), curve: Curves.linear);
       }
     });
+    _isTextMessageEmpty = false;
   }
 
   int get groupId => widget.groupId;
 
   // StompBadStateException
-  void connectSocket() async {
+  _connectSocketServer() async {
     _stompClient = StompClient(
       config: StompConfig(
-        url: "ws://192.168.1.8:8088/tc-socket",
+        url: kSocketUrl,
         stompConnectHeaders: {
           "Authorization": 'Bearer ${await _storage.read(key: 'accessToken')}'
         },
         onConnect: (StompFrame frame) {
           print("Connect web socket success");
+          //subscribe messages
           _stompClient.subscribe(
             destination: '/queue/groups/$groupId',
             callback: (frame) {
               var jsonMessage =
                   (jsonDecode(frame.body.toString()) as Map<String, dynamic>);
-              print(jsonMessage);
               var m = Message.fromJson(jsonMessage);
               setState(() {
-                _messages.add(m);
+                _messages = {m}.union(_messages);
               });
             },
           );
-          //subscrice to group status
+          //subscribe to group status
           _stompClient.subscribe(
             destination: '/queue/groups/$groupId/status',
             callback: (frame) {
-              var groupStatusResp =
+              var json =
                   jsonDecode(frame.body.toString()) as Map<String, dynamic>;
-              GroupStatus groupStatus = GroupStatus.fromJson(groupStatusResp);
-              // if (!isMyAccount(groupStatus.user!)) {
-              print(groupStatus.status);
-              if (groupStatus.status== 'TYPING') {
-                print("SEZT TYPING TRUE");
-                setState(() => _isTyping = true);
-              } else {
-                print("SEZT TYPING FALSE");
-                setState(() => _isTyping = false);
-              }
-
-              // }
+              _handleFrameStatusChange(json);
             },
           );
         },
@@ -113,42 +108,97 @@ class _ChatScreenState extends State<ChatScreen> {
     _stompClient.activate();
   }
 
+  // handle group status changes
+  _handleFrameStatusChange(Map<String, dynamic> json) {
+    GroupStatus groupStatus = GroupStatus.fromJson(json);
+    if (!isMyAccount(groupStatus.user!)) {
+      if (groupStatus.status == ChatGroupStatus.typing.value) {
+        setState(() => _isTyping = true);
+      } else {
+        setState(() => _isTyping = false);
+      }
+    }
+  }
+
   bool isMyAccount(BaseUserInfo user) {
     return context.read<UserViewModel>().user!.username == user.username;
   }
 
-  send() async {
-    sendStatus(status: "SENT");
+  set isLoading(bool i) => setState(() => _isLoading = i);
+
+  //send message
+  _sendMessage() async {
+    var text = _chatController.text;
+    if (text.isEmpty) {
+      return;
+    }
     var message = Message();
-    message.message = _chatController.text.toString();
-    _stompClient.send(
-        destination: '/app/groups/$groupId', body: jsonEncode(message));
-    // _chatController.text = "Message ${DateTime.now().millisecondsSinceEpoch}";
-    sendStatus(status: "SENT");
+    message.message = text.toString();
+    try {
+      _stompClient.send(
+          destination: '/app/groups/$groupId', body: jsonEncode(message));
+    } on Exception catch (e) {
+      print('Failed to send message: $e');
+    } finally {
+      _sendStatus(status: ChatGroupStatus.sent.value);
+      text = "Message ${DateTime.now().millisecondsSinceEpoch}";
+      // _clearTextMessage();
+    }
   }
 
-  sendStatus({required String status}) async {
-    _stompClient.send(
-        destination: '/app/groups/$groupId/status',
-        headers: {},
-        body: jsonEncode({"status": status}));
+  //send ChatGroupStatus
+  _sendStatus({required String status}) async {
+    try {
+      _stompClient.send(
+          destination: '/app/groups/$groupId/status',
+          headers: {},
+          body: jsonEncode({"status": status}));
+    } on Exception catch (e) {
+      print("Failed to send group status : $status");
+    }
   }
 
-  _getMessages() async {
-    var messages = await _chatService.getMessages(widget.groupId,
-        direction: "ASC", sortBy: "createDate");
-    setState(() => _messages = messages);
+  //get group message
+  _getMessages({required int page, required int pageSize}) async {
+    try {
+      isLoading = true;
+      var messages = await _chatService.getMessages(widget.groupId,
+          direction: "DESC",
+          sortBy: "createDate",
+          page: page,
+          pageSize: pageSize);
+      setState(() => _messages = messages);
+    } on Exception catch (e) {
+      print('Failed to get group $groupId messages: $e');
+    } finally {
+      isLoading = false;
+      _scrollController.addListener(() {
+        var position = _scrollController.position;
+        if ((position.maxScrollExtent - position.pixels) <=
+            MediaQueryData.fromWindow(WidgetsBinding.instance.window)
+                    .size
+                    .height *
+                .2) {
+          if (!_isLoading) {
+            isLoading = true;
+            _chatService
+                .getMessages(widget.groupId,
+                    direction: "DESC",
+                    sortBy: "createDate",
+                    page: ++_page,
+                    pageSize: _pageSize)
+                .then((value) => setState(() => _messages.addAll(value)))
+                .whenComplete(() => isLoading = false);
+          }
+        }
+      });
+    }
   }
 
-  void showToast(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
+  _clearTextMessage() {
+    _chatController.clear();
+    setState(() => _isTextMessageEmpty = true);
   }
-
-  List<Message> get messages => _messages.toList().reversed.toList();
 
   @override
   Widget build(BuildContext context) {
@@ -157,18 +207,14 @@ class _ChatScreenState extends State<ChatScreen> {
       resizeToAvoidBottomInset: true,
       extendBodyBehindAppBar: true,
       appBar: ChatScreenAppBar(
-        groupName: widget.tmpGroupName,
+        groupName: widget.tmpGroupName.toString(),
         isTyping: _isTyping,
       ),
       body: SizedBox(
         height: size.height,
         child: Stack(
-          alignment: Alignment.center,
+          alignment: Alignment.topCenter,
           children: [
-            Visibility(
-              visible: isLoading,
-              child: const CircularProgressIndicator(),
-            ),
             // ChatBackground(size: size),
             GestureDetector(
               onTap: () {
@@ -176,64 +222,78 @@ class _ChatScreenState extends State<ChatScreen> {
                   FocusScope.of(context).unfocus();
                 }
               },
+              //MESSAGE LIST CONTAINER
               child: Container(
                 alignment: Alignment.topCenter,
                 color: Colors.grey.shade50,
                 padding: const EdgeInsets.only(
                   right: 5,
                   left: 5,
+                  // bottom: kChatControllerHeight,
                 ),
                 margin: const EdgeInsets.only(
-                  bottom: 56,
+                  bottom: kChatControllerHeight,
                 ),
-                child: ListView(
-                  reverse: true,
-                  shrinkWrap: true,
-                  children: _messages.toList().reversed.map((e) {
-                    DateTime time = DateTime.fromMicrosecondsSinceEpoch(
-                        DateTime.now().millisecondsSinceEpoch);
-                    var fmt = DateFormat('hh:mm a').format(time);
-                    var message = e;
-                    return MessageWidget(
-                      timeFormat: fmt,
-                      onLongPress: () {},
-                      isFirst: false,
-                      isLast: false,
-                      color: context
-                                  .read<UserViewModel>()
-                                  .user!
-                                  .username
-                                  .toString() !=
-                              message.user?.username.toString()
-                          ? kPrimaryLightColor
-                          : kPrimaryLightColor.withOpacity(.85),
-                      isSender: context
-                              .read<UserViewModel>()
-                              .user!
-                              .username
-                              .toString() ==
-                          message.user?.username.toString(),
-                      message: message.message.toString(),
-                      isFavorite: false,
-                      onDoubleTap: () {},
-                      avt: message.user!.avt,
-                    );
-                  }).toList(),
-                ),
+                child: ListView.builder(
+                    reverse: true,
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.manual,
+                    physics: const BouncingScrollPhysics(),
+                    controller: _scrollController,
+                    itemCount: _messages.length + 1,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      if (index == _messages.length) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20.0),
+                          child: Visibility(
+                            visible: _isLoading,
+                            child: CupertinoActivityIndicator(),
+                          ),
+                        );
+                      }
+                      var message = _messages.elementAt(index);
+                      DateTime time = DateTime.fromMicrosecondsSinceEpoch(
+                          DateTime.now().millisecondsSinceEpoch);
+                      var fmt = DateFormat('hh:mm a').format(time);
+                      return MessageWidget(
+                        timeFormat: fmt,
+                        hasError: false,
+                        onLongPress: () {},
+                        isFirst: false,
+                        isLast: false,
+                        color: context
+                                    .read<UserViewModel>()
+                                    .user!
+                                    .username
+                                    .toString() !=
+                                message.user?.username.toString()
+                            ? kPrimaryLightColor
+                            : kPrimaryLightColor.withOpacity(.85),
+                        isSender: context
+                                .read<UserViewModel>()
+                                .user!
+                                .username
+                                .toString() ==
+                            message.user?.username.toString(),
+                        message: message.message.toString(),
+                        isFavorite: false,
+                        onDoubleTap: () {},
+                        avt: message.user!.avt.toString(),
+                      );
+                    }),
               ),
+              //  END OF MESSAGE LIST
             ),
+
+            //chat controller
             Positioned(
               child: ChatController(
                 size: size,
                 messageController: _chatController,
-                onSendBtnPressed: send,
-                onChange: (value) {
-                  print('on change');
-                  var str = value.toString();
-                  if (str.isNotEmpty) {
-                    sendStatus(status: "TYPING");
-                  }
-                },
+                onSendBtnPressed: _sendMessage,
+                onChange: _handleTextInputChange,
+                isTextMessageEmpty: _isTextMessageEmpty,
               ),
               bottom: 0,
               left: 0,
@@ -245,41 +305,24 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  _handleTextInputChange(value) {
+    if (value.toString().trim().isNotEmpty) {
+      isTextMessageEmpty = false;
+      _sendStatus(status: ChatGroupStatus.typing.value);
+    } else {
+      isTextMessageEmpty = true;
+      _sendStatus(status: ChatGroupStatus.none.value);
+    }
+  }
+
+  set isTextMessageEmpty(bool i) => setState(() => _isTextMessageEmpty = i);
+
   @override
   void dispose() {
-    super.dispose();
+    _sendStatus(status: 'LEAVE');
     _chatController.dispose();
     _scrollController.dispose();
     _stompClient.deactivate();
+    super.dispose();
   }
 }
-
-// child: ListView.builder(
-//   controller: _scrollController,
-//   reverse: true,
-//   shrinkWrap: true,
-//   itemBuilder: (context, index) {
-//     DateTime time = DateTime.fromMicrosecondsSinceEpoch(
-//         DateTime.now().millisecondsSinceEpoch);
-//     var fmt = DateFormat('hh:mm a').format(time);
-//     var message = _messages.elementAt(index);
-//     return MessageEntry(
-//       timeFormat: fmt,
-//       onLongPress: () {},
-//       isFirst: index == 0,
-//       isLast: false,
-//       color: kPrimaryLightColor,
-//       isSender: context
-//               .read<UserViewModel>()
-//               .user!
-//               .username
-//               .toString() ==
-//           message.user?.username.toString(),
-//       message: message.message.toString(),
-//       isFavorite: false,
-//       onDoubleTap: () {},
-//       avt: message.user!.avt,
-//     );
-//   },
-//   itemCount: _messages.length,
-// ),
