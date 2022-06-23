@@ -118,14 +118,14 @@ class UserService {
     return bodyJson['message'];
   }
 
-  Future<void> verifyAccount({required String code}) async {
+  Future<Map<String,dynamic>> verifyAccount({required String code}) async {
     final url = Uri.parse(baseUrl + "/api/v1/auth/verification");
     final resp = await http.get(url, headers: {"code": code});
     if (resp.statusCode == 200) {
       final body = jsonDecode(resp.body) as Map<String, dynamic>;
-      final tokens = body['data'];
-      await saveToken(tokens);
-      return;
+      Map<String,dynamic> tokens = body['data'];
+      // await saveToken(tokens);
+      return tokens;
     } else {
       throw 'Code is not valid';
     }

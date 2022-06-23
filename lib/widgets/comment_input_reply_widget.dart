@@ -16,7 +16,7 @@ class CommentInputReplyWidget extends StatelessWidget {
       this.controller,
       this.focusNode,
       required this.onChange,
-      required this.replyUser,
+      required this.replyUsername,
       required this.onClose,
       required this.showReplyUser,
       this.message})
@@ -34,7 +34,7 @@ class CommentInputReplyWidget extends StatelessWidget {
   final TextEditingController? controller;
   final FocusNode? focusNode;
   final Function onChange;
-  final User? replyUser;
+  final String? replyUsername;
   final String? message;
   final Function onClose;
   final bool showReplyUser;
@@ -74,7 +74,7 @@ class CommentInputReplyWidget extends StatelessWidget {
                             children: [
                               TextSpan(
                                   text:
-                                      'Reply to ${replyUser!.username.toString()}: ',style: const TextStyle(
+                                      'Reply to $replyUsername: ',style: const TextStyle(
                                     color: Colors.black87,
                                     fontWeight: FontWeight.w600),),
                               TextSpan(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
+import 'package:traveling_social_app/repository/authentication_repository/authentication_repository.dart';
 import 'package:traveling_social_app/screens/home/home_screen.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
@@ -7,6 +8,8 @@ import 'package:traveling_social_app/view_model/user_view_model.dart';
 import 'package:traveling_social_app/widgets/loading_widget.dart';
 import 'package:traveling_social_app/widgets/rounded_button.dart';
 import 'package:provider/provider.dart';
+
+import '../../authentication/bloc/authentication_bloc.dart';
 
 class VerificationScreen extends StatefulWidget {
   const VerificationScreen({Key? key}) : super(key: key);
@@ -48,10 +51,11 @@ class _VerificationScreenState extends State<VerificationScreen> {
       setState(() {
         _isLoading = true;
       });
-      await _userService.verifyAccount(code: '$d1$d2$d3$d4$d5$d6');
-      await context.read<UserViewModel>().fetchUserDetail();
-      ApplicationUtility.navigateToScreen(context, const HomeScreen());
-      return;
+      final tokens =
+          await _userService.verifyAccount(code: '$d1$d2$d3$d4$d5$d6');
+      await context.read<AuthenticationRepository>().saveSuccessAuthToken(
+          accessToken: tokens['accessToken'],
+          refreshToken: tokens['refreshToken']);
     } catch (e) {
       setState(() {
         errorMessage = e.toString();

@@ -7,9 +7,11 @@ import 'package:intl/intl.dart';
 import 'package:stomp_dart_client/stomp.dart';
 import 'package:stomp_dart_client/stomp_config.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';
+import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/models/chat_group_status.dart';
 import 'package:traveling_social_app/models/group_status.dart';
+import 'package:traveling_social_app/models/user.dart';
 import 'package:traveling_social_app/screens/message/message_widget.dart';
 
 import 'package:traveling_social_app/services/chat_service.dart';
@@ -26,7 +28,7 @@ class ChatScreen extends StatefulWidget {
   const ChatScreen({
     Key? key,
     required this.groupId,
-     this.tmpGroupName,
+    this.tmpGroupName,
   }) : super(key: key);
 
   final int groupId;
@@ -52,7 +54,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
-    super.initState();
     _getMessages(page: _page, pageSize: _pageSize);
     _connectSocketServer();
     _chatController.text = 'Message ${DateTime.now().millisecondsSinceEpoch}';
@@ -64,6 +65,7 @@ class _ChatScreenState extends State<ChatScreen> {
       }
     });
     _isTextMessageEmpty = false;
+    super.initState();
   }
 
   int get groupId => widget.groupId;
@@ -77,6 +79,7 @@ class _ChatScreenState extends State<ChatScreen> {
           "Authorization": 'Bearer ${await _storage.read(key: 'accessToken')}'
         },
         onConnect: (StompFrame frame) {
+
           print("Connect web socket success");
           //subscribe messages
           _stompClient.subscribe(
@@ -248,7 +251,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 20.0),
                           child: Visibility(
                             visible: _isLoading,
-                            child: CupertinoActivityIndicator(),
+                            child: const CupertinoActivityIndicator(),
                           ),
                         );
                       }
@@ -263,19 +266,20 @@ class _ChatScreenState extends State<ChatScreen> {
                         isFirst: false,
                         isLast: false,
                         color: context
-                                    .read<UserViewModel>()
-                                    .user!
+                                    .read<AuthenticationBloc>()
+                                    .state
+                                    .user
                                     .username
                                     .toString() !=
                                 message.user?.username.toString()
                             ? kPrimaryLightColor
                             : kPrimaryLightColor.withOpacity(.85),
                         isSender: context
-                                .read<UserViewModel>()
-                                .user!
-                                .username
-                                .toString() ==
-                            message.user?.username.toString(),
+                                .read<AuthenticationBloc>()
+                                .state
+                                .user
+                                .username ==
+                            message.user?.username,
                         message: message.message.toString(),
                         isFavorite: false,
                         onDoubleTap: () {},
@@ -317,12 +321,13 @@ class _ChatScreenState extends State<ChatScreen> {
 
   set isTextMessageEmpty(bool i) => setState(() => _isTextMessageEmpty = i);
 
-  @override
-  void dispose() {
-    _sendStatus(status: 'LEAVE');
-    _chatController.dispose();
-    _scrollController.dispose();
-    _stompClient.deactivate();
-    super.dispose();
-  }
+// @override
+// void dispose() {
+//   _sendStatus(status: 'LEAVE');
+//   _stompClient.deactivate();
+//   _chatController.dispose();
+//   _scrollController.dispose();
+//   _focusNode.dispose();
+//   super.dispose();
+// }
 }

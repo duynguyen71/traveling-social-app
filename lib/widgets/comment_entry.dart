@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/screens/profile/current_user_profile_screen.dart';
 import 'package:traveling_social_app/screens/profile/profile_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
@@ -11,7 +12,6 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../models/user.dart';
 import '../services/comment_service.dart';
-
 
 class CommentEntry extends StatefulWidget {
   const CommentEntry({
@@ -51,7 +51,8 @@ class _CommentEntryState extends State<CommentEntry> {
   bool _hiding = false;
 
   _getReplyComments() async {
-    List<Comment> rs = await _commentService.getReplyComment(parentCommentId: widget.comment.id!);
+    List<Comment> rs = await _commentService.getReplyComment(
+        parentCommentId: widget.comment.id!);
     setState(() {
       _childrenComment.addAll(rs);
     });
@@ -78,8 +79,6 @@ class _CommentEntryState extends State<CommentEntry> {
 
   User? get user => widget.comment.user;
 
-  User? get currentUser=> context.read<UserViewModel>().user;
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -105,14 +104,21 @@ class _CommentEntryState extends State<CommentEntry> {
                         onTap: () {
                           ApplicationUtility.navigateToScreen(
                               context,
-                              context.read<UserViewModel>().equal(widget.comment.user)
+                              context
+                                      .read<UserViewModel>()
+                                      .equal(widget.comment.user)
                                   ? const CurrentUserProfileScreen()
-                                  : ProfileScreen(userId: widget.comment.user!.id!));
+                                  : ProfileScreen(
+                                      userId: widget.comment.user!.id!));
                         },
                         size: 30,
                         avt: widget.comment.user != null
                             ? widget.comment.user!.avt.toString()
-                            : context.read<UserViewModel>().user!.avt.toString(),
+                            : context
+                                .read<UserViewModel>()
+                                .user!
+                                .avt
+                                .toString(),
                       ),
                       const SizedBox(width: 10),
                       Column(
@@ -128,8 +134,9 @@ class _CommentEntryState extends State<CommentEntry> {
                                   (user != null) &&
                                           (user!.id !=
                                               context
-                                                  .read<UserViewModel>()
-                                                  .user!
+                                                  .read<AuthenticationBloc>()
+                                                  .state
+                                                  .user
                                                   .id)
                                       ? MyBottomDialog(
                                           items: [

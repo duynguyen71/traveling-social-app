@@ -270,10 +270,10 @@ class _CommentScreenState extends State<CommentScreen>
                           });
                         },
                         showReplyUser: _currentFocusReplyComment != null,
-                        replyUser: (_currentFocusReplyComment != null &&
+                        replyUsername: (_currentFocusReplyComment != null &&
                                 _currentFocusReplyComment!.user != null)
-                            ? _currentFocusReplyComment!.user
-                            : context.read<UserViewModel>().user,
+                            ? _currentFocusReplyComment!.user!.username
+                            : null,
                         onChange: (text) {},
                         sendBtnColor: kPrimaryLightColor,
                         controller: _commentController,

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:traveling_social_app/app.dart';
+import 'package:traveling_social_app/repository/authentication_repository/authentication_repository.dart';
+import 'package:traveling_social_app/repository/user_repository/user_repository.dart';
 import 'package:traveling_social_app/screens/explore/explore_screen.dart';
 import 'package:traveling_social_app/screens/login/login_screen.dart';
 import 'package:traveling_social_app/services/navigation_service.dart';
@@ -12,7 +16,10 @@ import 'package:traveling_social_app/view_model/user_view_model.dart';
 import 'package:flutter/cupertino.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(App(
+    userRepo: UserRepository(),
+    authRepo: AuthenticationRepository(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -22,13 +29,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<UserViewModel>(
-          create: (_) => UserViewModel(),
-        ),
+
         ChangeNotifierProvider<StoryViewModel>(create: (_) => StoryViewModel()),
         ChangeNotifierProvider<PostViewModel>(create: (_) => PostViewModel()),
-        ChangeNotifierProvider<CurrentUserPostViewModel>(create: (_) => CurrentUserPostViewModel()),
-        ChangeNotifierProvider<ChatRoomViewModel>(create: (_) => ChatRoomViewModel()),
+        ChangeNotifierProvider<CurrentUserPostViewModel>(
+            create: (_) => CurrentUserPostViewModel()),
+        ChangeNotifierProvider<ChatRoomViewModel>(
+            create: (_) => ChatRoomViewModel()),
       ],
       builder: (context, child) {
         return MaterialApp(

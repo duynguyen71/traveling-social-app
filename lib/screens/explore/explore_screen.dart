@@ -20,6 +20,9 @@ class ExploreScreen extends StatefulWidget {
 
   @override
   _ExploreScreenState createState() => _ExploreScreenState();
+
+  static Route route() =>
+      MaterialPageRoute<void>(builder: (_) => const ExploreScreen());
 }
 
 class _ExploreScreenState extends State<ExploreScreen>
@@ -45,7 +48,7 @@ class _ExploreScreenState extends State<ExploreScreen>
     super.build(context);
     return Scaffold(
         key: _scaffoldKey,
-        drawer: HomeDrawer(user: context.read<UserViewModel>().user!),
+        drawer: const HomeDrawer(),
         body: NestedScrollView(
           controller: _scrollViewController,
           headerSliverBuilder: (context, innerBoxIsScrolled) {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:traveling_social_app/authentication/bloc/authentication_state.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/home/components/post_entry.dart';
 import 'package:traveling_social_app/screens/home/home_screen.dart';
@@ -8,6 +10,7 @@ import 'package:traveling_social_app/screens/profile/components/icon_with_text.d
 import 'package:traveling_social_app/screens/profile/components/profile_avt_and_cover.dart';
 import 'package:traveling_social_app/view_model/current_user_post_view_model.dart';
 import 'package:traveling_social_app/view_model/user_view_model.dart';
+import '../../authentication/bloc/authentication_bloc.dart';
 import 'components/profile_app_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -117,34 +120,31 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 12.0),
-                      child: Selector<UserViewModel, String>(
-                        builder: (BuildContext context, value, Widget? child) =>
-                            Text(
-                          '@$value',
+                      child:
+                          BlocConsumer<AuthenticationBloc, AuthenticationState>(
+                        builder: (context, value) => Text(
+                          '@${value.user.username}',
                           style: const TextStyle(
                               color: Colors.black54, fontSize: 18),
                         ),
-                        selector: (p0, p1) => p1.user!.username.toString(),
+                        listener: (context, state) =>
+                            state.user.username.toString(),
                       ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Selector<UserViewModel, int?>(
-                          builder:
-                              (BuildContext context, value, Widget? child) =>
-                                  FollowCount(
-                                      title: "Following",
-                                      count: value??0),
-                          selector: (p0, p1) => p1.user!.followingCounts,
+                        BlocConsumer<AuthenticationBloc, AuthenticationState>(
+                          builder: (context, state) => FollowCount(
+                              title: "Following",
+                              count: state.user.followingCounts),
+                          listener: (p0, p1) => p1.user.followingCounts,
                         ),
-                        Selector<UserViewModel, int?>(
-                          builder:
-                              (BuildContext context, value, Widget? child) =>
-                                  FollowCount(
-                                      title: "Follower",
-                                      count: value??0),
-                          selector: (p0, p1) => p1.user!.followerCounts,
+                        BlocConsumer<AuthenticationBloc, AuthenticationState>(
+                          builder: (context, state) => FollowCount(
+                              title: "Following",
+                              count: state.user.followerCounts),
+                          listener: (p0, p1) => p1.user.followerCounts,
                         ),
                       ],
                     ),
@@ -164,7 +164,7 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
                               const SizedBox(width: 10),
                               IconWithText(
                                   text:
-                                      'Joined date ${Jiffy(context.read<UserViewModel>().user!.createDate.toString()).format('dd-MM-yyyy')}',
+                                      'Joined date ${Jiffy(context.select((AuthenticationBloc authBloc) => authBloc.state.user).createDate.toString()).format('dd-MM-yyyy')}',
                                   icon: Icons.calendar_today_outlined),
                             ],
                           ),
@@ -189,10 +189,10 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
                       child: const Divider(indent: 1, thickness: 1),
                       width: size.width * .7,
                     ),
-                    Selector<UserViewModel, String?>(
-                      selector: ((context, p1) => p1.user!.bio.toString()),
-                      builder: (context, value, child) => Text(
-                        value.toString().trim(),
+                    BlocConsumer<AuthenticationBloc, AuthenticationState>(
+                      listener: ((context, state) => state.user.bio),
+                      builder: (context, state) => Text(
+                        '${state.user.bio}',
                         style: const TextStyle(
                           color: Colors.black87,
                         ),

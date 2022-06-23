@@ -2,8 +2,15 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
+import 'package:traveling_social_app/authentication/bloc/authentication_event.dart';
+import 'package:traveling_social_app/authentication/bloc/authentication_state.dart';
+import 'package:traveling_social_app/repository/authentication_repository/authentication_repository.dart';
+import 'package:traveling_social_app/repository/user_repository/user_repository.dart';
+import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/bottom_select_dialog.dart';
 import 'package:traveling_social_app/widgets/current_user_avt.dart';
@@ -12,6 +19,7 @@ import '../../../constants/api_constants.dart';
 import '../../../constants/app_theme_constants.dart';
 import 'package:provider/provider.dart';
 
+import '../../../models/file_upload.dart';
 import '../../../view_model/user_view_model.dart';
 import 'button_edit_profile.dart';
 
@@ -25,6 +33,7 @@ class ProfileAvtAndCover extends StatefulWidget {
 class _ProfileAvtAndCoverState extends State<ProfileAvtAndCover> {
   late List<BottomDialogItem> _bottomDialogItems;
   late List<BottomDialogItem> _backgroundPhotoBottomDialogItems;
+  final _userService = UserService();
 
   @override
   void initState() {
@@ -56,20 +65,21 @@ class _ProfileAvtAndCoverState extends State<ProfileAvtAndCover> {
                 ApplicationUtility.showBottomDialog(
                     context, _backgroundPhotoBottomDialogItems);
               },
+              //BACKGROUND
               child: AspectRatio(
-                aspectRatio: 16 / 9,
-                child: Selector<UserViewModel, String>(
-                  selector: ((p0, p1) => p1.user!.background.toString()),
-                  builder: (context, value, child) => CachedNetworkImage(
-                    fit: BoxFit.cover,
-                    imageUrl: imageUrl + value.toString(),
-                    errorWidget: (context, url, error) => Image.asset(
-                      "assets/images/home_bg.png",
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
+                  aspectRatio: 16 / 9,
+                  child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                    builder: (context, state) {
+                      return CachedNetworkImage(
+                        fit: BoxFit.cover,
+                        imageUrl: '$imageUrl${state.user.background}',
+                        errorWidget: (context, url, error) => Image.asset(
+                          "assets/images/home_bg.png",
+                          fit: BoxFit.cover,
+                        ),
+                      );
+                    },
+                  )),
             ),
           ),
           //CURRENT USER AVT
@@ -139,11 +149,13 @@ class _ProfileAvtAndCoverState extends State<ProfileAvtAndCover> {
     return null;
   }
 
+  //change avatar photo
   _changeAvtPhoto() async {
     File? croppedFile = await _pickImageFromGallery(
         cropStyle: CropStyle.circle, presets: [CropAspectRatioPreset.square]);
     if (croppedFile != null) {
-      context.read<UserViewModel>().changeUserAvt(File(croppedFile.path));
+      await _userService.updateAvt(file: File(croppedFile.path));
+      context.read<AuthenticationBloc>().add(UserInfoChanged());
     }
   }
 
@@ -152,9 +164,8 @@ class _ProfileAvtAndCoverState extends State<ProfileAvtAndCover> {
         cropStyle: CropStyle.rectangle,
         presets: [CropAspectRatioPreset.ratio16x9]);
     if (croppedFile != null) {
-      context
-          .read<UserViewModel>()
-          .changeUserBackgroundPhoto(File(croppedFile.path));
+      await _userService.updateBackground(file: File(croppedFile.path));
+      context.read<AuthenticationBloc>().add(UserInfoChanged());
     }
   }
 }

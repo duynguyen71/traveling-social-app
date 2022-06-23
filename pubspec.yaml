@@ -53,6 +53,8 @@ dependencies:
   flutter_html: ^2.2.1
   socket_io_client: ^1.0.2
   stomp_dart_client: ^0.4.4
+  flutter_bloc: ^8.0.1
+  equatable: ^2.0.0
 
 dev_dependencies:
   flutter_test:

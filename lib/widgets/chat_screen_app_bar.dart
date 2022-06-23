@@ -33,7 +33,7 @@ class ChatScreenAppBar extends StatelessWidget with PreferredSizeWidget {
       backgroundColor: Colors.white,
       leading: IconButton(
         onPressed: () {
-          Navigator.of(context).pop();
+          Navigator.of(context, rootNavigator: true).pop();
         },
         icon: const Icon(Icons.arrow_drop_down, color: kPrimaryColor),
       ),

@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
+import 'package:traveling_social_app/repository/user_repository/user_repository.dart';
 import 'package:traveling_social_app/screens/explore/explore_screen.dart';
 import 'package:traveling_social_app/screens/login/components/login_background.dart';
 import 'package:traveling_social_app/screens/register/register_screen.dart';
@@ -14,11 +16,16 @@ import 'package:traveling_social_app/widgets/custom_input_field.dart';
 import 'package:traveling_social_app/widgets/rounded_button.dart';
 import 'package:traveling_social_app/widgets/rounded_input_container.dart';
 
+import '../../repository/authentication_repository/authentication_repository.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
+
+  static Route route() =>
+      MaterialPageRoute<void>(builder: (_) => const LoginScreen());
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -35,6 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
     ApplicationUtility.hideKeyboard();
     final username = _usernameController.text.toString();
     final password = _passwordController.text.toString();
+
     if (username.isEmpty) {
       _setErrorMessage('username must not be empty');
       return;
@@ -45,9 +53,8 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     _showLoadingIndicator(true);
     try {
-      await _userService.login(username, password);
-      await context.read<UserViewModel>().fetchUserDetail();
-      ApplicationUtility.pushAndReplace(context, const ExploreScreen());
+      await RepositoryProvider.of<AuthenticationRepository>(context)
+          .logIn(username: username, password: password);
     } on SocketException catch (e) {
       print("Socket Exception " + e.toString());
     } catch (e) {
@@ -75,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
     _isLoading = false;
     _userService = UserService();
     //
-    _usernameController.text = 'nguyenkhanhduy21123@gmail.com';
+    _usernameController.text = 'kddevit';
     _passwordController.text = 'password';
     super.initState();
   }

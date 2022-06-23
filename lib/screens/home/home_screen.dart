@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen>
       key: _scaffoldKey,
       backgroundColor: Colors.grey.shade50,
       resizeToAvoidBottomInset: false,
-      drawer: HomeDrawer(user: _user),
+      drawer: HomeDrawer(),
       body: Builder(
         builder: (context) => CustomScrollView(
           controller: _scrollController,

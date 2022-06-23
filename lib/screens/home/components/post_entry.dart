@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/models/attachment.dart';
 import 'package:traveling_social_app/models/post.dart';
@@ -80,7 +81,6 @@ class _PostEntryState extends State<PostEntry>
 
   String? get mainCaption => widget.post.caption;
 
-  User? get currentUser => context.read<UserViewModel>().user;
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +151,7 @@ class _PostEntryState extends State<PostEntry>
                   ),
                   color: Colors.grey.shade100,
                   itemBuilder: (context) {
-                    return context.read<UserViewModel>().equal(widget.post.user)
+                    return context.read<AuthenticationBloc>().state.user.id==widget.post.user!.id!
                         ? const <PopupMenuEntry<String>>[
                             PopupMenuItem<String>(
                               value: 'DELETE',

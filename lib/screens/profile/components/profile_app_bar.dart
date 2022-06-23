@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:traveling_social_app/screens/profile/components/create_post_type_dialog.dart';
 import 'package:traveling_social_app/view_model/user_view_model.dart';
 
+import '../../../authentication/bloc/authentication_bloc.dart';
+import '../../../authentication/bloc/authentication_state.dart';
 import '../../../constants/app_theme_constants.dart';
 
 class ProfileAppbar extends StatelessWidget {
@@ -23,15 +26,15 @@ class ProfileAppbar extends StatelessWidget {
 
     return SliverAppBar(
       centerTitle: true,
-      title: Selector<UserViewModel, String>(
-        builder: (context, value, child) => Text(
-          value,
+      title:   BlocConsumer<AuthenticationBloc, AuthenticationState>(
+        builder: (context,state) => Text(
+          state.user.username,
           style: const TextStyle(
             color: Colors.black87,
             fontWeight: FontWeight.w400,
           ),
         ),
-        selector: (p0, p1) => p1.user!.username.toString(),
+        listener: (p0, p1) => p1.user.username.toString(),
       ),
       leading: IconButton(
         onPressed: () {

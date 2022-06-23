@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/models/nav_item.dart';
 import 'package:traveling_social_app/models/user.dart';
+import 'package:traveling_social_app/repository/authentication_repository/authentication_repository.dart';
 import 'package:traveling_social_app/screens/login/login_screen.dart';
 import 'package:traveling_social_app/screens/message/chat_groups_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
@@ -12,9 +13,9 @@ import 'package:traveling_social_app/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 
 class HomeDrawer extends StatelessWidget {
-  const HomeDrawer({Key? key, required this.user}) : super(key: key);
-
-  final User user;
+  const HomeDrawer({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +70,8 @@ class HomeDrawer extends StatelessWidget {
     switch (index) {
       case 1:
         {
-          ApplicationUtility.navigateToScreen(context, const ChatGroupsScreen());
+          ApplicationUtility.navigateToScreen(
+              context, const ChatGroupsScreen());
           break;
         }
       case 3:
@@ -80,10 +82,8 @@ class HomeDrawer extends StatelessWidget {
         {
           context.read<PostViewModel>().clear();
           context.read<StoryViewModel>().clear();
-          context.read<UserViewModel>().signOut();
           context.read<CurrentUserPostViewModel>().clear();
-          ApplicationUtility.pushAndReplace(context, const LoginScreen());
-
+          context.read<AuthenticationRepository>().logOut();
           break;
         }
 
