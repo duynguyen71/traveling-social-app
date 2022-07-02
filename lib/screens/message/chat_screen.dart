@@ -11,7 +11,6 @@ import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dar
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/models/chat_group_status.dart';
 import 'package:traveling_social_app/models/group_status.dart';
-import 'package:traveling_social_app/models/user.dart';
 import 'package:traveling_social_app/screens/message/message_widget.dart';
 
 import 'package:traveling_social_app/services/chat_service.dart';

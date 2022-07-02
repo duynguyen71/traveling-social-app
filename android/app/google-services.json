@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "853959956689",
+    "project_id": "tc-social-6b04b",
+    "storage_bucket": "tc-social-6b04b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:853959956689:android:cac94cf790a9f0f9248df0",
+        "android_client_info": {
+          "package_name": "com.tvc.traveling_social_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "853959956689-s987oj6phaf1p6mb6m2j9verqj6dav2i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATFzkMnJvqDBCa4K2ld9h1r11Z9wzWNVI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "853959956689-s987oj6phaf1p6mb6m2j9verqj6dav2i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

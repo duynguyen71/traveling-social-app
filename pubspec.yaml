@@ -55,10 +55,15 @@ dependencies:
   stomp_dart_client: ^0.4.4
   flutter_bloc: ^8.0.1
   equatable: ^2.0.0
+  firebase_core: ^1.18.0
+  firebase_messaging: ^11.4.2
+  flutter_local_notifications: ^9.6.1
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.9.2"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -66,6 +71,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -112,3 +118,10 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+flutter_icons:
+  ios: true
+  android: true
+  image_path: "assets/icons/tc_launcher_icon.png"
+  adaptive_icon_background: #ffffff00
+  remove_alpha_ios: true
+#    flutter pub pub run flutter_launcher_icons:main

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
 import 'package:traveling_social_app/screens/profile/components/create_post_type_dialog.dart';
-import 'package:traveling_social_app/view_model/user_view_model.dart';
 
 import '../../../authentication/bloc/authentication_bloc.dart';
 import '../../../authentication/bloc/authentication_state.dart';

@@ -26,7 +26,6 @@ class ApplicationUtility {
     return await PaletteGenerator.fromImageProvider(
       Image.network(image).image,
     );
-    return null;
   }
 
   static Future<dynamic> showModelBottomDialog(

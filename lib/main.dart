@@ -1,84 +1,66 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:traveling_social_app/app.dart';
+import 'package:traveling_social_app/configuration/firebase_options.dart';
 import 'package:traveling_social_app/repository/authentication_repository/authentication_repository.dart';
+import 'package:traveling_social_app/repository/notification_repository/notification_repository.dart';
 import 'package:traveling_social_app/repository/user_repository/user_repository.dart';
-import 'package:traveling_social_app/screens/explore/explore_screen.dart';
-import 'package:traveling_social_app/screens/login/login_screen.dart';
-import 'package:traveling_social_app/services/navigation_service.dart';
-import 'package:traveling_social_app/view_model/chat_room_view_model.dart';
-import 'package:traveling_social_app/view_model/current_user_post_view_model.dart';
-import 'package:traveling_social_app/view_model/post_view_model.dart';
-import 'package:traveling_social_app/view_model/story_view_model.dart';
-import 'package:traveling_social_app/view_model/user_view_model.dart';
 import 'package:flutter/cupertino.dart';
 
-void main() {
-  runApp(App(
-    userRepo: UserRepository(),
-    authRepo: AuthenticationRepository(),
-  ));
+//handle background message
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  //init firebase
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FlutterLocalNotificationsPlugin localNotification =
+      FlutterLocalNotificationsPlugin();
+  localNotification.initialize(
+    const InitializationSettings(
+      android: AndroidInitializationSettings('tc_launcher_icon'),
+      iOS: IOSInitializationSettings(),
+    ),
+  );
+  //android notification details
+  AndroidNotificationDetails android = const AndroidNotificationDetails(
+      'id', 'channel ',
+      priority: Priority.max, importance: Importance.max, playSound: true);
+  //ios notification details
+  IOSNotificationDetails iOS = const IOSNotificationDetails();
+  NotificationDetails platform =
+      NotificationDetails(android: android, iOS: iOS);
+  Map<String, dynamic> data = message.data;
+  String title = data['title'];
+  String body = data['body'];
+  await localNotification.show(0, title, body, platform);
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  //initial firebase
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  //request permission ios
+  FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
 
-  @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-
-        ChangeNotifierProvider<StoryViewModel>(create: (_) => StoryViewModel()),
-        ChangeNotifierProvider<PostViewModel>(create: (_) => PostViewModel()),
-        ChangeNotifierProvider<CurrentUserPostViewModel>(
-            create: (_) => CurrentUserPostViewModel()),
-        ChangeNotifierProvider<ChatRoomViewModel>(
-            create: (_) => ChatRoomViewModel()),
-      ],
-      builder: (context, child) {
-        return MaterialApp(
-          title: 'TC Social',
-          navigatorKey: NavigationService.navigatorKey,
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            scaffoldBackgroundColor: Colors.white,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-            textTheme: GoogleFonts.robotoTextTheme(),
-            // textTheme: GoogleFonts.robotoTextTheme(),
-          ),
-          home: const AuthWrapper(),
-        );
-      },
-    );
-  }
-}
-
-class AuthWrapper extends StatefulWidget {
-  const AuthWrapper({Key? key}) : super(key: key);
-
-  @override
-  State<AuthWrapper> createState() => _AuthWrapperState();
-}
-
-class _AuthWrapperState extends State<AuthWrapper> {
-  @override
-  Widget build(BuildContext context) {
-    final _userViewModel = context.read<UserViewModel>();
-    return FutureBuilder(
-      future: _userViewModel.fetchUserDetail(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return snapshot.hasData ? const ExploreScreen() : const LoginScreen();
-        }
-        return const Scaffold(
-          body: Align(
-            alignment: Alignment.center,
-            child: CupertinoActivityIndicator(),
-          ),
-        );
-      },
-    );
-  }
+  // await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+  //   alert: true,
+  //   badge: true,
+  //   sound: true,
+  // );
+  runApp(
+    App(
+      userRepo: UserRepository(),
+      authRepo: AuthenticationRepository(),
+      notificationRepo: NotificationRepository(),
+    ),
+  );
 }

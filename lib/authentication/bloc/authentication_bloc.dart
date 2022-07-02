@@ -33,11 +33,9 @@ class AuthenticationBloc
     );
   }
 
-
   @override
   void onChange(Change<AuthenticationState> change) {
     super.onChange(change);
-    print(change);
   }
 
   @override
@@ -48,7 +46,7 @@ class AuthenticationBloc
   }
 
   // handle authentication status changed
-   _onAuthenticationStatusChanged(
+  _onAuthenticationStatusChanged(
     AuthenticationStatusChanged event,
     Emitter<AuthenticationState> emit,
   ) async {
@@ -66,7 +64,7 @@ class AuthenticationBloc
   }
 
   //handle user info change [avt,backgroundImage,bio]
-   _onUserInfoChange(
+  _onUserInfoChange(
       UserInfoChanged event, Emitter<AuthenticationState> emit) async {
     final user = await _tryGetUser();
     return emit(user != null

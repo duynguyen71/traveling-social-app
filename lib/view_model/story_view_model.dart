@@ -5,8 +5,6 @@ import 'package:traveling_social_app/services/post_service.dart';
 
 class StoryViewModel extends ChangeNotifier {
   StoryViewModel() {
-    print("FETCH STORIES");
-
     fetchStories();
   }
 

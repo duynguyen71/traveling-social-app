@@ -24,3 +24,19 @@ const kbottomSheetBackgroundColor = Color.fromRGBO(247, 247, 247, 1);
 
 const kChatControllerHeight = 60.0;
 const kChatAppBarHeight = 68.0;
+
+const shimmerGradient = LinearGradient(
+  colors: [
+    Color(0xFFEBEBF4),
+    Color(0xFFF4F4F4),
+    Color(0xFFEBEBF4),
+  ],
+  stops: [
+    0.1,
+    0.3,
+    0.4,
+  ],
+  begin: Alignment(-1.0, -0.3),
+  end: Alignment(1.0, 0.3),
+  tileMode: TileMode.clamp,
+);

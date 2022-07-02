@@ -8,8 +8,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_event.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_state.dart';
-import 'package:traveling_social_app/repository/authentication_repository/authentication_repository.dart';
-import 'package:traveling_social_app/repository/user_repository/user_repository.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/bottom_select_dialog.dart';
@@ -17,10 +15,7 @@ import 'package:traveling_social_app/widgets/current_user_avt.dart';
 
 import '../../../constants/api_constants.dart';
 import '../../../constants/app_theme_constants.dart';
-import 'package:provider/provider.dart';
 
-import '../../../models/file_upload.dart';
-import '../../../view_model/user_view_model.dart';
 import 'button_edit_profile.dart';
 
 class ProfileAvtAndCover extends StatefulWidget {

@@ -1,12 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 
 import '../authentication/bloc/authentication_state.dart';
-import '../view_model/user_view_model.dart';
 
 class CurrentUserAvt extends StatelessWidget {
   const CurrentUserAvt({

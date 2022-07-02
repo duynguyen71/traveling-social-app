@@ -314,4 +314,7 @@ class UserService {
     print('Failed to unfollow user');
     return false;
   }
+
+  Future<void> refreshDeviceToken({required String token})async{
+  }
 }

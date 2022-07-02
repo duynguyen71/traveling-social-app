@@ -9,7 +9,6 @@ import 'package:traveling_social_app/screens/profile/components/follow_count.dar
 import 'package:traveling_social_app/screens/profile/components/icon_with_text.dart';
 import 'package:traveling_social_app/screens/profile/components/profile_avt_and_cover.dart';
 import 'package:traveling_social_app/view_model/current_user_post_view_model.dart';
-import 'package:traveling_social_app/view_model/user_view_model.dart';
 import '../../authentication/bloc/authentication_bloc.dart';
 import 'components/profile_app_bar.dart';
 import 'package:provider/provider.dart';

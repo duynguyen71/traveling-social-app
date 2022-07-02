@@ -11,16 +11,18 @@ class UserRepository {
 
   Future<User?> getUser() async {
     // if (_user != null) return _user;
-    var url = Uri.parse("$baseUrl/api/v1/member/users/me");
-    final resp = await http.get(url, headers: {
-      "Authorization": "Bearer ${await _storage.read(key: "accessToken")}"
-    });
-    if (resp.statusCode == 200) {
-      _user = User.fromJson(jsonDecode(resp.body)['data']);
-      print('Get user success $_user');
-      return _user;
+    final url = Uri.parse("$baseUrl/api/v1/member/users/me");
+    try {
+      final resp = await http.get(url, headers: {
+        "Authorization": "Bearer ${await _storage.read(key: "accessToken")}"
+      });
+      if (resp.statusCode == 200) {
+        _user = User.fromJson(jsonDecode(resp.body)['data']);
+        return _user;
+      }
+      return null;
+    } on Exception catch (e) {
+      return null;
     }
-    print("GET user failed");
-    return null;
   }
 }

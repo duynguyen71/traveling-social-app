@@ -37,7 +37,6 @@ class _MyFeedState extends State<MyFeed> with AutomaticKeepAliveClientMixin {
       },
       child: RefreshIndicator(
         onRefresh: ()async {
-          print('refresh');
         },
         child: CustomScrollView(
           slivers: [
