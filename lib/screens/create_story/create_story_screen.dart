@@ -11,6 +11,7 @@ import 'package:traveling_social_app/view_model/user_view_model.dart';
 import 'package:traveling_social_app/widgets/loading_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../../authentication/bloc/authentication_bloc.dart';
 import '../../widgets/media_file_container.dart';
 
 class CreateStoryScreen extends StatefulWidget {
@@ -79,12 +80,11 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
 
   @override
   void initState() {
-    var userViewModel = context.read<UserViewModel>();
-    _captionController.text =
-        "User: ${userViewModel.user!.username.toString()}" +
-            userViewModel.user!.id.toString() +
-            " post at " +
-            DateTime.now().millisecondsSinceEpoch.toString();
+    var authBloc = context.read<AuthenticationBloc>().state;
+    _captionController.text = "User: ${authBloc.user.username.toString()}" +
+        authBloc.user.id.toString() +
+        " post at " +
+        DateTime.now().millisecondsSinceEpoch.toString();
     super.initState();
   }
 

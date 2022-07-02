@@ -7,6 +7,7 @@ import 'package:traveling_social_app/models/post.dart';
 import 'package:traveling_social_app/widgets/expandable_text.dart';
 import 'package:traveling_social_app/widgets/story_context_menu.dart';
 
+import '../../authentication/bloc/authentication_bloc.dart';
 import '../../utilities/application_utility.dart';
 import '../../view_model/user_view_model.dart';
 import '../../widgets/user_avt.dart';
@@ -164,8 +165,10 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                         ),
                         StoryContextMenu(
                           isCurrentUser: context
-                              .read<UserViewModel>()
-                              .equal(widget.post.user),
+                                  .read<AuthenticationBloc>()
+                                  .state
+                                  .user
+                                  .id ==widget.post.user!.id!,
                           user: widget.post.user!,
                           storyId: widget.post.id!,
                         ),
