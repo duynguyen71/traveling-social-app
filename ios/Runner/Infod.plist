@@ -66,6 +66,8 @@
     <string>YES</string>
     <key>com.apple.security.network.client</key>
     <true/>
+    <key>FirebaseAppDelegateProxyEnabled</key>
+    <true/>
 
 
 </dict>

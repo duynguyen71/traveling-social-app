@@ -12,7 +12,7 @@ import 'package:flutter/cupertino.dart';
 //handle background message
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   //init firebase
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp();
   FlutterLocalNotificationsPlugin localNotification =
       FlutterLocalNotificationsPlugin();
   localNotification.initialize(
@@ -38,7 +38,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //initial firebase
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   //request permission ios
   FirebaseMessaging.instance.requestPermission(
@@ -50,12 +50,11 @@ void main() async {
     provisional: false,
     sound: true,
   );
-
-  // await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-  //   alert: true,
-  //   badge: true,
-  //   sound: true,
-  // );
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
   runApp(
     App(
       userRepo: UserRepository(),

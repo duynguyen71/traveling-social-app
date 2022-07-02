@@ -123,7 +123,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   bool isMyAccount(BaseUserInfo user) {
-    return context.read<UserViewModel>().user!.username == user.username;
+    return context.read<AuthenticationBloc>().state.user.username == user.username;
   }
 
   set isLoading(bool i) => setState(() => _isLoading = i);

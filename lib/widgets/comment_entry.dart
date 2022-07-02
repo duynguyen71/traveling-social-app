@@ -115,8 +115,9 @@ class _CommentEntryState extends State<CommentEntry> {
                         avt: widget.comment.user != null
                             ? widget.comment.user!.avt.toString()
                             : context
-                                .read<UserViewModel>()
-                                .user!
+                                .read<AuthenticationBloc>()
+                                .state
+                                .user
                                 .avt
                                 .toString(),
                       ),
