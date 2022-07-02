@@ -20,7 +20,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       android: AndroidInitializationSettings('tc_launcher_icon'),
       iOS: IOSInitializationSettings(),
     ),
-  );
+  )
   //android notification details
   AndroidNotificationDetails android = const AndroidNotificationDetails(
       'id', 'channel ',
