@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:traveling_social_app/screens/login/login_screen.dart';
+import 'package:traveling_social_app/widgets/config_widget.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -30,11 +32,26 @@ class SplashScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SizedBox.expand(
-        child: ShaderMask(
-          shaderCallback: (Rect bounds) {
-            return _shimmerGradient.createShader(bounds);
-          },
-          child: CupertinoActivityIndicator(),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            ShaderMask(
+              shaderCallback: (Rect bounds) {
+                return _shimmerGradient.createShader(bounds);
+              },
+              child: const CupertinoActivityIndicator(),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              child: ConfigWidget(
+                  onTap: () => Navigator.pushAndRemoveUntil<void>(
+                        context,
+                        LoginScreen.route(),
+                        (route) => false,
+                      )),
+            )
+          ],
         ),
       ),
     );

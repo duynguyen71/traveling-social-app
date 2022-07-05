@@ -47,16 +47,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                       print(jsonDecode(frame.body!));
                     }
                   });
-              print("BLOC Connect web socket success");
             },
             onWebSocketError: (_) {
-              print("BLOC Failed to connect to tc socket $_");
+              print('failed connect web socket channel on chat bloc $_');
             },
           ),
         );
         _stompClient.activate();
         //client
-        print("Get chat groups on init");
         emit(state.copyWith(status: ChatGroupStatus.loading));
         List<Group> chatGroups = await _fetchPost();
         return emit(state.copyWith(
@@ -67,7 +65,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-  _onGroupChatChanged() {}
 
   _fetchPost() async {
     List<Group> chatGroups = await _chatService.getChatGroups();

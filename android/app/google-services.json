@@ -29,6 +29,13 @@
             {
               "client_id": "853959956689-s987oj6phaf1p6mb6m2j9verqj6dav2i.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "853959956689-fdjakkst62pes36inechumk20f2tbng4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tvc.travelingSocialApp"
+              }
             }
           ]
         }

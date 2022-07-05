@@ -4,7 +4,12 @@ import 'package:http/http.dart' as http;
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'dart:convert';
 
-enum AuthenticationStatus { unknown, authenticated, unauthenticated,userInfoChanged }
+enum AuthenticationStatus {
+  unknown,
+  authenticated,
+  unauthenticated,
+  userInfoChanged
+}
 
 class AuthenticationRepository {
   final _controller = StreamController<AuthenticationStatus>();
@@ -25,18 +30,25 @@ class AuthenticationRepository {
     required String password,
   }) async {
     final url = Uri.parse(baseUrl + "/api/v1/auth/login");
-    final resp = await http.post(
-      url,
-      body: jsonEncode({"email": username, "password": password}),
-      headers: {
-        "Content-Type": "application/json",
-        'Access-Control-Allow-Origin': '*'
-      },
-    );
-    if (resp.statusCode == 200) {
-      final json = jsonDecode(resp.body) as Map<String, dynamic>;
-      await saveSuccessAuthToken(
-          accessToken: json['accessToken'], refreshToken: json['refreshToken']);
+    try {
+      final resp = await http.post(
+        url,
+        body: jsonEncode({"email": username, "password": password}),
+        headers: {
+          "Content-Type": "application/json",
+          'Access-Control-Allow-Origin': '*'
+        },
+      );
+      if (resp.statusCode == 200) {
+        final json = jsonDecode(resp.body) as Map<String, dynamic>;
+        await saveSuccessAuthToken(
+            accessToken: json['accessToken'],
+            refreshToken: json['refreshToken']);
+      } else {
+        throw 'Username or password not correct';
+      }
+    } on Exception catch (e) {
+      rethrow;
     }
   }
 

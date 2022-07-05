@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/repository/user_repository/user_repository.dart';
 import 'package:traveling_social_app/screens/explore/explore_screen.dart';
@@ -39,6 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   //handle login
   Future<void> _handleLogin() async {
+    print(baseUrl);
     ApplicationUtility.hideKeyboard();
     final username = _usernameController.text.toString();
     final password = _passwordController.text.toString();
@@ -189,7 +191,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     AlreadyHaveAccountCheck(
                       isLogin: true,
                       onPress: () => ApplicationUtility.pushAndReplace(
-                          context, const RegisterScreen()),
+                        context,
+                        const RegisterScreen(),
+                      ),
                     ),
                   ],
                 )

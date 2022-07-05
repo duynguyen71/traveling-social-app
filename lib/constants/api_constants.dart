@@ -1,7 +1,11 @@
-const baseUrl = "http://192.168.1.6:8080";
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-const kSocketUrl = "ws://192.168.1.6:8088/tc-socket";
+String kHost = '192.168.1.1';
 
+String baseUrl = "http://192.168.1.24:8080";
+
+String kSocketUrl = "ws://192.168.1.24:8088/tc-socket";
 // const kNotificationUrl = "http://192.168.1.6:8082";
 
-const imageUrl = baseUrl + "/api/v1/public/images/";
+String imageUrl = baseUrl + "/api/v1/public/images/";
+

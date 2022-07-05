@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:traveling_social_app/constants/api_constants.dart';
+import 'package:traveling_social_app/widgets/config_widget.dart';
 import 'package:traveling_social_app/widgets/loading_widget.dart';
 
 class LoginBackground extends StatefulWidget {
@@ -37,6 +39,10 @@ class _LoginBackgroundState extends State<LoginBackground> {
                 width: size.width * .3),
           ),
           widget.child,
+          const Positioned(
+              child: ConfigWidget(),
+              bottom: 0,
+              left: 0),
           LoadingWidget(isLoading: widget.isLoading)
         ],
       ),

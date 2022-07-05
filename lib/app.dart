@@ -50,7 +50,9 @@ class App extends StatelessWidget {
               create: (context) =>
                   NotificationBloc(notificationRepository: notificationRepo),
               lazy: false),
-          BlocProvider<ChatBloc>(create: (context) => ChatBloc()),
+          BlocProvider<ChatBloc>(
+            create: (context) => ChatBloc(),
+          ),
         ],
         child: const AppView(),
       ),
@@ -67,8 +69,6 @@ class AppView extends StatefulWidget {
 
 class _AppViewState extends State<AppView> with WidgetsBindingObserver {
   final _navigatorKey = GlobalKey<NavigatorState>();
-
-  // final _navigatorKey = NavigationService.navigatorKey;
 
   NavigatorState get _navigator => _navigatorKey.currentState!;
 
@@ -118,9 +118,6 @@ class _AppViewState extends State<AppView> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        // ChangeNotifierProvider<UserViewModel>(
-        //   create: (_) => UserViewModel(),
-        // ),
         ChangeNotifierProvider<StoryViewModel>(create: (_) => StoryViewModel()),
         ChangeNotifierProvider<PostViewModel>(create: (_) => PostViewModel()),
         ChangeNotifierProvider<CurrentUserPostViewModel>(

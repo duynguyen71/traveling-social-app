@@ -31,11 +31,8 @@ class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
     if (mounted) {
       setState(() {});
     }
-    // context.read<ChatRoomViewModel>().getChatGroups();
     context.read<ChatBloc>().add(FetchChatGroup());
     super.initState();
-
-    // context.read<GroupChatCubit>().getGroupChat();
   }
 
   String? getGroupAvt(Group group) {
@@ -96,25 +93,12 @@ class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
         },
         body: RefreshIndicator(
           onRefresh: () async {
-            // await context.read<ChatRoomViewModel>().refresh();
           },
           child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
                 child: Column(
                   children: [
-                    //LOADING ICON
-                    // Consumer<ChatRoomViewModel>(
-                    //   builder: (context, value, child) => Visibility(
-                    //     visible: value.isLoading,
-                    //     child: const Center(
-                    //       child: Padding(
-                    //         padding: EdgeInsets.all(kDefaultPadding),
-                    //         child: CupertinoActivityIndicator(),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                     BlocBuilder<ChatBloc,ChatState>(
                       builder: ((context,  state) => Visibility(
                             visible: state.status == ChatGroupStatus.loading,
@@ -126,58 +110,6 @@ class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
                             ),
                           )),
                     ),
-                    GroupChatEntry(
-                      name: 'My public message channel',
-                      onClick: () {
-                        ApplicationUtility.navigateToScreen(
-                            context, const PublicChatScreen());
-                      },
-                      avt: null,
-                      countMember: 100,
-                    ),
-                    // Consumer<ChatRoomViewModel>(
-                    //   builder: (context, value, child) => Column(
-                    //     children:
-                    //         List.generate(value.chatGroups.length, (index) {
-                    //       Group group = value.chatGroups[index];
-                    //       String? groupName;
-                    //       String? groupAvt;
-                    //       if (group.users.length == 2) {
-                    //         User? user = group.users[0];
-                    //         if (context
-                    //                 .read<AuthenticationBloc>()
-                    //                 .state
-                    //                 .user
-                    //                 .id !=
-                    //             user.id) {
-                    //           groupAvt = user.avt;
-                    //           groupName = user.username;
-                    //         } else {
-                    //           groupAvt = group.users[1].avt;
-                    //           groupName = group.users[1].username;
-                    //         }
-                    //       } else {
-                    //         groupName = group.name;
-                    //       }
-                    //       return GroupChatEntry(
-                    //         name: groupName.toString(),
-                    //         lastMessage: group.lastMessage,
-                    //         onClick: () {
-                    //           ApplicationUtility.navigateToScreen(
-                    //             context,
-                    //             ChatScreen(
-                    //               groupId: group.id!,
-                    //               tmpGroupName: groupName,
-                    //             ),
-                    //           );
-                    //         },
-                    //         avt: groupAvt,
-                    //         countMember: group.users.length,
-                    //       );
-                    //     }),
-                    //   ),
-                    // ),
-                    //BLOC
                     BlocBuilder<ChatBloc, ChatState>(
                       builder: (context, state) {
                         List<Group> groups = state.chatGroups;
