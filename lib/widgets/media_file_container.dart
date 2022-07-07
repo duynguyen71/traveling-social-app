@@ -37,7 +37,7 @@ class _MediaFileContainerState extends State<MediaFileContainer>
     super.build(context);
     return Container(
       height: widget.height,
-      width: widget.width,
+      width: double.infinity,
       constraints: const BoxConstraints(minWidth: 100),
       margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(color: Colors.grey.withOpacity(.1)),
@@ -53,8 +53,8 @@ class _MediaFileContainerState extends State<MediaFileContainer>
                 errorWidget: (context, url, error) => Image.file(
                   widget.file,
                   height: widget.height,
-                  fit: widget.boxFit,
-                  width: widget.width,
+                  fit: BoxFit.fitWidth,
+                  width: double.infinity,
                 ),
               ),
             ),

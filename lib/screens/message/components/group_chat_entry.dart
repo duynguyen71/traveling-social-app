@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../models/message.dart';
+import '../../../my_theme.dart';
 import '../../../widgets/user_avt.dart';
 
 class GroupChatEntry extends StatelessWidget {
@@ -24,9 +25,12 @@ class GroupChatEntry extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Container(
       width: size.width,
-      padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-      decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.grey.shade100))),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      // decoration: BoxDecoration(
+      //   border: Border(
+      //     bottom: BorderSide(color: Colors.grey.shade100),
+      //   ),
+      // ),
       child: Row(
         children: [
           Expanded(
@@ -68,10 +72,7 @@ class GroupChatEntry extends StatelessWidget {
                         //group name
                         Text(
                           name,
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500),
+                          style: MyTheme.heading2.copyWith(fontSize: 16),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -80,10 +81,7 @@ class GroupChatEntry extends StatelessWidget {
                           lastMessage != null
                               ? lastMessage!.message.toString()
                               : '',
-                          style: const TextStyle(
-                            color: Colors.black54,
-                            fontSize: 14,
-                          ),
+                          style: MyTheme.bodyText1,
                         ),
                       ],
                     ),
@@ -95,12 +93,13 @@ class GroupChatEntry extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: IconButton(
-                onPressed: () {},
+              onPressed: () {},
               constraints: const BoxConstraints(),
-                icon: const Icon(
-                  Icons.more_horiz,
-                  color: Colors.black54,
-                ),),
+              icon: const Icon(
+                Icons.more_horiz,
+                color: Colors.black54,
+              ),
+            ),
           ),
         ],
       ),

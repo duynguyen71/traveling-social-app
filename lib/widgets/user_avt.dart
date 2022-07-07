@@ -34,6 +34,7 @@ class UserAvatar extends StatelessWidget {
                 image: imageProvider,
                 fit: BoxFit.cover,
               ),
+
             ),
           ),
           // placeholder: (context, url) => placeholder,

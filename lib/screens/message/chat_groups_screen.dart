@@ -92,15 +92,14 @@ class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
           ];
         },
         body: RefreshIndicator(
-          onRefresh: () async {
-          },
+          onRefresh: () async {},
           child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
                 child: Column(
                   children: [
-                    BlocBuilder<ChatBloc,ChatState>(
-                      builder: ((context,  state) => Visibility(
+                    BlocBuilder<ChatBloc, ChatState>(
+                      builder: ((context, state) => Visibility(
                             visible: state.status == ChatGroupStatus.loading,
                             child: const Center(
                               child: Padding(

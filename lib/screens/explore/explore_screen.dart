@@ -9,6 +9,7 @@ import 'package:traveling_social_app/screens/message/chat_groups_screen.dart';
 import 'package:traveling_social_app/screens/review/review_screen.dart';
 import 'package:traveling_social_app/widgets/current_user_avt.dart';
 
+import '../../my_theme.dart';
 import '../../utilities/application_utility.dart';
 import '../home/components/drawer.dart';
 import '../profile/components/create_post_type_dialog.dart';
@@ -42,7 +43,7 @@ class _ExploreScreenState extends State<ExploreScreen>
         animationDuration: Duration.zero);
     FirebaseMessaging.instance.getToken().then(
       (token) {
-        print('device token\n$token');
+        print('device notification token\n$token');
       },
     );
     super.initState();
@@ -115,7 +116,7 @@ class _ExploreScreenState extends State<ExploreScreen>
                   isScrollable: false,
                   controller: _tabController,
                   labelColor: Colors.white,
-                  unselectedLabelColor: Colors.grey,
+                  unselectedLabelColor: Colors.black54,
                   indicator: BoxDecoration(
                     borderRadius: BorderRadius.circular(
                       25.0,
@@ -125,8 +126,9 @@ class _ExploreScreenState extends State<ExploreScreen>
                   indicatorSize: TabBarIndicatorSize.tab,
                   indicatorPadding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  labelStyle: const TextStyle(
+                  labelStyle: MyTheme.heading2.copyWith(
                     fontWeight: FontWeight.w500,
+                    fontSize: 15,
                   ),
                   tabs: const [
                     Tab(

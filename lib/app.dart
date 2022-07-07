@@ -133,7 +133,8 @@ class _AppViewState extends State<AppView> with WidgetsBindingObserver {
           theme: ThemeData(
             scaffoldBackgroundColor: Colors.white,
             visualDensity: VisualDensity.adaptivePlatformDensity,
-            textTheme: GoogleFonts.robotoTextTheme(),
+            textTheme:
+                GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
             // textTheme: GoogleFonts.robotoTextTheme(),
           ),
           builder: (context, child) {
