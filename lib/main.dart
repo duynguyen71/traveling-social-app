@@ -59,6 +59,7 @@ void main() async {
     badge: true,
     sound: true,
   );
+  //
   runApp(
     App(
       userRepo: UserRepository(),

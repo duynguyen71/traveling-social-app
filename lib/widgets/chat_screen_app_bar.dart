@@ -49,7 +49,9 @@ class ChatScreenAppBar extends StatelessWidget with PreferredSizeWidget {
           color: kPrimaryColor,
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Scaffold.of(context).openEndDrawer();
+          },
           icon: const Icon(Icons.info_outline),
           color: kPrimaryColor,
         ),

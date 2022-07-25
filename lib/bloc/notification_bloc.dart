@@ -21,7 +21,6 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     _onMessageSubscription =
         FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       Map<String, dynamic> data = event.data;
-      print('get message ${data.toString()}');
       String title = data['title'];
       String body = data['body'];
       _notificationRepo.showNotification(id: 0, title: title, body: body);

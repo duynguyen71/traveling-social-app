@@ -11,7 +11,7 @@ class GroupChatEntry extends StatelessWidget {
       required this.onClick,
       this.avt,
       required this.countMember,
-      this.lastMessage})
+      this.lastMessage, this.isUserActive})
       : super(key: key);
 
   final String name;
@@ -19,6 +19,7 @@ class GroupChatEntry extends StatelessWidget {
   final String? avt;
   final int countMember;
   final Message? lastMessage;
+  final bool? isUserActive;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +45,7 @@ class GroupChatEntry extends StatelessWidget {
                     Stack(
                       alignment: Alignment.center,
                       children: [
-                        UserAvatar(size: 40, avt: avt, onTap: () {}),
+                        UserAvatar(size: 40, avt: avt, onTap: () {},isActive: isUserActive,),
                         Visibility(
                           visible: countMember > 2,
                           child: Positioned(

@@ -5,6 +5,7 @@ import 'package:traveling_social_app/models/user.dart';
 import 'package:traveling_social_app/repository/authentication_repository/authentication_repository.dart';
 import 'package:traveling_social_app/screens/login/login_screen.dart';
 import 'package:traveling_social_app/screens/message/chat_groups_screen.dart';
+import 'package:traveling_social_app/screens/setting/setting_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/view_model/current_user_post_view_model.dart';
 import 'package:traveling_social_app/view_model/post_view_model.dart';
@@ -76,6 +77,7 @@ class HomeDrawer extends StatelessWidget {
         }
       case 3:
         {
+          Navigator.push(context, SettingScreen.route());
           break;
         }
       case 5: //sign out

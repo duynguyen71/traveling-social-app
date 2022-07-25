@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:traveling_social_app/services/navigation_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/view_model/current_user_post_view_model.dart';
 import 'package:traveling_social_app/view_model/post_view_model.dart';
@@ -82,12 +81,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             leading: TextButton(
-              onPressed: _handleCancelPress,
+              onPressed: () {
+                Navigator.pop(context);
+              },
               child: const Text(
                 'Cancel',
                 textAlign: TextAlign.left,
                 style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                     color: Colors.black87,
                     fontWeight: FontWeight.normal),
               ),
@@ -353,14 +354,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     BottomDialogItem(title: 'Save as draft', onClick: () {}),
   ];
 
-  _handleCancelPress() {
-    ApplicationUtility.showModelBottomDialog(
-      NavigationService.navigatorKey.currentContext!,
-      MyBottomDialog(
-        items: s,
-      ),
-    );
-  }
+  _handleCancelPress() {}
 
   @override
   void dispose() {

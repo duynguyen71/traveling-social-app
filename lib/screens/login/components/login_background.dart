@@ -40,9 +40,10 @@ class _LoginBackgroundState extends State<LoginBackground> {
           ),
           widget.child,
           const Positioned(
-              child: ConfigWidget(),
-              bottom: 0,
-              left: 0),
+            child: ConfigWidget(),
+            bottom: 0,
+            left: 0,
+          ),
           LoadingWidget(isLoading: widget.isLoading)
         ],
       ),

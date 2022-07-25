@@ -10,7 +10,6 @@ import 'package:traveling_social_app/screens/explore/explore_screen.dart';
 import 'package:traveling_social_app/screens/login/login_screen.dart';
 import 'package:traveling_social_app/screens/message/bloc/chat_bloc.dart';
 import 'package:traveling_social_app/screens/splash/splash_screen.dart';
-import 'package:traveling_social_app/services/navigation_service.dart';
 import 'package:traveling_social_app/view_model/chat_room_view_model.dart';
 import 'package:traveling_social_app/view_model/current_user_post_view_model.dart';
 import 'package:traveling_social_app/view_model/post_view_model.dart';

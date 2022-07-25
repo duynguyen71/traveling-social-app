@@ -11,6 +11,7 @@ import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dar
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/models/chat_group_status.dart';
 import 'package:traveling_social_app/models/group_status.dart';
+import 'package:traveling_social_app/screens/message/components/chat_screen_drawer.dart';
 import 'package:traveling_social_app/screens/message/message_widget.dart';
 
 import 'package:traveling_social_app/services/chat_service.dart';
@@ -78,7 +79,6 @@ class _ChatScreenState extends State<ChatScreen> {
           "Authorization": 'Bearer ${await _storage.read(key: 'accessToken')}'
         },
         onConnect: (StompFrame frame) {
-
           print("Connect web socket success");
           //subscribe messages
           _stompClient.subscribe(
@@ -123,7 +123,8 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   bool isMyAccount(BaseUserInfo user) {
-    return context.read<AuthenticationBloc>().state.user.username == user.username;
+    return context.read<AuthenticationBloc>().state.user.username ==
+        user.username;
   }
 
   set isLoading(bool i) => setState(() => _isLoading = i);
@@ -208,6 +209,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       extendBodyBehindAppBar: true,
+      endDrawer: const ChatScreenDrawer(),
       appBar: ChatScreenAppBar(
         groupName: widget.tmpGroupName.toString(),
         isTyping: _isTyping,

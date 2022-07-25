@@ -60,7 +60,7 @@ class _ExploreScreenState extends State<ExploreScreen>
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
             SliverAppBar(
-              iconTheme: const IconThemeData(color: Colors.black),
+              iconTheme: const IconThemeData(color: Colors.black87),
               leading: IconButton(
                 onPressed: () => _scaffoldKey.currentState!.openDrawer(),
                 icon: const Icon(Icons.menu),
@@ -73,7 +73,7 @@ class _ExploreScreenState extends State<ExploreScreen>
                   ),
                   icon: const Icon(
                       IconData(0xe5c9, fontFamily: 'MaterialIcons'),
-                      color: Colors.black45),
+                      color: Colors.black87),
                 ),
                 IconButton(
                     onPressed: () => showModalBottomSheet(
@@ -83,7 +83,7 @@ class _ExploreScreenState extends State<ExploreScreen>
                           },
                           backgroundColor: Colors.transparent,
                         ),
-                    icon: const Icon(Icons.edit, color: Colors.black45)),
+                    icon: const Icon(Icons.edit, color: Colors.black87)),
                 IconButton(
                   onPressed: () => ApplicationUtility.navigateToScreen(
                       context, const SearchScreen(keyword: '')),

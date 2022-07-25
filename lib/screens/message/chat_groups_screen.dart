@@ -53,41 +53,55 @@ class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
-            SliverAppBar(
-              iconTheme: const IconThemeData(color: Colors.black),
-              leading: IconButton(
-                onPressed: () => Navigator.of(context).pop(),
-                icon: const Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.black87,
-                ),
-              ),
-              actions: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.edit, color: Colors.black45),
-                ),
-              ],
-              backgroundColor: Colors.white,
-              floating: true,
-              snap: true,
-              title: RoundedInputContainer(
-                color: Colors.grey.shade100,
-                child: TextField(
-                  controller: TextEditingController(),
-                  textAlign: TextAlign.left,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              sliver: SliverAppBar(
+                iconTheme: const IconThemeData(color: Colors.black),
+                leading: IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.black87,
                   ),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                margin: EdgeInsets.zero,
+                actions: [
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.edit, color: Colors.black45),
+                  ),
+                ],
+
+                backgroundColor: Colors.white,
+                // floating: true,
+                pinned: true,
+                // snap: true,
+                centerTitle: true,
+                title: RoundedInputContainer(
+                  color: Colors.grey.shade100,
+                  child: TextField(
+                    controller: TextEditingController(),
+                    textAlign: TextAlign.left,
+                    onSubmitted: (value) {
+                      print('on submitted');
+                    },
+                    decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Search in chat',
+                        hintStyle: TextStyle(
+                          letterSpacing: .5,
+                          fontSize: 14,
+                          // fontStyle: FontStyle.italic
+                        )),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  margin: EdgeInsets.zero,
+                ),
+                // bottom: const PreferredSize(
+                //   preferredSize: Size.fromHeight(10),
+                // child: MyDivider(),
+                // ),
+                forceElevated: innerBoxIsScrolled,
               ),
-              bottom: const PreferredSize(
-                preferredSize: Size.fromHeight(10),
-                child: MyDivider(),
-              ),
-              forceElevated: innerBoxIsScrolled,
             )
           ];
         },
@@ -137,6 +151,7 @@ class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
                             return GroupChatEntry(
                               name: groupName.toString(),
                               lastMessage: group.lastMessage,
+                              isUserActive: true,
                               onClick: () {
                                 ApplicationUtility.navigateToScreen(
                                   context,
