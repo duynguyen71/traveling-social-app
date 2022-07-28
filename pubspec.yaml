@@ -58,6 +58,10 @@ dependencies:
   firebase_core: ^1.18.0
   firebase_messaging: ^11.4.2
   flutter_local_notifications: ^9.6.1
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.17.0
+  timeago: ^3.2.2
 
 
 dev_dependencies:
@@ -76,17 +80,7 @@ dev_dependencies:
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
-# The following section is specific to Flutter.
-flutter:
 
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
-  uses-material-design: true
-  assets:
-    - assets/images/
-    - assets/icons/
-    - assets/google_fonts/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -125,3 +119,18 @@ flutter_icons:
   adaptive_icon_background: #ffffff00
   remove_alpha_ios: true
 #    flutter pub pub run flutter_launcher_icons:main
+
+# The following section is specific to Flutter.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/google_fonts/
+  generate: true
+flutter_intl:
+  enabled: true

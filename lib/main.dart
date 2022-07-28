@@ -3,12 +3,15 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:traveling_social_app/app.dart';
-import 'package:traveling_social_app/configuration/firebase_options.dart';
-import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/repository/authentication_repository/authentication_repository.dart';
 import 'package:traveling_social_app/repository/notification_repository/notification_repository.dart';
 import 'package:traveling_social_app/repository/user_repository/user_repository.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'config/my_custom_vi_message.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 //handle background message
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -59,7 +62,6 @@ void main() async {
     badge: true,
     sound: true,
   );
-  //
   runApp(
     App(
       userRepo: UserRepository(),
