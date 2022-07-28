@@ -132,30 +132,28 @@ class PostService {
               })
           .toList(),
     };
-    var resp = await http.post(url,
+    final  resp = await http.post(url,
         headers: {
           "Content-Type": "application/json",
           "Authorization": 'Bearer $accessToken'
         },
         body: jsonEncode(body));
-    if (resp.statusCode != 200) throw 'Could not create story';
-    var jsonBody = jsonDecode(resp.body) as Map<String, dynamic>;
+    if (resp.statusCode != 200) throw 'Could not create post';
+    final  jsonBody = jsonDecode(resp.body) as Map<String, dynamic>;
     final postResp = Post.fromJson(jsonBody['data']);
-    print('Create post success');
     return postResp;
   }
 
   Future<FileUpload> uploadImage(File file) async {
+    print('handle upload image');
     final accessToken = await _storage.read(key: 'accessToken');
-    final uri = Uri.parse(baseUrl + "/api/v1/member/users/me/files");
+    final uri = Uri.parse(baseUrl + "/api/v1/member/users/me/file");
     var request = http.MultipartRequest("POST", uri);
-
     request.headers['Content-Type'] = 'multipart/form-data';
     request.headers['Authorization'] = 'Bearer $accessToken';
     var path = file.path;
     var f = http.MultipartFile.fromBytes('file', File(path).readAsBytesSync(),
         filename: basename(file.path), contentType: MediaType('image', 'jpeg'));
-
     request.files.add(f);
     final streamResp = await request.send();
     final resp = await http.Response.fromStream(streamResp);
@@ -164,7 +162,7 @@ class PostService {
       FileUpload fileUpload = FileUpload.fromJson(body['data']);
       return fileUpload;
     } else {
-      throw 'Failed to upload images';
+      throw 'Failed to upload image';
     }
   }
 
@@ -203,8 +201,10 @@ class PostService {
     return null;
   }
 
-  Future<List<Post>> getUserPosts({required int userId,int? page = 0,int? pageSize = 5}) async {
-    final url = Uri.parse(baseUrl + "/api/v1/member/users/$userId/posts?page=$page&pageSize=$pageSize");
+  Future<List<Post>> getUserPosts(
+      {required int userId, int? page = 0, int? pageSize = 5}) async {
+    final url = Uri.parse(baseUrl +
+        "/api/v1/member/users/$userId/posts?page=$page&pageSize=$pageSize");
     final resp = await http.get(url, headers: await authorizationHeader());
     if (resp.statusCode == 200) {
       print('get user id $userId post success');

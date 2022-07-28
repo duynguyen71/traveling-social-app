@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:traveling_social_app/screens/setting/components/setting_item_checkbox.dart';
 import 'package:traveling_social_app/screens/setting/components/setting_item_with_more_icon.dart';
 import 'package:traveling_social_app/screens/setting/language_setting_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:traveling_social_app/screens/setting/notification_screen.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -19,15 +21,15 @@ class _SettingScreenState extends State<SettingScreen> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text(AppLocalizations.of(context)!.setting),
         automaticallyImplyLeading: false,
         leadingWidth: 0,
         elevation: 0,
         backgroundColor: Colors.transparent,
         titleTextStyle: const TextStyle(
-            color: Colors.black,
+            color: Colors.black87,
             fontSize: 30,
-            letterSpacing: 1,
+            letterSpacing: .8,
             fontWeight: FontWeight.w500),
         centerTitle: false,
       ),
@@ -47,30 +49,36 @@ class _SettingScreenState extends State<SettingScreen> {
                 children: [
                   SettingItemWithMoreIcon(
                     isLast: false,
-                    title: 'Appearance',
-                    icon: Icons.settings,
-                    description: 'Make TC Social\'s Your',
+                    title: AppLocalizations.of(context)!.appearance,
+                    description: AppLocalizations.of(context)!.settingAppearanceDescription,
                     onClick: () {},
                     asset: 'assets/icons/language.svg',
                   ),
                   SettingItemWithMoreIcon(
                     isLast: false,
-                    title: 'Privacy',
-                    icon: Icons.settings,
-                    description: 'description',
+                    title: AppLocalizations.of(context)!.privacy,
                     leadingBg: Colors.yellow,
                     onClick: () {},
                     asset: 'assets/icons/privacy.svg',
                   ),
                   SettingItemWithMoreIcon(
                     isLast: true,
-                    title: 'Language',
-                    icon: Icons.settings,
-                    description: 'description',
+                    title: AppLocalizations.of(context)!.language,
+                    description: AppLocalizations.of(context)!.settingLanguageDescription,
                     onClick: () {
                       Navigator.push(context, LanguageSettingScreen.route());
                     },
                     asset: 'assets/icons/language.svg',
+                  ),
+                  SettingItemWithMoreIcon(
+                    isLast: true,
+                    title: AppLocalizations.of(context)!.notification,
+                    leadingBg: Colors.deepPurpleAccent,
+                    onClick: () {
+                      Navigator.push(
+                          context, NotificationSettingScreen.route());
+                    },
+                    asset: 'assets/icons/notification.svg',
                   ),
                 ],
               ),
@@ -86,16 +94,13 @@ class _SettingScreenState extends State<SettingScreen> {
                   SettingItemWithMoreIcon(
                     isLast: false,
                     title: 'Appearance',
-                    icon: Icons.settings,
                     description: 'Make TC Social\'s Your',
                     onClick: () {},
                     asset: 'assets/icons/language.svg',
                   ),
                   SettingItemWithMoreIcon(
                     isLast: true,
-                    title: 'Apperace',
-                    icon: Icons.settings,
-                    description: 'description',
+                    title: 'Appearance',
                     onClick: () {},
                     asset: 'assets/icons/language.svg',
                   ),
@@ -110,12 +115,13 @@ class _SettingScreenState extends State<SettingScreen> {
                 borderRadius: BorderRadius.circular(16.0),
                 color: Colors.white,
               ),
-              child: const SettingItemCheckBox(
+              child: SettingItemCheckBox(
                 isLast: true,
-                icon: Icons.mode,
                 title: 'Dark mode',
-                description: 'Automatic',
                 leadingBg: Colors.redAccent,
+                onChange: (bool value) {
+
+                },
               ),
             ),
           ],

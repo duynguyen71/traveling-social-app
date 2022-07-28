@@ -7,12 +7,12 @@ import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/view_model/story_view_model.dart';
-import 'package:traveling_social_app/view_model/user_view_model.dart';
 import 'package:traveling_social_app/widgets/loading_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../authentication/bloc/authentication_bloc.dart';
 import '../../widgets/media_file_container.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CreateStoryScreen extends StatefulWidget {
   const CreateStoryScreen({Key? key}) : super(key: key);
@@ -45,6 +45,7 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
   _getImagesFromGallery() async {
     List<XFile>? files = await _imagePicker.pickMultiImage();
     if (files != null) {
+      print('selected file name: ' + files[0].name);
       for (int i = 0; i < files.length; i++) {
         File? compressed = await ApplicationUtility.compressImage(files[i].path,
             quality: _compressQuality);
@@ -66,16 +67,21 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
     setState(() {
       _isLoading = true;
     });
-    UserService userService = UserService();
-    var story = await userService.createStory(<String, dynamic>{
-      "caption": caption,
-      "type": 0,
-    }, _pickedFiles);
-    context.read<StoryViewModel>().addStory(story);
-    Navigator.of(context).pop();
-    setState(() {
-      _isLoading = false;
-    });
+    try {
+      UserService userService = UserService();
+      var story = await userService.createStory(<String, dynamic>{
+        "caption": caption,
+        "type": 0,
+      }, _pickedFiles);
+      context.read<StoryViewModel>().addStory(story);
+      Navigator.of(context).pop();
+    } on Exception catch (e) {
+      print(e.toString());
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -115,8 +121,8 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
                 color: Colors.black87,
               ),
             ),
-            title: const Text(
-              "Create Story",
+            title: Text(
+              AppLocalizations.of(context)!.createStory,
               textAlign: TextAlign.center,
             ),
             titleTextStyle: const TextStyle(
@@ -126,7 +132,7 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
             actions: [
               TextButton(
                   onPressed: () async => _handlePostStory(),
-                  child: const Text("Post"))
+                  child: Text(AppLocalizations.of(context)!.posting))
             ],
           ),
           body: Center(

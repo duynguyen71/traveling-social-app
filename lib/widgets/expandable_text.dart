@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class ExpandableText extends StatefulWidget {
   const ExpandableText(
       {Key? key,
@@ -56,7 +56,7 @@ class _ExpandableTextState extends State<ExpandableText> {
                   });
                 },
                 child: Text(
-                  isExpandableText ? "Show more" : "Show less",
+                  isExpandableText ?AppLocalizations.of(context)!.showMore : AppLocalizations.of(context)!.showLess,
                   style: const TextStyle(color: Colors.blueGrey),
                 ),
                 style: TextButton.styleFrom(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:traveling_social_app/constants/app_theme_constants.dart';
 
 class SettingItemLeading extends StatelessWidget {
   const SettingItemLeading(
@@ -17,15 +18,15 @@ class SettingItemLeading extends StatelessWidget {
     return Container(
       child: SvgPicture.asset(
         asset,
-        height: 30,
-        width: 30,
+        height: kIconSize,
+        width: kIconSize,
         color: color,
       ),
       decoration: BoxDecoration(
         color: bg,
         borderRadius: BorderRadius.circular(5.0),
       ),
-      padding: const EdgeInsets.all(4.0),
+      padding: const EdgeInsets.all(kIconPadding),
     );
   }
 }

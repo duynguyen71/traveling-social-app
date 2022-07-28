@@ -6,7 +6,6 @@ import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/comment_input_reply_widget.dart';
 import '../../models/comment.dart';
 import '../../view_model/post_view_model.dart';
-import '../../view_model/user_view_model.dart';
 import '../../widgets/comment_entry.dart';
 import 'package:provider/provider.dart';
 
@@ -34,7 +33,6 @@ class _CommentScreenState extends State<CommentScreen>
 
   List<Comment> get myComments => widget.myComments;
   final TextEditingController _commentController = TextEditingController();
-  bool _isLoadMoreComment = false;
   Comment? _currentReplyComment;
   Comment? _currentFocusReplyComment;
   Comment? _currentFocusEditComment;
@@ -137,9 +135,9 @@ class _CommentScreenState extends State<CommentScreen>
                   .size
                   .height *
               .3) {
-        if (!_isLoadMoreComment) {
+        if (!_isLoading && _comments.isNotEmpty) {
           print("====LOAD MORE COMMENTS====");
-          _isLoadMoreComment = true;
+          isLoading = true;
           _currentPage += 1;
           List<Comment> comments = await _commentService.getRootCommentsOnPost(
               postId: widget.postId, page: _currentPage);
@@ -149,7 +147,7 @@ class _CommentScreenState extends State<CommentScreen>
           setState(() {
             _comments.addAll(comments);
           });
-          _isLoadMoreComment = false;
+          isLoading = false;
         }
       }
       // }
@@ -223,11 +221,14 @@ class _CommentScreenState extends State<CommentScreen>
                               _comments.length + 1,
                               (index) {
                                 if (index == _comments.length) {
-                                  return const Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 5),
-                                    child: Center(
-                                      child: CupertinoActivityIndicator(),
-                                    ),
+                                  return Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 5),
+                                    child: _isLoading
+                                        ? const Center(
+                                            child: CupertinoActivityIndicator(),
+                                          )
+                                        : const SizedBox.shrink(),
                                   );
                                 }
                                 var c = _comments.elementAt(index);
@@ -290,10 +291,10 @@ class _CommentScreenState extends State<CommentScreen>
                       ),
                       bottom: MediaQuery.of(context).viewInsets.bottom,
                     ),
-                    _isLoading
-                        ? const Positioned.fill(
-                            child: Center(child: CupertinoActivityIndicator()))
-                        : const SizedBox.shrink(),
+                    // _isLoading
+                    //     ? const Positioned.fill(
+                    //         child: Center(child: CupertinoActivityIndicator()))
+                    //     : const SizedBox.shrink(),
                   ],
                 ),
               ),

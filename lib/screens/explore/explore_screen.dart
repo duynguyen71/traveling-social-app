@@ -1,20 +1,16 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
-import 'package:traveling_social_app/screens/feed/my_feed.dart';
-import 'package:traveling_social_app/screens/message/chat_groups_screen.dart';
-import 'package:traveling_social_app/screens/review/review_screen.dart';
-import 'package:traveling_social_app/widgets/current_user_avt.dart';
+import 'package:traveling_social_app/screens/account/account_screen.dart';
+import 'package:traveling_social_app/screens/bookmark/bookmark_screen.dart';
+import 'package:traveling_social_app/screens/explore/components/my_bottom_nav_item.dart';
+import 'package:traveling_social_app/screens/home/home_screen.dart';
+import 'package:traveling_social_app/screens/notification/notification_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../my_theme.dart';
-import '../../utilities/application_utility.dart';
-import '../home/components/drawer.dart';
-import '../profile/components/create_post_type_dialog.dart';
-import '../profile/current_user_profile_screen.dart';
-import '../search/search_screen.dart';
+import 'components/drawer.dart';
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({Key? key}) : super(key: key);
@@ -29,140 +25,128 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen>
     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late TabController _tabController;
-
+  late PageController _pageController;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final _scrollViewController = ScrollController();
+  // final _scrollViewController = ScrollController();
+
+  int _currentPageIndex = 0;
+
+  //set page index and jump to page
+  set currentPageIndex(int i) {
+    setState(() => _currentPageIndex = i);
+    _animateToPage(i);
+  }
+
+  _animateToPage(int pageIndex) async {
+    _pageController.animateToPage(pageIndex,
+        duration: const Duration(milliseconds: 250), curve: Curves.linear);
+  }
 
   @override
   void initState() {
-    _tabController = TabController(
-        vsync: this,
-        length: 2,
-        initialIndex: 0,
-        animationDuration: Duration.zero);
+    // _tabController = TabController(
+    //     vsync: this,
+    //     length: 2,
+    //     initialIndex: 0,
+    //     animationDuration: Duration.zero);
     FirebaseMessaging.instance.getToken().then(
       (token) {
-        print('device notification token\n$token');
+        print('device notification token\n$token\n');
       },
     );
+    // AppLocalizations.of(context).
     super.initState();
+    _pageController = PageController(initialPage: 0, keepPage: true);
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      key: _scaffoldKey,
-      drawer: const HomeDrawer(),
-      body: NestedScrollView(
-        controller: _scrollViewController,
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            SliverAppBar(
-              iconTheme: const IconThemeData(color: Colors.black87),
-              leading: IconButton(
-                onPressed: () => _scaffoldKey.currentState!.openDrawer(),
-                icon: const Icon(Icons.menu),
-              ),
-              actions: [
-                IconButton(
-                  onPressed: () => ApplicationUtility.navigateToScreen(
-                    context,
-                    const ChatGroupsScreen(),
-                  ),
-                  icon: const Icon(
-                      IconData(0xe5c9, fontFamily: 'MaterialIcons'),
-                      color: Colors.black87),
+        key: _scaffoldKey,
+        drawer: const HomeDrawer(),
+        body: PageView(
+          controller: _pageController,
+          physics: const NeverScrollableScrollPhysics(),
+          children: const [
+            HomeScreen(),
+            BookmarkScreen(),
+            NotificationScreen(),
+            AccountScreen()
+          ],
+        ),
+        bottomNavigationBar: Container(
+          height: 60.0,
+          padding: const EdgeInsets.only(bottom: 8.0),
+          alignment: Alignment.center,
+          child: Center(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: MyBottomNavItem(
+                      iconData: Icons.home,
+                      label: AppLocalizations.of(context)!.home,
+                      onClick: () {
+                        currentPageIndex = 0;
+                      },
+                      isSelected: _currentPageIndex == 0),
                 ),
-                IconButton(
-                    onPressed: () => showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return const CreatePostTypeDialog();
-                          },
-                          backgroundColor: Colors.transparent,
-                        ),
-                    icon: const Icon(Icons.edit, color: Colors.black87)),
-                IconButton(
-                  onPressed: () => ApplicationUtility.navigateToScreen(
-                      context, const SearchScreen(keyword: '')),
-                  icon: SvgPicture.asset(
-                    "assets/icons/search.svg",
-                    color: Colors.black87,
+                Expanded(
+                  child: MyBottomNavItem(
+                      iconData: Icons.bookmark,
+                      label:  AppLocalizations.of(context)!.bookmark,
+                      onClick: () {
+                        currentPageIndex = 1;
+                      },
+                      isSelected: _currentPageIndex == 1),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: kPrimaryLightColor.withOpacity(.7),
+                          borderRadius: BorderRadius.circular(200)),
+                      width: 50,
+                      height: 50,
+                      child: SvgPicture.asset(
+                        'assets/icons/add.svg',
+                        color: kPrimaryColor,
+                      ),
+                    ),
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(right: 10),
-                  child: CurrentUserAvt(
-                    size: 20,
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              const CurrentUserProfileScreen(),
-                        ),
-                      );
-                    },
-                  ),
+                Expanded(
+                  child: MyBottomNavItem(
+                      iconData: Icons.notifications,
+                      label:  AppLocalizations.of(context)!.notification,
+                      onClick: () {
+                        currentPageIndex = 2;
+                      },
+                      isSelected: _currentPageIndex == 2),
+                ),
+                Expanded(
+                  child: MyBottomNavItem(
+                      iconData: Icons.person,
+                      label:  AppLocalizations.of(context)!.account,
+                      onClick: () {
+                        currentPageIndex = 4;
+                      },
+                      isSelected: _currentPageIndex == 3),
                 ),
               ],
-              backgroundColor: Colors.white,
-              floating: true,
-              snap: true,
-              bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(56),
-                child: TabBar(
-                  isScrollable: false,
-                  controller: _tabController,
-                  labelColor: Colors.white,
-                  unselectedLabelColor: Colors.black54,
-                  indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                      25.0,
-                    ),
-                    color: kPrimaryLightColor.withOpacity(.8),
-                  ),
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  indicatorPadding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  labelStyle: MyTheme.heading2.copyWith(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 15,
-                  ),
-                  tabs: const [
-                    Tab(
-                      text: 'My Feed',
-                    ),
-                    Tab(
-                      text: 'Review',
-                    ),
-                  ],
-                ),
-              ),
-              forceElevated: innerBoxIsScrolled,
             ),
-          ];
-        },
-        body: Container(
-          color: Colors.grey[100],
-          child: TabBarView(
-            controller: _tabController,
-            physics: const NeverScrollableScrollPhysics(),
-            children: const [
-              MyFeed(),
-              ReviewScreen(),
-            ],
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
-    _scrollViewController.dispose();
+    // _tabController.dispose();
+    // _scrollViewController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 

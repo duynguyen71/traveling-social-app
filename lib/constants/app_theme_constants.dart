@@ -40,3 +40,6 @@ const shimmerGradient = LinearGradient(
   end: Alignment(1.0, 0.3),
   tileMode: TileMode.clamp,
 );
+
+const kIconPadding = 4.0;
+const kIconSize = 25.0;

@@ -6,6 +6,7 @@ import 'package:traveling_social_app/widgets/my_divider.dart';
 import '../../../utilities/application_utility.dart';
 import '../../create_post/create_post_screen.dart';
 import '../../create_story/create_story_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CreatePostTypeDialog extends StatelessWidget {
   const CreatePostTypeDialog({Key? key}) : super(key: key);
@@ -29,7 +30,7 @@ class CreatePostTypeDialog extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 BottomModelItem(
-                    title: 'Create post',
+                    title: AppLocalizations.of(context)!.createPost,
                     onClick: () {
                       Navigator.of(context).pop();
                       ApplicationUtility.navigateToScreen(
@@ -37,14 +38,15 @@ class CreatePostTypeDialog extends StatelessWidget {
                     }),
                 const SizedBox(child: MyDivider()),
                 BottomModelItem(
-                    title: 'Create story',
+                    title: AppLocalizations.of(context)!.createStory,
                     onClick: () {
                       Navigator.of(context).pop();
                       ApplicationUtility.navigateToScreen(
                           context, const CreateStoryScreen());
-                    }), const SizedBox(child: MyDivider()),
+                    }),
+                const SizedBox(child: MyDivider()),
                 BottomModelItem(
-                    title: 'Create review post',
+                    title: AppLocalizations.of(context)!.createReviewPost,
                     onClick: () {
                       Navigator.of(context).pop();
                       ApplicationUtility.navigateToScreen(
@@ -61,10 +63,11 @@ class CreatePostTypeDialog extends StatelessWidget {
               ),
               margin: const EdgeInsets.all(10),
               padding: const EdgeInsets.all(5),
-              child: BottomModelItem(title: "Cancel",
+              child: BottomModelItem(
+                title: AppLocalizations.of(context)!.cancel,
                 onClick: () => Navigator.of(context).pop(),
-                color: Colors.redAccent,)
-          )
+                color: Colors.redAccent,
+              ))
         ],
       ),
     );

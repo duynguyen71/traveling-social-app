@@ -2,21 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:traveling_social_app/screens/setting/components/settting_item_leading.dart';
-
 class SettingItemCheckBox extends StatelessWidget {
   const SettingItemCheckBox(
       {Key? key,
       required this.isLast,
       required this.title,
-      required this.description,
-      required this.icon,
-      required this.leadingBg})
+       this.description,
+        required this.onChange,
+      required this.leadingBg,  this.value = false})
       : super(key: key);
   final bool isLast;
   final String title;
-  final String description;
-  final IconData icon;
+  final String? description;
   final Color leadingBg;
+  final Function onChange;
+  final bool value;
 
   @override
   Widget build(BuildContext context) {
@@ -50,18 +50,23 @@ class SettingItemCheckBox extends StatelessWidget {
                         style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.w500),
                       ),
-                      Text(
-                        description,
+                   description!=null?   Text(
+                        description!,
                         style: const TextStyle(
                             fontSize: 14, color: Colors.black54),
-                      ),
+                      ):const SizedBox.shrink(),
                     ],
                   ),
                 ),
                 const Spacer(),
-                CupertinoSwitch(
-                  onChanged: (value) {},
-                  value: true,
+                Transform.scale(
+                  scale: .8,
+                  child: CupertinoSwitch(
+                    onChanged: (value) {
+                      onChange(value);
+                    },
+                    value: value,
+                  ),
                 ),
               ],
             ),

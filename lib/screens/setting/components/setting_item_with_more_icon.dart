@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:traveling_social_app/screens/setting/components/settting_item_leading.dart';
 import 'package:traveling_social_app/widgets/my_divider.dart';
 
@@ -8,8 +7,7 @@ class SettingItemWithMoreIcon extends StatelessWidget {
       {Key? key,
       required this.isLast,
       required this.title,
-      required this.description,
-      required this.icon,
+      this.description,
       required this.onClick,
       required this.asset,
       this.leadingBg = Colors.black12,
@@ -18,8 +16,7 @@ class SettingItemWithMoreIcon extends StatelessWidget {
 
   final bool isLast;
   final String title;
-  final String description;
-  final IconData icon;
+  final String? description;
   final Function onClick;
   final String asset;
   final Color leadingBg, leadingColor;
@@ -33,7 +30,6 @@ class SettingItemWithMoreIcon extends StatelessWidget {
         child: Ink(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            // margin: const EdgeInsets.symmetric(vertical: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -58,11 +54,13 @@ class SettingItemWithMoreIcon extends StatelessWidget {
                             style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.w500),
                           ),
-                          Text(
-                            description,
-                            style: const TextStyle(
-                                fontSize: 14, color: Colors.black54),
-                          ),
+                          description != null
+                              ? Text(
+                                  description!,
+                                  style: const TextStyle(
+                                      fontSize: 14, color: Colors.black54),
+                                )
+                              : const SizedBox.shrink(),
                         ],
                       ),
                     ),

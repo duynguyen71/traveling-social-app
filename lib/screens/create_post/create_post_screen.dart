@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../../services/post_service.dart';
 import '../../widgets/loading_widget.dart';
 import 'components/user_draft_posts.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CreatePostScreen extends StatefulWidget {
   const CreatePostScreen({Key? key}) : super(key: key);
@@ -43,7 +44,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       final resp = await _postService.createPost(post, _pickedFiles);
       context.read<PostViewModel>().addPost(resp);
       context.read<CurrentUserPostViewModel>().addPost(resp);
-      // ApplicationUtility.pushAndReplace(context, const HomeScreen());
       Navigator.pop(context);
     } catch (e) {
       print("Failed to create post :" + e.toString());
@@ -61,12 +61,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   @override
   void initState() {
     super.initState();
-    s.add(BottomDialogItem(
-        title: 'Delete',
-        onClick: () {
-          _focusNode.unfocus();
-          discard();
-        }));
+    // s.add(BottomDialogItem(
+    //     title: AppLocalizations.of(context)!.delete,
+    //     onClick: () {
+    //       _focusNode.unfocus();
+    //       discard();
+    //     }));
     _focusNode.requestFocus();
   }
 
@@ -77,17 +77,17 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       children: [
         Scaffold(
           backgroundColor: Colors.white,
-          extendBodyBehindAppBar: true,
+          extendBodyBehindAppBar: false,
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             leading: TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: const Text(
-                'Cancel',
+              child: Text(
+                AppLocalizations.of(context)!.cancel,
                 textAlign: TextAlign.left,
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 16,
                     color: Colors.black87,
                     fontWeight: FontWeight.normal),
@@ -100,16 +100,16 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   ? const SizedBox.shrink()
                   : TextButton(
                       onPressed: _showDrafts,
-                      child: const Tooltip(
+                      child: Tooltip(
                         message: "Choose your previous drafts",
-                        waitDuration: Duration(seconds: 1),
-                        showDuration: Duration(seconds: 2),
-                        padding: EdgeInsets.all(12),
+                        waitDuration: const Duration(seconds: 1),
+                        showDuration: const Duration(seconds: 2),
+                        padding: const EdgeInsets.all(12),
                         height: 35,
                         preferBelow: true,
                         child: Text(
-                          'Drafts',
-                          style: TextStyle(
+                          AppLocalizations.of(context)!.drafts,
+                          style: const TextStyle(
                               fontSize: 16,
                               color: Colors.lightBlue,
                               fontWeight: FontWeight.normal),
@@ -128,9 +128,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           ? Colors.blueAccent.withOpacity(.5)
                           : Colors.blueAccent,
                       borderRadius: BorderRadius.circular(50)),
-                  child: const Text(
-                    'Post',
-                    style: TextStyle(
+                  child: Text(
+                    AppLocalizations.of(context)!.posting,
+                    style: const TextStyle(
                         fontSize: 16,
                         color: Colors.white,
                         fontWeight: FontWeight.normal),
@@ -141,7 +141,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             backgroundColor: Colors.white.withOpacity(.8),
           ),
           body: Container(
-            padding: const EdgeInsets.only(top: 100, left: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             width: double.infinity,
             height: size.height,
             child: Stack(
@@ -182,9 +182,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                   color: Colors.black87, fontSize: 18),
                               showCursor: true,
                               cursorColor: Colors.blue,
-                              decoration: const InputDecoration(
-                                hintText: 'What are you thinking?',
-                                hintStyle: TextStyle(
+                              decoration: InputDecoration(
+                                hintText: AppLocalizations.of(context)!.whatRUT,
+                                hintStyle: const TextStyle(
                                   color: Colors.black54,
                                 ),
                                 border: InputBorder.none,
@@ -219,12 +219,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                             _pickedFiles.removeAt(index);
                                           });
                                         },
-                                        width: null,
                                         modifiedFile: (File f) {
                                           setState(() {
                                             _pickedFiles[index] = f;
                                           });
                                         },
+                                        width: double.infinity,
                                       );
                                     },
                                     itemCount: _pickedFiles.length,
@@ -236,15 +236,15 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: Row(
-                          children: const [
-                            Icon(
+                          children: [
+                            const Icon(
                               Icons.location_on_outlined,
                               color: Colors.blue,
                             ),
                             Text(
-                              'Add location',
-                              style:
-                                  TextStyle(color: Colors.blue, fontSize: 12),
+                              AppLocalizations.of(context)!.addLocation,
+                              style: const TextStyle(
+                                  color: Colors.blue, fontSize: 12),
                             )
                           ],
                         ),

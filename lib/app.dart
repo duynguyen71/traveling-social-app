@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
+import 'package:traveling_social_app/bloc/locale/locale_cubit.dart';
+import 'package:traveling_social_app/generated/l10n.dart';
 import 'package:traveling_social_app/repository/authentication_repository/authentication_repository.dart';
 import 'package:traveling_social_app/repository/notification_repository/notification_repository.dart';
 import 'package:traveling_social_app/repository/user_repository/user_repository.dart';
@@ -14,9 +16,10 @@ import 'package:traveling_social_app/view_model/chat_room_view_model.dart';
 import 'package:traveling_social_app/view_model/current_user_post_view_model.dart';
 import 'package:traveling_social_app/view_model/post_view_model.dart';
 import 'package:traveling_social_app/view_model/story_view_model.dart';
-
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'authentication/bloc/authentication_state.dart';
-import 'bloc/notification_bloc.dart';
+import 'bloc/notification/notification_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 //root application
 class App extends StatelessWidget {
@@ -52,6 +55,7 @@ class App extends StatelessWidget {
           BlocProvider<ChatBloc>(
             create: (context) => ChatBloc(),
           ),
+          BlocProvider<LocaleCubit>(create: (_) => LocaleCubit()),
         ],
         child: const AppView(),
       ),
@@ -78,9 +82,61 @@ class _AppViewState extends State<AppView> with WidgetsBindingObserver {
   }
 
   @override
-  void dispose() {
-    WidgetsBinding.instance.addObserver(this);
-    super.dispose();
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<StoryViewModel>(create: (_) => StoryViewModel()),
+        ChangeNotifierProvider<PostViewModel>(create: (_) => PostViewModel()),
+        ChangeNotifierProvider<CurrentUserPostViewModel>(
+            create: (_) => CurrentUserPostViewModel()),
+      ],
+      builder: (context, child) {
+        return BlocBuilder<LocaleCubit,LocaleState>(
+          builder: (_,localeState) {
+            return MaterialApp(
+              title: 'TC Social',
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              locale: localeState.locale,
+              navigatorKey: _navigatorKey,
+              debugShowCheckedModeBanner: false,
+              theme: ThemeData(
+                scaffoldBackgroundColor: Colors.white,
+                visualDensity: VisualDensity.adaptivePlatformDensity,
+                textTheme:
+                    GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
+                // textTheme: GoogleFonts.robotoTextTheme(),
+              ),
+              builder: (context, child) {
+                return BlocListener<AuthenticationBloc, AuthenticationState>(
+                  listener: (context, state) {
+                    switch (state.status) {
+                      case AuthenticationStatus.authenticated:
+                        _navigator.pushAndRemoveUntil<void>(
+                          ExploreScreen.route(),
+                          (route) => false,
+                        );
+                        break;
+                      case AuthenticationStatus.unauthenticated:
+                        _navigator.pushAndRemoveUntil<void>(
+                          LoginScreen.route(),
+                          (route) => false,
+                        );
+                        break;
+                      default:
+                        break;
+                    }
+                  },
+                  child: child,
+                );
+              },
+              onGenerateRoute: (_) => SplashScreen.route(),
+              // onGenerateRoute: (_) => Router,
+            );
+          }
+        );
+      },
+    );
   }
 
   @override
@@ -104,7 +160,6 @@ class _AppViewState extends State<AppView> with WidgetsBindingObserver {
       case AppLifecycleState.detached:
         {
           print('AppLifecycleState.detached');
-
           break;
         }
 
@@ -114,55 +169,8 @@ class _AppViewState extends State<AppView> with WidgetsBindingObserver {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<StoryViewModel>(create: (_) => StoryViewModel()),
-        ChangeNotifierProvider<PostViewModel>(create: (_) => PostViewModel()),
-        ChangeNotifierProvider<CurrentUserPostViewModel>(
-            create: (_) => CurrentUserPostViewModel()),
-        ChangeNotifierProvider<ChatRoomViewModel>(
-            create: (_) => ChatRoomViewModel()),
-      ],
-      builder: (context, child) {
-        return MaterialApp(
-          title: 'TC Social',
-          navigatorKey: _navigatorKey,
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            scaffoldBackgroundColor: Colors.white,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-            textTheme:
-                GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
-            // textTheme: GoogleFonts.robotoTextTheme(),
-          ),
-          builder: (context, child) {
-            return BlocListener<AuthenticationBloc, AuthenticationState>(
-              listener: (context, state) {
-                switch (state.status) {
-                  case AuthenticationStatus.authenticated:
-                    _navigator.pushAndRemoveUntil<void>(
-                      ExploreScreen.route(),
-                      (route) => false,
-                    );
-                    break;
-                  case AuthenticationStatus.unauthenticated:
-                    _navigator.pushAndRemoveUntil<void>(
-                      LoginScreen.route(),
-                      (route) => false,
-                    );
-                    break;
-                  default:
-                    break;
-                }
-              },
-              child: child,
-            );
-          },
-          onGenerateRoute: (_) => SplashScreen.route(),
-          // onGenerateRoute: (_) => Router,
-        );
-      },
-    );
+  void dispose() {
+    WidgetsBinding.instance.addObserver(this);
+    super.dispose();
   }
 }

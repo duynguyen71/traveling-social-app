@@ -23,6 +23,8 @@ class ChatGroupsScreen extends StatefulWidget {
 
   @override
   State<ChatGroupsScreen> createState() => _ChatGroupsScreenState();
+
+  static Route route() => MaterialPageRoute(builder: (_) => const ChatGroupsScreen());
 }
 
 class _ChatGroupsScreenState extends State<ChatGroupsScreen> {

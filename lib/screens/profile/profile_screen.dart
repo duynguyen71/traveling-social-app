@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:traveling_social_app/models/user.dart';
-import 'package:traveling_social_app/screens/home/components/post_entry.dart';
+import 'package:traveling_social_app/screens/explore/components/post_entry.dart';
 import 'package:traveling_social_app/services/post_service.dart';
 import 'package:traveling_social_app/widgets/my_outline_button.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
@@ -13,6 +13,7 @@ import '../../models/post.dart';
 import '../../services/user_service.dart';
 import 'components/follow_count.dart';
 import 'components/icon_with_text.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key, required this.userId}) : super(key: key);
@@ -190,7 +191,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         }
                                       }
                                     },
-                                    text: isFollowed ? "Following" : "Follow",
+                                    text: isFollowed
+                                        ? AppLocalizations.of(context)!
+                                            .following
+                                        : AppLocalizations.of(context)!.follow,
                                     color: isFollowed ? kPrimaryColor : null,
                                     textColor:
                                         isFollowed ? Colors.white : null),
@@ -227,10 +231,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           MainAxisAlignment.start,
                                       children: [
                                         FollowCount(
-                                            title: "Following",
+                                            title: AppLocalizations.of(context)!
+                                                .following,
                                             count: _user!.followingCounts),
                                         FollowCount(
-                                            title: "Follower",
+                                            title: AppLocalizations.of(context)!
+                                                .follower,
                                             count: _user!.followerCounts),
                                       ],
                                     )
@@ -251,8 +257,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             icon: Icons.location_on_outlined),
                                         const SizedBox(width: 10),
                                         IconWithText(
-                                            text:
-                                                'Joined date ${Jiffy(_user?.createDate).format('dd-MM-yyyy')}',
+                                            text: AppLocalizations.of(context)!
+                                                .joinedDate(
+                                                    Jiffy(_user?.createDate)
+                                                        .format('dd-MM-yyyy')),
                                             icon:
                                                 Icons.calendar_today_outlined),
                                       ],

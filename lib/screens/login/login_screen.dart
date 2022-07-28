@@ -18,6 +18,7 @@ import 'package:traveling_social_app/widgets/rounded_button.dart';
 import 'package:traveling_social_app/widgets/rounded_input_container.dart';
 
 import '../../repository/authentication_repository/authentication_repository.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);

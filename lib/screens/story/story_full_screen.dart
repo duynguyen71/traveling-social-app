@@ -13,6 +13,8 @@ import '../../view_model/user_view_model.dart';
 import '../../widgets/user_avt.dart';
 import '../profile/profile_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class StoryFullScreen extends StatefulWidget {
   const StoryFullScreen({Key? key, required this.post}) : super(key: key);
@@ -128,6 +130,7 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Expanded(
+                          //USERNAME AND CREATED TIME
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -154,7 +157,12 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                                         color: Colors.white),
                                   ),
                                   Text(
-                                    _getTimeAgo(),
+                                    // _getTimeAgo(),
+                                    timeago.format(
+                                        DateTime.parse(
+                                            widget.post.createDate.toString()),
+                                        locale: Localizations.localeOf(context)
+                                            .languageCode),
                                     style: const TextStyle(
                                         color: Colors.white, fontSize: 14),
                                   ),
@@ -168,7 +176,8 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                                   .read<AuthenticationBloc>()
                                   .state
                                   .user
-                                  .id ==widget.post.user!.id!,
+                                  .id ==
+                              widget.post.user!.id!,
                           user: widget.post.user!,
                           storyId: widget.post.id!,
                         ),
@@ -277,32 +286,33 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     Expanded(
                       child: TextField(
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(50)),
                               borderSide: BorderSide(
                                 width: 1,
                               ),
                             ),
-                            focusedBorder: OutlineInputBorder(
+                            focusedBorder: const OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(50)),
                               borderSide: BorderSide(
                                   width: 1, color: kPrimaryLightColor),
                             ),
                             filled: true,
-                            hintStyle: TextStyle(color: Colors.white10),
-                            hintText: "Type in your text",
+                            hintStyle: const TextStyle(color: Colors.white10),
+                            hintText:
+                                AppLocalizations.of(context)!.typeInYourText,
                             fillColor: Colors.white10),
                       ),
                     ),
-                    SizedBox(width: 10),
-                    Icon(
+                    const SizedBox(width: 10),
+                    const Icon(
                       Icons.send,
                       color: Colors.white,
                     ),

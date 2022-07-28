@@ -2,11 +2,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
-import 'package:traveling_social_app/bloc/notification_state.dart';
-
-import '../repository/notification_repository/notification_repository.dart';
 import 'notification_event.dart';
+import 'notification_state.dart';
+
+import '../../repository/notification_repository/notification_repository.dart';
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   final NotificationRepository _notificationRepo;

@@ -118,12 +118,12 @@ class UserService {
     return bodyJson['message'];
   }
 
-  Future<Map<String,dynamic>> verifyAccount({required String code}) async {
+  Future<Map<String, dynamic>> verifyAccount({required String code}) async {
     final url = Uri.parse(baseUrl + "/api/v1/auth/verification");
     final resp = await http.get(url, headers: {"code": code});
     if (resp.statusCode == 200) {
       final body = jsonDecode(resp.body) as Map<String, dynamic>;
-      Map<String,dynamic> tokens = body['data'];
+      Map<String, dynamic> tokens = body['data'];
       // await saveToken(tokens);
       return tokens;
     } else {
@@ -133,7 +133,7 @@ class UserService {
 
   Future<FileUpload> uploadImage(File file) async {
     final accessToken = await _storage.read(key: 'accessToken');
-    final uri = Uri.parse(baseUrl + "/api/v1/member/users/me/files");
+    final uri = Uri.parse(baseUrl + "/api/v1/member/users/me/file");
     var request = http.MultipartRequest("POST", uri);
 
     request.headers['Content-Type'] = 'multipart/form-data';
@@ -143,14 +143,19 @@ class UserService {
         filename: basename(file.path), contentType: MediaType('image', 'jpeg'));
 
     request.files.add(f);
-    final streamResp = await request.send();
-    final resp = await http.Response.fromStream(streamResp);
-    if (resp.statusCode == 200) {
-      var body = jsonDecode(resp.body) as Map<String, dynamic>;
-      FileUpload fileUpload = FileUpload.fromJson(body['data']);
-      return fileUpload;
-    } else {
-      throw 'Failed to upload images';
+    try {
+      final streamResp = await request.send();
+      final resp = await http.Response.fromStream(streamResp);
+      if (resp.statusCode == 200) {
+        var body = jsonDecode(resp.body) as Map<String, dynamic>;
+        FileUpload fileUpload = FileUpload.fromJson(body['data']);
+        return fileUpload;
+      } else {
+        print('server response' + jsonDecode(resp.body).toString());
+        throw 'Failed to upload images ';
+      }
+    } on Exception catch (e) {
+      throw 'Failed to upload images ' + e.toString();
     }
   }
 
@@ -315,6 +320,5 @@ class UserService {
     return false;
   }
 
-  Future<void> refreshDeviceToken({required String token})async{
-  }
+  Future<void> refreshDeviceToken({required String token}) async {}
 }

@@ -11,12 +11,14 @@ import '../../constants/api_constants.dart';
 import '../../models/base_user.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({Key? key, required this.keyword}) : super(key: key);
+  const SearchScreen({Key? key,  this.keyword }) : super(key: key);
 
   final String? keyword;
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
+
+  static Route route(String? keyword) => MaterialPageRoute(builder: (_)=>  SearchScreen(keyword: keyword));
 }
 
 class _SearchScreenState extends State<SearchScreen> {

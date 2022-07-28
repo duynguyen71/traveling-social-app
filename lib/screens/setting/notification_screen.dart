@@ -3,46 +3,28 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:traveling_social_app/bloc/locale/locale_cubit.dart';
 import 'package:traveling_social_app/models/language.dart';
+import 'package:traveling_social_app/screens/setting/components/setting_item_checkbox.dart';
 import 'package:traveling_social_app/screens/setting/components/setting_item_selected.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class LanguageSettingScreen extends StatefulWidget {
-  const LanguageSettingScreen({Key? key}) : super(key: key);
+class NotificationSettingScreen extends StatefulWidget {
+  const NotificationSettingScreen({Key? key}) : super(key: key);
 
   static Route route() =>
-      MaterialPageRoute(builder: (_) => const LanguageSettingScreen());
+      MaterialPageRoute(builder: (_) => const NotificationSettingScreen());
 
   @override
-  State<LanguageSettingScreen> createState() => _LanguageSettingScreenState();
+  State<NotificationSettingScreen> createState() =>
+      _NotificationSettingScreenState();
 }
 
-class _LanguageSettingScreenState extends State<LanguageSettingScreen> {
-  List<Language> languageList = [
-    const Language('Vietnamese', 'vi'),
-    const Language('English', 'en'),
-  ];
-
-  late String selectedLocaleName;
-
+class _NotificationSettingScreenState extends State<NotificationSettingScreen> {
   final _storage = const FlutterSecureStorage();
 
-  @override
-  void didChangeDependencies() {
-    String localeName = AppLocalizations.of(context)!.localeName;
-    setState(() {
-      selectedLocaleName = localeName;
-    });
-    super.didChangeDependencies();
-  }
 
-  //method to change app locale
-  Future<void> changeLocale(Language e, BuildContext context) async {
-    if (AppLocalizations.delegate
-        .isSupported(Locale(e.localName))) {
-      await _storage.write(
-          key: 'localeName', value: e.localName);
-      context.read<LocaleCubit>().toLocaleName(e.localName);
-    }
+  @override
+  void initState() {
+    super.initState();
   }
   @override
   Widget build(BuildContext context) {
@@ -52,8 +34,10 @@ class _LanguageSettingScreenState extends State<LanguageSettingScreen> {
         backgroundColor: Colors.grey.shade100,
         elevation: 0,
         leading: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
+              constraints:const BoxConstraints(),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -70,9 +54,9 @@ class _LanguageSettingScreenState extends State<LanguageSettingScreen> {
             ),
           ],
         ),
-        leadingWidth: 200,
+        leadingWidth: 200.0,
         title: Text(
-          AppLocalizations.of(context)!.language,
+          AppLocalizations.of(context)!.notification,
           style: const TextStyle(
             color: Colors.black87,
           ),
@@ -90,15 +74,8 @@ class _LanguageSettingScreenState extends State<LanguageSettingScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Column(
-                children: languageList.map((e) {
-                  return SettingItemSelected(
-                    text: e.locale,
-                    isChecked: e.localName == selectedLocaleName,
-                    onClick: () async {
-                      await changeLocale(e, context);
-                    },
-                  );
-                }).toList(),
+                children: [
+                ],
               )
             ],
           ),
@@ -106,6 +83,4 @@ class _LanguageSettingScreenState extends State<LanguageSettingScreen> {
       ),
     );
   }
-
-
 }
