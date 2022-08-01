@@ -24,7 +24,6 @@ class ChatState extends Equatable {
   List<Object> get props => [chatGroups, status, hasReachMax];
 
   @override
-  bool get stringify {
-    return true;
-  }
+  bool get stringify => true;
+
 }

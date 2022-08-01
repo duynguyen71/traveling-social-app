@@ -1,14 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/models/group.dart';
 import 'package:traveling_social_app/screens/message/components/group_chat_entry.dart';
+import 'package:traveling_social_app/screens/message/create_message_screen.dart';
 import 'package:traveling_social_app/screens/message/public_chat_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/view_model/user_view_model.dart';
 import 'package:traveling_social_app/widgets/my_divider.dart';
+import 'package:traveling_social_app/widgets/rounded_icon_button.dart';
 import 'package:traveling_social_app/widgets/rounded_input_container.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +27,8 @@ class ChatGroupsScreen extends StatefulWidget {
   @override
   State<ChatGroupsScreen> createState() => _ChatGroupsScreenState();
 
-  static Route route() => MaterialPageRoute(builder: (_) => const ChatGroupsScreen());
+  static Route route() =>
+      MaterialPageRoute(builder: (_) => const ChatGroupsScreen());
 }
 
 class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
@@ -51,6 +55,7 @@ class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -67,9 +72,21 @@ class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
                   ),
                 ),
                 actions: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.edit, color: Colors.black45),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Center(
+                      child: RoundedIconButton(
+                        onClick: () {
+                          Navigator.push(context, CreateMessageScreen.route());
+                        },
+                        icon: Icons.add,
+                        size: 30,
+                        // child: IconButton(
+                        //   onPressed: () {},
+                        //   icon: const Icon(Icons.add, color: Colors.black45),
+                        // ),
+                      ),
+                    ),
                   ),
                 ],
 
@@ -129,49 +146,87 @@ class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
                       builder: (context, state) {
                         List<Group> groups = state.chatGroups;
                         return Column(
-                          children: List.generate(groups.length, (index) {
-                            Group group = groups[index];
-                            String? groupName;
-                            String? groupAvt;
-                            if (group.users.length == 2) {
-                              User? user = group.users[0];
-                              if (context
-                                      .read<AuthenticationBloc>()
-                                      .state
-                                      .user
-                                      .id !=
-                                  user.id) {
-                                groupAvt = user.avt;
-                                groupName = user.username;
+                          children: List.generate(
+                            groups.length,
+                            (index) {
+                              Group group = groups[index];
+                              String? groupName;
+                              String? groupAvt;
+                              if (group.users.length == 2) {
+                                User? user = group.users[0];
+                                if (context
+                                        .read<AuthenticationBloc>()
+                                        .state
+                                        .user
+                                        .id !=
+                                    user.id) {
+                                  groupAvt = user.avt;
+                                  groupName = user.username;
+                                } else {
+                                  groupAvt = group.users[1].avt;
+                                  groupName = group.users[1].username;
+                                }
                               } else {
-                                groupAvt = group.users[1].avt;
-                                groupName = group.users[1].username;
+                                groupName = group.name;
                               }
-                            } else {
-                              groupName = group.name;
-                            }
-                            return GroupChatEntry(
-                              name: groupName.toString(),
-                              lastMessage: group.lastMessage,
-                              isUserActive: true,
-                              onClick: () {
-                                ApplicationUtility.navigateToScreen(
-                                  context,
-                                  ChatScreen(
-                                    groupId: group.id!,
-                                    tmpGroupName: groupName,
-                                  ),
-                                );
-                              },
-                              avt: groupAvt,
-                              countMember: group.users.length,
-                            );
-                          }),
+                              return GroupChatEntry(
+                                name: groupName.toString(),
+                                lastMessage: group.lastMessage,
+                                isUserActive: true,
+                                onClick: () {
+                                  ApplicationUtility.navigateToScreen(
+                                    context,
+                                    ChatScreen(
+                                      groupId: group.id!,
+                                      tmpGroupName: groupName,
+                                    ),
+                                  );
+                                },
+                                avt: groupAvt,
+                                countMember: group.users.length,
+                              );
+                            },
+                          ),
                         );
                       },
                     ),
                   ],
                 ),
+              ),
+              BlocBuilder<ChatBloc, ChatState>(
+                builder: (context, state) {
+                  return SliverToBoxAdapter(
+                    child: (state.chatGroups.isNotEmpty||state.status != ChatGroupStatus.success)
+                        ? const SizedBox.shrink()
+                        : Container(
+                            margin: EdgeInsets.only(top: size.height * .2),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  height: 120,
+                                  width: 120,
+                                  child: SvgPicture.asset(
+                                    'assets/icons/inbox_message.svg',
+                                    color: kPrimaryColor.withOpacity(.4),
+                                  ),
+                                ),
+                                Center(
+                                  child: Text(
+                                    'No messages',
+                                    style: TextStyle(
+                                        color: kPrimaryColor.withOpacity(.8),
+                                        fontSize: 18,
+                                        letterSpacing: .8),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                  );
+                },
               )
             ],
           ),

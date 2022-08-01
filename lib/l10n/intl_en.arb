@@ -36,7 +36,7 @@
   "editProfile": "Edit profile",
   "follower": "Follower",
   "following": "Following",
-  "joinedDate": "Tham gia vào {formatDate}",
+  "joinedDate": "Joined at {formatDate}",
   "@joinedDate": {
     "description": "The date user joined.",
     "placeholders": {

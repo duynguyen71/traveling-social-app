@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/bloc/locale/locale_cubit.dart';
+import 'package:traveling_social_app/bloc/post/post_bloc.dart';
 import 'package:traveling_social_app/generated/l10n.dart';
 import 'package:traveling_social_app/repository/authentication_repository/authentication_repository.dart';
 import 'package:traveling_social_app/repository/notification_repository/notification_repository.dart';
@@ -55,6 +56,9 @@ class App extends StatelessWidget {
           BlocProvider<ChatBloc>(
             create: (context) => ChatBloc(),
           ),
+          BlocProvider<PostBloc>(
+            create: (_) => PostBloc(),
+          ),
           BlocProvider<LocaleCubit>(create: (_) => LocaleCubit()),
         ],
         child: const AppView(),
@@ -86,55 +90,53 @@ class _AppViewState extends State<AppView> with WidgetsBindingObserver {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<StoryViewModel>(create: (_) => StoryViewModel()),
-        ChangeNotifierProvider<PostViewModel>(create: (_) => PostViewModel()),
+        // ChangeNotifierProvider<PostViewModel>(create: (_) => PostViewModel()),
         ChangeNotifierProvider<CurrentUserPostViewModel>(
             create: (_) => CurrentUserPostViewModel()),
       ],
       builder: (context, child) {
-        return BlocBuilder<LocaleCubit,LocaleState>(
-          builder: (_,localeState) {
-            return MaterialApp(
-              title: 'TC Social',
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              supportedLocales: AppLocalizations.supportedLocales,
-              locale: localeState.locale,
-              navigatorKey: _navigatorKey,
-              debugShowCheckedModeBanner: false,
-              theme: ThemeData(
-                scaffoldBackgroundColor: Colors.white,
-                visualDensity: VisualDensity.adaptivePlatformDensity,
-                textTheme:
-                    GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
-                // textTheme: GoogleFonts.robotoTextTheme(),
-              ),
-              builder: (context, child) {
-                return BlocListener<AuthenticationBloc, AuthenticationState>(
-                  listener: (context, state) {
-                    switch (state.status) {
-                      case AuthenticationStatus.authenticated:
-                        _navigator.pushAndRemoveUntil<void>(
-                          ExploreScreen.route(),
-                          (route) => false,
-                        );
-                        break;
-                      case AuthenticationStatus.unauthenticated:
-                        _navigator.pushAndRemoveUntil<void>(
-                          LoginScreen.route(),
-                          (route) => false,
-                        );
-                        break;
-                      default:
-                        break;
-                    }
-                  },
-                  child: child,
-                );
-              },
-              onGenerateRoute: (_) => SplashScreen.route(),
-              // onGenerateRoute: (_) => Router,
-            );
-          }
-        );
+        return BlocBuilder<LocaleCubit, LocaleState>(builder: (_, localeState) {
+          return MaterialApp(
+            title: 'TC Social',
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            locale: localeState.locale,
+            navigatorKey: _navigatorKey,
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              scaffoldBackgroundColor: Colors.white,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+              textTheme:
+                  GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
+              // textTheme: GoogleFonts.robotoTextTheme(),
+            ),
+            builder: (context, child) {
+              return BlocListener<AuthenticationBloc, AuthenticationState>(
+                listener: (context, state) {
+                  switch (state.status) {
+                    case AuthenticationStatus.authenticated:
+                      _navigator.pushAndRemoveUntil<void>(
+                        ExploreScreen.route(),
+                        (route) => false,
+                      );
+                      break;
+                    case AuthenticationStatus.unauthenticated:
+                      _navigator.pushAndRemoveUntil<void>(
+                        LoginScreen.route(),
+                        (route) => false,
+                      );
+                      break;
+                    default:
+                      break;
+                  }
+                },
+                child: child,
+              );
+            },
+            onGenerateRoute: (_) => SplashScreen.route(),
+            // onGenerateRoute: (_) => Router,
+          );
+        });
       },
     );
   }
@@ -166,11 +168,13 @@ class _AppViewState extends State<AppView> with WidgetsBindingObserver {
       default:
         break;
     }
+    super.didChangeAppLifecycleState(state);
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.addObserver(this);
+    print('app view dispose');
     super.dispose();
   }
 }

@@ -62,7 +62,7 @@ class _MediaFileContainerState extends State<MediaFileContainer>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  RoundedIconButton(onClick: () {}, icon: Icons.description),
+                  RoundedIconButton(onClick: () {}, icon: Icons.description, size: 20,),
                   const SizedBox(width: 10),
                   RoundedIconButton(
                     onClick: () async {
@@ -93,7 +93,7 @@ class _MediaFileContainerState extends State<MediaFileContainer>
                             : null;
                       }
                     },
-                    icon: Icons.brush_outlined,
+                    icon: Icons.brush_outlined, size: 20,
                   ),
                 ],
               ),

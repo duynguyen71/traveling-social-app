@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../constants/app_theme_constants.dart';
+
 class MyBottomNavItem extends StatelessWidget {
   const MyBottomNavItem(
       {Key? key,
@@ -29,7 +31,7 @@ class MyBottomNavItem extends StatelessWidget {
               Transform.scale(
                 scale: isSelected ? 1.2 : 1,
                 child: Icon(iconData,
-                    color: isSelected ? Colors.black54 : Colors.grey.withOpacity(.5)),
+                    color: isSelected ? Colors.black54 : Colors.grey.withOpacity(.5),size: kDefaultBottomNavIconSize),
               ),
               //nav label
               Text(

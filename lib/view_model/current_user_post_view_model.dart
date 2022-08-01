@@ -50,5 +50,6 @@ class CurrentUserPostViewModel with ChangeNotifier {
 
   clear(){
     _posts.clear();
+    notifyListeners();
   }
 }

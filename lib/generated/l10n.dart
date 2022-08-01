@@ -410,10 +410,10 @@ class S {
     );
   }
 
-  /// `Tham gia vào {formatDate}`
+  /// `Joined at {formatDate}`
   String joinedDate(String formatDate) {
     return Intl.message(
-      'Tham gia vào $formatDate',
+      'Joined at $formatDate',
       name: 'joinedDate',
       desc: 'The date user joined.',
       args: [formatDate],

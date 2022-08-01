@@ -1,16 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:traveling_social_app/models/group.dart';
 import 'package:traveling_social_app/models/user.dart';
 import 'package:traveling_social_app/screens/explore/components/post_entry.dart';
+import 'package:traveling_social_app/services/chat_service.dart';
 import 'package:traveling_social_app/services/post_service.dart';
 import 'package:traveling_social_app/widgets/my_outline_button.dart';
+import 'package:traveling_social_app/widgets/rounded_icon_button.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
 
 import '../../constants/api_constants.dart';
 import '../../constants/app_theme_constants.dart';
 import '../../models/post.dart';
 import '../../services/user_service.dart';
+import '../../widgets/rounded_background_icon.dart';
+import '../message/chat_screen.dart';
 import 'components/follow_count.dart';
 import 'components/icon_with_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -165,13 +170,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Positioned(
                               bottom: 0,
                               right: kDefaultPadding / 2,
-                              child: Container(
-                                constraints:
-                                    const BoxConstraints(minWidth: 130),
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 15),
-                                height: 40,
-                                child: MyOutlineButton(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  MyOutlineButton(
                                     onClick: () async {
                                       if (isFollowed) {
                                         bool success = await _userService
@@ -196,8 +199,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             .following
                                         : AppLocalizations.of(context)!.follow,
                                     color: isFollowed ? kPrimaryColor : null,
-                                    textColor:
-                                        isFollowed ? Colors.white : null),
+                                    textColor: isFollowed ? Colors.white : null,
+                                    minWidth: 80,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  MyOutlineButton(
+                                    onClick: () async {
+                                      print('get chat group');
+                                      var chatService = ChatService();
+                                      Group? chatGroup = await chatService
+                                          .getChatGroupBetweenTwoUsers(
+                                              widget.userId);
+                                      if (chatGroup != null) {
+                                        Navigator.push(
+                                            context,
+                                            ChatScreen.route(
+                                                groupId: chatGroup.id!,
+                                                name: _user!.username));
+                                      }
+                                    },
+                                    text: 'Message',
+                                    minWidth: 70,
+                                  )
+                                ],
                               ),
                             ),
                           ],

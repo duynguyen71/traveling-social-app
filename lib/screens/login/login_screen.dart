@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/repository/user_repository/user_repository.dart';
@@ -19,6 +20,7 @@ import 'package:traveling_social_app/widgets/rounded_input_container.dart';
 
 import '../../repository/authentication_repository/authentication_repository.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -56,7 +58,8 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     _showLoadingIndicator(true);
     try {
-      await RepositoryProvider.of<AuthenticationRepository>(context)
+      await context
+          .read<AuthenticationRepository>()
           .logIn(username: username, password: password);
     } on SocketException catch (e) {
       print("Socket Exception " + e.toString());

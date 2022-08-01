@@ -57,6 +57,7 @@ class StoryViewModel extends ChangeNotifier {
 
   clear() {
     _stories = <Post>{};
+    notifyListeners();
   }
 
   bool next() {

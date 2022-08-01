@@ -21,9 +21,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   late StompClient _stompClient;
 
-
   ChatBloc() : super(const ChatState()) {
     on<FetchChatGroup>(_onFetchPost);
+    on<InitialChatGroup>(
+      (event, emit) {
+        emit(const ChatState(
+            hasReachMax: false,
+            status: ChatGroupStatus.initial,
+            chatGroups: []));
+      },
+    );
   }
 
   _onFetchPost(ChatEvent event, Emitter<ChatState> emit) async {
@@ -31,42 +38,49 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     try {
       //loading
       if (state.status == ChatGroupStatus.initial) {
-        //client
-        _stompClient = StompClient(
-          config: StompConfig(
-            url: kSocketUrl,
-            stompConnectHeaders: {
-              "Authorization":
-                  'Bearer ${await _storage.read(key: 'accessToken')}'
-            },
-            onConnect: (StompFrame frame) {
-              _stompClient.subscribe(
-                  destination: "/users/{userId}/messages",
-                  callback: (StompFrame frame) {
-                    if(frame.body!=null){
-                      print(jsonDecode(frame.body!));
-                    }
-                  });
-            },
-            onWebSocketError: (_) {
-              print('failed connect web socket channel on chat bloc $_');
-            },
-          ),
-        );
-        _stompClient.activate();
-        //client
         emit(state.copyWith(status: ChatGroupStatus.loading));
-        List<Group> chatGroups = await _fetchPost();
+        //client
+        // _stompClient = StompClient(
+        //   config: StompConfig(
+        //     url: kSocketUrl,
+        //     stompConnectHeaders: {
+        //       "Authorization":
+        //           'Bearer ${await _storage.read(key: 'accessToken')}'
+        //     },
+        //     onConnect: (StompFrame frame) {
+        //       _stompClient.subscribe(
+        //           destination: "/users/{userId}/messages",
+        //           callback: (StompFrame frame) {
+        //             if (frame.body != null) {
+        //               print(jsonDecode(frame.body!));
+        //             }
+        //           });
+        //     },
+        //     onWebSocketError: (_) {
+        //       print('failed connect web socket channel on chat bloc $_');
+        //     },
+        //   ),
+        // );
+        // _stompClient.activate();
+        //client
+        //fetch chat groups
+        List<Group> chatGroups = await _fetchChatGroups();
         return emit(state.copyWith(
             groups: chatGroups, status: ChatGroupStatus.success));
       }
     } catch (_) {
       emit(state.copyWith(status: ChatGroupStatus.failure));
+    } finally {
+      emit(state.copyWith(status: ChatGroupStatus.success));
     }
   }
 
+  // dispose()async{
+  // emit(state.copyWith(status: ChatGroupStatus.failure));
+  // emit(const ChatState(chatGroups: [],hasReachMax: false,status: ChatGroupStatus.initial));
+  // }
 
-  _fetchPost() async {
+  _fetchChatGroups() async {
     List<Group> chatGroups = await _chatService.getChatGroups();
     return chatGroups;
   }

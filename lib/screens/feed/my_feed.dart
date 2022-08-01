@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:traveling_social_app/bloc/post/post_bloc.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
+import 'package:traveling_social_app/models/post.dart';
 import 'package:traveling_social_app/screens/feed/components/feed_action_button.dart';
 import 'package:traveling_social_app/screens/explore/components/home_stories.dart';
 import 'package:traveling_social_app/screens/message/chat_groups_screen.dart';
@@ -23,12 +26,7 @@ class _MyFeedState extends State<MyFeed> with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
-    if (context
-        .read<PostViewModel>()
-        .posts
-        .isEmpty) {
-      context.read<PostViewModel>().fetchPosts();
-    }
+    context.read<PostBloc>().add(const FetchPost());
   }
 
   @override
@@ -38,11 +36,7 @@ class _MyFeedState extends State<MyFeed> with AutomaticKeepAliveClientMixin {
       onNotification: (notification) {
         var position = notification.metrics;
         if (position.pixels == position.maxScrollExtent) {
-          if (!context
-              .read<PostViewModel>()
-              .isLoading) {
-            context.read<PostViewModel>().fetchMorePosts();
-          }
+          context.read<PostBloc>().add(const FetchPost());
         }
         return true;
       },
@@ -54,7 +48,6 @@ class _MyFeedState extends State<MyFeed> with AutomaticKeepAliveClientMixin {
             const SliverToBoxAdapter(
               child: HomeStories(),
             ),
-            //
             SliverToBoxAdapter(
               child: Container(
                 decoration: BoxDecoration(
@@ -64,16 +57,16 @@ class _MyFeedState extends State<MyFeed> with AutomaticKeepAliveClientMixin {
                 margin: const EdgeInsets.only(
                   bottom: 8.0,
                 ),
-
-                // padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
                     FeedActionButton(
                         onClick: () {
-                          showModalBottomSheet(context: context,
+                          showModalBottomSheet(
+                              context: context,
                               builder: (_) => const CreatePostTypeDialog(),
                               backgroundColor: Colors.transparent);
-                        }, asset: 'assets/icons/add.svg'),
+                        },
+                        asset: 'assets/icons/add.svg'),
                     FeedActionButton(
                         onClick: () =>
                             Navigator.push(context, ChatGroupsScreen.route()),
@@ -87,31 +80,32 @@ class _MyFeedState extends State<MyFeed> with AutomaticKeepAliveClientMixin {
                 ),
               ),
             ),
-            //POSTS
-            Consumer<PostViewModel>(
-              builder: (context, value, child) {
-                var posts = value.posts;
+            // BUILDER FOR POSTS STATE
+            BlocBuilder<PostBloc, PostState>(
+              builder: (context, state) {
+                var posts = state.posts;
                 return SliverList(
                   delegate: SliverChildBuilderDelegate(
-                        (context, index) {
+                    (context, index) {
                       if (index == posts.length) {
-                        return const Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: CupertinoActivityIndicator(),
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 40.0),
+                          child: state.status == PostStateStatus.fetching
+                              ? const Center(
+                                  child: CupertinoActivityIndicator())
+                              : const SizedBox.shrink(),
                         );
                       }
                       return PostEntry(
                         post: posts.elementAt(index),
-                        key: ValueKey(posts
-                            .elementAt(index)
-                            .id),
+                        key: ValueKey(posts.elementAt(index).id),
                       );
                     },
-                    childCount: value.posts.length + 1,
+                    childCount: posts.length + 1,
                   ),
                 );
               },
-            ),
+            )
           ],
         ),
       ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
+import 'package:traveling_social_app/bloc/post/post_bloc.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/generated/l10n.dart';
 import 'package:traveling_social_app/models/attachment.dart';
@@ -17,6 +18,7 @@ import 'package:traveling_social_app/widgets/expandable_text.dart';
 import 'package:traveling_social_app/widgets/popup_menu_item.dart';
 import 'package:traveling_social_app/widgets/rounded_icon_button.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
+import 'package:traveling_social_app/widgets/username_text.dart';
 
 import '../../../models/post_content.dart';
 import '../../../models/reaction.dart';
@@ -126,13 +128,7 @@ class _PostEntryState extends State<PostEntry>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      widget.post.user!.username.toString(),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18,
-                      ),
-                    ),
+                    UsernameText(username: widget.post.user!.username!),
                     Text(
                       // Jiffy(widget.post.createDate).fromNow(),
                       timeago.format(
@@ -246,6 +242,7 @@ class _PostEntryState extends State<PostEntry>
                         iconColor: _attachmentIndex < 1
                             ? Colors.black12
                             : Colors.white,
+                        size: 20,
                       ),
                       right: 10,
                     )
@@ -264,6 +261,7 @@ class _PostEntryState extends State<PostEntry>
                         iconColor: _attachmentIndex <= (_attachments.length - 1)
                             ? Colors.black12
                             : Colors.white,
+                        size: 20,
                       ),
                       left: 10,
                     )
@@ -412,10 +410,12 @@ class _PostEntryState extends State<PostEntry>
               child: const Text("Delete",
                   style: TextStyle(color: Colors.redAccent)),
               onPressed: () {
-                context.read<PostViewModel>().removePost(postId: postId!);
-                context
-                    .read<CurrentUserPostViewModel>()
-                    .removePost(postId: postId!);
+                print('deleting post $postId');
+                context.read<PostBloc>().add(RemovePost(postId!));
+                // context.read<PostViewModel>().removePost(postId: postId!);
+                // context
+                //     .read<CurrentUserPostViewModel>()
+                //     .removePost(postId: postId!);
                 Navigator.of(context).pop();
               },
             ),

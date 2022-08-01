@@ -82,6 +82,21 @@ class Post with ChangeNotifier {
     return '{id: $id, caption: $caption, contents : [$contents]}';
   }
 
+  void copyWith({
+    String? caption,
+    int? status,
+    int? active,
+    User? user,
+    List<Content>? contents,
+    String? createDate,
+    String? updateDate,
+    int? reactionCount,
+    int? commentCount,
+  }) {
+    _reactionCount = reactionCount ?? this.reactionCount;
+    _commentCount = commentCount ?? this.commentCount;
+  }
+
   Post({
     int? id,
     String? caption,

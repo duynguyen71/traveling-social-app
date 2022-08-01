@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
+import 'package:traveling_social_app/models/chat_group_detail.dart';
 import 'package:traveling_social_app/models/group.dart';
 import 'package:http/http.dart' as http;
 import 'package:traveling_social_app/models/message.dart';
@@ -43,6 +44,38 @@ class ChatService {
       "Authorization": 'Bearer ${await _storage.read(key: 'accessToken')}',
       "Content-Type": "application/json",
     };
+  }
+
+  /// get chat group between two user
+  Future<Group?> getChatGroupBetweenTwoUsers(userId) async {
+    final url =
+        Uri.parse('$baseUrl/api/v1/member/users/me/chat-groups/users/$userId');
+    final resp = await http.get(url, headers: await authorizationHeader());
+    if (resp.statusCode == 200) {
+      final data = (jsonDecode(resp.body) as Map<String, dynamic>)['data']
+          as Map<String, dynamic>;
+      var group = Group.fromJson(data);
+      print(data);
+      return group;
+    } else {
+      final data = (jsonDecode(resp.body));
+      print(data);
+    }
+    return null;
+  }
+
+  Future<ChatGroupDetail?> getChatGroupDetail(int groupId) async {
+    final url =
+        Uri.parse('$baseUrl/api/v1/member/users/me/chat-groups/$groupId');
+    final resp = await http.get(url, headers: await authorizationHeader());
+    if (resp.statusCode == 200) {
+      final data = (jsonDecode(resp.body) as Map<String, dynamic>)['data']
+          as Map<String, dynamic>;
+      var group = ChatGroupDetail.fromJson(data);
+      print(data);
+      return group;
+    }
+    return null;
   }
 
   Future<String> getToken() async {

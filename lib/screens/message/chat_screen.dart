@@ -15,7 +15,6 @@ import 'package:traveling_social_app/screens/message/components/chat_screen_draw
 import 'package:traveling_social_app/screens/message/message_widget.dart';
 
 import 'package:traveling_social_app/services/chat_service.dart';
-import 'package:traveling_social_app/view_model/user_view_model.dart';
 import 'package:traveling_social_app/widgets/chat_screen_app_bar.dart';
 
 import '../../constants/app_theme_constants.dart';
@@ -36,6 +35,12 @@ class ChatScreen extends StatefulWidget {
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
+
+  static Route route({required int groupId, String? name}) => MaterialPageRoute(
+      builder: (_) => ChatScreen(
+            groupId: groupId,
+            tmpGroupName: name,
+          ));
 }
 
 class _ChatScreenState extends State<ChatScreen> {
@@ -54,8 +59,13 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
+    //get chat group detail
+    _getGroupDetail();
+    //get messages
     _getMessages(page: _page, pageSize: _pageSize);
+    //connect socket
     _connectSocketServer();
+    // mock data
     _chatController.text = 'Message ${DateTime.now().millisecondsSinceEpoch}';
     _focusNode.addListener(() {
       if (_focusNode.hasFocus &&
@@ -69,6 +79,10 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   int get groupId => widget.groupId;
+
+  _getGroupDetail() async {
+    var chatGroupDetail = await _chatService.getChatGroupDetail(groupId);
+  }
 
   // StompBadStateException
   _connectSocketServer() async {

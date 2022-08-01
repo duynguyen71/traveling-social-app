@@ -40,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return NestedScrollView(
       controller: _scrollViewController,
       headerSliverBuilder: (context, innerBoxIsScrolled) {

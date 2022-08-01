@@ -6,10 +6,14 @@ import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/account/account_screen.dart';
 import 'package:traveling_social_app/screens/bookmark/bookmark_screen.dart';
 import 'package:traveling_social_app/screens/explore/components/my_bottom_nav_item.dart';
+import 'package:traveling_social_app/screens/home/components/badge_bottom_nav_item.dart';
 import 'package:traveling_social_app/screens/home/home_screen.dart';
 import 'package:traveling_social_app/screens/notification/notification_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:traveling_social_app/screens/profile/components/create_post_type_dialog.dart';
+import 'package:traveling_social_app/utilities/application_utility.dart';
 
+import '../../widgets/icon_gradient.dart';
 import 'components/drawer.dart';
 
 class ExploreScreen extends StatefulWidget {
@@ -23,12 +27,9 @@ class ExploreScreen extends StatefulWidget {
 }
 
 class _ExploreScreenState extends State<ExploreScreen>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-  late TabController _tabController;
+    with  AutomaticKeepAliveClientMixin {
   late PageController _pageController;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  // final _scrollViewController = ScrollController();
 
   int _currentPageIndex = 0;
 
@@ -45,11 +46,6 @@ class _ExploreScreenState extends State<ExploreScreen>
 
   @override
   void initState() {
-    // _tabController = TabController(
-    //     vsync: this,
-    //     length: 2,
-    //     initialIndex: 0,
-    //     animationDuration: Duration.zero);
     FirebaseMessaging.instance.getToken().then(
       (token) {
         print('device notification token\n$token\n');
@@ -65,7 +61,7 @@ class _ExploreScreenState extends State<ExploreScreen>
     super.build(context);
     return Scaffold(
         key: _scaffoldKey,
-        drawer: const HomeDrawer(),
+        drawer: Builder(builder:(context) =>  const HomeDrawer()),
         body: PageView(
           controller: _pageController,
           physics: const NeverScrollableScrollPhysics(),
@@ -83,7 +79,6 @@ class _ExploreScreenState extends State<ExploreScreen>
           child: Center(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: MyBottomNavItem(
@@ -97,7 +92,7 @@ class _ExploreScreenState extends State<ExploreScreen>
                 Expanded(
                   child: MyBottomNavItem(
                       iconData: Icons.bookmark,
-                      label:  AppLocalizations.of(context)!.bookmark,
+                      label: AppLocalizations.of(context)!.bookmark,
                       onClick: () {
                         currentPageIndex = 1;
                       },
@@ -105,23 +100,39 @@ class _ExploreScreenState extends State<ExploreScreen>
                 ),
                 Expanded(
                   child: Center(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: kPrimaryLightColor.withOpacity(.7),
-                          borderRadius: BorderRadius.circular(200)),
-                      width: 50,
-                      height: 50,
-                      child: SvgPicture.asset(
-                        'assets/icons/add.svg',
-                        color: kPrimaryColor,
+                    child: Material(
+                      color: Colors.white,
+                      child: InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (_) => const CreatePostTypeDialog(),
+                              backgroundColor: Colors.transparent);
+                        },
+                        child: Ink(
+                          child: LinearGradiantMask(
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(200)),
+                                width: 45,
+                                height: 45,
+                                child: const LinearGradiantMask(
+                                  child: Icon(
+                                    Icons.add,
+                                    color: Colors.white,
+                                  ),
+                                ),),
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
                 Expanded(
-                  child: MyBottomNavItem(
+                  child: BadgeBottomNavItem(
                       iconData: Icons.notifications,
-                      label:  AppLocalizations.of(context)!.notification,
+                      label: AppLocalizations.of(context)!.notification,
                       onClick: () {
                         currentPageIndex = 2;
                       },
@@ -130,9 +141,9 @@ class _ExploreScreenState extends State<ExploreScreen>
                 Expanded(
                   child: MyBottomNavItem(
                       iconData: Icons.person,
-                      label:  AppLocalizations.of(context)!.account,
+                      label: AppLocalizations.of(context)!.account,
                       onClick: () {
-                        currentPageIndex = 4;
+                        currentPageIndex = 3;
                       },
                       isSelected: _currentPageIndex == 3),
                 ),
@@ -144,8 +155,6 @@ class _ExploreScreenState extends State<ExploreScreen>
 
   @override
   void dispose() {
-    // _tabController.dispose();
-    // _scrollViewController.dispose();
     _pageController.dispose();
     super.dispose();
   }

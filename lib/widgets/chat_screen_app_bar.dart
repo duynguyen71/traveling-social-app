@@ -14,6 +14,7 @@ class ChatScreenAppBar extends StatelessWidget with PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       toolbarHeight: kChatAppBarHeight,
+      elevation: 0,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,

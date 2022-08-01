@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:traveling_social_app/bloc/post/post_bloc.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/services/comment_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
@@ -64,9 +65,7 @@ class _CommentScreenState extends State<CommentScreen>
           _scrollController
               .jumpTo(_scrollController.position.maxScrollExtent + 80);
         }
-        context
-            .read<PostViewModel>()
-            .incrementCommentCount(postId: widget.postId);
+        context.read<PostBloc>().add(IncrementCommentCount(widget.postId));
       }
     } on Exception catch (e) {
       throw Exception(e.toString());
@@ -95,11 +94,11 @@ class _CommentScreenState extends State<CommentScreen>
   }
 
   hideComment(c) async {
-    int id = c.id;
-    _commentService.hideComment(commentId: id);
-    context
-        .read<PostViewModel>()
-        .removeComment(postId: widget.postId, commentId: c.id);
+    // _commentService.hideComment(commentId: id);
+    // context
+    //     .read<PostViewModel>()
+    //     .removeComment(postId: widget.postId, commentId: c.id);
+    context.read<PostBloc>().add(RemoveComment(widget.postId, c.id));
   }
 
   replyCommentRequest(Comment c) {

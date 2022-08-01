@@ -6,7 +6,8 @@ const kIconColor = Color(0xFF5E5E5E);
 const kPrimaryLightColor = Color.fromRGBO(134, 122, 233, 1);
 
 const kDefaultPadding = 20.0;
-
+const kDefaultHorizPadding = EdgeInsets.symmetric(horizontal: 8.0);
+const kDefaultListItemPadding = EdgeInsets.symmetric(horizontal: 8.0,vertical: 4.0);
 final kDefaultShadow = BoxShadow(
   offset: const Offset(5, 5),
   blurRadius: 10,
@@ -43,3 +44,4 @@ const shimmerGradient = LinearGradient(
 
 const kIconPadding = 4.0;
 const kIconSize = 25.0;
+const kDefaultBottomNavIconSize =  24.0;

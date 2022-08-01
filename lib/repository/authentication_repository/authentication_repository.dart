@@ -16,12 +16,7 @@ class AuthenticationRepository {
   final _storage = const FlutterSecureStorage();
 
   Stream<AuthenticationStatus> get status async* {
-    bool i = await checkAuthenticated();
-    if (i) {
-      yield AuthenticationStatus.authenticated;
-    } else {
-      yield AuthenticationStatus.unauthenticated;
-    }
+    await checkAuthenticated();
     yield* _controller.stream;
   }
 
@@ -44,19 +39,20 @@ class AuthenticationRepository {
         await saveSuccessAuthToken(
             accessToken: json['accessToken'],
             refreshToken: json['refreshToken']);
+        _controller.add(AuthenticationStatus.authenticated);
+        return;
       } else {
         throw 'Username or password not correct';
       }
-    } on Exception catch (e) {
+    } on Exception {
       rethrow;
     }
   }
 
-  saveSuccessAuthToken(
+  Future<dynamic> saveSuccessAuthToken(
       {required String accessToken, required String refreshToken}) async {
     await _storage.write(key: "accessToken", value: accessToken);
     await _storage.write(key: "refreshToken", value: refreshToken);
-    _controller.add(AuthenticationStatus.authenticated);
   }
 
   Future<bool> checkAuthenticated() async {
@@ -65,13 +61,17 @@ class AuthenticationRepository {
       _controller.add(AuthenticationStatus.authenticated);
       return true;
     }
+    _controller.add(AuthenticationStatus.unauthenticated);
     return false;
   }
 
   logOut() async {
     await _storage.deleteAll();
     _controller.add(AuthenticationStatus.unauthenticated);
+    return;
   }
 
-  void dispose() => _controller.close();
+  void dispose() async {
+    await _controller.close();
+  }
 }

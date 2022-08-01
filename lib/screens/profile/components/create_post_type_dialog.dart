@@ -62,7 +62,7 @@ class CreatePostTypeDialog extends StatelessWidget {
                 borderRadius: BorderRadius.circular(5),
               ),
               margin: const EdgeInsets.all(10),
-              padding: const EdgeInsets.all(5),
+              // padding: const EdgeInsets.all(5),
               child: BottomModelItem(
                 title: AppLocalizations.of(context)!.cancel,
                 onClick: () => Navigator.of(context).pop(),
@@ -96,7 +96,7 @@ class BottomModelItem extends StatelessWidget {
         ),
         style: TextButton.styleFrom(
           minimumSize: Size.zero,
-          padding: const EdgeInsets.symmetric(vertical: 20),
+          padding: const EdgeInsets.symmetric(vertical: 12),
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           alignment: Alignment.center,
         ),
