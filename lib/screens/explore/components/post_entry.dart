@@ -12,8 +12,7 @@ import 'package:traveling_social_app/models/post.dart';
 import 'package:traveling_social_app/screens/comment/comment_screen.dart';
 import 'package:traveling_social_app/screens/profile/profile_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
-import 'package:traveling_social_app/view_model/current_user_post_view_model.dart';
-import 'package:traveling_social_app/view_model/post_view_model.dart';
+import 'package:traveling_social_app/widgets/bottom_select_dialog.dart';
 import 'package:traveling_social_app/widgets/expandable_text.dart';
 import 'package:traveling_social_app/widgets/popup_menu_item.dart';
 import 'package:traveling_social_app/widgets/rounded_icon_button.dart';
@@ -22,13 +21,9 @@ import 'package:traveling_social_app/widgets/username_text.dart';
 
 import '../../../models/post_content.dart';
 import '../../../models/reaction.dart';
-import '../../../models/user.dart';
 import '../../../services/post_service.dart';
 import 'package:provider/provider.dart';
-
-import '../../../view_model/user_view_model.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 class PostEntry extends StatefulWidget {
   const PostEntry({Key? key, this.image, required this.post, this.padding})
@@ -139,57 +134,118 @@ class _PostEntryState extends State<PostEntry>
                   ],
                 ),
                 const Spacer(),
-                PopupMenuButton(
-                  child: Container(
-                    height: 36,
-                    width: 48,
-                    alignment: Alignment.centerRight,
-                    child: const Icon(Icons.more_horiz, color: Colors.black87),
-                  ),
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
-                    ),
-                  ),
-                  color: Colors.grey.shade100,
-                  itemBuilder: (context) {
-                    return context.read<AuthenticationBloc>().state.user.id ==
-                            widget.post.user!.id!
-                        ? const <PopupMenuEntry<String>>[
-                            PopupMenuItem<String>(
-                              value: 'DELETE',
-                              child: MyPopupMenuItem(
-                                  title: 'DELETE',
-                                  iconData: Icons.visibility_off),
+                IconButton(
+                  onPressed: () {
+                    showCupertinoModalPopup(
+                      context: context,
+                      builder: (context) {
+                        return CupertinoActionSheet(
+                          actions: [
+                            CupertinoActionSheetAction(
+                                onPressed: () {
+                                  showCupertinoDialog(
+                                    context: context,
+                                    barrierDismissible: true,
+                                    builder: (context) {
+                                      return CupertinoAlertDialog(
+                                        title: const Text(
+                                            'Are you sure delete this post?'),
+                                        actions: [
+                                          CupertinoDialogAction(
+                                            child: const Text('Delete'),
+                                            onPressed: () {
+                                              context.read<PostBloc>().add(
+                                                  RemovePost(widget.post.id!));
+                                              Navigator.of(context,
+                                                      rootNavigator: true)
+                                                  .pop("Discard");
+                                            },
+                                            isDestructiveAction: true,
+                                          ),
+                                          CupertinoDialogAction(
+                                            child: const Text('Cancel'),
+                                            isDefaultAction: true,
+                                            onPressed: () {
+                                              Navigator.of(context,
+                                                      rootNavigator: true)
+                                                  .pop("Cancel");
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                                child: const Text('Delete'))
+                          ],
+                          cancelButton: CupertinoActionSheetAction(
+                            onPressed: () {
+                              Navigator.of(context, rootNavigator: true)
+                                  .pop("Cancel");
+                            },
+                            isDefaultAction: true,
+                            child: const Text(
+                              'Cancel',
                             ),
-                          ]
-                        : <PopupMenuEntry<String>>[
-                            PopupMenuItem<String>(
-                              value: 'FOLLOW',
-                              child: MyPopupMenuItem(
-                                  title:
-                                      'Follow ${widget.post.user!.username.toString()}',
-                                  iconData: Icons.person),
-                            ),
-                            const PopupMenuItem<String>(
-                              value: 'LOVE',
-                              child: MyPopupMenuItem(
-                                  title: 'Love', iconData: Icons.person),
-                            ),
-                          ];
+                          ),
+                          // title: const Text('duy nguyen posts'),
+                        );
+                      },
+                    );
                   },
-                  onSelected: (string) {
-                    switch (string) {
-                      case "DELETE":
-                        {
-                          showHidePostAlert(context);
-                          break;
-                        }
-                    }
-                  },
-                  padding: EdgeInsets.zero,
-                  elevation: 0,
-                )
+                  icon: const Icon(Icons.more_horiz),
+                ),
+                // PopupMenuButton(
+                //   child: Container(
+                //     height: 36,
+                //     width: 48,
+                //     alignment: Alignment.centerRight,
+                //     child: const Icon(Icons.more_horiz, color: Colors.black87),
+                //   ),
+                //   shape: const RoundedRectangleBorder(
+                //     borderRadius: BorderRadius.all(
+                //       Radius.circular(10.0),
+                //     ),
+                //   ),
+                //   color: Colors.grey.shade100,
+                //   itemBuilder: (context) {
+                //     return context.read<AuthenticationBloc>().state.user.id ==
+                //             widget.post.user!.id!
+                //         ? const <PopupMenuEntry<String>>[
+                //             PopupMenuItem<String>(
+                //               value: 'DELETE',
+                //               child: MyPopupMenuItem(
+                //                   title: 'DELETE',
+                //                   iconData: Icons.visibility_off),
+                //             ),
+                //           ]
+                //         : <PopupMenuEntry<String>>[
+                //             PopupMenuItem<String>(
+                //               value: 'FOLLOW',
+                //               child: MyPopupMenuItem(
+                //                   title:
+                //                       'Follow ${widget.post.user!.username.toString()}',
+                //                   iconData: Icons.person),
+                //             ),
+                //             const PopupMenuItem<String>(
+                //               value: 'LOVE',
+                //               child: MyPopupMenuItem(
+                //                   title: 'Love', iconData: Icons.person),
+                //             ),
+                //           ];
+                //   },
+                //   onSelected: (string) {
+                //     switch (string) {
+                //       case "DELETE":
+                //         {
+                //           showHidePostAlert(context);
+                //           break;
+                //         }
+                //     }
+                //   },
+                //   padding: EdgeInsets.zero,
+                //   elevation: 0,
+                // )
               ],
             ),
           ),
@@ -294,93 +350,110 @@ class _PostEntryState extends State<PostEntry>
               color: Colors.lightBlueAccent.withOpacity(.05),
               borderRadius: BorderRadius.circular(40),
             ),
+            alignment: Alignment.center,
             padding: const EdgeInsets.all(4),
             margin: const EdgeInsets.all(8),
             child: Row(
+              mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () async {
-                        _postService.reactionPost(
-                            postId: widget.post.id!,
-                            reactionId: _isFavorite ? null : 1);
-                        setState(() {
-                          if (_isFavorite) {
-                            _isFavorite = false;
-                            _likeCount--;
-                          } else {
-                            _isFavorite = true;
-                            _likeCount++;
-                          }
-                        });
-                      },
-                      icon: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 200),
-                        transitionBuilder: (child, animation) =>
-                            ScaleTransition(
-                          scale: child.key == const ValueKey('icon1')
-                              ? Tween<double>(
-                                      begin: !_isFavorite ? 1 : 1.5, end: 1)
-                                  .animate(animation)
-                              : Tween<double>(
-                                      begin: _isFavorite ? 1 : 1.5, end: 1)
-                                  .animate(animation),
-                          child: child,
-                        ),
-                        child: _isFavorite
-                            ? const Icon(
-                                Icons.favorite,
-                                color: Colors.red,
-                                key: ValueKey('icon1'),
-                              )
-                            : const Icon(
-                                Icons.favorite_border,
-                                color: Colors.black45,
-                                key: ValueKey('icon2'),
-                              ),
-                      ),
-                    ),
-                    Text(_likeCount.toString()),
-                  ],
-                ),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          PageRouteBuilder(
-                            opaque: false,
-                            pageBuilder: (BuildContext context, _, __) =>
-                                CommentScreen(
+                Expanded(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          _postService.reactionPost(
                               postId: widget.post.id!,
-                              myComments: widget.post.myComments,
-                            ),
+                              reactionId: _isFavorite ? null : 1);
+                          setState(() {
+                            if (_isFavorite) {
+                              _isFavorite = false;
+                              _likeCount--;
+                            } else {
+                              _isFavorite = true;
+                              _likeCount++;
+                            }
+                          });
+                        },
+                        icon: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 200),
+                          transitionBuilder: (child, animation) =>
+                              ScaleTransition(
+                            scale: child.key == const ValueKey('icon1')
+                                ? Tween<double>(
+                                        begin: !_isFavorite ? 1 : 1.5, end: 1)
+                                    .animate(animation)
+                                : Tween<double>(
+                                        begin: _isFavorite ? 1 : 1.5, end: 1)
+                                    .animate(animation),
+                            child: child,
                           ),
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.chat_bubble_outline,
-                        color: Colors.black87,
+                          child: _isFavorite
+                              ? const Icon(
+                                  Icons.favorite,
+                                  color: Colors.red,
+                                  key: ValueKey('icon1'),
+                                )
+                              : const Icon(
+                                  Icons.favorite_border,
+                                  color: Colors.black45,
+                                  key: ValueKey('icon2'),
+                                ),
+                        ),
                       ),
-                    ),
-                    Text(
-                      widget.post.commentCount.toString(),
-                    ),
-                  ],
+                      Text(_likeCount.toString()),
+                    ],
+                  ),
                 ),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.share,
-                        color: Colors.black87,
+                Expanded(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            PageRouteBuilder(
+                              opaque: false,
+                              pageBuilder: (BuildContext context, _, __) =>
+                                  CommentScreen(
+                                postId: widget.post.id!,
+                                myComments: widget.post.myComments,
+                              ),
+                            ),
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.chat_bubble_outline,
+                          color: Colors.black87,
+                        ),
                       ),
-                    ),
-                  ],
+                      Text(
+                        widget.post.commentCount.toString(),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.share,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -410,12 +483,7 @@ class _PostEntryState extends State<PostEntry>
               child: const Text("Delete",
                   style: TextStyle(color: Colors.redAccent)),
               onPressed: () {
-                print('deleting post $postId');
                 context.read<PostBloc>().add(RemovePost(postId!));
-                // context.read<PostViewModel>().removePost(postId: postId!);
-                // context
-                //     .read<CurrentUserPostViewModel>()
-                //     .removePost(postId: postId!);
                 Navigator.of(context).pop();
               },
             ),

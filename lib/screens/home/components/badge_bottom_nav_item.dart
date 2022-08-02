@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
+import 'package:traveling_social_app/widgets/icon_gradient.dart';
 
 import 'number_badge.dart';
 
@@ -29,15 +30,16 @@ class BadgeBottomNavItem extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                width: kDefaultBottomNavIconSize + 10,
-                child: Transform.scale(
-                  scale: isSelected ? 1.2 : 1,
+              Transform.scale(
+                scale: isSelected ? 1.2 : 1,
+                child: SizedBox(
+                  width: kDefaultBottomNavIconSize + 10,
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
                       Icon(
                         iconData,
+                        // color: Colors.white,
                         color: isSelected
                             ? Colors.black54
                             : Colors.grey.withOpacity(.5),
@@ -56,8 +58,11 @@ class BadgeBottomNavItem extends StatelessWidget {
               Text(
                 label,
                 style: TextStyle(
-                    fontSize: isSelected ? 12 : 10,
-                    color: isSelected ? Colors.black54 : Colors.black26),
+                  // fontSize: isSelected ? 12 : 10,
+                  fontSize: 10,
+                  color: isSelected ? Colors.black54 : Colors.black26,
+                  // color: Colors.white
+                ),
               ),
             ],
           ),

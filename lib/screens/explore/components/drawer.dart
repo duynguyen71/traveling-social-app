@@ -3,6 +3,7 @@ import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dar
 import 'package:traveling_social_app/authentication/bloc/authentication_event.dart';
 import 'package:traveling_social_app/bloc/locale/locale_cubit.dart';
 import 'package:traveling_social_app/bloc/post/post_bloc.dart';
+import 'package:traveling_social_app/bloc/story/story_bloc.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/models/nav_item.dart';
 import 'package:traveling_social_app/models/user.dart';
@@ -12,11 +13,8 @@ import 'package:traveling_social_app/screens/message/bloc/chat_bloc.dart';
 import 'package:traveling_social_app/screens/message/chat_groups_screen.dart';
 import 'package:traveling_social_app/screens/restartWidget.dart';
 import 'package:traveling_social_app/screens/setting/setting_screen.dart';
-import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/view_model/current_user_post_view_model.dart';
-import 'package:traveling_social_app/view_model/post_view_model.dart';
 import 'package:traveling_social_app/view_model/story_view_model.dart';
-import 'package:traveling_social_app/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -70,6 +68,7 @@ class HomeDrawer extends StatelessWidget {
                     context.read<CurrentUserPostViewModel>().clear();
                     context.read<ChatBloc>().add(InitialChatGroup());
                     context.read<PostBloc>().add(Reset());
+                    context.read<StoryBloc>().add(ResetStoryState());
                     context
                         .read<AuthenticationBloc>()
                         .add(AuthenticationLogoutRequested());

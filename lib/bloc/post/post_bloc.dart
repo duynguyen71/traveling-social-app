@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -36,25 +34,21 @@ class PostBloc extends Bloc<PostEvent, PostState> {
             status: PostStateStatus.fetching,
           ));
           Set<Post> posts =
-              await _postService.getPosts(page: state.page, pageSize: 4);
+              await _postService.getPosts(page: state.page, pageSize: state.pageSize);
           // stop fetching if hasReachMax
-          bool hasReachMax = false;
+          bool hasReachMax = true;
           // get next page value
           int nextPage = state.page;
-          if (posts.isEmpty) {
-            print('post reach max');
-            hasReachMax = true;
-          } else {
+          if (posts.isNotEmpty) {
+            hasReachMax = false;
             nextPage += 1;
           }
-          // Copy posts
-          Set<Post> postState = {...state.posts, ...posts};
           emit(state.copyWith(
-              posts: postState,
+              posts: {...state.posts, ...posts},
               page: nextPage,
               hasReachMax: hasReachMax,
               status: PostStateStatus.success));
-        } on Exception catch (e) {
+        } on Exception {
           emit(state.copyWith(status: PostStateStatus.failed));
         }
       }
@@ -80,7 +74,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         post.myComments.removeWhere((element) => element.id == event.commentId);
         post.commentCount = post.commentCount - 1;
         emit(state.copyWith(posts: copyPosts));
-      } on Exception catch (e) {
+      } on Exception {
         rethrow;
       }
     }
@@ -96,7 +90,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       modifiedPosts.removeWhere((element) => event.id == element.id);
       emit(state.copyWith(
           posts: modifiedPosts, status: PostStateStatus.success));
-    } on Exception catch (e) {
+    } on Exception {
       emit(state.copyWith(status: PostStateStatus.failed));
     }
   }

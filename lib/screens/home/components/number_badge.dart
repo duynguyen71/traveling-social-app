@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traveling_social_app/widgets/icon_gradient.dart';
 
 class NumberBadge extends StatelessWidget {
   const NumberBadge({Key? key, required this.number}) : super(key: key);
@@ -8,15 +9,15 @@ class NumberBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 14,
-      height: 14,
+      width: 12,
+      height: 12,
       child: CircleAvatar(
         backgroundColor: Colors.red,
         child: Text(
           number.toString(),
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 10,
+            fontSize: 8,
           ),
           textAlign: TextAlign.center,
         ),

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:traveling_social_app/bloc/story/story_bloc.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
@@ -13,6 +14,7 @@ import 'package:provider/provider.dart';
 import '../../authentication/bloc/authentication_bloc.dart';
 import '../../widgets/media_file_container.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_lorem/flutter_lorem.dart';
 
 class CreateStoryScreen extends StatefulWidget {
   const CreateStoryScreen({Key? key}) : super(key: key);
@@ -73,7 +75,7 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
         "caption": caption,
         "type": 0,
       }, _pickedFiles);
-      context.read<StoryViewModel>().addStory(story);
+      context.read<StoryBloc>().add(AddStory(story));
       Navigator.of(context).pop();
     } on Exception catch (e) {
       print(e.toString());
@@ -86,11 +88,12 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
 
   @override
   void initState() {
-    var authBloc = context.read<AuthenticationBloc>().state;
-    _captionController.text = "User: ${authBloc.user.username.toString()}" +
-        authBloc.user.id.toString() +
-        " post at " +
-        DateTime.now().millisecondsSinceEpoch.toString();
+    // var authBloc = context.read<AuthenticationBloc>().state;
+    // _captionController.text = "User: ${authBloc.user.username.toString()}" +
+    //     authBloc.user.id.toString() +
+    //     " post at " +
+    //     DateTime.now().millisecondsSinceEpoch.toString();
+    _captionController.text = lorem(words: 60);
     super.initState();
   }
 

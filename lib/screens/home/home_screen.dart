@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen>
             actions: [
               IconButton(
                 onPressed: () =>
-                    Navigator.push(context, SearchScreen.route(null)),
+                    Navigator.push(context, SearchScreen.route('')),
                 icon: SvgPicture.asset(
                   "assets/icons/search.svg",
                   color: Colors.black87,

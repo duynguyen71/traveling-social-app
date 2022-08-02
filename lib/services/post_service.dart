@@ -26,7 +26,7 @@ class PostService {
   ], retryPolicy: ExpiredTokenRetryPolicy());
 
   /// get friends stories
-  Future<List<Post>> getStories({int? page, int? pageSize}) async {
+  Future<Set<Post>> getStories({int? page, int? pageSize}) async {
     var url = Uri.parse(
         baseUrl + "/api/v1/member/stories?page=$page&pageSize=$pageSize");
     final resp = await client.get(url, headers: {
@@ -37,10 +37,10 @@ class PostService {
       final respBody = jsonDecode(resp.body) as Map<String, dynamic>;
       var list = respBody['data'] as List<dynamic>;
       final rs =
-          list.map((e) => Post.fromJson((e as Map<String, dynamic>))).toList();
+          list.map((e) => Post.fromJson((e as Map<String, dynamic>))).toSet();
       return rs;
     }
-    return [];
+    return <Post>{};
   }
 
   /// get friends posts
@@ -97,6 +97,8 @@ class PostService {
     return [];
   }
 
+
+  /// reaction emotion on post
   Future<void> reactionPost(
       {required int postId, required int? reactionId}) async {
     final url = Uri.parse(baseUrl + "/api/v1/member/posts/reactions");
@@ -111,6 +113,45 @@ class PostService {
     }
     print(resp.body.toString());
     return;
+  }
+
+  /// Add story
+  Future<Post> createStory(
+      Map<String, dynamic> story, List<File> attachments) async {
+    var url = Uri.parse(baseUrl + "/api/v1/member/users/me/posts");
+    List<int> attachmentIds = [];
+    if (attachments.isNotEmpty) {
+      for (int i = 0; i < attachments.length; i++) {
+        var resp = await uploadImage(attachments[i]);
+        attachmentIds.add(resp.id);
+      }
+    }
+    var accessToken = await _storage.read(key: 'accessToken');
+    var body = <String, dynamic>{
+      "id": story['id'],
+      "caption": story['caption'].toString().trim(),
+      "type": 0,
+      "contents": attachmentIds
+          .asMap()
+          .entries
+          .map((e) => {
+        "attachment": {"id": e.value},
+        "pos": e.key,
+        "active": 1,
+        "caption": story['caption'].toString().trim()
+      })
+          .toList(),
+    };
+    var resp = await http.post(url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": 'Bearer $accessToken'
+        },
+        body: jsonEncode(body));
+    if (resp.statusCode != 200) throw 'Could not create story';
+    var jsonBody = jsonDecode(resp.body) as Map<String, dynamic>;
+    final storyResp = Post.fromJson(jsonBody['data']);
+    return storyResp;
   }
 
   Future<Map<String, String>> authorizationHeader() async {

@@ -1,18 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 import 'package:traveling_social_app/bloc/post/post_bloc.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
-import 'package:traveling_social_app/models/post.dart';
 import 'package:traveling_social_app/screens/feed/components/feed_action_button.dart';
 import 'package:traveling_social_app/screens/explore/components/home_stories.dart';
 import 'package:traveling_social_app/screens/message/chat_groups_screen.dart';
 import 'package:traveling_social_app/screens/profile/components/create_post_type_dialog.dart';
 import 'package:traveling_social_app/screens/setting/setting_screen.dart';
 
-import '../../view_model/post_view_model.dart';
 import '../explore/components/post_entry.dart';
 
 class MyFeed extends StatefulWidget {
@@ -32,16 +28,17 @@ class _MyFeedState extends State<MyFeed> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return NotificationListener<ScrollNotification>(
-      onNotification: (notification) {
-        var position = notification.metrics;
-        if (position.pixels == position.maxScrollExtent) {
-          context.read<PostBloc>().add(const FetchPost());
-        }
-        return true;
-      },
-      child: RefreshIndicator(
-        onRefresh: () async {},
+    return RefreshIndicator(
+      onRefresh: () async {},
+      child: NotificationListener<ScrollNotification>(
+        onNotification: (scrollNotification) {
+          var position = scrollNotification.metrics;
+          if (position.pixels == position.maxScrollExtent) {
+            context.read<PostBloc>().add(const FetchPost());
+            return true;
+          }
+          return false;
+        },
         child: CustomScrollView(
           slivers: [
             //STORIES
@@ -83,6 +80,7 @@ class _MyFeedState extends State<MyFeed> with AutomaticKeepAliveClientMixin {
             // BUILDER FOR POSTS STATE
             BlocBuilder<PostBloc, PostState>(
               builder: (context, state) {
+                print('build posts');
                 var posts = state.posts;
                 return SliverList(
                   delegate: SliverChildBuilderDelegate(

@@ -7,14 +7,8 @@ import 'package:traveling_social_app/repository/authentication_repository/authen
 import 'package:traveling_social_app/repository/notification_repository/notification_repository.dart';
 import 'package:traveling_social_app/repository/user_repository/user_repository.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:traveling_social_app/screens/restartWidget.dart';
 
-import 'config/my_custom_vi_message.dart';
-import 'package:timeago/timeago.dart' as timeago;
-
-//handle background message
+//handle background messages
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   //init firebase
   await Firebase.initializeApp();

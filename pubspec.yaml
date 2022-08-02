@@ -63,6 +63,7 @@ dependencies:
   intl: ^0.17.0
   timeago: ^3.2.2
   http_interceptor: ^1.0.2
+  flutter_lorem: ^2.0.0
 
 
 dev_dependencies:

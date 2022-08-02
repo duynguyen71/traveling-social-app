@@ -6,7 +6,8 @@ class MyListTile extends StatelessWidget {
       {Key? key,
       required this.onClick,
       required this.leading,
-      required this.title,  this.padding = kDefaultListItemPadding})
+      required this.title,
+      this.padding = kDefaultListItemPadding})
       : super(key: key);
   final Function onClick;
   final Widget leading;
@@ -15,18 +16,30 @@ class MyListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: padding,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          leading,
-          const SizedBox(width: 10),
-          Text(title,style: TextStyle(
-            fontWeight: FontWeight.w500,
-          ),),
-        ],
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          onClick();
+        },
+        child: Ink(
+          child: Padding(
+            padding: padding,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                leading,
+                const SizedBox(width: 10),
+                Text(
+                  title,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w500, fontSize: 15),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

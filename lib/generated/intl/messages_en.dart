@@ -94,6 +94,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Username have already existed"),
         "verificationCode":
             MessageLookupByLibrary.simpleMessage("Verification Code"),
+        "viewYourProfile":
+            MessageLookupByLibrary.simpleMessage("View your profile"),
         "whatRUT":
             MessageLookupByLibrary.simpleMessage("What are you thinking?")
       };

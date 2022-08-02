@@ -21,7 +21,6 @@ class MyBottomDialog extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
             ),
             margin: const EdgeInsets.all(10),
-            // padding: const EdgeInsets.all(5),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -39,7 +38,7 @@ class MyBottomDialog extends StatelessWidget {
                           },
                           child: Ink(
                             child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              // padding: const EdgeInsets.symmetric(vertical: 5),
                               width: double.infinity,
                               child: TextButton(
                                 style: ElevatedButton.styleFrom(
@@ -73,7 +72,7 @@ class MyBottomDialog extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
             ),
             margin: const EdgeInsets.all(10),
-            padding: const EdgeInsets.all(5),
+            // padding: const EdgeInsets.all(5),
             child: TextButton(
               onPressed: () {
                 Navigator.of(context).pop();

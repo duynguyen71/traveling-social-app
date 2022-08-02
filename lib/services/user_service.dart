@@ -265,7 +265,11 @@ class UserService {
   }
 
   Future<List<BaseUserInfo>> searchUsers(
-      {String? username, String? email, String? phone,int? page, int? pageSize}) async {
+      {String? username,
+      String? email,
+      String? phone,
+      int? page,
+      int? pageSize}) async {
     final url = Uri.parse(
         baseUrl + "/api/v1/member/users/searching?username=$username");
     final resp = await http.get(url, headers: await authorizationHeader());
@@ -321,4 +325,17 @@ class UserService {
   }
 
   Future<void> refreshDeviceToken({required String token}) async {}
+
+  /// Get notifications
+  Future<void> getNotifications() async {
+    final url = Uri.parse(baseUrl + "/api/v1/member/users/me/notifications");
+    final resp = await http.get(url, headers: await authorizationHeader());
+    if (resp.statusCode == 200) {
+      print('fetch noti success');
+      print(jsonDecode(resp.body));
+    }
+  }
+  Future<void> getNotificationMessage() async {
+
+  }
 }

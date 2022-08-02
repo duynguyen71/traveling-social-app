@@ -629,6 +629,16 @@ class S {
       args: [],
     );
   }
+
+  /// `View your profile`
+  String get viewYourProfile {
+    return Intl.message(
+      'View your profile',
+      name: 'viewYourProfile',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/bloc/locale/locale_cubit.dart';
 import 'package:traveling_social_app/bloc/post/post_bloc.dart';
-import 'package:traveling_social_app/generated/l10n.dart';
+import 'package:traveling_social_app/bloc/story/story_bloc.dart';
 import 'package:traveling_social_app/repository/authentication_repository/authentication_repository.dart';
 import 'package:traveling_social_app/repository/notification_repository/notification_repository.dart';
 import 'package:traveling_social_app/repository/user_repository/user_repository.dart';
@@ -13,11 +13,8 @@ import 'package:traveling_social_app/screens/explore/explore_screen.dart';
 import 'package:traveling_social_app/screens/login/login_screen.dart';
 import 'package:traveling_social_app/screens/message/bloc/chat_bloc.dart';
 import 'package:traveling_social_app/screens/splash/splash_screen.dart';
-import 'package:traveling_social_app/view_model/chat_room_view_model.dart';
 import 'package:traveling_social_app/view_model/current_user_post_view_model.dart';
-import 'package:traveling_social_app/view_model/post_view_model.dart';
 import 'package:traveling_social_app/view_model/story_view_model.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'authentication/bloc/authentication_state.dart';
 import 'bloc/notification/notification_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -58,6 +55,8 @@ class App extends StatelessWidget {
           ),
           BlocProvider<PostBloc>(
             create: (_) => PostBloc(),
+          ),     BlocProvider<StoryBloc>(
+            create: (_) => StoryBloc(),
           ),
           BlocProvider<LocaleCubit>(create: (_) => LocaleCubit()),
         ],
@@ -90,7 +89,6 @@ class _AppViewState extends State<AppView> with WidgetsBindingObserver {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<StoryViewModel>(create: (_) => StoryViewModel()),
-        // ChangeNotifierProvider<PostViewModel>(create: (_) => PostViewModel()),
         ChangeNotifierProvider<CurrentUserPostViewModel>(
             create: (_) => CurrentUserPostViewModel()),
       ],

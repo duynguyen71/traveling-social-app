@@ -69,5 +69,6 @@
   "posting": "Post",
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"
-  }
+  },
+  "viewYourProfile": "View your profile"
 }

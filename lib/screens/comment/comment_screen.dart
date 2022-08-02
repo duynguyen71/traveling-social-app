@@ -6,7 +6,6 @@ import 'package:traveling_social_app/services/comment_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/comment_input_reply_widget.dart';
 import '../../models/comment.dart';
-import '../../view_model/post_view_model.dart';
 import '../../widgets/comment_entry.dart';
 import 'package:provider/provider.dart';
 
@@ -40,7 +39,6 @@ class _CommentScreenState extends State<CommentScreen>
   String? editedMessage;
 
   _sendComment() async {
-    print("SEND COMMENT");
     int? parentCommentId;
     if (_currentFocusReplyComment != null) {
       parentCommentId = _currentFocusReplyComment!.id;
@@ -84,9 +82,6 @@ class _CommentScreenState extends State<CommentScreen>
     if (_currentFocusEditComment != null) {
       Comment temp = _currentFocusEditComment!;
       temp.content = _commentController.text.toString();
-      // setState(() {
-      //   _editedComment = temp;
-      // });
     }
     _currentFocusEditComment = null;
     _commentController.clear();
@@ -94,10 +89,6 @@ class _CommentScreenState extends State<CommentScreen>
   }
 
   hideComment(c) async {
-    // _commentService.hideComment(commentId: id);
-    // context
-    //     .read<PostViewModel>()
-    //     .removeComment(postId: widget.postId, commentId: c.id);
     context.read<PostBloc>().add(RemoveComment(widget.postId, c.id));
   }
 

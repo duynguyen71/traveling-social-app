@@ -90,6 +90,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "usernameExist":
             MessageLookupByLibrary.simpleMessage("Username đã tồn tại"),
         "verificationCode": MessageLookupByLibrary.simpleMessage("Mã xác nhận"),
+        "viewYourProfile":
+            MessageLookupByLibrary.simpleMessage("Xem trang cá nhân của bạn"),
         "whatRUT": MessageLookupByLibrary.simpleMessage("Bạn đang nghĩ gì?")
       };
 }

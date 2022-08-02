@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:traveling_social_app/bloc/story/story_bloc.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/story/stories_screen.dart';
 import 'package:traveling_social_app/screens/story/stories_scroll_screen.dart';
 import 'package:traveling_social_app/screens/story/story_card.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
-import 'package:traveling_social_app/view_model/story_view_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeStories extends StatefulWidget {
@@ -18,23 +18,11 @@ class HomeStories extends StatefulWidget {
 
 class _HomeStoriesState extends State<HomeStories>
     with AutomaticKeepAliveClientMixin {
-  final _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    if (context.read<StoryViewModel>().stories.isEmpty) {
-      context.read<StoryViewModel>().fetchStories(pageSize: 5);
-    }
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        if (!context.read<StoryViewModel>().isLoading) {
-          print("LOAD MORE STORIES");
-          context.read<StoryViewModel>().updateStories();
-        }
-      }
-    });
+    context.read<StoryBloc>().add(FetchStory());
   }
 
   @override
@@ -45,9 +33,9 @@ class _HomeStoriesState extends State<HomeStories>
       decoration: const BoxDecoration(color: Colors.white),
       padding: const EdgeInsets.all(8),
       margin: const EdgeInsets.symmetric(vertical: 10),
-      child: Consumer<StoryViewModel>(
-        builder: (context, value, child) {
-          var stories = value.stories;
+      child: BlocBuilder<StoryBloc, StoryState>(
+        builder: (context, state) {
+          var stories = state.stories;
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -55,36 +43,48 @@ class _HomeStoriesState extends State<HomeStories>
             children: [
               SizedBox(
                 height: 180,
-                child: Consumer<StoryViewModel>(
-                  builder: (context, value, child) {
-                    return ListView.builder(
-                      controller: _scrollController,
-                      itemBuilder: (context, index) {
-                        if (index == value.stories.length) {
-                          return const Center(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 40.0),
-                              child: CupertinoActivityIndicator(),
-                            ),
-                          );
-                        }
-                        return StoryCard(
-                            key: ValueKey(value.stories.elementAt(index).id),
-                            story: value.stories.elementAt(index),
-                            onClick: () {
-                              context
-                                  .read<StoryViewModel>()
-                                  .setCurrentStoryIndex = index;
-                              ApplicationUtility.navigateToScreen(
-                                  context, const StoriesScrollScreen());
-                            });
-                      },
-                      itemCount: value.stories.length + 1,
-                      scrollDirection: Axis.horizontal,
-                    );
+                child: NotificationListener<ScrollNotification>(
+                  onNotification:(_){
+                    if ( _.metrics.pixels ==
+                        _.metrics.maxScrollExtent) {
+                      context.read<StoryBloc>().add(FetchStory());
+                      return true;
+                    }
+                    else{
+                      return false;
+                    }
                   },
+                  child: ListView.builder(
+                    // controller: _scrollController,
+                    primary: false,
+                    itemBuilder: (context, index) {
+                      if (index == stories.length) {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                            child: state.status == StoryStateStatus.fetching
+                                ? const CupertinoActivityIndicator()
+                                : const SizedBox.shrink(),
+                          ),
+                        );
+                      }
+                      return StoryCard(
+                          key: ValueKey(stories.elementAt(index).id),
+                          story: stories.elementAt(index),
+                          onClick: () {
+                            context
+                                .read<StoryBloc>()
+                                .add(UpdateScrollIndex(index));
+                            ApplicationUtility.navigateToScreen(
+                                context, const StoriesScrollScreen());
+                          });
+                    },
+                    itemCount: stories.length + 1,
+                    scrollDirection: Axis.horizontal,
+                  ),
                 ),
               ),
+              //SHOW MORE STORIES BUTTON
               stories.isNotEmpty && stories.length > 1
                   ? Align(
                       alignment: Alignment.bottomRight,

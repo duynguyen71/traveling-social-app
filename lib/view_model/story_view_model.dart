@@ -18,7 +18,7 @@ class StoryViewModel extends ChangeNotifier {
 
   void fetchStories({int? page, int? pageSize}) async {
     _currentPage = 0;
-    List<Post> rs =
+    Set<Post> rs =
         await _postService.getStories(page: page ?? 0, pageSize: pageSize ?? 5);
     if (rs.isNotEmpty) {
       _stories.addAll(rs);
@@ -28,7 +28,7 @@ class StoryViewModel extends ChangeNotifier {
 
   void updateStories({int? pageSize}) async {
     _currentPage = _currentPage + 1;
-    List<Post> resp = await _postService.getStories(
+    Set<Post> resp = await _postService.getStories(
         page: _currentPage, pageSize: pageSize ?? 5);
     if (resp.isNotEmpty) {
       _stories.addAll(resp);

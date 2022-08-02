@@ -5,6 +5,7 @@ import 'package:traveling_social_app/bloc/locale/locale_cubit.dart';
 import 'package:traveling_social_app/models/language.dart';
 import 'package:traveling_social_app/screens/setting/components/setting_item_selected.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:traveling_social_app/widgets/base_app_bar.dart';
 
 class LanguageSettingScreen extends StatefulWidget {
   const LanguageSettingScreen({Key? key}) : super(key: key);
@@ -37,47 +38,18 @@ class _LanguageSettingScreenState extends State<LanguageSettingScreen> {
 
   //method to change app locale
   Future<void> changeLocale(Language e, BuildContext context) async {
-    if (AppLocalizations.delegate
-        .isSupported(Locale(e.localName))) {
-      await _storage.write(
-          key: 'localeName', value: e.localName);
+    if (AppLocalizations.delegate.isSupported(Locale(e.localName))) {
+      await _storage.write(key: 'localeName', value: e.localName);
       context.read<LocaleCubit>().toLocaleName(e.localName);
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-      appBar: AppBar(
-        backgroundColor: Colors.grey.shade100,
-        elevation: 0,
-        leading: Row(
-          children: [
-            IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.blue,
-              ),
-            ),
-            Text(
-              AppLocalizations.of(context)!.setting,
-              style: const TextStyle(
-                color: Colors.blue,
-              ),
-            ),
-          ],
-        ),
-        leadingWidth: 200,
-        title: Text(
-          AppLocalizations.of(context)!.language,
-          style: const TextStyle(
-            color: Colors.black87,
-          ),
-        ),
-        centerTitle: true,
+      appBar: BaseAppBar(
+        title: AppLocalizations.of(context)!.language,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -106,6 +78,4 @@ class _LanguageSettingScreenState extends State<LanguageSettingScreen> {
       ),
     );
   }
-
-
 }

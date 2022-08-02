@@ -1,10 +1,5 @@
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:traveling_social_app/constants/api_constants.dart';
-import 'package:traveling_social_app/models/post.dart';
-import 'package:provider/provider.dart';
-import 'package:traveling_social_app/view_model/post_view_model.dart';
 
 
 class UserDraftPosts extends StatefulWidget {

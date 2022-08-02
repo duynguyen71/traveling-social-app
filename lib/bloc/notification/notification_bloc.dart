@@ -14,9 +14,9 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   NotificationBloc({required NotificationRepository notificationRepository})
       : _notificationRepo = notificationRepository,
         super(NotificationState()) {
+    on<FetchNotification>(_fetchNotifications);
     on<NotificationEvent>(_onFirebaseNotificationEvent);
     add(RequestNotificationPermission());
-    // add(ListeningNotification());
     _onMessageSubscription =
         FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       Map<String, dynamic> data = event.data;
@@ -29,7 +29,6 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   @override
   Future<void> close() {
     _onMessageSubscription.cancel();
-
     return super.close();
   }
 
@@ -57,5 +56,9 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       sound: true,
     );
     print('User granted permission: ${settings.authorizationStatus}');
+  }
+
+  _fetchNotifications(event, emit) async {
+    _notificationRepo.getNotifications();
   }
 }

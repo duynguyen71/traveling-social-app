@@ -1,24 +1,27 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/profile/profile_screen.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/custom_input_field.dart';
+import 'package:traveling_social_app/widgets/my_divider.dart';
 import 'package:traveling_social_app/widgets/rounded_input_container.dart';
 
 import '../../constants/api_constants.dart';
 import '../../models/base_user.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({Key? key,  this.keyword }) : super(key: key);
+  const SearchScreen({Key? key, this.keyword}) : super(key: key);
 
   final String? keyword;
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 
-  static Route route(String? keyword) => MaterialPageRoute(builder: (_)=>  SearchScreen(keyword: keyword));
+  static Route route(String? keyword) =>
+      MaterialPageRoute(builder: (_) => SearchScreen(keyword: keyword));
 }
 
 class _SearchScreenState extends State<SearchScreen> {
@@ -108,7 +111,10 @@ class _SearchScreenState extends State<SearchScreen> {
               actions: [
                 IconButton(
                   onPressed: _handleSearch,
-                  icon: const Icon(Icons.search, color: kPrimaryLightColor),
+                  icon: SvgPicture.asset(
+                    "assets/icons/search.svg",
+                    color: Colors.black87,
+                  ),
                 ),
               ],
             ),
@@ -127,7 +133,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
                             Text(
-                              'Oops We Couldn’t Find Matching Credential :(',
+                              'Oops We Could’t Find Matching Credential :(',
                               style: TextStyle(
                                 color: Colors.black54,
                                 fontSize: 20,
@@ -196,6 +202,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                       ],
                                     ),
                                   ),
+                                  const MyDivider(width: 1),
                                 ],
                               ),
                             ),

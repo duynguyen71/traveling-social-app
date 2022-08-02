@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traveling_social_app/widgets/icon_gradient.dart';
 
 import '../../../constants/app_theme_constants.dart';
 
@@ -31,14 +32,18 @@ class MyBottomNavItem extends StatelessWidget {
               Transform.scale(
                 scale: isSelected ? 1.2 : 1,
                 child: Icon(iconData,
-                    color: isSelected ? Colors.black54 : Colors.grey.withOpacity(.5),size: kDefaultBottomNavIconSize),
+                    color: isSelected
+                        ? Colors.black54
+                        : Colors.grey.withOpacity(.5),
+                    size: kDefaultBottomNavIconSize),
               ),
               //nav label
               Text(
                 label,
                 style: TextStyle(
-                    fontSize: isSelected ? 12 : 10,
-                    color: isSelected ? Colors.black54 : Colors.black26),
+                  fontSize: 10,
+                  color: isSelected ? Colors.black54 : Colors.black26,
+                ),
               ),
             ],
           ),

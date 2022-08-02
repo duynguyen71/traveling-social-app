@@ -1,3 +1,4 @@
+
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,6 +24,12 @@ class RequestNotificationPermission extends NotificationEvent {
 
 @immutable
 class ListeningNotification extends NotificationEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+@immutable
+class FetchNotification extends NotificationEvent {
   @override
   List<Object?> get props => [];
 }

@@ -1,7 +1,10 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import '../../services/user_service.dart';
+
 class NotificationRepository {
   FlutterLocalNotificationsPlugin? flutterLocalNotificationsPlugin;
+  final UserService _userService = UserService();
 
   NotificationRepository() {
     flutterLocalNotificationsPlugin ??= FlutterLocalNotificationsPlugin();
@@ -33,5 +36,9 @@ class NotificationRepository {
     print("Show notification foreground message");
     await flutterLocalNotificationsPlugin!
         .show(0, title, body, platform, payload: payload);
+  }
+
+  getNotifications() async {
+    _userService.getNotifications();
   }
 }

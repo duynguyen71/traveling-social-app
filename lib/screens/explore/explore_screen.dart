@@ -46,13 +46,13 @@ class _ExploreScreenState extends State<ExploreScreen>
 
   @override
   void initState() {
+
+    super.initState();
     FirebaseMessaging.instance.getToken().then(
-      (token) {
+          (token) {
         print('device notification token\n$token\n');
       },
     );
-    // AppLocalizations.of(context).
-    super.initState();
     _pageController = PageController(initialPage: 0, keepPage: true);
   }
 
@@ -74,7 +74,7 @@ class _ExploreScreenState extends State<ExploreScreen>
         ),
         bottomNavigationBar: Container(
           height: 60.0,
-          padding: const EdgeInsets.only(bottom: 8.0),
+          // margin: const EdgeInsets.only(bottom: 8.0),
           alignment: Alignment.center,
           child: Center(
             child: Row(

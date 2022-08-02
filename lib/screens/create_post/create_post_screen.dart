@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:traveling_social_app/models/post.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/view_model/current_user_post_view_model.dart';
-import 'package:traveling_social_app/view_model/post_view_model.dart';
 import 'package:traveling_social_app/widgets/bottom_select_dialog.dart';
 import 'package:traveling_social_app/widgets/media_file_container.dart';
 import 'dart:io';
@@ -63,13 +63,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   @override
   void initState() {
     super.initState();
-    // s.add(BottomDialogItem(
-    //     title: AppLocalizations.of(context)!.delete,
-    //     onClick: () {
-    //       _focusNode.unfocus();
-    //       discard();
-    //     }));
     _focusNode.requestFocus();
+    _captionController.text = lorem(paragraphs: 2,words: 10);
   }
 
   @override

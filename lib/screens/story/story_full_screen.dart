@@ -184,7 +184,8 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                         const SizedBox(width: 10),
                         IconButton(
                           onPressed: () {
-                            Navigator.of(context, rootNavigator: true).pop();
+                            // Navigator.of(context, rootNavigator: true).pop();
+                            Navigator.pop(context);
                           },
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           icon: const Icon(
@@ -235,7 +236,7 @@ class _StoryFullScreenState extends State<StoryFullScreen>
             widget.post.contents!.isEmpty
                 ? Positioned.fill(
                     child: Container(
-                      margin: EdgeInsets.symmetric(vertical: size.height * .1),
+                      margin: EdgeInsets.symmetric(vertical: size.height * .2),
                       alignment: Alignment.center,
                       child: Center(
                         child: Padding(
@@ -246,8 +247,8 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                               textStyle: const TextStyle(
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white,
-                                  fontSize: 30),
-                              textAlign: TextAlign.center,
+                                  fontSize: 20),
+                              textAlign: TextAlign.start,
                             ),
                           ),
                         ),
