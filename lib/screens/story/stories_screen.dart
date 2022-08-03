@@ -15,14 +15,6 @@ class StoriesScreen extends StatefulWidget {
 }
 
 class _StoriesScreenState extends State<StoriesScreen> {
-  @override
-  void initState() {
-    var stories = context.read<StoryViewModel>().stories;
-    if (stories.isEmpty || stories.length < 10) {
-      context.read<StoryViewModel>().updateStories(pageSize: 8);
-    }
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,28 +46,30 @@ class _StoriesScreenState extends State<StoriesScreen> {
           child: CustomScrollView(
             slivers: [
               const SliverPadding(padding: EdgeInsets.only(top: 10)),
-              Consumer<StoryViewModel>(builder: (context, value, child) {
-                var stories = value.stories;
-                return SliverGrid(
-                  delegate: SliverChildListDelegate(stories
-                      .map((e) => StoryCard(
-                            story: e,
-                            onClick: () {
-                              ApplicationUtility.navigateToScreen(
-                                  context, const StoriesScrollScreen());
-                            },
-                            key: Key(e.id.toString()),
-                          ))
-                      .toList()),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                    // childAspectRatio: 9/16,
-                    childAspectRatio: 10 / 14,
-                  ),
-                );
-              }),
+              // Consumer<StoryViewModel>(builder: (context, value, child) {
+              //   var stories = value.stories;
+              //   return SliverGrid(
+              //     delegate: SliverChildListDelegate(
+              //       stories
+              //           .map(
+              //             (e) => StoryCard(
+              //               story: e,
+              //               onClick: () => Navigator.push(
+              //                   context, StoriesScrollScreen.route()),
+              //               key: ValueKey(e.id),
+              //             ),
+              //           )
+              //           .toList(),
+              //     ),
+              //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              //       crossAxisCount: 3,
+              //       mainAxisSpacing: 10,
+              //       crossAxisSpacing: 10,
+              //       // childAspectRatio: 9/16,
+              //       childAspectRatio: 10 / 14,
+              //     ),
+              //   );
+              // }),
             ],
           ),
         ),

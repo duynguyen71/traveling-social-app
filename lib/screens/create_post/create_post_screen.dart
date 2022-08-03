@@ -64,7 +64,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   void initState() {
     super.initState();
     _focusNode.requestFocus();
-    _captionController.text = lorem(paragraphs: 2,words: 10);
+    _captionController.text = lorem(paragraphs: 2,words: 140);
   }
 
   @override

@@ -17,6 +17,7 @@ class StoryBloc extends Bloc<StoryEvent, StoryState> {
     on<UpdateScrollIndex>(_updateScrollIndex);
     on<ResetStoryState>(_clear);
     on<AddStory>(_addCurrentUserStory);
+    on<RemoveStory>(_removeStory);
   }
 
   _fetchStories(FetchStory event, emit) async {
@@ -58,5 +59,22 @@ class StoryBloc extends Bloc<StoryEvent, StoryState> {
 
   _addCurrentUserStory(AddStory event, emit) {
     emit(state.copyWith(stories: {event.story, ...state.stories}));
+  }
+
+  _removeStory(RemoveStory event, emit) {
+    // await _postService.hidePost(postId: event.id);
+
+    // int indexOfDeleteStory =
+    //     state.stories.toList().indexWhere((element) => element.id == event.id);
+
+    var copyStories = {...state.stories};
+    // int currentScrollIndex = state.currentScrollIndex;
+    // if (indexOfDeleteStory == currentScrollIndex) {
+    //   print('nex state');
+    //   emit(state.copyWith(
+    //       stories: copyStories, currentScrollIndex: currentScrollIndex + 1));
+    // }
+    copyStories.removeWhere((element) => element.id == event.id);
+    emit(state.copyWith(stories: copyStories));
   }
 }

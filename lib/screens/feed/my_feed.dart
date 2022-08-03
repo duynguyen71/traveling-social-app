@@ -80,7 +80,6 @@ class _MyFeedState extends State<MyFeed> with AutomaticKeepAliveClientMixin {
             // BUILDER FOR POSTS STATE
             BlocBuilder<PostBloc, PostState>(
               builder: (context, state) {
-                print('build posts');
                 var posts = state.posts;
                 return SliverList(
                   delegate: SliverChildBuilderDelegate(

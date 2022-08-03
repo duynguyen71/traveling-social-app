@@ -10,6 +10,7 @@ import 'package:traveling_social_app/generated/l10n.dart';
 import 'package:traveling_social_app/models/attachment.dart';
 import 'package:traveling_social_app/models/post.dart';
 import 'package:traveling_social_app/screens/comment/comment_screen.dart';
+import 'package:traveling_social_app/screens/explore/components/post_attachment_container.dart';
 import 'package:traveling_social_app/screens/profile/profile_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/bottom_select_dialog.dart';
@@ -19,6 +20,7 @@ import 'package:traveling_social_app/widgets/rounded_icon_button.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
 import 'package:traveling_social_app/widgets/username_text.dart';
 
+import '../../../constants/app_theme_constants.dart';
 import '../../../models/post_content.dart';
 import '../../../models/reaction.dart';
 import '../../../services/post_service.dart';
@@ -195,57 +197,6 @@ class _PostEntryState extends State<PostEntry>
                   },
                   icon: const Icon(Icons.more_horiz),
                 ),
-                // PopupMenuButton(
-                //   child: Container(
-                //     height: 36,
-                //     width: 48,
-                //     alignment: Alignment.centerRight,
-                //     child: const Icon(Icons.more_horiz, color: Colors.black87),
-                //   ),
-                //   shape: const RoundedRectangleBorder(
-                //     borderRadius: BorderRadius.all(
-                //       Radius.circular(10.0),
-                //     ),
-                //   ),
-                //   color: Colors.grey.shade100,
-                //   itemBuilder: (context) {
-                //     return context.read<AuthenticationBloc>().state.user.id ==
-                //             widget.post.user!.id!
-                //         ? const <PopupMenuEntry<String>>[
-                //             PopupMenuItem<String>(
-                //               value: 'DELETE',
-                //               child: MyPopupMenuItem(
-                //                   title: 'DELETE',
-                //                   iconData: Icons.visibility_off),
-                //             ),
-                //           ]
-                //         : <PopupMenuEntry<String>>[
-                //             PopupMenuItem<String>(
-                //               value: 'FOLLOW',
-                //               child: MyPopupMenuItem(
-                //                   title:
-                //                       'Follow ${widget.post.user!.username.toString()}',
-                //                   iconData: Icons.person),
-                //             ),
-                //             const PopupMenuItem<String>(
-                //               value: 'LOVE',
-                //               child: MyPopupMenuItem(
-                //                   title: 'Love', iconData: Icons.person),
-                //             ),
-                //           ];
-                //   },
-                //   onSelected: (string) {
-                //     switch (string) {
-                //       case "DELETE":
-                //         {
-                //           showHidePostAlert(context);
-                //           break;
-                //         }
-                //     }
-                //   },
-                //   padding: EdgeInsets.zero,
-                //   elevation: 0,
-                // )
               ],
             ),
           ),
@@ -260,96 +211,101 @@ class _PostEntryState extends State<PostEntry>
                   ),
                 )
               : const SizedBox.shrink(),
-
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              //CONTENTS
-              (_attachments.isEmpty ||
-                      !_attachments.asMap().containsKey(_attachmentIndex))
-                  ? const SizedBox.shrink()
-                  : CachedNetworkImage(
-                      fit: BoxFit.fitWidth,
-                      imageUrl: imageUrl +
-                          _attachments[_attachmentIndex].name.toString(),
-                      placeholder: (context, url) {
-                        return AspectRatio(
-                          aspectRatio: 4 / 5,
-                          child: Container(
-                              color: Colors.grey.shade50,
-                              child: const Center(
-                                  child: CupertinoActivityIndicator())),
-                        );
-                      },
-                      errorWidget: (context, url, error) =>
-                          const SizedBox.shrink(),
-                    ),
-              _attachments.length > 1
-                  ? Positioned(
-                      child: RoundedIconButton(
-                        onClick: () {
-                          if (_attachmentIndex < getContents().length - 1) {
-                            setState(() {
-                              _attachmentIndex = _attachmentIndex + 1;
-                            });
-                          }
-                        },
-                        icon: Icons.arrow_forward_ios,
-                        iconColor: _attachmentIndex < 1
-                            ? Colors.black12
-                            : Colors.white,
-                        size: 20,
-                      ),
-                      right: 10,
-                    )
-                  : const SizedBox.shrink(),
-              _attachments.length > 1
-                  ? Positioned(
-                      child: RoundedIconButton(
-                        onClick: () {
-                          if (_attachmentIndex >= 1) {
-                            setState(() {
-                              _attachmentIndex = _attachmentIndex - 1;
-                            });
-                          }
-                        },
-                        icon: Icons.arrow_back_ios,
-                        iconColor: _attachmentIndex <= (_attachments.length - 1)
-                            ? Colors.black12
-                            : Colors.white,
-                        size: 20,
-                      ),
-                      left: 10,
-                    )
-                  : const SizedBox.shrink(),
-              _attachments.length > 1
-                  ? Positioned(
-                      right: 10,
-                      top: 10,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 5),
-                        decoration: BoxDecoration(
-                          color: Colors.black87.withOpacity(.3),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: RichText(
-                          text: TextSpan(children: [
-                            TextSpan(text: '${_attachmentIndex + 1}'),
-                            TextSpan(text: ' / ${_attachments.length}')
-                          ], style: const TextStyle(color: Colors.white)),
-                        ),
-                      ),
-                    )
-                  : const SizedBox.shrink()
-            ],
-          ),
+          PostAttachmentContainer(attachments: _attachments),
+          // Stack(
+          //   alignment: Alignment.center,
+          //   children: [
+          //     //CONTENTS
+          //     (_attachments.isEmpty ||
+          //             !_attachments.asMap().containsKey(_attachmentIndex))
+          //         ? const SizedBox.shrink()
+          //         : CachedNetworkImage(
+          //             fit: BoxFit.fitWidth,
+          //             imageUrl: imageUrl +
+          //                 _attachments[_attachmentIndex].name.toString(),
+          //             placeholder: (context, url) {
+          //               return AspectRatio(
+          //                 aspectRatio: 4 / 5,
+          //                 child: Container(
+          //                   color: Colors.grey.shade50,
+          //                   child: const Center(
+          //                     child: CupertinoActivityIndicator(),
+          //                   ),
+          //                 ),
+          //               );
+          //             },
+          //             errorWidget: (context, url, error) =>
+          //                 const SizedBox.shrink(),
+          //           ),
+          //     _attachments.length > 1
+          //         ? Positioned(
+          //             child: RoundedIconButton(
+          //               onClick: () {
+          //                 if (_attachmentIndex < getContents().length - 1) {
+          //                   setState(() {
+          //                     _attachmentIndex = _attachmentIndex + 1;
+          //                   });
+          //                 }
+          //               },
+          //               icon: Icons.arrow_forward_ios,
+          //               iconColor: _attachmentIndex < 1
+          //                   ? Colors.black12
+          //                   : Colors.white,
+          //               size: 20,
+          //             ),
+          //             right: 10,
+          //           )
+          //         : const SizedBox.shrink(),
+          //     _attachments.length > 1
+          //         ? Positioned(
+          //             child: RoundedIconButton(
+          //               onClick: () {
+          //                 if (_attachmentIndex >= 1) {
+          //                   setState(() {
+          //                     _attachmentIndex = _attachmentIndex - 1;
+          //                   });
+          //                 }
+          //               },
+          //               icon: Icons.arrow_back_ios,
+          //               iconColor: _attachmentIndex <= (_attachments.length - 1)
+          //                   ? Colors.black12
+          //                   : Colors.white,
+          //               size: 20,
+          //             ),
+          //             left: 10,
+          //           )
+          //         : const SizedBox.shrink(),
+          //     _attachments.length > 1
+          //         ? Positioned(
+          //             right: 10,
+          //             top: 10,
+          //             child: Container(
+          //               padding: const EdgeInsets.symmetric(
+          //                   horizontal: 10, vertical: 5),
+          //               decoration: BoxDecoration(
+          //                 color: Colors.black87.withOpacity(.3),
+          //                 borderRadius: BorderRadius.circular(20),
+          //               ),
+          //               child: RichText(
+          //                 text: TextSpan(children: [
+          //                   TextSpan(text: '${_attachmentIndex + 1}'),
+          //                   TextSpan(text: ' / ${_attachments.length}')
+          //                 ], style: const TextStyle(color: Colors.white)),
+          //               ),
+          //             ),
+          //           )
+          //         : const SizedBox.shrink()
+          //   ],
+          // ),
           //BUTTONS
           Container(
             decoration: BoxDecoration(
-              color: Colors.lightBlueAccent.withOpacity(.05),
-              borderRadius: BorderRadius.circular(40),
-            ),
+                color: Colors.lightBlueAccent.withOpacity(.05),
+                borderRadius: BorderRadius.circular(40),
+                border: Border.all(width: .1, color: Colors.grey.shade400),
+                boxShadow: [
+                  kDefaultPostActionBarShadow,
+                ]),
             alignment: Alignment.center,
             padding: const EdgeInsets.all(4),
             margin: const EdgeInsets.all(8),
@@ -394,11 +350,13 @@ class _PostEntryState extends State<PostEntry>
                           ),
                           child: _isFavorite
                               ? const Icon(
+                                  size: kDefaultBottomNavIconSize,
                                   Icons.favorite,
                                   color: Colors.red,
                                   key: ValueKey('icon1'),
                                 )
                               : const Icon(
+                                  size: kDefaultBottomNavIconSize,
                                   Icons.favorite_border,
                                   color: Colors.black45,
                                   key: ValueKey('icon2'),
@@ -428,9 +386,14 @@ class _PostEntryState extends State<PostEntry>
                             ),
                           );
                         },
-                        icon: const Icon(
-                          Icons.chat_bubble_outline,
-                          color: Colors.black87,
+                        // icon: const Icon(
+                        //   Icons.chat_bubble_outline,
+                        //   color: Colors.black87,
+                        // ),
+                        icon: SvgPicture.asset(
+                          'assets/icons/comment.svg',
+                          width: kDefaultBottomNavIconSize,
+                          height: kDefaultBottomNavIconSize,
                         ),
                       ),
                       Text(
@@ -447,9 +410,10 @@ class _PostEntryState extends State<PostEntry>
                     children: [
                       IconButton(
                         onPressed: () {},
-                        icon: const Icon(
-                          Icons.share,
-                          color: Colors.black87,
+                        icon: SvgPicture.asset(
+                          'assets/icons/share.svg',
+                          width: kDefaultBottomNavIconSize,
+                          height: kDefaultBottomNavIconSize,
                         ),
                       ),
                     ],

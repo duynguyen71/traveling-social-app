@@ -70,5 +70,6 @@
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"
   },
-  "viewYourProfile": "View your profile"
+  "viewYourProfile": "View your profile",
+  "viewPhoto": "View photo"
 }

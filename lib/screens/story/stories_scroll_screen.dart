@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:traveling_social_app/bloc/story/story_bloc.dart';
 import 'package:traveling_social_app/screens/story/story_full_screen.dart';
 
@@ -9,6 +8,8 @@ class StoriesScrollScreen extends StatefulWidget {
 
   @override
   _StoriesScrollScreenState createState() => _StoriesScrollScreenState();
+  static Route route() => MaterialPageRoute(builder: (_) => const StoriesScrollScreen());
+
 }
 
 class _StoriesScrollScreenState extends State<StoriesScrollScreen>
@@ -18,7 +19,6 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen>
   @override
   void initState() {
     super.initState();
-    // _storyViewModel = context.read<StoryViewModel>();
     int currentStoryIndex = context.read<StoryBloc>().state.currentScrollIndex;
     _listController = ScrollController(
         initialScrollOffset: currentStoryIndex *
@@ -93,9 +93,8 @@ class _StoriesScrollScreenState extends State<StoriesScrollScreen>
         height: size.height,
         child: BlocBuilder<StoryBloc, StoryState>(
           buildWhen: (previous, current) =>
-              current.stories.length > previous.stories.length,
+              current.stories.length != previous.stories.length,
           builder: (context, state) {
-            print('build scroll screens');
             return ListView.builder(
                 padding: EdgeInsets.zero,
                 physics: const NeverScrollableScrollPhysics(),

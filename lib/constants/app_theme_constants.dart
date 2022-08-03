@@ -14,6 +14,11 @@ final kDefaultShadow = BoxShadow(
   blurRadius: 10,
   color: const Color(0xFFE9E9E9).withOpacity(0.56),
 );
+final kDefaultPostActionBarShadow = BoxShadow(
+  offset: const Offset(4, 5),
+  blurRadius: 6,
+  color: const Color(0xFFE9E9E9).withOpacity(0.5),
+);
 
 const kImg =
     "https://images.pexels.com/photos/6977499/pexels-photo-6977499.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500";
@@ -45,7 +50,10 @@ const shimmerGradient = LinearGradient(
 
 const kIconPadding = 4.0;
 const kIconSize = 25.0;
-const kDefaultBottomNavIconSize = 20.0;
+const kDefaultBottomNavIconSize = 24.0;
 
 const kDefaultAppBarTextTitleStyle =
     TextStyle(color: Colors.black87, letterSpacing: .6, fontSize: 18);
+
+const kDefaultStoryCardHeight = 180.0;
+const kMainBottomNavHeight = 60.0;

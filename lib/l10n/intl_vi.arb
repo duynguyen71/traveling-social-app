@@ -70,6 +70,7 @@
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"
   },
-  "viewYourProfile": "Xem trang cá nhân của bạn"
+  "viewYourProfile": "Xem trang cá nhân của bạn",
+  "viewPhoto": "Xem ảnh"
 
 }

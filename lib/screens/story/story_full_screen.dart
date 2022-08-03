@@ -1,15 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/models/post.dart';
 import 'package:traveling_social_app/widgets/expandable_text.dart';
-import 'package:traveling_social_app/widgets/story_context_menu.dart';
+import 'package:traveling_social_app/screens/story/story_context_menu.dart';
 
 import '../../authentication/bloc/authentication_bloc.dart';
 import '../../utilities/application_utility.dart';
-import '../../view_model/user_view_model.dart';
 import '../../widgets/user_avt.dart';
 import '../profile/profile_screen.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +26,6 @@ class StoryFullScreen extends StatefulWidget {
 class _StoryFullScreenState extends State<StoryFullScreen>
     with AutomaticKeepAliveClientMixin {
   int currentIndex = 0;
-  String? currentImg;
   int itemCount = 0;
 
   nextImage() {
@@ -41,10 +38,6 @@ class _StoryFullScreenState extends State<StoryFullScreen>
     if (currentIndex >= 1) {
       setState(() => currentIndex -= 1);
     }
-  }
-
-  String _getTimeAgo() {
-    return Jiffy(widget.post.createDate).fromNow();
   }
 
   @override
@@ -137,7 +130,7 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                             children: [
                               UserAvatar(
                                 size: 40,
-                                avt: widget.post.user!.avt.toString(),
+                                avt: widget.post.user!.avt,
                                 onTap: () {
                                   ApplicationUtility.pushAndReplace(
                                       context,
@@ -184,7 +177,6 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                         const SizedBox(width: 10),
                         IconButton(
                           onPressed: () {
-                            // Navigator.of(context, rootNavigator: true).pop();
                             Navigator.pop(context);
                           },
                           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -256,7 +248,7 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                     ),
                   )
                 : const SizedBox.shrink(),
-            //
+            //CAPTIONS
             (widget.post.caption != null && widget.post.contents!.isNotEmpty)
                 ? Positioned(
                     child: SizedBox(
@@ -271,7 +263,7 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                     bottom: 80,
                   )
                 : const SizedBox.shrink(),
-            //COMMENT INPUT
+            //MESSAGE INPUT
             Positioned(
               child: Container(
                 height: size.height * .1,

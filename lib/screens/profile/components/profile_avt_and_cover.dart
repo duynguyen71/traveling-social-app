@@ -17,6 +17,7 @@ import '../../../constants/api_constants.dart';
 import '../../../constants/app_theme_constants.dart';
 
 import 'button_edit_profile.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfileAvtAndCover extends StatefulWidget {
   const ProfileAvtAndCover({Key? key}) : super(key: key);
@@ -33,14 +34,25 @@ class _ProfileAvtAndCoverState extends State<ProfileAvtAndCover> {
   @override
   void initState() {
     super.initState();
+
+  }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _bottomDialogItems = [
-      BottomDialogItem(title: 'View photo', onClick: () {}),
       BottomDialogItem(
-          title: 'New photo from gallery', onClick: () => _changeAvtPhoto()),
+          title: AppLocalizations.of(context)!.viewPhoto, onClick: () {}),
+      BottomDialogItem(
+          title: AppLocalizations.of(context)!.newPhotoFromGallery,
+          onClick: () => _changeAvtPhoto(source: ImageSource.gallery)),
+      BottomDialogItem(
+          title: AppLocalizations.of(context)!.newPhotoFromCamera,
+          onClick: () => _changeAvtPhoto(source: ImageSource.camera)),
     ];
     _backgroundPhotoBottomDialogItems = [
       BottomDialogItem(
-          title: 'New photo from gallery', onClick: () => _changeBgPhoto()),
+          title: AppLocalizations.of(context)!.newPhotoFromGallery,
+          onClick: () => _changeBgPhoto(source: ImageSource.gallery)),
     ];
   }
 
@@ -110,9 +122,9 @@ class _ProfileAvtAndCoverState extends State<ProfileAvtAndCover> {
 
   Future<File?> _pickImageFromGallery(
       {required CropStyle cropStyle,
-      required List<CropAspectRatioPreset> presets}) async {
-    XFile? pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+      required List<CropAspectRatioPreset> presets,
+      required ImageSource source}) async {
+    XFile? pickedFile = await ImagePicker().pickImage(source: source);
     if (pickedFile != null) {
       File? file =
           await ApplicationUtility.compressImage(pickedFile.path, quality: 70);
@@ -123,7 +135,7 @@ class _ProfileAvtAndCoverState extends State<ProfileAvtAndCover> {
         sourcePath: file.path,
         cropStyle: cropStyle,
         aspectRatioPresets: presets,
-        compressQuality: 70,
+        compressQuality: 100,
         uiSettings: [
           AndroidUiSettings(
             toolbarTitle: 'Cropper',
@@ -145,19 +157,22 @@ class _ProfileAvtAndCoverState extends State<ProfileAvtAndCover> {
   }
 
   //change avatar photo
-  _changeAvtPhoto() async {
+  _changeAvtPhoto({required ImageSource source}) async {
     File? croppedFile = await _pickImageFromGallery(
-        cropStyle: CropStyle.circle, presets: [CropAspectRatioPreset.square]);
+        cropStyle: CropStyle.circle,
+        presets: [CropAspectRatioPreset.square],
+        source: source);
     if (croppedFile != null) {
       await _userService.updateAvt(file: File(croppedFile.path));
       context.read<AuthenticationBloc>().add(UserInfoChanged());
     }
   }
 
-  _changeBgPhoto() async {
+  _changeBgPhoto({required ImageSource source}) async {
     File? croppedFile = await _pickImageFromGallery(
         cropStyle: CropStyle.rectangle,
-        presets: [CropAspectRatioPreset.ratio16x9]);
+        presets: [CropAspectRatioPreset.ratio16x9],
+        source: source);
     if (croppedFile != null) {
       await _userService.updateBackground(file: File(croppedFile.path));
       context.read<AuthenticationBloc>().add(UserInfoChanged());

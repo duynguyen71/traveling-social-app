@@ -27,11 +27,22 @@ class ResetStoryState extends StoryEvent {
   List<Object?> get props => [];
 }
 
+@immutable
+class AddStory extends StoryEvent {
+  final Post story;
+
+  const AddStory(this.story);
+
+  @override
+  List<Object?> get props => [];
+}
 
 @immutable
-class AddStory extends StoryEvent{
-  final Post story;
-  const AddStory(this.story);
+class RemoveStory extends StoryEvent {
+  final int id;
+
+  const RemoveStory(this.id);
+
   @override
   List<Object?> get props => [];
 }

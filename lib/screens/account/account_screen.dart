@@ -6,10 +6,12 @@ import 'package:traveling_social_app/screens/profile/current_user_profile_screen
 import 'package:traveling_social_app/screens/setting/language_setting_screen.dart';
 import 'package:traveling_social_app/screens/setting/notification_screen.dart';
 import 'package:traveling_social_app/widgets/base_sliver_app_bar.dart';
+import 'package:traveling_social_app/widgets/current_user_avt.dart';
 import 'package:traveling_social_app/widgets/icon_gradient.dart';
 import 'package:traveling_social_app/widgets/my_divider.dart';
 import 'package:traveling_social_app/widgets/my_list_tile.dart';
 
+import '../../constants/app_theme_constants.dart';
 import '../../widgets/user_avt.dart';
 import '../../widgets/username_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -49,12 +51,9 @@ class _AccountScreenState extends State<AccountScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        UserAvatar(
+                        CurrentUserAvt(
                           size: 40,
                           onTap: () {},
-                          isActive: false,
-                          avt:
-                              context.read<AuthenticationBloc>().state.user.avt,
                         ),
                         const SizedBox(width: 10),
                         Column(
@@ -90,6 +89,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 child: Icon(
                   Icons.ac_unit_outlined,
                   color: Colors.white,
+                  size: kDefaultBottomNavIconSize,
                 ),
               ),
               title: AppLocalizations.of(context)!.following,

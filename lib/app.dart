@@ -88,7 +88,6 @@ class _AppViewState extends State<AppView> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<StoryViewModel>(create: (_) => StoryViewModel()),
         ChangeNotifierProvider<CurrentUserPostViewModel>(
             create: (_) => CurrentUserPostViewModel()),
       ],

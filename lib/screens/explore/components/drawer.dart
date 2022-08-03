@@ -63,8 +63,6 @@ class HomeDrawer extends StatelessWidget {
                   title: Text(AppLocalizations.of(context)!.logOut),
                   leading: const Icon(Icons.logout),
                   onTap: () {
-                    // context.read<PostViewModel>().clear();
-                    context.read<StoryViewModel>().clear();
                     context.read<CurrentUserPostViewModel>().clear();
                     context.read<ChatBloc>().add(InitialChatGroup());
                     context.read<PostBloc>().add(Reset());

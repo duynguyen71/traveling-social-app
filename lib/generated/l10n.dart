@@ -639,6 +639,16 @@ class S {
       args: [],
     );
   }
+
+  /// `View photo`
+  String get viewPhoto {
+    return Intl.message(
+      'View photo',
+      name: 'viewPhoto',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

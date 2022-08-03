@@ -18,7 +18,6 @@ class HomeStories extends StatefulWidget {
 
 class _HomeStoriesState extends State<HomeStories>
     with AutomaticKeepAliveClientMixin {
-
   @override
   void initState() {
     super.initState();
@@ -44,24 +43,25 @@ class _HomeStoriesState extends State<HomeStories>
               SizedBox(
                 height: 180,
                 child: NotificationListener<ScrollNotification>(
-                  onNotification:(_){
-                    if ( _.metrics.pixels ==
-                        _.metrics.maxScrollExtent) {
+                  onNotification: (_) {
+                    if (_.metrics.pixels == _.metrics.maxScrollExtent) {
                       context.read<StoryBloc>().add(FetchStory());
                       return true;
-                    }
-                    else{
+                    } else {
                       return false;
                     }
                   },
                   child: ListView.builder(
                     // controller: _scrollController,
-                    primary: false,
+                    // primary: false,
+                    // addAutomaticKeepAlives: true,
+                    // cacheExtent: stories.length,
                     itemBuilder: (context, index) {
                       if (index == stories.length) {
                         return Center(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 40.0),
                             child: state.status == StoryStateStatus.fetching
                                 ? const CupertinoActivityIndicator()
                                 : const SizedBox.shrink(),

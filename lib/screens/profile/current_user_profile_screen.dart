@@ -30,10 +30,10 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
   @override
   void initState() {
     super.initState();
-    var postViewModel = context.read<CurrentUserPostViewModel>();
-    if (!postViewModel.isFetched) {
-      postViewModel.getPosts();
-    }
+    // var postViewModel = context.read<CurrentUserPostViewModel>();
+    // if (!postViewModel.isFetched) {
+    //   postViewModel.getPosts();
+    // }
   }
 
   @override
@@ -46,25 +46,25 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
           const ProfileAppbar(),
           const ProfileCoverBackground(),
           //CURRENT USER POSTS
-          SliverToBoxAdapter(
-            child: Consumer<CurrentUserPostViewModel>(
-              builder: (context, value, child) {
-                var posts = value.posts;
-                return Column(
-                  children: List.generate(
-                    posts.length,
-                    (index) {
-                      var post = posts.elementAt(index);
-                      return PostEntry(
-                        post: post,
-                        key: ValueKey(post.id),
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
-          ),
+          // SliverToBoxAdapter(
+          //   child: Consumer<CurrentUserPostViewModel>(
+          //     builder: (context, value, child) {
+          //       var posts = value.posts;
+          //       return Column(
+          //         children: List.generate(
+          //           posts.length,
+          //           (index) {
+          //             var post = posts.elementAt(index);
+          //             return PostEntry(
+          //               post: post,
+          //               key: ValueKey(post.id),
+          //             );
+          //           },
+          //         ),
+          //       );
+          //     },
+          //   ),
+          // ),
         ],
       ),
       floatingActionButton: Container(
