@@ -12,7 +12,6 @@ import 'package:traveling_social_app/widgets/my_divider.dart';
 import 'package:traveling_social_app/widgets/my_list_tile.dart';
 
 import '../../constants/app_theme_constants.dart';
-import '../../widgets/user_avt.dart';
 import '../../widgets/username_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -35,7 +34,8 @@ class _AccountScreenState extends State<AccountScreen> {
       },
       body: Container(
         color: Colors.grey.shade50,
-        child: Column(
+        child: ListView(
+          padding: EdgeInsets.zero,
           children: [
             Material(
               color: Colors.transparent,
@@ -46,7 +46,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 child: Ink(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
+                        horizontal: 10, vertical: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -153,6 +153,35 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
               title: AppLocalizations.of(context)!.notification,
             ),
+            MyListTile(
+              onClick: () {
+                showAboutDialog(context: context);
+              },
+              leading: const LinearGradiantMask(
+                child: Icon(
+                  Icons.info,
+                  color: Colors.white,
+                ),
+              ),
+              title: AppLocalizations.of(context)!.aboutUs,
+            ),
+            Column(
+              children: List.generate(
+                  10,
+                  (index) => MyListTile(
+                        onClick: () {
+                          Navigator.push(
+                              context, NotificationSettingScreen.route());
+                        },
+                        leading: const LinearGradiantMask(
+                          child: Icon(
+                            Icons.notifications,
+                            color: Colors.white,
+                          ),
+                        ),
+                        title: AppLocalizations.of(context)!.notification,
+                      )).toList(),
+            )
           ],
         ),
       ),

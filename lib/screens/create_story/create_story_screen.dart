@@ -7,11 +7,9 @@ import 'package:traveling_social_app/bloc/story/story_bloc.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
-import 'package:traveling_social_app/view_model/story_view_model.dart';
 import 'package:traveling_social_app/widgets/loading_widget.dart';
 import 'package:provider/provider.dart';
 
-import '../../authentication/bloc/authentication_bloc.dart';
 import '../../widgets/media_file_container.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';

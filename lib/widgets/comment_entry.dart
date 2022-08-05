@@ -10,7 +10,6 @@ import 'package:traveling_social_app/widgets/user_avt.dart';
 import '../models/comment.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import '../models/user.dart';
 import '../services/comment_service.dart';
 
 class CommentEntry extends StatefulWidget {
@@ -25,6 +24,9 @@ class CommentEntry extends StatefulWidget {
     required this.hideComment,
     required this.editCommentRequest,
     this.editedComment,
+    required this.userId,
+    required this.username,
+    required this.avt,
   }) : super(key: key);
 
   final Comment comment;
@@ -37,6 +39,10 @@ class CommentEntry extends StatefulWidget {
 
   final Function editCommentRequest;
   final Function hideComment;
+
+  final int userId;
+  final String username;
+  final String avt;
 
   final Comment? editedComment;
 
@@ -63,6 +69,9 @@ class _CommentEntryState extends State<CommentEntry> {
   @override
   void initState() {
     super.initState();
+    if (widget.level <= 3) {
+      _getReplyComments();
+    }
   }
 
   @override
@@ -70,6 +79,7 @@ class _CommentEntryState extends State<CommentEntry> {
     if (widget.isShowChildren &&
         (widget.currentReplyComment != null &&
             widget.currentReplyComment!.id == comment.id)) {
+      print('did update widget ${widget.comment.id}');
       _getReplyComments();
     }
     super.didUpdateWidget(oldWidget);
@@ -77,7 +87,7 @@ class _CommentEntryState extends State<CommentEntry> {
 
   int get level => widget.level;
 
-  User? get user => widget.comment.user;
+  // User? get user => widget.comment.user;
 
   @override
   Widget build(BuildContext context) {
@@ -132,13 +142,12 @@ class _CommentEntryState extends State<CommentEntry> {
                               onTap: () {
                                 ApplicationUtility.showModelBottomDialog(
                                   context,
-                                  (user != null) &&
-                                          (user!.id !=
-                                              context
-                                                  .read<AuthenticationBloc>()
-                                                  .state
-                                                  .user
-                                                  .id)
+                                  widget.userId !=
+                                          context
+                                              .read<AuthenticationBloc>()
+                                              .state
+                                              .user
+                                              .id
                                       ? MyBottomDialog(
                                           items: [
                                             //REPLY COMMENT BUTTON
@@ -257,8 +266,9 @@ class _CommentEntryState extends State<CommentEntry> {
                   ),
                   ..._childrenComment.map(
                     (e) => CommentEntry(
-                      isShowChildren: (widget.currentReplyComment != null &&
-                          widget.currentReplyComment!.id == e.id),
+                      isShowChildren: true,
+                      // (widget.currentReplyComment != null &&
+                      //     widget.currentReplyComment!.id == e.id),
                       key: ValueKey(e.id.toString()),
                       postId: widget.postId,
                       replyCommentRequest: (e) => widget.replyCommentRequest(e),
@@ -271,6 +281,9 @@ class _CommentEntryState extends State<CommentEntry> {
                               widget.editedComment!.id == e.id
                           ? widget.editedComment
                           : null,
+                      userId: widget.userId,
+                      username: widget.username,
+                      avt: widget.avt,
                     ),
                   ),
                 ],

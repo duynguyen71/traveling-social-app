@@ -125,22 +125,21 @@ class _CommentScreenState extends State<CommentScreen>
                   .size
                   .height *
               .3) {
-        if (!_isLoading && _comments.isNotEmpty) {
-          print("====LOAD MORE COMMENTS====");
-          isLoading = true;
-          _currentPage += 1;
-          List<Comment> comments = await _commentService.getRootCommentsOnPost(
-              postId: widget.postId, page: _currentPage);
-          if (comments.isEmpty) {
-            _currentPage -= 1;
-          }
-          setState(() {
-            _comments.addAll(comments);
-          });
-          isLoading = false;
-        }
+        // if (!_isLoading && _comments.isNotEmpty) {
+        //   print("====LOAD MORE COMMENTS====");
+        //   isLoading = true;
+        //   _currentPage += 1;
+        //   List<Comment> comments = await _commentService.getRootCommentsOnPost(
+        //       postId: widget.postId, page: _currentPage);
+        //   if (comments.isEmpty) {
+        //     _currentPage -= 1;
+        //   }
+        //   setState(() {
+        //     _comments.addAll(comments);
+        //   });
+        //   isLoading = false;
+        // }
       }
-      // }
     });
     super.initState();
   }
@@ -228,8 +227,9 @@ class _CommentScreenState extends State<CommentScreen>
                                   postId: widget.postId,
                                   level: 0,
                                   isShowChildren:
-                                      (_currentReplyComment != null &&
-                                          _currentReplyComment!.id == c.id),
+                                      // (_currentReplyComment != null &&
+                                      //     _currentReplyComment!.id == c.id),
+                                      true,
                                   currentReplyComment: _currentReplyComment,
                                   key: ValueKey(c.id.toString()),
                                   replyCommentRequest: (c) =>
@@ -240,6 +240,9 @@ class _CommentScreenState extends State<CommentScreen>
                                           _editedComment!.id == c.id)
                                       ? _editedComment
                                       : null,
+                                  userId: c.user!.id!,
+                                  avt: c.user!.avt!,
+                                  username: c.user!.username!,
                                 );
                               },
                             )
@@ -270,21 +273,11 @@ class _CommentScreenState extends State<CommentScreen>
                         controller: _commentController,
                         focusNode: _focusNode,
                         onSendButtonClick: () {
-                          // if (_currentFocusReplyComment != null) {
-                          //   print("SEND COMMENT");
                           _sendComment();
-                          // } else if (_currentFocusEditComment != null) {
-                          //   print("ANSWER TO COMMENT ${_currentFocusEditComment!.content.toString()}");
-                          //   updateComment();
-                          // }
                         },
                       ),
                       bottom: MediaQuery.of(context).viewInsets.bottom,
                     ),
-                    // _isLoading
-                    //     ? const Positioned.fill(
-                    //         child: Center(child: CupertinoActivityIndicator()))
-                    //     : const SizedBox.shrink(),
                   ],
                 ),
               ),

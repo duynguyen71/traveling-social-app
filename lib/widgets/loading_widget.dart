@@ -10,14 +10,11 @@ class LoadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return isLoading
         ? Positioned.fill(
-            child: Center(
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.deepPurpleAccent.withOpacity(0.04)),
-                child: const Align(
-                  child: CupertinoActivityIndicator(),
-                  alignment: Alignment.center,
-                ),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.deepPurpleAccent.withOpacity(0.1)),
+              child: const Center(
+                child: CupertinoActivityIndicator(),
               ),
             ),
           )

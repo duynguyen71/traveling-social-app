@@ -1,19 +1,12 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:traveling_social_app/constants/app_theme_constants.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:traveling_social_app/screens/account/account_screen.dart';
 import 'package:traveling_social_app/screens/bookmark/bookmark_screen.dart';
-import 'package:traveling_social_app/screens/explore/components/my_bottom_nav_item.dart';
-import 'package:traveling_social_app/screens/home/components/badge_bottom_nav_item.dart';
+
 import 'package:traveling_social_app/screens/home/home_screen.dart';
 import 'package:traveling_social_app/screens/notification/notification_screen.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:traveling_social_app/screens/profile/components/create_post_type_dialog.dart';
-import 'package:traveling_social_app/utilities/application_utility.dart';
 
-import '../../widgets/icon_gradient.dart';
 import 'components/drawer.dart';
 import 'components/main_bottom_nav.dart';
 
@@ -61,22 +54,27 @@ class _ExploreScreenState extends State<ExploreScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Scaffold(
-        key: _scaffoldKey,
-        drawer: Builder(builder: (context) => const HomeDrawer()),
-        body: PageView(
-          controller: _pageController,
-          physics: const NeverScrollableScrollPhysics(),
-          children: const [
-            HomeScreen(),
-            BookmarkScreen(),
-            NotificationScreen(),
-            AccountScreen()
-          ],
-        ),
-        bottomNavigationBar: MainBottomNav(
-            currentPageIndex: _currentPageIndex,
-            setCurrentPageIndex: setCurrentPageIndex));
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+          key: _scaffoldKey,
+          drawer: Builder(builder: (context) => const HomeDrawer()),
+          body: PageView(
+            controller: _pageController,
+            physics: const NeverScrollableScrollPhysics(),
+            children: const [
+              HomeScreen(),
+              BookmarkScreen(),
+              NotificationScreen(),
+              AccountScreen()
+            ],
+          ),
+          bottomNavigationBar: MainBottomNav(
+              currentPageIndex: _currentPageIndex,
+              setCurrentPageIndex: setCurrentPageIndex)),
+    );
   }
 
   @override

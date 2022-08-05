@@ -5,7 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../constants/app_theme_constants.dart';
 import '../../my_theme.dart';
 import '../feed/my_feed.dart';
-import '../review/review_screen.dart';
+import '../review/review_post_screen.dart';
 import '../search/search_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -22,11 +22,6 @@ class _HomeScreenState extends State<HomeScreen>
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final _scrollViewController = ScrollController();
-
-  int _currentNavIndex = 0;
-
-  //set bottom nav index
-  set currentNavIndex(int i) => setState(() => _currentNavIndex = i);
 
   @override
   void initState() {
@@ -117,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen>
           physics: const NeverScrollableScrollPhysics(),
           children: const [
             MyFeed(),
-            ReviewScreen(),
+            ReviewPostScreen(),
           ],
         ),
       ),

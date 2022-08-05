@@ -142,6 +142,7 @@ class _ProfileAvtAndCoverState extends State<ProfileAvtAndCover> {
             initAspectRatio: CropAspectRatioPreset.square,
             lockAspectRatio: false,
             cropFrameColor: Colors.transparent,
+
           ),
           IOSUiSettings(
             title: 'Cropper',

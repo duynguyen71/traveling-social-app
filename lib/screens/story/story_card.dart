@@ -22,13 +22,8 @@ class StoryCard extends StatefulWidget {
 
 class _StoryCardState extends State<StoryCard>
     with AutomaticKeepAliveClientMixin {
-  // late PaletteGenerator paletteGenerator;
-  // List<Color>? gradientBgColors;
 
   String? image;
-
-  // late String userAvt;
-  // bool isLoadingImage = true;
 
   @override
   void initState() {
@@ -38,21 +33,7 @@ class _StoryCardState extends State<StoryCard>
     }
     super.initState();
 
-    // userAvt = widget.story.user!.avt.toString();
   }
-
-  _updateGradientBgColors() async {
-    // if (image != null) {
-    //   paletteGenerator = await PaletteGenerator.fromImageProvider(
-    //     Image.network(imageUrl + image!).image,
-    //   );
-    //   setState(() {
-    //     gradientBgColors = paletteGenerator.colors.toList();
-    //   });
-    // }
-  }
-
-  // User get user => widget.story.user!;
 
   @override
   Widget build(BuildContext context) {

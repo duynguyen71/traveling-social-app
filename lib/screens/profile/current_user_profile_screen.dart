@@ -27,14 +27,6 @@ class CurrentUserProfileScreen extends StatefulWidget {
 }
 
 class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen> {
-  @override
-  void initState() {
-    super.initState();
-    // var postViewModel = context.read<CurrentUserPostViewModel>();
-    // if (!postViewModel.isFetched) {
-    //   postViewModel.getPosts();
-    // }
-  }
 
   @override
   Widget build(BuildContext context) {

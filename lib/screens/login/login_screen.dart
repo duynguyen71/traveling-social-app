@@ -1,26 +1,21 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
-import 'package:traveling_social_app/repository/user_repository/user_repository.dart';
-import 'package:traveling_social_app/screens/explore/explore_screen.dart';
 import 'package:traveling_social_app/screens/login/components/login_background.dart';
 import 'package:traveling_social_app/screens/register/register_screen.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
-import 'package:traveling_social_app/view_model/user_view_model.dart';
 import 'package:traveling_social_app/widgets/already_have_account_check.dart';
 import 'package:traveling_social_app/widgets/custom_input_field.dart';
 import 'package:traveling_social_app/widgets/rounded_button.dart';
 import 'package:traveling_social_app/widgets/rounded_input_container.dart';
 
 import '../../repository/authentication_repository/authentication_repository.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -63,12 +58,32 @@ class _LoginScreenState extends State<LoginScreen> {
           .logIn(username: username, password: password);
     } on SocketException catch (e) {
       print("Socket Exception " + e.toString());
+      _showSocketErrAlertDialog();
     } catch (e) {
       _setErrorMessage(e.toString());
       print("Failed to login" + e.toString());
     } finally {
       _showLoadingIndicator(false);
     }
+  }
+
+  void _showSocketErrAlertDialog() {
+     showDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: const Text("Notification"),
+            content: const Text("Unknown error. Please try again"),
+            actions: [
+              CupertinoDialogAction(
+                child: const Text("Got it"),
+                isDefaultAction: true,
+                onPressed: () => Navigator.pop(context),
+              )
+            ],
+          );
+        },
+        barrierDismissible: false);
   }
 
   void _showLoadingIndicator(bool isLoading) {

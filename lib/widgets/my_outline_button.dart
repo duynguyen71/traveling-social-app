@@ -34,24 +34,26 @@ class MyOutlineButton extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(40),
           color: color ?? Colors.transparent),
-      child: TextButton(
-        onPressed: () {
-          onClick();
-        },
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-              color: textColor ?? kPrimaryColor,
-              fontWeight: FontWeight.bold,
-              fontSize: 12),
-        ),
-        style: TextButton.styleFrom(
-          elevation: 0,
-          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          padding: EdgeInsets.zero,
+      child: SizedBox.expand(
+        child: TextButton(
+          onPressed: () {
+            onClick();
+          },
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+                color: textColor ?? kPrimaryColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 12),
+          ),
+          style: TextButton.styleFrom(
+            elevation: 0,
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            padding: EdgeInsets.zero,
+          ),
         ),
       ),
     );

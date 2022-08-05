@@ -200,8 +200,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                       if (newIndex > oldIndex) {
                                         newIndex = newIndex - 1;
                                       }
-                                      final element =
-                                          _pickedFiles.removeAt(oldIndex);
+                                      final element = _pickedFiles.removeAt(oldIndex);
                                       _pickedFiles.insert(newIndex, element);
                                     }),
                                     itemBuilder: (context, index) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
-import 'package:traveling_social_app/screens/create_review/create_review_post.dart';
+import 'package:traveling_social_app/screens/create_review/create_review_post_screen.dart';
 import 'package:traveling_social_app/widgets/my_divider.dart';
 
 import '../../../utilities/application_utility.dart';
@@ -50,7 +50,7 @@ class CreatePostTypeDialog extends StatelessWidget {
                     onClick: () {
                       Navigator.of(context).pop();
                       ApplicationUtility.navigateToScreen(
-                          context, const CreateReviewPost());
+                          context, const CreateReviewPostScreen());
                     }),
               ],
             ),

@@ -12,9 +12,14 @@ import 'package:traveling_social_app/models/review_post_detail.dart';
 
 import '../config/expired_token_retry.dart';
 import '../config/base_interceptor.dart';
+import '../dto/attachment_dto.dart';
+import '../dto/creation_review_post.dart';
+import '../models/Base_review_post_response.dart';
 import '../models/file_upload.dart';
 import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
+
+import '../models/review_post_details.dart';
 
 /// Service class for Posts
 class PostService {
@@ -97,7 +102,6 @@ class PostService {
     return [];
   }
 
-
   /// reaction emotion on post
   Future<void> reactionPost(
       {required int postId, required int? reactionId}) async {
@@ -135,11 +139,11 @@ class PostService {
           .asMap()
           .entries
           .map((e) => {
-        "attachment": {"id": e.value},
-        "pos": e.key,
-        "active": 1,
-        "caption": story['caption'].toString().trim()
-      })
+                "attachment": {"id": e.value},
+                "pos": e.key,
+                "active": 1,
+                "caption": story['caption'].toString().trim()
+              })
           .toList(),
     };
     var resp = await http.post(url,
@@ -200,7 +204,6 @@ class PostService {
   }
 
   Future<FileUpload> uploadImage(File file) async {
-    print('handle upload image');
     final accessToken = await _storage.read(key: 'accessToken');
     final uri = Uri.parse(baseUrl + "/api/v1/member/users/me/file");
     var request = http.MultipartRequest("POST", uri);
@@ -215,6 +218,7 @@ class PostService {
     if (resp.statusCode == 200) {
       var body = jsonDecode(resp.body) as Map<String, dynamic>;
       FileUpload fileUpload = FileUpload.fromJson(body['data']);
+      print('upload image success');
       return fileUpload;
     } else {
       throw 'Failed to upload image';
@@ -223,32 +227,19 @@ class PostService {
 
   Future<void> hidePost({required int postId}) async {
     final url = Uri.parse(baseUrl + "/api/v1/member/posts/$postId/status/0");
-     await client.put(url, headers: await authorizationHeader());
+    await client.put(url, headers: await authorizationHeader());
   }
 
-  Future<List<ReviewPost>> getReviewPosts() async {
-    final url = Uri.parse(baseUrl + "/api/v1/member/reviews");
-    final resp = await client.get(url, headers: await authorizationHeader());
-    if (resp.statusCode == 200) {
-      final json = jsonDecode(resp.body) as Map<String, dynamic>;
-      final data = json['data'] as List<dynamic>;
-      List<ReviewPost> list = data.map((e) => ReviewPost.fromJson(e)).toList();
-      return list;
-    }
-
-    return [];
-  }
-
-  Future<ReviewPostDetail?> getReviewPostDetail({required int id}) async {
-    final url = Uri.parse(baseUrl + "/api/v1/member/reviews/$id");
-    final resp = await client.get(url, headers: await authorizationHeader());
-    if (resp.statusCode == 200) {
-      final json = jsonDecode(resp.body) as Map<String, dynamic>;
-      final data = json['data'] as Map<String, dynamic>;
-      return ReviewPostDetail.fromJson(data);
-    }
-    return null;
-  }
+  // Future<ReviewPostDetail?> getReviewPostDetail({required int id}) async {
+  //   final url = Uri.parse(baseUrl + "/api/v1/member/reviews/$id");
+  //   final resp = await client.get(url, headers: await authorizationHeader());
+  //   if (resp.statusCode == 200) {
+  //     final json = jsonDecode(resp.body) as Map<String, dynamic>;
+  //     final data = json['data'] as Map<String, dynamic>;
+  //     return ReviewPostDetail.fromJson(data);
+  //   }
+  //   return null;
+  // }
 
   Future<List<Post>> getUserPosts(
       {required int userId, int? page = 0, int? pageSize = 5}) async {
@@ -263,5 +254,65 @@ class PostService {
       return posts;
     }
     return [];
+  }
+
+  /// Get review posts
+  Future<List<BaseReviewPostResponse>> getReviewPosts() async {
+    final url = Uri.parse(baseUrl + "/api/v1/member/reviews");
+    final resp = await client.get(url, headers: await authorizationHeader());
+    if (resp.statusCode == 200) {
+      final json = jsonDecode(resp.body) as Map<String, dynamic>;
+      final data = json['data'] as List<dynamic>;
+      List<BaseReviewPostResponse> list =
+          data.map((e) => BaseReviewPostResponse.fromJson(e)).toList();
+      print('get base review post success');
+      return list;
+    }
+    return [];
+  }
+
+  /// Get review post detail
+  Future<ReviewPostDetails?> getReviewPostDetail(int id) async {
+    final url = Uri.parse('$baseUrl/api/v1/member/review-posts/$id');
+    final resp = await client.get(url);
+    if (resp.statusCode == 200) {
+      var body = jsonDecode(resp.body);
+      return ReviewPostDetails.fromJson(body['data']);
+    }
+    return null;
+  }
+
+  /// Create review post
+  Future<void> createReviewPost(CreationReviewPost request) async {
+    final url = Uri.parse('$baseUrl/api/v1/member/review-posts');
+    //
+    var requestJson = request.toJson();
+    //upload cover image
+    var coverImage = request.coverImage;
+    if (coverImage!.id == null) {
+      var coverImageResp = await uploadImage(coverImage.file);
+      requestJson['coverImageId'] = coverImageResp.id;
+    }
+    // upload images
+    List<AttachmentDto> attachmentRequests = [];
+    for (int i = 0; i < request.images.length; i++) {
+      var attachmentRequest = request.images[i];
+      if (attachmentRequest.id == null && attachmentRequest.imageId == null) {
+        var uploadResp = await uploadImage(attachmentRequest.file);
+        attachmentRequest =
+            attachmentRequest.copyWith(imageId: uploadResp.id, pos: i);
+        attachmentRequests.add(attachmentRequest);
+      }
+    }
+    requestJson['images'] = attachmentRequests.map((e) => e.toJson()).toList();
+    //
+    final resp = await http.post(url,
+        headers: await authorizationHeader(), body: jsonEncode(requestJson));
+    if (resp.statusCode == 200) {
+      return;
+    } else {
+      var body = jsonDecode(resp.body);
+      print(body);
+    }
   }
 }

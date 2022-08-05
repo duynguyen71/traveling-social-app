@@ -57,3 +57,29 @@ const kDefaultAppBarTextTitleStyle =
 
 const kDefaultStoryCardHeight = 180.0;
 const kMainBottomNavHeight = 60.0;
+
+final kReviewPostBorderRadius = BorderRadius.circular(8.0);
+
+const reviewPostTitleTextStyle = TextStyle(
+  fontSize: 20,
+  fontWeight: FontWeight.w600,
+  letterSpacing: .7,
+  color: Colors.black87,
+);
+final kReviewPostImageGalleryBorder = BorderRadius.circular(4.0);
+const kReviewPostMinHeight = 180.0;
+const kShimmerGradient = LinearGradient(
+  colors: [
+    Color(0xFFEBEBF4),
+    Color(0xFFF4F4F4),
+    Color(0xFFEBEBF4),
+  ],
+  stops: [
+    0.1,
+    0.3,
+    0.4,
+  ],
+  begin: Alignment(-1.0, -0.3),
+  end: Alignment(1.0, 0.3),
+  tileMode: TileMode.clamp,
+);

@@ -12,7 +12,7 @@ class CommentService {
   Future<List<Comment>> getRootCommentsOnPost(
       {required int postId, int? page}) async {
     final url = Uri.parse(baseUrl +
-        "/api/v1/member/posts/$postId/comments?page=$page&pageSize=12");
+        "/api/v1/member/posts/$postId/comments?page=$page&pageSize=100");
     final resp = await http.get(url, headers: await authorizationHeader());
     if (resp.statusCode == 200) {
       final jsonBody = jsonDecode(resp.body) as Map<String, dynamic>;

@@ -27,6 +27,9 @@ class ProfileScreen extends StatefulWidget {
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
+
+  static Route route(int userId) =>
+      MaterialPageRoute(builder: (_) => ProfileScreen(userId: userId));
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
@@ -174,52 +177,60 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  MyOutlineButton(
-                                    onClick: () async {
-                                      if (isFollowed) {
-                                        bool success = await _userService
-                                            .unFollow(userId: widget.userId);
-                                        if (success) {
-                                          setState(() {
-                                            _user!.isFollowed = false;
-                                          });
+                                  SizedBox(
+                                    width: 70,
+                                    child: MyOutlineButton(
+                                      onClick: () async {
+                                        if (isFollowed) {
+                                          bool success = await _userService
+                                              .unFollow(userId: widget.userId);
+                                          if (success) {
+                                            setState(() {
+                                              _user!.isFollowed = false;
+                                            });
+                                          }
+                                        } else {
+                                          bool success = await _userService
+                                              .follow(userId: widget.userId);
+                                          if (success) {
+                                            setState(() {
+                                              _user!.isFollowed = true;
+                                            });
+                                          }
                                         }
-                                      } else {
-                                        bool success = await _userService
-                                            .follow(userId: widget.userId);
-                                        if (success) {
-                                          setState(() {
-                                            _user!.isFollowed = true;
-                                          });
-                                        }
-                                      }
-                                    },
-                                    text: isFollowed
-                                        ? AppLocalizations.of(context)!
-                                            .following
-                                        : AppLocalizations.of(context)!.follow,
-                                    color: isFollowed ? kPrimaryColor : null,
-                                    textColor: isFollowed ? Colors.white : null,
-                                    minWidth: 80,
+                                      },
+                                      text: isFollowed
+                                          ? AppLocalizations.of(context)!
+                                              .following
+                                          : AppLocalizations.of(context)!
+                                              .follow,
+                                      color: isFollowed ? kPrimaryColor : null,
+                                      textColor:
+                                          isFollowed ? Colors.white : null,
+                                      minWidth: 80,
+                                    ),
                                   ),
                                   const SizedBox(width: 5),
-                                  MyOutlineButton(
-                                    onClick: () async {
-                                      print('get chat group');
-                                      var chatService = ChatService();
-                                      Group? chatGroup = await chatService
-                                          .getChatGroupBetweenTwoUsers(
-                                              widget.userId);
-                                      if (chatGroup != null) {
-                                        Navigator.push(
-                                            context,
-                                            ChatScreen.route(
-                                                groupId: chatGroup.id!,
-                                                name: _user!.username));
-                                      }
-                                    },
-                                    text: 'Message',
-                                    minWidth: 70,
+                                  SizedBox(
+                                    width: 70,
+                                    child: MyOutlineButton(
+                                      onClick: () async {
+                                        print('get chat group');
+                                        var chatService = ChatService();
+                                        Group? chatGroup = await chatService
+                                            .getChatGroupBetweenTwoUsers(
+                                                widget.userId);
+                                        if (chatGroup != null) {
+                                          Navigator.push(
+                                              context,
+                                              ChatScreen.route(
+                                                  groupId: chatGroup.id!,
+                                                  name: _user!.username));
+                                        }
+                                      },
+                                      text: 'Message',
+                                      minWidth: 70,
+                                    ),
                                   )
                                 ],
                               ),

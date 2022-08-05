@@ -45,7 +45,6 @@ class _PostEntryState extends State<PostEntry>
   final PostService _postService = PostService();
   final List<Attachment> _attachments = [];
 
-  int _attachmentIndex = 0;
   int _likeCount = 0;
 
   @override
@@ -212,91 +211,6 @@ class _PostEntryState extends State<PostEntry>
                 )
               : const SizedBox.shrink(),
           PostAttachmentContainer(attachments: _attachments),
-          // Stack(
-          //   alignment: Alignment.center,
-          //   children: [
-          //     //CONTENTS
-          //     (_attachments.isEmpty ||
-          //             !_attachments.asMap().containsKey(_attachmentIndex))
-          //         ? const SizedBox.shrink()
-          //         : CachedNetworkImage(
-          //             fit: BoxFit.fitWidth,
-          //             imageUrl: imageUrl +
-          //                 _attachments[_attachmentIndex].name.toString(),
-          //             placeholder: (context, url) {
-          //               return AspectRatio(
-          //                 aspectRatio: 4 / 5,
-          //                 child: Container(
-          //                   color: Colors.grey.shade50,
-          //                   child: const Center(
-          //                     child: CupertinoActivityIndicator(),
-          //                   ),
-          //                 ),
-          //               );
-          //             },
-          //             errorWidget: (context, url, error) =>
-          //                 const SizedBox.shrink(),
-          //           ),
-          //     _attachments.length > 1
-          //         ? Positioned(
-          //             child: RoundedIconButton(
-          //               onClick: () {
-          //                 if (_attachmentIndex < getContents().length - 1) {
-          //                   setState(() {
-          //                     _attachmentIndex = _attachmentIndex + 1;
-          //                   });
-          //                 }
-          //               },
-          //               icon: Icons.arrow_forward_ios,
-          //               iconColor: _attachmentIndex < 1
-          //                   ? Colors.black12
-          //                   : Colors.white,
-          //               size: 20,
-          //             ),
-          //             right: 10,
-          //           )
-          //         : const SizedBox.shrink(),
-          //     _attachments.length > 1
-          //         ? Positioned(
-          //             child: RoundedIconButton(
-          //               onClick: () {
-          //                 if (_attachmentIndex >= 1) {
-          //                   setState(() {
-          //                     _attachmentIndex = _attachmentIndex - 1;
-          //                   });
-          //                 }
-          //               },
-          //               icon: Icons.arrow_back_ios,
-          //               iconColor: _attachmentIndex <= (_attachments.length - 1)
-          //                   ? Colors.black12
-          //                   : Colors.white,
-          //               size: 20,
-          //             ),
-          //             left: 10,
-          //           )
-          //         : const SizedBox.shrink(),
-          //     _attachments.length > 1
-          //         ? Positioned(
-          //             right: 10,
-          //             top: 10,
-          //             child: Container(
-          //               padding: const EdgeInsets.symmetric(
-          //                   horizontal: 10, vertical: 5),
-          //               decoration: BoxDecoration(
-          //                 color: Colors.black87.withOpacity(.3),
-          //                 borderRadius: BorderRadius.circular(20),
-          //               ),
-          //               child: RichText(
-          //                 text: TextSpan(children: [
-          //                   TextSpan(text: '${_attachmentIndex + 1}'),
-          //                   TextSpan(text: ' / ${_attachments.length}')
-          //                 ], style: const TextStyle(color: Colors.white)),
-          //               ),
-          //             ),
-          //           )
-          //         : const SizedBox.shrink()
-          //   ],
-          // ),
           //BUTTONS
           Container(
             decoration: BoxDecoration(
