@@ -22,14 +22,22 @@ class AccountScreen extends StatefulWidget {
   State<AccountScreen> createState() => _AccountScreenState();
 }
 
-class _AccountScreenState extends State<AccountScreen> {
+class _AccountScreenState extends State<AccountScreen>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  void initState() {
+    super.initState();
+    print('account screen init');
+  }
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return NestedScrollView(
       headerSliverBuilder: (context, innerBoxIsScrolled) {
         return [
           BaseSliverAppBar(
-              title: AppLocalizations.of(context)!.account, actions: [])
+              title: AppLocalizations.of(context)!.account, actions: const[])
         ];
       },
       body: Container(
@@ -165,26 +173,31 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
               title: AppLocalizations.of(context)!.aboutUs,
             ),
-            Column(
-              children: List.generate(
-                  10,
-                  (index) => MyListTile(
-                        onClick: () {
-                          Navigator.push(
-                              context, NotificationSettingScreen.route());
-                        },
-                        leading: const LinearGradiantMask(
-                          child: Icon(
-                            Icons.notifications,
-                            color: Colors.white,
-                          ),
-                        ),
-                        title: AppLocalizations.of(context)!.notification,
-                      )).toList(),
-            )
+            // Column(
+            //   children: List.generate(
+            //       10,
+            //       (index) => MyListTile(
+            //             onClick: () {
+            //               Navigator.push(
+            //                   context, NotificationSettingScreen.route());
+            //             },
+            //             leading: const LinearGradiantMask(
+            //               child: Icon(
+            //                 Icons.notifications,
+            //                 color: Colors.white,
+            //               ),
+            //             ),
+            //             title: AppLocalizations.of(context)!.notification,
+            //           )).toList(),
+            // )
           ],
         ),
       ),
     );
+  }
+
+  @override
+  bool get wantKeepAlive {
+    return true;
   }
 }

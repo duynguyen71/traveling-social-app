@@ -20,7 +20,6 @@ class MainBottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: kBottomNavigationBarHeight,
-      // margin: const EdgeInsets.only(bottom: 8.0),
       alignment: Alignment.center,
       child: Center(
         child: Row(

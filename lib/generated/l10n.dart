@@ -649,6 +649,16 @@ class S {
       args: [],
     );
   }
+
+  /// `About author`
+  String get aboutAuthor {
+    return Intl.message(
+      'About author',
+      name: 'aboutAuthor',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

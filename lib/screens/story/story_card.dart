@@ -4,10 +4,7 @@ import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/models/post_content.dart';
 import 'package:traveling_social_app/models/post.dart';
-import 'package:palette_generator/palette_generator.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
-import '../../models/user.dart';
-import 'package:shimmer/shimmer.dart';
 
 class StoryCard extends StatefulWidget {
   const StoryCard({Key? key, required this.story, required this.onClick})

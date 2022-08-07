@@ -2,80 +2,54 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:traveling_social_app/models/comment.dart';
-import 'package:traveling_social_app/models/reaction.dart';
 import 'package:traveling_social_app/models/post_content.dart';
+import 'package:traveling_social_app/models/reaction.dart';
 
 import 'user.dart';
 
 Post postFromJson(String str) => Post.fromJson(json.decode(str));
 
 class Post with ChangeNotifier {
-  int? _id;
-  String? _caption;
-  int? _status;
-  int? _active;
-  User? _user;
-  List<Content>? _contents = [];
-  String? _createDate;
-  String? _updateDate;
-  int _likeCount = 0;
-  int _reactionCount = 0;
-  int _commentCount = 0;
-  List<Comment> _myComments = [];
-  Reaction? _myReaction;
+  int? id;
+  String? caption;
+  int?status;
+  int? active;
+  User? user;
+  List<Content>? contents = [];
+  String? createDate;
+  String? updateDate;
+  int likeCount = 0;
+  int reactionCount = 0;
+  int commentCount = 0;
+  List<Comment>myComments = [];
+  Reaction?myReaction;
 
   Post.fromJson(dynamic json) {
-    _id = json['id'];
-    _caption = json['caption'];
-    _status = json['status'];
-    _active = json['active'];
-    _user = json['user'] != null ? User.fromJson(json['user']) : null;
+   id = json['id'];
+    caption = json['caption'];
+    status = json['status'];
+    active = json['active'];
+    user = json['user'] != null ? User.fromJson(json['user']) : null;
     if (json['contents'] != null) {
-      _contents = [];
+      contents = [];
       json['contents'].forEach((v) {
-        _contents?.add(Content.fromJson(v));
+        contents?.add(Content.fromJson(v));
       });
     }
-    _createDate = json['createDate'];
-    _updateDate = json['updateDate'];
-    _likeCount = json['likeCount'] ?? 0;
-    _reactionCount = json['reactionCount'] ?? 0;
-    _commentCount = json['commentCount'] ?? 0;
+    createDate = json['createDate'];
+    updateDate = json['updateDate'];
+    likeCount = json['likeCount'] ?? 0;
+    reactionCount = json['reactionCount'] ?? 0;
+    commentCount = json['commentCount'] ?? 0;
 
     Object? c = json['myComments'];
-    _myComments = c != null
+    myComments = c != null
         ? ((c as List<dynamic>).map((e) => Comment.fromJson(e)).toList())
         : [];
 
     var jsonReaction = json['myReaction'];
-    _myReaction = jsonReaction != null ? Reaction.fromJson(jsonReaction) : null;
+    myReaction = jsonReaction != null ? Reaction.fromJson(jsonReaction) : null;
   }
-
-  int? get id => _id;
-
-  String? get caption => _caption;
-
-  int? get status => _status;
-
-  int? get active => _active;
-
-  User? get user => _user;
-
-  List<Content>? get contents => _contents;
-
-  String? get createDate => _createDate;
-
-  String? get updateDate => _updateDate;
-
-  int get likeCounts => _likeCount;
-
-  int get reactionCount => _reactionCount;
-
-  int get commentCount => _commentCount;
-
-  List<Comment> get myComments => _myComments;
-
-  Reaction? get myReaction => _myReaction;
 
   @override
   String toString() {
@@ -93,8 +67,8 @@ class Post with ChangeNotifier {
     int? reactionCount,
     int? commentCount,
   }) {
-    _reactionCount = reactionCount ?? this.reactionCount;
-    _commentCount = commentCount ?? this.commentCount;
+    reactionCount = reactionCount ?? this.reactionCount;
+    commentCount = commentCount ?? this.commentCount;
   }
 
   Post({
@@ -109,16 +83,16 @@ class Post with ChangeNotifier {
     int reactionCount = 0,
     int commentCount = 0,
   }) {
-    _id = id;
-    _caption = caption;
-    _status = status;
-    _active = active;
-    _user = user;
-    _contents = contents;
-    _createDate = createDate;
-    _updateDate = updateDate;
-    _reactionCount = reactionCount;
-    _commentCount = commentCount;
+    id = id;
+    caption = caption;
+    status = status;
+    active = active;
+    user = user;
+    contents = contents;
+    createDate = createDate;
+    updateDate = updateDate;
+    reactionCount = reactionCount;
+    commentCount = commentCount;
   }
 
   @override
@@ -129,5 +103,4 @@ class Post with ChangeNotifier {
   @override
   int get hashCode => id.hashCode;
 
-  set commentCount(int i) => _commentCount = i;
 }

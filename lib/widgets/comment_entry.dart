@@ -3,10 +3,10 @@ import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dar
 import 'package:traveling_social_app/screens/profile/current_user_profile_screen.dart';
 import 'package:traveling_social_app/screens/profile/profile_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
-import 'package:traveling_social_app/view_model/user_view_model.dart';
 import 'package:traveling_social_app/widgets/bottom_select_dialog.dart';
 import 'package:traveling_social_app/widgets/expandable_text.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
+import '../models/base_user.dart';
 import '../models/comment.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -40,9 +40,9 @@ class CommentEntry extends StatefulWidget {
   final Function editCommentRequest;
   final Function hideComment;
 
-  final int userId;
-  final String username;
-  final String avt;
+  final int? userId;
+  final String? username;
+  final String? avt;
 
   final Comment? editedComment;
 
@@ -66,6 +66,8 @@ class _CommentEntryState extends State<CommentEntry> {
 
   Comment get comment => widget.comment;
 
+  BaseUserInfo? get user => widget.comment.user;
+
   @override
   void initState() {
     super.initState();
@@ -86,8 +88,6 @@ class _CommentEntryState extends State<CommentEntry> {
   }
 
   int get level => widget.level;
-
-  // User? get user => widget.comment.user;
 
   @override
   Widget build(BuildContext context) {
@@ -112,24 +112,20 @@ class _CommentEntryState extends State<CommentEntry> {
                       //USER AVT
                       UserAvatar(
                         onTap: () {
-                          ApplicationUtility.navigateToScreen(
-                              context,
-                              context
-                                      .read<UserViewModel>()
-                                      .equal(widget.comment.user)
-                                  ? const CurrentUserProfileScreen()
-                                  : ProfileScreen(
-                                      userId: widget.comment.user!.id!));
+                          int currentUserId =
+                              context.read<AuthenticationBloc>().state.user.id;
+                          if (user == null || currentUserId == user!.id!) {
+                            Navigator.push(
+                                context, CurrentUserProfileScreen.route());
+                          } else {
+                            Navigator.push(
+                                context, ProfileScreen.route(user!.id!));
+                          }
                         },
                         size: 30,
-                        avt: widget.comment.user != null
-                            ? widget.comment.user!.avt.toString()
-                            : context
-                                .read<AuthenticationBloc>()
-                                .state
-                                .user
-                                .avt
-                                .toString(),
+                        avt: user != null
+                            ? user!.avt
+                            : context.read<AuthenticationBloc>().state.user.avt,
                       ),
                       const SizedBox(width: 10),
                       Column(
@@ -169,17 +165,10 @@ class _CommentEntryState extends State<CommentEntry> {
                                         )
                                       : MyBottomDialog(
                                           items: [
-                                            // SelectItem(
-                                            //     title: 'Edit',
-                                            //     onClick: () {
-                                            //       widget.editCommentRequest(
-                                            //           widget.comment);
-                                            //     }),
                                             BottomDialogItem(
                                                 title: 'Hide',
                                                 onClick: () {
-                                                  widget.hideComment(
-                                                      widget.comment);
+                                                  widget.hideComment(widget.comment);
                                                   setState(() {
                                                     _hiding = true;
                                                   });

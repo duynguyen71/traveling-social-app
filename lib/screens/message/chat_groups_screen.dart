@@ -7,15 +7,9 @@ import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/models/group.dart';
 import 'package:traveling_social_app/screens/message/components/group_chat_entry.dart';
 import 'package:traveling_social_app/screens/message/create_message_screen.dart';
-import 'package:traveling_social_app/screens/message/public_chat_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
-import 'package:traveling_social_app/view_model/user_view_model.dart';
-import 'package:traveling_social_app/widgets/my_divider.dart';
 import 'package:traveling_social_app/widgets/rounded_icon_button.dart';
 import 'package:traveling_social_app/widgets/rounded_input_container.dart';
-import 'package:provider/provider.dart';
-
-import '../../view_model/chat_room_view_model.dart';
 import 'bloc/chat_bloc.dart';
 import 'chat_screen.dart';
 
@@ -44,7 +38,7 @@ class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
   String? getGroupAvt(Group group) {
     if (group.users.length == 2) {
       User? user = group.users[0];
-      if (!context.read<UserViewModel>().equal(user)) {
+      if (context.read<AuthenticationBloc>().state.user.id != user.id) {
         return user.avt.toString();
       } else {
         return group.users[1].avt.toString();
@@ -196,7 +190,8 @@ class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
               BlocBuilder<ChatBloc, ChatState>(
                 builder: (context, state) {
                   return SliverToBoxAdapter(
-                    child: (state.chatGroups.isNotEmpty||state.status != ChatGroupStatus.success)
+                    child: (state.chatGroups.isNotEmpty ||
+                            state.status != ChatGroupStatus.success)
                         ? const SizedBox.shrink()
                         : Container(
                             margin: EdgeInsets.only(top: size.height * .2),

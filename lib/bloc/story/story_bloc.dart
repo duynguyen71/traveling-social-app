@@ -61,20 +61,15 @@ class StoryBloc extends Bloc<StoryEvent, StoryState> {
     emit(state.copyWith(stories: {event.story, ...state.stories}));
   }
 
-  _removeStory(RemoveStory event, emit) {
-    // await _postService.hidePost(postId: event.id);
-
-    // int indexOfDeleteStory =
-    //     state.stories.toList().indexWhere((element) => element.id == event.id);
-
-    var copyStories = {...state.stories};
-    // int currentScrollIndex = state.currentScrollIndex;
-    // if (indexOfDeleteStory == currentScrollIndex) {
-    //   print('nex state');
-    //   emit(state.copyWith(
-    //       stories: copyStories, currentScrollIndex: currentScrollIndex + 1));
-    // }
-    copyStories.removeWhere((element) => element.id == event.id);
-    emit(state.copyWith(stories: copyStories));
+  _removeStory(RemoveStory event, emit) async {
+    try {
+      await _postService.hidePost(postId: event.id);
+      var copyStories = {...state.stories};
+      copyStories.removeWhere((element) => element.id == event.id);
+      emit(state.copyWith(stories: copyStories));
+      print('review story ${event.id} success');
+    } on Exception catch (e) {
+      emit(state.copyWith(status: StoryStateStatus.failed));
+    }
   }
 }

@@ -15,16 +15,15 @@ class BaseInterceptor implements InterceptorContract {
       var url = data.url;
       print('\nRequesting on: $url method ${data.method}\n');
       String? token = await _storage.read(key: 'accessToken');
-      if (token != null) {
-        data.headers['Authorization'] = "Bearer $token";
-      }
+      data.headers['Authorization'] = "Bearer $token";
       data.headers['Content-Type'] = "application/json";
       return data;
     } on Exception catch (e) {
-      print('exception: $e');
+      print('BaseInterceptor exception: $e');
     }
     return data;
   }
+
   /// Triggering after the request is called
   @override
   Future<ResponseData> interceptResponse({required ResponseData data}) async {

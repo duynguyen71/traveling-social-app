@@ -25,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void initState() {
+    print('home screen init');
     _tabController = TabController(
         vsync: this,
         length: 2,
@@ -67,6 +68,9 @@ class _HomeScreenState extends State<HomeScreen>
             backgroundColor: Colors.white,
             floating: true,
             snap: true,
+            // expandedHeight: 700,
+            collapsedHeight: 56,
+            elevation: 0,
             bottom: PreferredSize(
               preferredSize: const Size.fromHeight(56),
               //TAB BAR

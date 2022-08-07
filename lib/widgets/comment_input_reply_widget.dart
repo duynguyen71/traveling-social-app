@@ -41,118 +41,135 @@ class CommentInputReplyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Column(
-      children: [
-        showReplyUser
-            ? Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  border: Border(
-                    top: BorderSide(
-                      color: Colors.grey.withOpacity(.2),
-                      width: 1,
-                    ),
-                  ),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                alignment: Alignment.centerLeft,
-                width: size.width,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        width: size.width * .7,
-                        constraints: BoxConstraints(
-                          maxWidth: size.width * .7,
-                        ),
-                        child: RichText(
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                  text:
-                                      'Reply to $replyUsername: ',style: const TextStyle(
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w600),),
-                              TextSpan(
-                                text: ' ${message.toString()}',
-                                style: const TextStyle(
-                                            color: Colors.black54,
-                                          ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () => onClose(),
-                      icon: const Icon(Icons.close),
-                    )
-                  ],
-                ),
-              )
-            : const SizedBox.shrink(),
-        Container(
-          height: size.height * .1,
-          constraints: const BoxConstraints(maxHeight: 80),
-          alignment: Alignment.center,
-          width: size.width,
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-              color: bgColor ?? Colors.grey.shade100,
+    return Container(
+      decoration: BoxDecoration(
+        color: bgColor ?? Colors.grey.shade100,
+        border: Border(
+          top: BorderSide(
+            color: Colors.grey.withOpacity(.1),
+            width: 1,
+          ),
+        ),
+      ),
+      alignment: Alignment.center,
+      // height: 65,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          showReplyUser
+              ? Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
               border: Border(
                 top: BorderSide(
-                  color: Colors.grey.withOpacity(.1),
+                  color: Colors.grey.withOpacity(.2),
                   width: 1,
                 ),
               ),
-              borderRadius: borderRadius),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: TextField(
-                  onChanged: (text) => onChange(text),
-                  focusNode: focusNode,
-                  controller: controller,
-                  style: TextStyle(color: placeHolderColor ?? Colors.black87),
-                  decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: inputBorderRadius ??
-                            const BorderRadius.all(Radius.circular(50)),
-                        borderSide: BorderSide(
-                            width: 1, color: inputBorderColor ?? Colors.white),
+            ),
+            padding:
+            const EdgeInsets.symmetric(horizontal: 10,),
+            alignment: Alignment.centerLeft,
+            width: size.width,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    width: size.width * .7,
+                    constraints: BoxConstraints(
+                      maxWidth: size.width * .7,
+                    ),
+                    child: RichText(
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Reply to $replyUsername: ',
+                            style: const TextStyle(
+                                color: Colors.black87,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          TextSpan(
+                            text: ' ${message.toString()}',
+                            style: const TextStyle(
+                              color: Colors.blueAccent,
+                            ),
+                          ),
+                        ],
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(50)),
-                        borderSide: BorderSide(
-                            width: 1, color: inputBorderColor ?? Colors.white),
-                      ),
-                      filled: true,
-                      hintStyle:
-                          TextStyle(color: placeHolderColor ?? Colors.black54),
-                      hintText: placeHolderText ?? "Type in your text",
-                      fillColor: inputBgColor ?? Colors.white),
+                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(width: 10),
-              IconButton(
-                icon: Icon(
-                  Icons.send,
-                  color: sendBtnColor ?? Colors.black12,
+                IconButton(
+                  onPressed: () => onClose(),
+                  icon: const Icon(Icons.close),
+                )
+              ],
+            ),
+          )
+              : const SizedBox.shrink(),
+          Container(
+            constraints: const BoxConstraints(maxHeight: 60),
+            alignment: Alignment.center,
+            width: size.width,
+            decoration: BoxDecoration(
+                color: bgColor ?? Colors.grey.shade100,
+                borderRadius: borderRadius),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      autofocus: false,
+                      minLines: 1,
+                      onChanged: (text) => onChange(text),
+                      focusNode: focusNode,
+                      controller: controller,
+                      style: TextStyle(color: placeHolderColor ?? Colors.black87),
+                      decoration: InputDecoration(
+                          // enabledBorder: OutlineInputBorder(
+                          //   borderRadius: inputBorderRadius ??
+                          //       const BorderRadius.all(Radius.circular(90)),
+                          //   borderSide: BorderSide(
+                          //       width: 1,
+                          //       color: inputBorderColor ?? Colors.white),
+                          // ),
+                          // focusedBorder: OutlineInputBorder(
+                          //   borderRadius:
+                          //       const BorderRadius.all(Radius.circular(1)),
+                          //   borderSide: BorderSide(
+                          //       width: 1,
+                          //       color: inputBorderColor ?? Colors.white),
+                          // ),
+                          filled: true,
+                          hintStyle: TextStyle(
+                              color: placeHolderColor ?? Colors.black54),
+                          hintText: placeHolderText ?? "Type in your text",
+                          fillColor: inputBgColor ?? Colors.white),
+                    ),
+                  ),
                 ),
-                onPressed: () => onSendButtonClick(),
-              ),
-            ],
+                const SizedBox(width: 10),
+                IconButton(
+                  icon: Icon(
+                    Icons.send,
+                    color: sendBtnColor ?? Colors.black12,
+                  ),
+                  onPressed: () => onSendButtonClick(),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+
+        ],
+      ),
     );
   }
 }

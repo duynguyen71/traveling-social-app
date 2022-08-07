@@ -1,6 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:traveling_social_app/screens/account/account_screen.dart';
 import 'package:traveling_social_app/screens/bookmark/bookmark_screen.dart';
 
@@ -27,28 +26,23 @@ class _ExploreScreenState extends State<ExploreScreen>
 
   int _currentPageIndex = 0;
 
-  //set page index and jump to page
-  set currentPageIndex(int i) {
-    setState(() => _currentPageIndex = i);
-    _animateToPage(i);
-  }
-
-  setCurrentPageIndex(int i) => currentPageIndex = i;
-
-  _animateToPage(int pageIndex) async {
-    _pageController.animateToPage(pageIndex,
-        duration: const Duration(milliseconds: 250), curve: Curves.linear);
+  setCurrentPageIndex(int i) {
+    setState(() {
+      _pageController.jumpToPage(i);
+      _currentPageIndex = i;
+    });
   }
 
   @override
   void initState() {
-    super.initState();
     FirebaseMessaging.instance.getToken().then(
       (token) {
         print('device notification token\n$token\n');
       },
     );
-    _pageController = PageController(initialPage: 0, keepPage: true);
+    _pageController =
+        PageController(initialPage: _currentPageIndex, keepPage: true);
+    super.initState();
   }
 
   @override

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:traveling_social_app/screens/setting/components/settting_item_leading.dart';
 class SettingItemCheckBox extends StatelessWidget {
   const SettingItemCheckBox(

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:traveling_social_app/bloc/post/post_bloc.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/services/comment_service.dart';
@@ -22,7 +23,6 @@ class CommentScreen extends StatefulWidget {
 
 class _CommentScreenState extends State<CommentScreen>
     with AutomaticKeepAliveClientMixin {
-  int _currentPage = 0;
 
   final CommentService _commentService = CommentService();
 
@@ -125,23 +125,10 @@ class _CommentScreenState extends State<CommentScreen>
                   .size
                   .height *
               .3) {
-        // if (!_isLoading && _comments.isNotEmpty) {
-        //   print("====LOAD MORE COMMENTS====");
-        //   isLoading = true;
-        //   _currentPage += 1;
-        //   List<Comment> comments = await _commentService.getRootCommentsOnPost(
-        //       postId: widget.postId, page: _currentPage);
-        //   if (comments.isEmpty) {
-        //     _currentPage -= 1;
-        //   }
-        //   setState(() {
-        //     _comments.addAll(comments);
-        //   });
-        //   isLoading = false;
-        // }
       }
     });
     super.initState();
+    _commentController.text = lorem(words: 12,paragraphs: 1);
   }
 
   _getOtherUserComments() async {
@@ -240,9 +227,9 @@ class _CommentScreenState extends State<CommentScreen>
                                           _editedComment!.id == c.id)
                                       ? _editedComment
                                       : null,
-                                  userId: c.user!.id!,
-                                  avt: c.user!.avt!,
-                                  username: c.user!.username!,
+                                  userId: c.user?.id,
+                                  avt: c.user?.avt,
+                                  username: c.user?.username,
                                 );
                               },
                             )
@@ -308,7 +295,6 @@ class _CommentScreenState extends State<CommentScreen>
     _commentController.dispose();
     _focusNode.dispose();
     _scrollController.dispose();
-
     super.dispose();
   }
 

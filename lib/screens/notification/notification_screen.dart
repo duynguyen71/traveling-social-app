@@ -17,15 +17,15 @@ class _NotificationScreenState extends State<NotificationScreen>
     with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
-    super.initState();
     print("=== Notification Screen ===");
+    super.initState();
     context.read<NotificationBloc>().add(FetchNotification());
   }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     super.build(context);
+    final size = MediaQuery.of(context).size;
     return NestedScrollView(
       headerSliverBuilder: (context, innerBoxIsScrolled) {
         return [const BaseSliverAppBar(title: 'Notifications', actions: [])];
@@ -96,5 +96,5 @@ class _NotificationScreenState extends State<NotificationScreen>
   }
 
   @override
-  bool get wantKeepAlive => false;
+  bool get wantKeepAlive => true;
 }

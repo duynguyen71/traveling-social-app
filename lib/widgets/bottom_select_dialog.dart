@@ -37,7 +37,7 @@ class MyBottomDialog extends StatelessWidget {
                             Navigator.of(context).pop();
                           },
                           child: Ink(
-                            child: Container(
+                            child: SizedBox(
                               // padding: const EdgeInsets.symmetric(vertical: 5),
                               width: double.infinity,
                               child: TextButton(

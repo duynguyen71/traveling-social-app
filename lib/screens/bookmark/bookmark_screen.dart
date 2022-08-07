@@ -13,8 +13,8 @@ class _BookmarkScreenState extends State<BookmarkScreen>
     with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
-    super.initState();
     print('bookmark init');
+    super.initState();
   }
 
   @override
@@ -24,8 +24,7 @@ class _BookmarkScreenState extends State<BookmarkScreen>
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
             BaseSliverAppBar(
-                title: AppLocalizations.of(context)!.bookmark, actions: [
-            ])
+                title: AppLocalizations.of(context)!.bookmark, actions: const[])
           ];
         },
         body: Container(

@@ -25,15 +25,10 @@ class _ReactionBarState extends State<ReactionBar> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.lightBlueAccent.withOpacity(.05),
-        // borderRadius: BorderRadius.circular(40),
-        // border: Border.all(width: .1, color: Colors.grey.shade400),
         border: Border(
           top: BorderSide(width: .1, color: Colors.grey.shade400),
           bottom: BorderSide(width: .1, color: Colors.grey.shade400),
         ),
-        // boxShadow: [
-        //   kDefaultPostActionBarShadow,
-        // ]
       ),
       alignment: Alignment.center,
       padding: const EdgeInsets.all(4),

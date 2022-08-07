@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/bloc/locale/locale_cubit.dart';
 import 'package:traveling_social_app/bloc/post/post_bloc.dart';
@@ -14,7 +13,6 @@ import 'package:traveling_social_app/screens/explore/explore_screen.dart';
 import 'package:traveling_social_app/screens/login/login_screen.dart';
 import 'package:traveling_social_app/screens/message/bloc/chat_bloc.dart';
 import 'package:traveling_social_app/screens/splash/splash_screen.dart';
-import 'package:traveling_social_app/view_model/current_user_post_view_model.dart';
 import 'authentication/bloc/authentication_state.dart';
 import 'bloc/notification/notification_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -91,56 +89,47 @@ class _AppViewState extends State<AppView> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<CurrentUserPostViewModel>(
-            create: (_) => CurrentUserPostViewModel()),
-      ],
-      builder: (context, child) {
-        return BlocBuilder<LocaleCubit, LocaleState>(builder: (_, localeState) {
-          return MaterialApp(
-            title: 'TC Social',
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            locale: localeState.locale,
-            navigatorKey: _navigatorKey,
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              scaffoldBackgroundColor: Colors.white,
-              visualDensity: VisualDensity.adaptivePlatformDensity,
-              textTheme:
-                  GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
-              // textTheme: GoogleFonts.robotoTextTheme(),
-            ),
-            builder: (context, child) {
-              return BlocListener<AuthenticationBloc, AuthenticationState>(
-                listener: (context, state) {
-                  switch (state.status) {
-                    case AuthenticationStatus.authenticated:
-                      _navigator.pushAndRemoveUntil<void>(
-                        ExploreScreen.route(),
-                        (route) => false,
-                      );
-                      break;
-                    case AuthenticationStatus.unauthenticated:
-                      _navigator.pushAndRemoveUntil<void>(
-                        LoginScreen.route(),
-                        (route) => false,
-                      );
-                      break;
-                    default:
-                      break;
-                  }
-                },
-                child: child,
-              );
+    return BlocBuilder<LocaleCubit, LocaleState>(builder: (_, localeState) {
+      return MaterialApp(
+        title: 'TC Social',
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: localeState.locale,
+        navigatorKey: _navigatorKey,
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          scaffoldBackgroundColor: Colors.white,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
+          // textTheme: GoogleFonts.robotoTextTheme(),
+        ),
+        builder: (context, child) {
+          return BlocListener<AuthenticationBloc, AuthenticationState>(
+            listener: (context, state) {
+              switch (state.status) {
+                case AuthenticationStatus.authenticated:
+                  _navigator.pushAndRemoveUntil<void>(
+                    ExploreScreen.route(),
+                    (route) => false,
+                  );
+                  break;
+                case AuthenticationStatus.unauthenticated:
+                  _navigator.pushAndRemoveUntil<void>(
+                    LoginScreen.route(),
+                    (route) => false,
+                  );
+                  break;
+                default:
+                  break;
+              }
             },
-            onGenerateRoute: (_) => SplashScreen.route(),
-            // onGenerateRoute: (_) => Router,
+            child: child,
           );
-        });
-      },
-    );
+        },
+        onGenerateRoute: (_) => SplashScreen.route(),
+        // onGenerateRoute: (_) => Router,
+      );
+    });
   }
 
   @override

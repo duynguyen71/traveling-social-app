@@ -7,14 +7,12 @@ import 'package:traveling_social_app/screens/explore/components/post_entry.dart'
 import 'package:traveling_social_app/services/chat_service.dart';
 import 'package:traveling_social_app/services/post_service.dart';
 import 'package:traveling_social_app/widgets/my_outline_button.dart';
-import 'package:traveling_social_app/widgets/rounded_icon_button.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
 
 import '../../constants/api_constants.dart';
 import '../../constants/app_theme_constants.dart';
 import '../../models/post.dart';
 import '../../services/user_service.dart';
-import '../../widgets/rounded_background_icon.dart';
 import '../message/chat_screen.dart';
 import 'components/follow_count.dart';
 import 'components/icon_with_text.dart';
