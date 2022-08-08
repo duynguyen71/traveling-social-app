@@ -26,7 +26,7 @@ class _StoryCardState extends State<StoryCard>
   void initState() {
     List<Content>? contents = widget.story.contents;
     if (contents != null && contents.isNotEmpty) {
-      image = (contents[0].attachment?.name.toString());
+      image = (contents[0].attachment?.name);
     }
     super.initState();
 

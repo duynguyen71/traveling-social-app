@@ -68,6 +68,34 @@ class CommentService {
     }
     throw 'Failed to post comment';
   }
+ Future<Comment> commentReviewPost(
+      {int? postId,
+      int? commentId,
+      String? contentText,
+      int? attachmentId,
+      int? parentCommentId}) async {
+    final url = Uri.parse(baseUrl + "/api/v1/member/review-posts/$postId/comments");
+    final resp = await http.post(
+      url,
+      headers: await authorizationHeader(),
+      body: jsonEncode(
+        {
+          "id": commentId,
+          "postId": postId,
+          "attachmentId": attachmentId,
+          "parentCommentId": parentCommentId,
+          "content": contentText,
+        },
+      ),
+    );
+    if (resp.statusCode == 200) {
+      final jsonBody = jsonDecode(resp.body) as Map<String, dynamic>;
+      Comment comment =
+          Comment.fromJson(jsonBody['data'] as Map<String, dynamic>);
+      return comment;
+    }
+    throw 'Failed to post comment';
+  }
 
   Future<void> hideComment({required int commentId}) async {
     final url =

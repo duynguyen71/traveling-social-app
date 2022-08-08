@@ -7,6 +7,7 @@ import '../../../widgets/user_avt.dart';
 import '../../profile/components/follow_count.dart';
 import '../../profile/profile_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthTag extends StatefulWidget {
   const AuthTag({Key? key, required this.auth}) : super(key: key);
@@ -30,6 +31,10 @@ class _AuthTagState extends State<AuthTag> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey.shade100,
+        border: Border.all(
+          color: Colors.grey.shade200,
+          width: 1,
+        ),
         borderRadius: BorderRadius.circular(8.0),
       ),
       padding: const EdgeInsets.all(8.0),
@@ -38,8 +43,8 @@ class _AuthTagState extends State<AuthTag> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "About author",
+           Text(
+           AppLocalizations.of(context)!.aboutAuthor,
             style: TextStyle(
               fontSize: 16,
               color: Colors.black87,
@@ -76,7 +81,7 @@ class _AuthTagState extends State<AuthTag> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          Container(
+                       context.read<AuthenticationBloc>().state.user.id != author.id?Container(
                             decoration: BoxDecoration(
                               color: Colors.blue,
                               borderRadius: BorderRadius.circular(80.0),
@@ -85,16 +90,16 @@ class _AuthTagState extends State<AuthTag> {
                               onPressed: () {},
                               style: TextButton.styleFrom(
                                   padding: EdgeInsets.zero,
-                                  minimumSize: Size(100, 30),
+                                  minimumSize: const Size(100, 30),
                                   tapTargetSize:
                                       MaterialTapTargetSize.shrinkWrap,
                                   alignment: Alignment.center),
-                              child: const Text(
-                                "Follow",
+                              child:  Text(
+                                AppLocalizations.of(context)!.follow,
                                 style: TextStyle(color: Colors.white),
                               ),
                             ),
-                          )
+                          ):const SizedBox.shrink()
                         ],
                       ),
                       Padding(
@@ -103,9 +108,9 @@ class _AuthTagState extends State<AuthTag> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            FollowCount(title: 'Reviews', count: 1),
-                            FollowCount(title: 'Posts', count: 21),
-                            FollowCount(title: 'Followers', count: 21),
+                            FollowCount(title:  AppLocalizations.of(context)!.review, count: 1),
+                            FollowCount(title:  AppLocalizations.of(context)!.post, count: 21),
+                            FollowCount(title:  AppLocalizations.of(context)!.follower, count: 21),
                           ],
                         ),
                       )

@@ -20,7 +20,8 @@ class BaseReviewPostWidget extends StatefulWidget {
   State<BaseReviewPostWidget> createState() => _BaseReviewPostWidgetState();
 }
 
-class _BaseReviewPostWidgetState extends State<BaseReviewPostWidget>with AutomaticKeepAliveClientMixin {
+class _BaseReviewPostWidgetState extends State<BaseReviewPostWidget>
+    with AutomaticKeepAliveClientMixin {
   BaseReviewPostResponse get reviewPost => widget.reviewPost;
 
   _onTap() {
@@ -52,7 +53,7 @@ class _BaseReviewPostWidgetState extends State<BaseReviewPostWidget>with Automat
                   child: CachedNetworkImage(
                     alignment: Alignment.center,
                     imageUrl:
-                        '$imageUrl${reviewPost.coverImage!.name.toString()}',
+                        '$imageUrl${reviewPost.coverImage!.name}',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -91,15 +92,15 @@ class _BaseReviewPostWidgetState extends State<BaseReviewPostWidget>with Automat
                             overflow: TextOverflow.ellipsis,
                             maxLines: 4,
                           ),
-                          Row(
-                            children: const [
-                              Icon(Icons.location_on_sharp,
-                                  size: 12, color: Colors.black54),
-                              Text(
-                                "Lat da",
-                                style: TextStyle(color: Colors.black54),
+                          SizedBox(
+                            width: size.width * .35,
+                            child: Text(
+                              reviewPost.user!.username!,
+                              style: const TextStyle(
+                                color: Colors.blueAccent,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                            ],
+                            ),
                           ),
                         ],
                       ),

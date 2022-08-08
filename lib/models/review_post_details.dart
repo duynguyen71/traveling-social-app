@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:traveling_social_app/models/base_user.dart';
 import 'package:traveling_social_app/models/file_upload.dart';

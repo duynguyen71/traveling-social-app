@@ -86,12 +86,7 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
 
   @override
   void initState() {
-    // var authBloc = context.read<AuthenticationBloc>().state;
-    // _captionController.text = "User: ${authBloc.user.username.toString()}" +
-    //     authBloc.user.id.toString() +
-    //     " post at " +
-    //     DateTime.now().millisecondsSinceEpoch.toString();
-    _captionController.text = lorem(words: 60);
+    _captionController.text = lorem(words: 20);
     super.initState();
   }
 

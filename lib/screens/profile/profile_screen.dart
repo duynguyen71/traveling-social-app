@@ -143,8 +143,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   child: _user != null
                                       ? CachedNetworkImage(
                                           fit: BoxFit.cover,
-                                          imageUrl: imageUrl +
-                                              _user!.background.toString(),
+                                          imageUrl: '$imageUrl${_user!.background}',
                                           errorWidget: (context, url, error) =>
                                               Image.asset(
                                             "assets/images/home_bg.png",

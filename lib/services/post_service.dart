@@ -7,19 +7,19 @@ import 'package:http_interceptor/http/intercepted_client.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/models/post.dart';
 import 'package:http/http.dart' as http;
-import 'package:traveling_social_app/models/review_post.dart';
-import 'package:traveling_social_app/models/review_post_detail.dart';
 
 import '../config/expired_token_retry.dart';
 import '../config/base_interceptor.dart';
 import '../dto/attachment_dto.dart';
 import '../dto/creation_review_post.dart';
 import '../models/Base_review_post_response.dart';
+import '../models/comment.dart';
 import '../models/file_upload.dart';
 import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
 
 import '../models/review_post_details.dart';
+import '../models/tag.dart';
 
 /// Service class for Posts
 class PostService {
@@ -314,5 +314,95 @@ class PostService {
       var body = jsonDecode(resp.body);
       print(body);
     }
+  }
+
+  /// Get review post root comments
+  Future<Set<Comment>> getReviewPostComments(
+      {required int postId, int page = 0, int pageSize = 100}) async {
+    final url = Uri.parse(baseUrl +
+        "/api/v1/member/review-posts/$postId/comments?$page=0&pageSize=$pageSize");
+    final resp = await client.get(url);
+    if (resp.statusCode == 200) {
+      final jsonBody = jsonDecode(resp.body) as Map<String, dynamic>;
+      var listComment = jsonBody['data'] as List<dynamic>;
+      final data = listComment
+          .map((e) => Comment.fromJson(e as Map<String, dynamic>))
+          .toSet();
+      return data;
+    }
+    return {};
+  }
+
+  /// Get review post comment replies
+  Future<Set<Comment>> getReviewPostReplyComment(
+      {required int parentCommentId}) async {
+    final url = Uri.parse(baseUrl +
+        "/api/v1/member/review-posts/comments/$parentCommentId/reply");
+    final resp = await client.get(url);
+    if (resp.statusCode == 200) {
+      final jsonBody = jsonDecode(resp.body) as Map<String, dynamic>;
+      final listComment = jsonBody['data'] as List<dynamic>;
+      var data = listComment
+          .map((e) => Comment.fromJson(e as Map<String, dynamic>))
+          .toSet();
+      return data;
+    }
+    return {};
+  }
+
+  /// Comment on review post
+  Future<Comment> commentReviewPost(
+      {int? postId,
+      int? commentId,
+      String? contentText,
+      int? attachmentId,
+      int? parentCommentId}) async {
+    final url =
+        Uri.parse(baseUrl + "/api/v1/member/review-posts/$postId/comments");
+    final resp = await client.post(
+      url,
+      body: jsonEncode(
+        {
+          "id": commentId,
+          "postId": postId,
+          "attachmentId": attachmentId,
+          "parentCommentId": parentCommentId,
+          "content": contentText,
+        },
+      ),
+    );
+    if (resp.statusCode == 200) {
+      final jsonBody = jsonDecode(resp.body) as Map<String, dynamic>;
+      Comment comment =
+          Comment.fromJson(jsonBody['data'] as Map<String, dynamic>);
+      return comment;
+    }
+    throw 'Failed to post comment';
+  }
+
+  /// Hide comment on review posts
+  Future<void> hideReviewPostComment({required int commentId}) async {
+    final url = Uri.parse(
+        baseUrl + "/api/v1/member/review-posts/comments/$commentId/status/0");
+
+    final resp = await client.put(url);
+    if (resp.statusCode == 200) {
+      print('hide comment $commentId success');
+    } else {
+      print('hide comment failed' + resp.body);
+    }
+  }
+
+  /// get tags
+  Future<List<Tag>> getTags(
+      {int page = 0, int pageSize = 100, String? name}) async {
+    final url = Uri.parse('$baseUrl/api/v1/member/tags');
+    final resp = await client.get(url);
+    if (resp.statusCode == 200) {
+      var body = jsonDecode(resp.body);
+      var list = body['data'] as List<dynamic>;
+      return list.map((e) => Tag.fromJson(e)).toList();
+    }
+    return [];
   }
 }

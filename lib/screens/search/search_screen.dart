@@ -171,8 +171,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                               clipBehavior: Clip.hardEdge,
                                               child: e.avt != null
                                                   ? CachedNetworkImage(
-                                                      imageUrl: imageUrl +
-                                                          e.avt.toString(),
+                                                      imageUrl: '$imageUrl${e.avt}',
                                                       height: 40,
                                                       width: 40,
                                                       fit: BoxFit.cover,

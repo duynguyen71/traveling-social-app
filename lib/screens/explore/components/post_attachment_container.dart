@@ -35,8 +35,7 @@ class _PostAttachmentContainerState extends State<PostAttachmentContainer>
         attachments.asMap().containsKey(_attachmentIndex)
             ? CachedNetworkImage(
                 fit: BoxFit.fitWidth,
-                imageUrl:
-                    '$imageUrl${attachments[_attachmentIndex].name.toString()}',
+                imageUrl: '$imageUrl${attachments[_attachmentIndex].name}',
                 placeholder: (context, url) {
                   return AspectRatio(
                     aspectRatio: 4 / 5,
