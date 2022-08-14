@@ -27,8 +27,10 @@ class _ConfigWidgetState extends State<ConfigWidget> {
                   TextEditingController();
               TextEditingController _socketUrlController =
                   TextEditingController();
+              TextEditingController _imgUrlController = TextEditingController();
               _baseUrlController.text = baseUrl;
               _socketUrlController.text = kSocketUrl;
+              _imgUrlController.text = imageUrl;
               return Dialog(
                 insetPadding: const EdgeInsets.all(10),
                 child: Column(
@@ -40,12 +42,16 @@ class _ConfigWidgetState extends State<ConfigWidget> {
                     TextField(
                       controller: _socketUrlController,
                     ),
+                    TextField(
+                      controller: _imgUrlController,
+                    ),
                     Align(
                       alignment: Alignment.bottomRight,
                       child: TextButton(
                         onPressed: () {
                           baseUrl = _baseUrlController.text.toString();
                           kSocketUrl = _socketUrlController.text.toString();
+                          imageUrl = _imgUrlController.text.toString();
                         },
                         child: const Text('Save'),
                       ),

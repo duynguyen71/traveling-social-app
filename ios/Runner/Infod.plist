@@ -68,7 +68,11 @@
     <true/>
     <key>FirebaseAppDelegateProxyEnabled</key>
     <false/>
-
+    <key>CFBundleLocalizations</key>
+    <array>
+        <string>en</string>
+        <string>vi</string>
+    </array>
 
 </dict>
 </plist>
