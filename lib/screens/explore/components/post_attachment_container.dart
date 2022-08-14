@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:traveling_social_app/utilities/application_utility.dart';
 
 import '../../../constants/api_constants.dart';
 import '../../../models/attachment.dart';
@@ -25,6 +26,23 @@ class _PostAttachmentContainerState extends State<PostAttachmentContainer>
 
   set attachmentIndex(i) => setState(() => _attachmentIndex = i);
 
+  double? _displayRatio;
+
+  @override
+  void initState() {
+    _getDisplayRadio();
+    super.initState();
+  }
+
+  _getDisplayRadio() async {
+    if (attachments.asMap().containsKey(_attachmentIndex)) {
+      var ratio = await ApplicationUtility.getRatio(attachments[0].name);
+      setState(() {
+        _displayRatio = ratio;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -32,22 +50,26 @@ class _PostAttachmentContainerState extends State<PostAttachmentContainer>
       alignment: Alignment.center,
       children: [
         //CONTENTS
-        attachments.asMap().containsKey(_attachmentIndex)
-            ? CachedNetworkImage(
-                fit: BoxFit.fitWidth,
-                imageUrl: '$imageUrl${attachments[_attachmentIndex].name}',
-                placeholder: (context, url) {
-                  return AspectRatio(
-                    aspectRatio: 4 / 5,
-                    child: Container(
-                      color: Colors.grey.shade50,
-                      child: const Center(
-                        child: CupertinoActivityIndicator(),
+        _displayRatio != null
+            ? AspectRatio(
+                aspectRatio: _displayRatio!,
+                child: CachedNetworkImage(
+                  // fit: BoxFit.fitWidth,
+                  fit: BoxFit.cover,
+                  imageUrl: '$imageUrl${attachments[_attachmentIndex].name}',
+                  placeholder: (context, url) {
+                    return AspectRatio(
+                      child: Container(
+                        color: Colors.grey.shade100,
+                        child: const Center(
+                          child: CupertinoActivityIndicator(),
+                        ),
                       ),
-                    ),
-                  );
-                },
-                errorWidget: (context, url, error) => const SizedBox.shrink(),
+                      aspectRatio: _displayRatio!,
+                    );
+                  },
+                  errorWidget: (context, url, error) => const SizedBox.shrink(),
+                ),
               )
             : const SizedBox.shrink(),
         attachments.length > 1

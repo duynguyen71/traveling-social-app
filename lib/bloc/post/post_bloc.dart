@@ -34,7 +34,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
             status: PostStateStatus.fetching,
           ));
           Set<Post> posts =
-              await _postService.getPosts(page: state.page, pageSize: state.pageSize);
+              await _postService.getPosts(page: state.page, pageSize: 6);
           // stop fetching if hasReachMax
           bool hasReachMax = true;
           // get next page value

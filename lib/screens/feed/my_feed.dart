@@ -40,43 +40,44 @@ class _MyFeedState extends State<MyFeed> with AutomaticKeepAliveClientMixin {
           return false;
         },
         child: CustomScrollView(
+          shrinkWrap: true,
           slivers: [
             //STORIES
             const SliverToBoxAdapter(
               child: HomeStories(),
             ),
-            SliverToBoxAdapter(
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [kDefaultShadow],
-                    borderRadius: BorderRadius.circular(50.0)),
-                margin: const EdgeInsets.only(
-                  bottom: 8.0,
-                ),
-                child: Row(
-                  children: [
-                    FeedActionButton(
-                        onClick: () {
-                          showModalBottomSheet(
-                              context: context,
-                              builder: (_) => const CreatePostTypeDialog(),
-                              backgroundColor: Colors.transparent);
-                        },
-                        asset: 'assets/icons/add.svg'),
-                    FeedActionButton(
-                        onClick: () =>
-                            Navigator.push(context, ChatGroupsScreen.route()),
-                        asset: 'assets/icons/message.svg'),
-                    const Spacer(),
-                    FeedActionButton(
-                        onClick: () =>
-                            Navigator.push(context, SettingScreen.route()),
-                        asset: 'assets/icons/setting.svg'),
-                  ],
-                ),
-              ),
-            ),
+            // SliverToBoxAdapter(
+            //   child: Container(
+            //     decoration: BoxDecoration(
+            //         color: Colors.white,
+            //         boxShadow: [kDefaultShadow],
+            //         borderRadius: BorderRadius.circular(50.0)),
+            //     margin: const EdgeInsets.only(
+            //       bottom: 8.0,
+            //     ),
+            //     child: Row(
+            //       children: [
+            //         FeedActionButton(
+            //             onClick: () {
+            //               showModalBottomSheet(
+            //                   context: context,
+            //                   builder: (_) => const CreatePostTypeDialog(),
+            //                   backgroundColor: Colors.transparent);
+            //             },
+            //             asset: 'assets/icons/add.svg'),
+            //         FeedActionButton(
+            //             onClick: () =>
+            //                 Navigator.push(context, ChatGroupsScreen.route()),
+            //             asset: 'assets/icons/message.svg'),
+            //         const Spacer( ),
+            //         FeedActionButton(
+            //             onClick: () =>
+            //                 Navigator.push(context, SettingScreen.route()),
+            //             asset: 'assets/icons/setting.svg'),
+            //       ],
+            //     ),
+            //   ),
+            // ),
             // BUILDER FOR POSTS STATE
             BlocBuilder<PostBloc, PostState>(
               builder: (context, state) {

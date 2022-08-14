@@ -25,7 +25,6 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void initState() {
-    print('home screen init');
     _tabController = TabController(
         vsync: this,
         length: 2,

@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:palette_generator/palette_generator.dart';
+import 'package:traveling_social_app/app.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/models/post_content.dart';
 import 'package:traveling_social_app/models/post.dart';
+import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
 
 class StoryCard extends StatefulWidget {
@@ -19,18 +22,31 @@ class StoryCard extends StatefulWidget {
 
 class _StoryCardState extends State<StoryCard>
     with AutomaticKeepAliveClientMixin {
-
-  String? image;
+  String? _imageName;
+  double? _displayRatio;
+  final List<Color> _colors = [
+    Colors.black54,
+    Colors.black,
+  ];
 
   @override
   void initState() {
-    List<Content>? contents = widget.story.contents;
-    if (contents != null && contents.isNotEmpty) {
-      image = (contents[0].attachment?.name);
+    _imageName =
+        (contents.asMap().containsKey(0) ? contents[0].attachment?.name : null);
+    if (_imageName != null) {
+      _getImageRatio();
     }
     super.initState();
-
   }
+
+  _getImageRatio() async {
+    var ratio = await ApplicationUtility.getRatio(_imageName);
+    setState(() {
+      _displayRatio = ratio;
+    });
+  }
+
+  List<Content> get contents => widget.story.contents ?? [];
 
   @override
   Widget build(BuildContext context) {
@@ -54,32 +70,26 @@ class _StoryCardState extends State<StoryCard>
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Colors.black87, Colors.black45],
-                        begin: Alignment.topRight,
-                        end: Alignment.bottomLeft,
-                      ),
-                      border: Border.all(
-                        color: Colors.black12,
-                        width: 1,
-                      ),
-                      borderRadius: const BorderRadius.all(Radius.circular(5)),
+                      gradient: RadialGradient(colors: _colors, radius: 2),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Container(
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        image: image != null
+                        image: _displayRatio != null
                             ? DecorationImage(
-                                fit: BoxFit.fitWidth,
+                                fit: (_displayRatio! > 1)
+                                    ? BoxFit.fitWidth
+                                    : BoxFit.cover,
                                 image: CachedNetworkImageProvider(
-                                    '$imageUrl$image'),
+                                    '$imageUrl$_imageName'),
                               )
                             : null,
                         borderRadius:
                             const BorderRadius.all(Radius.circular(5)),
                       ),
                       child: (widget.story.caption.toString().isNotEmpty &&
-                              image == null)
+                              _imageName == null)
                           ? Center(
                               child: Padding(
                                 padding: const EdgeInsets.all(5.0),

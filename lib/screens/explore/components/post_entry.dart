@@ -49,6 +49,7 @@ class _PostEntryState extends State<PostEntry>
 
   @override
   void initState() {
+    print('post ${widget.post.id} render');
     _likeCount = widget.post.reactionCount;
     _isFavorite = (myReaction != null);
     _getAttachments();

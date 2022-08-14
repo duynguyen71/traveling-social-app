@@ -28,6 +28,9 @@ class _HomeStoriesState extends State<HomeStories>
   Widget build(BuildContext context) {
     super.build(context);
     return Container(
+      constraints: const BoxConstraints(
+        minHeight: 210,
+      ),
       width: double.infinity,
       decoration: const BoxDecoration(color: Colors.white),
       padding: const EdgeInsets.all(8),
@@ -47,15 +50,12 @@ class _HomeStoriesState extends State<HomeStories>
                     if (_.metrics.pixels == _.metrics.maxScrollExtent) {
                       context.read<StoryBloc>().add(FetchStory());
                       return true;
-                    } else {
-                      return false;
                     }
+                    return false;
                   },
                   child: ListView.builder(
-                    // controller: _scrollController,
-                    // primary: false,
-                    // addAutomaticKeepAlives: true,
-                    // cacheExtent: stories.length,
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
                       if (index == stories.length) {
                         return Center(
@@ -108,11 +108,12 @@ class _HomeStoriesState extends State<HomeStories>
                               child: Text(
                                 AppLocalizations.of(context)!.showMore,
                                 style: const TextStyle(
-                                  color: kPrimaryColor,
-                                  fontWeight: FontWeight.w500,
-                                  // decoration: TextDecoration.underline,
-                                  // decorationThickness: 4,
-                                ),
+                                    color: kPrimaryColor,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12
+                                    // decoration: TextDecoration.underline,
+                                    // decorationThickness: 4,
+                                    ),
                               ),
                             ),
                           ),
