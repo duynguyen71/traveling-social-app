@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http_interceptor/http/http.dart';
 import 'package:http_interceptor/models/request_data.dart';
@@ -18,8 +21,10 @@ class BaseInterceptor implements InterceptorContract {
       data.headers['Authorization'] = "Bearer $token";
       data.headers['Content-Type'] = "application/json";
       return data;
-    } on Exception catch (e) {
-      print('BaseInterceptor exception: $e');
+    } on SocketException catch (e) {
+      print('socket exception: $e');
+    } on TimeoutException catch (e) {
+      print('time out excaption');
     }
     return data;
   }

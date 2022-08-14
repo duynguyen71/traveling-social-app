@@ -37,15 +37,15 @@ class _AuthTagState extends State<AuthTag> {
         ),
         borderRadius: BorderRadius.circular(8.0),
       ),
-      padding: const EdgeInsets.all(8.0),
-      margin: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all( 8.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
            Text(
            AppLocalizations.of(context)!.aboutAuthor,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               color: Colors.black87,
             ),

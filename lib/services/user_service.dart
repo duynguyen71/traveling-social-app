@@ -295,8 +295,6 @@ class UserService {
       final json = (jsonDecode(resp.body) as Map<String, dynamic>)['data']
           as List<dynamic>;
       var list = json.map((u) => BaseUserInfo.fromJson(u)).toList();
-      print('get top user success $list'
-          '');
       return list;
     }
     return [];

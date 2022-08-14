@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:traveling_social_app/my_theme.dart';
 import 'package:traveling_social_app/screens/create_review/components/review_post_gallery_view.dart';
 import 'package:traveling_social_app/screens/create_review/components/review_post_image_container.dart';
+import 'package:traveling_social_app/screens/create_review/components/review_post_tags.dart';
 import 'package:traveling_social_app/screens/create_review/components/review_post_title.dart';
 import 'package:traveling_social_app/widgets/rounded_icon_button.dart';
 
@@ -29,9 +30,9 @@ class _EditorReviewState extends State<EditorReview> {
     return SafeArea(
       child: SingleChildScrollView(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              // height: size.height * .95,
               width: double.infinity,
               margin: const EdgeInsets.only(top: 20.0),
               decoration: const BoxDecoration(
@@ -45,6 +46,7 @@ class _EditorReviewState extends State<EditorReview> {
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Align(
                     alignment: Alignment.topRight,
@@ -57,39 +59,90 @@ class _EditorReviewState extends State<EditorReview> {
                     ),
                   ),
                   // Cover image
-                  BlocBuilder<CreateReviewPostCubit, CreateReviewPostState>(
-                    builder: (context, state) {
-                      return CoverImageContainer(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: kReviewPostBorderRadius,
-                            color: Colors.grey.shade200,
-                            image: state.post.coverImage == null
-                                ? null
-                                : DecorationImage(
-                                    image: FileImage(
-                                      File(state.post.coverImage!.path!),
-                                    ),
-                                    fit: BoxFit.cover,
-                                    alignment: Alignment.center,
-                                    onError: (_, stack) {
-                                      context
-                                          .read<CreateReviewPostCubit>()
-                                          .updateReviewPost(coverImage: null);
-                                    }),
-                          ),
-                        ),
-                      );
-                    },
+                  CoverImageContainer(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: kReviewPostBorderRadius,
+                        color: Colors.grey.shade200,
+                        image: context
+                                    .read<CreateReviewPostCubit>()
+                                    .state
+                                    .post
+                                    .coverImage ==
+                                null
+                            ? null
+                            : DecorationImage(
+                                image: FileImage(
+                                  File(context
+                                      .read<CreateReviewPostCubit>()
+                                      .state
+                                      .post
+                                      .coverImage!
+                                      .path!),
+                                ),
+                                fit: BoxFit.cover,
+                                alignment: Alignment.center,
+                                onError: (_, stack) {
+                                  context
+                                      .read<CreateReviewPostCubit>()
+                                      .updateReviewPost(coverImage: null);
+                                }),
+                      ),
+                    ),
                   ),
-                  // Post title
+                  // Tags
+                  ReviewPostTags(
+                    tags: context.read<CreateReviewPostCubit>().state.post.tags,
+                    onTap: (tag) {},
+                  ),
+                  //, Post title
                   ReviewPostTitle(
+                      padding: const EdgeInsets.only(bottom: 8.0),
                       title: context
                           .read<CreateReviewPostCubit>()
                           .state
                           .post
                           .title
                           .toString()),
+                  // aditional infomation
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: GridView(
+                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 200.0,
+                          mainAxisSpacing: 15.0,
+                          crossAxisSpacing: 5.0,
+                          childAspectRatio: 10.0,
+                        ),
+                        shrinkWrap: true,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.calendar_today),
+                              Text("HIHI"),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Icon(Icons.calendar_today),
+                              Text("HIHI"),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Icon(Icons.calendar_today),
+                              Text("HIHI"),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Icon(Icons.calendar_today),
+                              Text("HIHI"),
+                            ],
+                          ),
+                        ]),
+                  ),
+
                   // post content
                   quill.QuillEditor.basic(
                     controller: widget.controller,
@@ -104,34 +157,37 @@ class _EditorReviewState extends State<EditorReview> {
                     ),
                   ),
                   SizedBox(
-                    height: 140,
-                    child: BlocBuilder<CreateReviewPostCubit,
-                        CreateReviewPostState>(
-                      builder: (context, state) {
-                        return ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: state.post.images.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            var image = state.post.images[index];
-                            return ReviewPostImageContainer(
-                                onErr: () {},
-                                image: image.file,
-                                onRemove: () {},
-                                onTap: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (_) => ReviewPostGalleryView(
-                                      initialIndex: index,
-                                    ),
-                                    isScrollControlled: true,
-                                    backgroundColor: Colors.transparent,
-                                  );
-                                });
-                          },
-                        );
-                      },
-                    ),
-                  ),
+                      height: 140,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: context
+                            .read<CreateReviewPostCubit>()
+                            .state
+                            .post
+                            .images
+                            .length,
+                        itemBuilder: (BuildContext context, int index) {
+                          var image = context
+                              .read<CreateReviewPostCubit>()
+                              .state
+                              .post
+                              .images[index];
+                          return ReviewPostImageContainer(
+                              onErr: () {},
+                              image: image.file,
+                              onRemove: () {},
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (_) => ReviewPostGalleryView(
+                                    initialIndex: index,
+                                  ),
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                );
+                              });
+                        },
+                      )),
                   SizedBox(
                     height: size.height * .2,
                   ),

@@ -18,7 +18,7 @@ import '../models/file_upload.dart';
 import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
 
-import '../models/review_post_details.dart';
+import '../models/review_post_detail.dart';
 import '../models/tag.dart';
 
 /// Service class for Posts
@@ -114,6 +114,19 @@ class PostService {
         body: jsonEncode({"postId": postId, "reactionId": reactionId}));
     if (resp.statusCode == 200) {
       print('reaction success');
+    }
+    print(resp.body.toString());
+    return;
+  }
+
+  /// reaction emotion on review post
+  Future<void> reactionReviewPost(
+      {required int reviewPostId, required int? reactionId}) async {
+    final url = Uri.parse(baseUrl + "/api/v1/member/review-posts/reactions");
+    final resp = await client.post(url,
+        body: jsonEncode({"postId": reviewPostId, "reactionId": reactionId}));
+    if (resp.statusCode == 200) {
+      print('reaction review post $reviewPostId success');
     }
     print(resp.body.toString());
     return;
@@ -247,7 +260,6 @@ class PostService {
         "/api/v1/member/users/$userId/posts?page=$page&pageSize=$pageSize");
     final resp = await client.get(url, headers: await authorizationHeader());
     if (resp.statusCode == 200) {
-      print('get user id $userId post success');
       final data = (jsonDecode(resp.body) as Map<String, dynamic>)['data']
           as List<dynamic>;
       List<Post> posts = data.map((e) => Post.fromJson(e)).toList();
@@ -257,27 +269,28 @@ class PostService {
   }
 
   /// Get review posts
-  Future<List<BaseReviewPostResponse>> getReviewPosts() async {
-    final url = Uri.parse(baseUrl + "/api/v1/member/reviews");
+  Future<List<BaseReviewPostResponse>> getReviewPosts(
+      {int? page, int? pageSize}) async {
+    final url = Uri.parse(
+        baseUrl + "/api/v1/member/review-posts?page=$page&pageSize=$pageSize");
     final resp = await client.get(url, headers: await authorizationHeader());
     if (resp.statusCode == 200) {
       final json = jsonDecode(resp.body) as Map<String, dynamic>;
       final data = json['data'] as List<dynamic>;
       List<BaseReviewPostResponse> list =
           data.map((e) => BaseReviewPostResponse.fromJson(e)).toList();
-      print('get base review post success');
       return list;
     }
     return [];
   }
 
   /// Get review post detail
-  Future<ReviewPostDetails?> getReviewPostDetail(int id) async {
+  Future<ReviewPostDetail?> getReviewPostDetail(int id) async {
     final url = Uri.parse('$baseUrl/api/v1/member/review-posts/$id');
     final resp = await client.get(url);
     if (resp.statusCode == 200) {
       var body = jsonDecode(resp.body);
-      return ReviewPostDetails.fromJson(body['data']);
+      return ReviewPostDetail.fromJson(body['data']);
     }
     return null;
   }
@@ -396,13 +409,55 @@ class PostService {
   /// get tags
   Future<List<Tag>> getTags(
       {int page = 0, int pageSize = 100, String? name}) async {
-    final url = Uri.parse('$baseUrl/api/v1/member/tags');
+    final url = Uri.parse(
+        '$baseUrl/api/v1/member/tags?name=$name&page=$page&pageSize=$pageSize');
     final resp = await client.get(url);
     if (resp.statusCode == 200) {
       var body = jsonDecode(resp.body);
       var list = body['data'] as List<dynamic>;
+      print('get tag success $list');
       return list.map((e) => Tag.fromJson(e)).toList();
     }
     return [];
+  }
+
+  /// Get current user review posts
+  Future<List<BaseReviewPostResponse>> getCurrentUserReviewPosts() async {
+    final url = Uri.parse('$baseUrl/api/v1/member/users/me/review-post');
+    final resp = await client.get(url);
+    if (resp.statusCode == 200) {
+      var data = jsonDecode(resp.body)['data'] as List;
+      return data.map((item) => BaseReviewPostResponse.fromJson(json)).toList();
+    }
+    return [];
+  }
+
+  /// Get bookmarks
+  Future<List<BaseReviewPostResponse>> getBookmarkedReviewPosts(
+      {int? page, int? pageSize}) async {
+    final url = Uri.parse(baseUrl +
+        "/api/v1/member/review-posts/bookmarks?page=$page&pageSize=$pageSize");
+    final resp = await client.get(url);
+    if (resp.statusCode == 200) {
+      final json = jsonDecode(resp.body) as Map<String, dynamic>;
+      final data = json['data'] as List<dynamic>;
+      List<BaseReviewPostResponse> list =
+          data.map((e) => BaseReviewPostResponse.fromJson(e)).toList();
+      print('Bookmark list size ${list.length}');
+      return list;
+    }
+    return [];
+  }
+
+  /// Get bookmarks
+  Future<bool> saveBookmark({int? postId}) async {
+    final url =
+        Uri.parse(baseUrl + "/api/v1/member/review-posts/bookmarks/$postId");
+    final resp = await client.post(url);
+    if (resp.statusCode == 200) {
+      print('Bookmark review post $postId success!');
+      return true;
+    }
+    return false;
   }
 }

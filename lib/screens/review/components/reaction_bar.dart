@@ -8,20 +8,42 @@ class ReactionBar extends StatefulWidget {
       {Key? key,
       required this.onLike,
       required this.onComment,
-      required this.onShare})
+      required this.onShare,
+      this.isLoved = false,
+      required this.numOfReaction,
+      required this.numOfComment})
       : super(key: key);
 
   final Function onLike, onComment, onShare;
+  final bool isLoved;
+  final int numOfReaction, numOfComment;
 
   @override
   State<ReactionBar> createState() => _ReactionBarState();
 }
 
-class _ReactionBarState extends State<ReactionBar> {
+class _ReactionBarState extends State<ReactionBar> with AutomaticKeepAliveClientMixin {
   bool _isFavorite = false;
+  int _numOfReaction = 0, _numOfComment = 0;
+
+  @override
+  void didChangeDependencies() {
+    print('did change dependency');
+    if (widget.isLoved) {
+      setState(() {
+        _isFavorite = true;
+      });
+    }
+    setState(() {
+      _numOfReaction = widget.numOfReaction;
+      _numOfComment = widget.numOfComment;
+    });
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
       decoration: BoxDecoration(
         color: Colors.lightBlueAccent.withOpacity(.05),
@@ -32,7 +54,7 @@ class _ReactionBarState extends State<ReactionBar> {
       ),
       alignment: Alignment.center,
       padding: const EdgeInsets.all(4),
-      margin: const EdgeInsets.symmetric(horizontal: 12.0),
+      margin: const EdgeInsets.symmetric(vertical: 12.0),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -46,7 +68,13 @@ class _ReactionBarState extends State<ReactionBar> {
               children: [
                 IconButton(
                   onPressed: () async {
-                    widget.onLike();
+                    widget.onLike(_isFavorite ? null : 1);
+                    setState(() {
+                      _isFavorite = !_isFavorite;
+                      _numOfReaction = _isFavorite
+                          ? (_numOfReaction + 1)
+                          : (_numOfReaction - 1);
+                    });
                   },
                   icon: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 200),
@@ -73,7 +101,7 @@ class _ReactionBarState extends State<ReactionBar> {
                           ),
                   ),
                 ),
-                Text(11.toString()),
+                Text(_numOfReaction.toString()),
               ],
             ),
           ),
@@ -98,7 +126,7 @@ class _ReactionBarState extends State<ReactionBar> {
                   ),
                 ),
                 Text(
-                  11.toString(),
+                  _numOfComment.toString(),
                 ),
               ],
             ),
@@ -124,4 +152,7 @@ class _ReactionBarState extends State<ReactionBar> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

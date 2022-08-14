@@ -27,11 +27,13 @@ class _CreateReviewPostScreenState extends State<CreateReviewPostScreen>
     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late quill.QuillController _controller;
   final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _tagController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _loadPrevData();
+    PostService().getTags(page:0,pageSize: 100,name: null);
   }
 
   _loadPrevData() {
@@ -39,18 +41,15 @@ class _CreateReviewPostScreenState extends State<CreateReviewPostScreen>
     var title = review.title;
 
     if (title == null || review.contentJson == null) {
-      print('crete new data');
       _controller = quill.QuillController.basic();
       _titleController.text = lorem(words: 10, paragraphs: 1);
       _controller.document.insert(0, lorem(words: 100, paragraphs: 4));
     } else {
-      print('load prec data');
       var decoded = jsonDecode(review.contentJson!);
       _controller = quill.QuillController(
           document: quill.Document.fromJson(decoded),
           selection: const TextSelection.collapsed(offset: 0));
       _titleController.text = title.toString();
-      // _controller.document.insert(0, review.contentJson);
     }
   }
 
@@ -78,7 +77,6 @@ class _CreateReviewPostScreenState extends State<CreateReviewPostScreen>
         return Future.value(true);
       },
       child: Scaffold(
-        // backgroundColor: Colors.white12,
         body: Stack(
           alignment: Alignment.topCenter,
           children: [
@@ -87,8 +85,10 @@ class _CreateReviewPostScreenState extends State<CreateReviewPostScreen>
                 padding: EdgeInsets.zero,
                 children: [
                   ReviewPostEditor(
-                      controller: _controller,
-                      titleController: _titleController),
+                    controller: _controller,
+                    titleController: _titleController,
+                    tagController: _tagController,
+                  ),
                 ],
               ),
               headerSliverBuilder:

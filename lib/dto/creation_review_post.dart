@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+import '../models/tag.dart';
 import 'attachment_dto.dart';
 
 class CreationReviewPost extends Equatable {
@@ -13,6 +14,7 @@ class CreationReviewPost extends Equatable {
   final String? contentJson;
   final AttachmentDto? coverImage;
   final List<AttachmentDto> images;
+  final List<Tag> tags;
 
   const CreationReviewPost(
       {this.id,
@@ -24,6 +26,7 @@ class CreationReviewPost extends Equatable {
       this.coverImage,
       this.contentJson,
       this.images = const [],
+      this.tags = const [],
       this.cost = 0});
 
   Map<String, dynamic> toJson() {
@@ -35,6 +38,7 @@ class CreationReviewPost extends Equatable {
     map['shortDescription'] = shortDescription;
     map['content'] = content;
     map['contentJson'] = contentJson;
+    map['tags'] = tags;
     return map;
   }
 
@@ -49,6 +53,7 @@ class CreationReviewPost extends Equatable {
     String? content,
     AttachmentDto? coverImage,
     String? contentJson,
+    List<Tag>? tags
   }) =>
       CreationReviewPost(
           id: id ?? this.id,
@@ -59,6 +64,7 @@ class CreationReviewPost extends Equatable {
           cost: cost ?? this.cost,
           coverImage: coverImage ?? this.coverImage,
           images: images ?? this.images,
+          tags: tags ?? this.tags,
           contentJson: contentJson ?? this.contentJson,
           content: content ?? this.content);
 

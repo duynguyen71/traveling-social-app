@@ -27,7 +27,6 @@ class _AccountScreenState extends State<AccountScreen>
   @override
   void initState() {
     super.initState();
-    print('account screen init');
   }
 
   @override
@@ -113,6 +112,30 @@ class _AccountScreenState extends State<AccountScreen>
               title: AppLocalizations.of(context)!.follower,
             ),
             const MyDivider(width: 2.5),
+            MyListTile(
+              onClick: () {},
+              leading: const LinearGradiantMask(
+                child: Icon(
+                  Icons.ac_unit_outlined,
+                  color: Colors.white,
+                  size: kDefaultBottomNavIconSize,
+                ),
+              ),
+              title: AppLocalizations.of(context)!.review,
+            ),
+            MyListTile(
+              onClick: () {},
+              leading: const LinearGradiantMask(
+                child: Icon(
+                  Icons.ac_unit_outlined,
+                  color: Colors.white,
+                  size: kDefaultBottomNavIconSize,
+                ),
+              ),
+              title: AppLocalizations.of(context)!.post,
+            ),
+            const MyDivider(width: 2.5),
+
             MyListTile(
               onClick: () {},
               leading: const LinearGradiantMask(

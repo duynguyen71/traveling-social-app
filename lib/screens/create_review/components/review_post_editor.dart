@@ -11,19 +11,26 @@ import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/dto/attachment_dto.dart';
 import 'package:traveling_social_app/my_theme.dart';
 import 'package:traveling_social_app/screens/create_review/components/cover_image_container.dart';
+import 'package:traveling_social_app/screens/create_review/components/day_cost_input_dialog.dart';
 import 'package:traveling_social_app/screens/create_review/components/review_post_gallery_view.dart';
+import 'package:traveling_social_app/screens/create_review/pick_tags_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/my_outline_button.dart';
+import 'package:traveling_social_app/widgets/my_text_icon_button.dart';
 import 'package:traveling_social_app/widgets/tap_effect_widget.dart';
 import '../../../services/post_service.dart';
 import 'review_post_image_container.dart';
 
 class ReviewPostEditor extends StatefulWidget {
   const ReviewPostEditor(
-      {Key? key, required this.controller, required this.titleController})
+      {Key? key,
+      required this.controller,
+      required this.titleController,
+      required this.tagController})
       : super(key: key);
   final quill.QuillController controller;
   final TextEditingController titleController;
+  final TextEditingController tagController;
 
   @override
   State<ReviewPostEditor> createState() => _ReviewPostEditorState();
@@ -83,7 +90,7 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
       File? compress =
           await ApplicationUtility.compressImage(pickImage.path, quality: 60);
 
-      var coverImage = AttachmentDto();
+      var coverImage = const AttachmentDto();
       if (compress == null) {
         coverImage = coverImage.copyWith(path: pickImage.path);
       } else {
@@ -168,15 +175,62 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
             },
           ),
         ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Container(
+            padding: const EdgeInsets.all(4.0),
+            child: Wrap(
+              crossAxisAlignment: WrapCrossAlignment.start,
+              direction: Axis.horizontal,
+              spacing: 10,
+              alignment: WrapAlignment.start,
+              runAlignment: WrapAlignment.start,
+              runSpacing: 10,
+              children: [
+                MyTextIconButton(
+                    text: 'Tag',
+                    icon: Icons.tag,
+                    bgColor: Colors.blueAccent,
+                    textColor: Colors.white,
+                    onTap: () => Navigator.push(context,
+                            PickTagScreen.route(callback: (tagNames) {
+                          print(tagNames);
+                        }))),
+                MyTextIconButton(
+                    text: 'Money',
+                    icon: Icons.attach_money,
+                    bgColor: Colors.orange,
+                    textColor: Colors.white,
+                    onTap: () {
+                      _showCostInputDialog(context);
+                    }),
+                MyTextIconButton(
+                    text: 'Date',
+                    icon: Icons.date_range,
+                    bgColor: Colors.lightBlueAccent,
+                    textColor: Colors.white,
+                    onTap: () {}),
+              ],
+            ),
+          ),
+        ),
+
         // Title editing
         Container(
-          decoration: BoxDecoration(boxShadow: [kDefaultPostActionBarShadow]),
-          margin: const EdgeInsets.symmetric(horizontal: 4.0),
-          child: TextField(
-            controller: widget.titleController,
-            keyboardType: TextInputType.multiline,
-            maxLines: null,
-            decoration: const InputDecoration(),
+          padding: const EdgeInsets.all(4.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Title",
+                  style:
+                      MyTheme.heading2.copyWith(fontWeight: FontWeight.w600)),
+              TextField(
+                controller: widget.titleController,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 10),
@@ -277,6 +331,21 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
           height: 300,
         )
       ],
+    );
+  }
+
+  void _showCostInputDialog(BuildContext context) {
+      showDialog(
+      context: context,
+      barrierDismissible: true,
+       builder: (context) {
+         return const Dialog(
+           child: DayCostInputDialog(),
+           alignment: Alignment.center,
+           backgroundColor: Colors.transparent,
+           insetPadding: EdgeInsets.zero,
+         );
+       },
     );
   }
 

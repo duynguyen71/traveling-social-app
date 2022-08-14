@@ -1,68 +1,142 @@
-import 'package:traveling_social_app/models/attachment.dart';
+import 'package:traveling_social_app/models/reaction.dart';
+import 'package:traveling_social_app/models/tag.dart';
 
-import 'user.dart';
+import 'Review_post_attachment.dart';
+import 'base_user.dart';
+import 'file_upload.dart';
 
 class ReviewPostDetail {
   ReviewPostDetail({
-      String? title, 
-      String? detail, 
-      double? cost, 
-      int? totalMember, 
-      int? totalDay, 
-      int? status, 
-      Attachment? coverPhoto,
-      List<Attachment>? photos,
-      User? user, 
-      String? createDate,}){
-    _title = title;
-    _detail = detail;
-    _cost = cost;
-    _totalMember = totalMember;
-    _totalDay = totalDay;
-    _status = status;
-    _coverPhoto = coverPhoto;
-    _photos = photos;
-    _user = user;
-    _createDate = createDate;
-}
+    int? id,
+    String? title,
+    String? content,
+    String? contentJson,
+    double? cost,
+    int? numOfParticipant,
+    int? totalDay,
+    int? status,
+    FileUpload? coverImage,
+    List<ReviewPostAttachment> images = const [],
+    List<Tag> tags = const [],
+    BaseUserInfo? user,
+    String? createDate,
+    bool hasBookmark = false,
+  }) {
+    id = id;
+    title = title;
+    content = content;
+    contentJson = contentJson;
+    cost = cost;
+    numOfParticipant = numOfParticipant;
+    totalDay = totalDay;
+    status = status;
+    coverImage = coverImage;
+    images = images;
+    user = user;
+    createDate = createDate;
+    tags = tags;
+    hasBookmark = hasBookmark;
+  }
 
   ReviewPostDetail.fromJson(dynamic json) {
-    _title = json['title'];
-    _detail = json['detail'];
-    _cost = json['cost'];
-    _totalMember = json['totalMember'];
-    _totalDay = json['totalDay'];
-    _status = json['status'];
-    _coverPhoto = json['coverPhoto'] != null ? Attachment.fromJson(json['coverPhoto']) : null;
-    if (json['photos'] != null) {
-      _photos = [];
-      json['photos'].forEach((v) {
-        _photos?.add(Attachment.fromJson(v));
+    id = json['id'];
+    title = json['title'];
+    content = json['content'];
+    contentJson = json['contentJson'];
+    cost = json['cost'];
+    numOfParticipant = json['numOfParticipant'];
+    numOfReaction = json['numOfReaction'];
+    numOfComment = json['numOfComment'];
+    numOfVisitor = json['numOfVisitor'];
+    totalDay = json['totalDay'];
+    status = json['status'];
+    hasBookmark = json['hasBookmark'];
+    coverImage = json['coverImage'] != null
+        ? FileUpload.fromJson(json['coverImage'])
+        : null;
+    if (json['images'] != null) {
+      json['images'].forEach((v) {
+        images.add(ReviewPostAttachment.fromJson(v));
       });
     }
-    _user = json['user'] != null ? User.fromJson(json['user']) : null;
-    _createDate = json['createDate'];
+    if (json['tags'] != null) {
+      var list = (json['tags'] as List);
+      tags = list.map((item) => Tag.fromJson(item)).toList();
+    }
+    user = json['user'] != null ? BaseUserInfo.fromJson(json['user']) : null;
+    createDate = json['createDate'];
+    myReaction =
+        json['reaction'] != null ? Reaction.fromJson(json['reaction']) : null;
   }
-  String? _title;
-  String? _detail;
-  double? _cost;
-  int? _totalMember;
-  int? _totalDay;
-  int? _status;
-  Attachment? _coverPhoto;
-  List<Attachment>? _photos;
-  User? _user;
-  String? _createDate;
 
-  String? get title => _title;
-  String? get detail => _detail;
-  double? get cost => _cost;
-  int? get totalMember => _totalMember;
-  int? get totalDay => _totalDay;
-  int? get status => _status;
-  Attachment? get coverPhoto => _coverPhoto;
-  List<Attachment>? get photos => _photos;
-  User? get user => _user;
-  String? get createDate => _createDate;
+  int? id;
+  String? title;
+  String? content;
+  String? contentJson;
+  double? cost;
+  int numOfParticipant = 0;
+  int numOfReaction = 0;
+  int numOfVisitor = 0;
+  int numOfComment = 0;
+  int? totalDay;
+  int? status;
+  FileUpload? coverImage;
+  List<ReviewPostAttachment> images = [];
+  List<Tag> tags = [];
+  BaseUserInfo? user;
+  String? createDate;
+  bool hasBookmark = false;
+  Reaction? myReaction;
 
+  ReviewPostDetail copyWith({
+    int? id,
+    String? title,
+    String? content,
+    String? contentJson,
+    double? cost,
+    int? numOfParticipant,
+    int? totalDay,
+    int? status,
+    FileUpload? coverImage,
+    List<ReviewPostAttachment> images = const [],
+    List<Tag> tags = const [],
+    BaseUserInfo? user,
+    String? createDate,
+  }) =>
+      ReviewPostDetail(
+          id: id ?? this.id,
+          title: title ?? this.title,
+          content: content ?? this.content,
+          contentJson: contentJson ?? this.contentJson,
+          cost: cost ?? this.cost,
+          numOfParticipant: numOfParticipant ?? this.numOfParticipant,
+          totalDay: totalDay ?? this.totalDay,
+          status: status ?? this.status,
+          coverImage: coverImage ?? this.coverImage,
+          images: images,
+          user: user ?? user,
+          createDate: createDate ?? createDate,
+          tags: tags);
+
+// Map<String, dynamic> toJson() {
+//   final map = <String, dynamic>{};
+//   map['id'] = id;
+//   map['title'] = title;
+//   map['content'] = content;
+//   map['contentJson'] = contentJson;
+//   map['cost'] = cost;
+//   map['numOfParticipant'] = numOfParticipant;
+//   map['totalDay'] = totalDay;
+//   map['status'] = status;
+//   if (coverImage != null) {
+//     map['coverImage'] = coverImage?.toJson();
+//   }
+//   map['images'] = images.map((v) => v.toJson()).toList();
+//   if (user != null) {
+//     map['user'] = user?.toJson();
+//   }
+//   map['createDate'] = createDate;
+//   map['tags'] = tags.map((e) => e.toJson()).toList();
+//   return map;
+// }
 }

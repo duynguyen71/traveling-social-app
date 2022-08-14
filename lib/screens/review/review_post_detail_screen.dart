@@ -1,10 +1,12 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/models/comment.dart';
+import 'package:traveling_social_app/screens/create_review/components/review_post_tags.dart';
 import 'package:traveling_social_app/screens/profile/profile_screen.dart';
 import 'package:traveling_social_app/screens/review/components/review_post_att_scroll_view.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +14,7 @@ import 'package:traveling_social_app/widgets/comment_input_reply_widget.dart';
 import '../../constants/api_constants.dart';
 import '../../constants/app_theme_constants.dart';
 import '../../models/base_user.dart';
-import '../../models/review_post_details.dart';
+import '../../models/review_post_detail.dart';
 import '../../services/post_service.dart';
 import '../../widgets/user_avt.dart';
 import '../create_review/components/cover_image_container.dart';
@@ -39,7 +41,8 @@ class ReviewPostDetailScreen extends StatefulWidget {
 class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
   final _postService = PostService();
   bool _isFetching = true;
-  late ReviewPostDetails _reviewPostDetail;
+  bool _isBookmarked = false;
+  late ReviewPostDetail _reviewPostDetail;
   late quill.QuillController _quillController;
   final FocusNode _focusNode = FocusNode();
   final FocusNode _commentFocusNode = FocusNode();
@@ -54,6 +57,7 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
           selection: const TextSelection.collapsed(offset: 0));
       setState(() {
         _reviewPostDetail = data;
+        _isBookmarked = _reviewPostDetail.hasBookmark;
         _isFetching = false;
       });
     }
@@ -82,125 +86,178 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: NestedScrollView(
-        // dragStartBehavior: DragSta,
         body: Stack(
           alignment: Alignment.topCenter,
           children: [
-            ListView(
-                physics: const BouncingScrollPhysics(),
-                addAutomaticKeepAlives: true,
-                addRepaintBoundaries: true,
-                // keyboardDismissBehavior:
-                // ScrollViewKeyboardDismissBehavior.,
-                shrinkWrap: false,
-                padding: EdgeInsets.zero,
-                scrollDirection: Axis.vertical,
-                children: [
-                  _isFetching
-                      ? const SizedBox(
-                          height: 1000,
-                        )
-                      : const SizedBox.shrink(),
-                  // POST TITLE
-                  _isFetching
-                      ? const SizedBox.shrink()
-                      : Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child:
-                              ReviewPostTitle(title: _reviewPostDetail.title!),
-                        ),
-                  // POST COVER IMAGE
-                  _isFetching
-                      ? const SizedBox.shrink()
-                      : Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: CoverImageContainer(
-                            child: Container(
-                              color: Colors.grey.shade200,
-                              child: ClipRRect(
-                                borderRadius: kReviewPostBorderRadius,
-                                child: CachedNetworkImage(
-                                  alignment: Alignment.center,
-                                  imageUrl:
-                                      '$imageUrl${_reviewPostDetail.coverImage!.name}',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: ListView(
+                  physics: const BouncingScrollPhysics(),
+                  addAutomaticKeepAlives: true,
+                  // addRepaintBoundaries: true,
+                  shrinkWrap: false,
+                  padding: EdgeInsets.zero,
+                  scrollDirection: Axis.vertical,
+                  children: [
+                    _isFetching
+                        ? SizedBox(
+                            height: MediaQuery.of(context).size.height,
+                            child: const Center(
+                              child: CupertinoActivityIndicator(),
                             ),
-                          ),
-                        ),
-                  // QUILL CONTROLLER
-                  _isFetching
-                      ? const SizedBox.shrink()
-                      : Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: quill.QuillEditor(
-                            controller: _quillController,
-                            readOnly: true,
-                            scrollable: false,
-                            scrollController: _scrollController,
-                            focusNode: _focusNode,
-                            autoFocus: false,
-                            expands: false,
-                            padding: EdgeInsets.zero,
-                            showCursor: false, // add th
-                          ),
-                        ),
-                  //
-                  (_isFetching || _reviewPostDetail.images.isEmpty)
-                      ? const SizedBox.shrink()
-                      : Container(
-                          height: kReviewPostMinHeight,
-                          constraints: const BoxConstraints(
-                              minHeight: kReviewPostMinHeight),
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            physics: const BouncingScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  _showAttScrollView(index);
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: AspectRatio(
-                                    aspectRatio: 1,
-                                    child: ClipRRect(
-                                      borderRadius:
-                                          kReviewPostImageGalleryBorder,
-                                      child: CachedNetworkImage(
-                                          fit: BoxFit.cover,
-                                          imageUrl:
-                                              '$imageUrl${_reviewPostDetail.images[index].image!.name}'),
+                          )
+                        : Column(
+                            children: [
+                              // POST TITLE
+                              ReviewPostTitle(
+                                title: _reviewPostDetail.title!,
+                                padding: const EdgeInsets.only(top: 8.0),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      TextButton(
+                                        style: TextButton.styleFrom(
+                                            padding: EdgeInsets.zero,
+                                            minimumSize: Size(50, 30),
+                                            alignment: Alignment.centerRight,
+                                            tapTargetSize: MaterialTapTargetSize
+                                                .shrinkWrap),
+                                        onPressed: () {},
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 4.0),
+                                              child: Text(
+                                                  _reviewPostDetail.numOfVisitor
+                                                      .toString(),
+                                                  style:
+                                                      TextStyle(fontSize: 14)),
+                                            ),
+                                            const Icon(
+                                              Icons.visibility,
+                                              size: 16,
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                              // POST COVER IMAGE
+                              CoverImageContainer(
+                                child: Container(
+                                  color: Colors.grey.shade200,
+                                  child: ClipRRect(
+                                    borderRadius: kReviewPostBorderRadius,
+                                    child: CachedNetworkImage(
+                                      alignment: Alignment.center,
+                                      imageUrl:
+                                          '$imageUrl${_reviewPostDetail.coverImage!.name}',
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
                                 ),
-                              );
+                              ),
+                              // QUILL CONTROLLER
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: quill.QuillEditor(
+                                  controller: _quillController,
+                                  readOnly: true,
+                                  scrollable: false,
+                                  scrollController: _scrollController,
+                                  focusNode: _focusNode,
+                                  autoFocus: false,
+                                  expands: false,
+                                  padding: EdgeInsets.zero,
+                                  showCursor: false, // add th
+                                ),
+                              ),
+                              //
+                            ],
+                          ),
+                    (_isFetching || _reviewPostDetail.images.isEmpty)
+                        ? const SizedBox.shrink()
+                        : Container(
+                            height: 120,
+                            constraints: const BoxConstraints(minHeight: 120),
+                            // padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: ListView.builder(
+                              padding: EdgeInsets.zero,
+                              scrollDirection: Axis.horizontal,
+                              physics: const BouncingScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    _showAttScrollView(index);
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: AspectRatio(
+                                      aspectRatio: 1,
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            kReviewPostImageGalleryBorder,
+                                        child: CachedNetworkImage(
+                                            fit: BoxFit.cover,
+                                            imageUrl:
+                                                '$imageUrl${_reviewPostDetail.images[index].image!.name}'),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              itemCount: _reviewPostDetail.images.length,
+                              shrinkWrap: true,
+                            )),
+                    //ABOUT AUTHOR
+                    _isFetching
+                        ? const SizedBox.shrink()
+                        : AuthTag(auth: author),
+                    // TAGS
+                    _isFetching
+                        ? const SizedBox()
+                        : ReviewPostTags(
+                            tags: _reviewPostDetail.tags, onTap: (tag) {}),
+                    // REACTION BAR
+                    _isFetching
+                        ? const SizedBox.shrink()
+                        : ReactionBar(
+                            isLoved: _reviewPostDetail.myReaction != null,
+                            onLike: (int? type) async {
+                              await _postService.reactionReviewPost(
+                                  reviewPostId: _reviewPostDetail.id!,
+                                  reactionId: type);
                             },
-                            itemCount: _reviewPostDetail.images.length,
-                            shrinkWrap: true,
-                          )),
-                  _isFetching ? const SizedBox.shrink() : AuthTag(auth: author),
-                  _isFetching
-                      ? const SizedBox.shrink()
-                      : ReactionBar(
-                          onLike: () {},
-                          onComment: () {
-                            setState(() {
-                              _commentFocusNode.requestFocus();
-                            });
-                          },
-                          onShare: () {},
-                        ),
-                  _isFetching
-                      ? const SizedBox.shrink()
-                      : Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: ReviewPostCommentSection(
+                            onComment: () {
+                              setState(() {
+                                _commentFocusNode.requestFocus();
+                              });
+                            },
+                            onShare: () {},
+                            numOfReaction: _reviewPostDetail.numOfReaction,
+                            numOfComment: _reviewPostDetail.numOfComment,
+                          ),
+                    _isFetching
+                        ? const SizedBox.shrink()
+                        : ReviewPostCommentSection(
                             currentFocusReplyId: _currentFocusReplyId,
                             postId: _reviewPostDetail.id!,
-                            //TODO: cajjjjj
                             currentReplyId: _replyComment?.id,
                             comments: _comments,
                             // setComments: (comments) =>
@@ -211,7 +268,7 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
                             },
                             hideComment: (id) {},
                             setRemoveCommentId: (id) {
-                              if(id==null){
+                              if (id == null) {
                                 setState(() {
                                   _removedCommentId = null;
                                 });
@@ -235,12 +292,12 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
                               setState(() => _comments = resp);
                             },
                           ),
-                        ),
-                  // SPACER
-                  const SizedBox(
-                    height: 100,
-                  ),
-                ]),
+                    // SPACER
+                    const SizedBox(
+                      height: 100,
+                    ),
+                  ]),
+            ),
             Positioned(
               child: CommentInputReplyWidget(
                 message: _replyComment?.content,
@@ -318,8 +375,13 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
                     ),
               actions: [
                 IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.bookmark_add_outlined),
+                  onPressed: _bookmarkPost,
+                  icon: _isBookmarked
+                      ? const Icon(
+                          Icons.bookmark_add_rounded,
+                          color: Colors.lightBlue,
+                        )
+                      : const Icon(Icons.bookmark_add_outlined),
                   color: Colors.black38,
                 ),
                 IconButton(
@@ -384,11 +446,22 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
     );
   }
 
+  _bookmarkPost() async {
+    bool success =
+        await _postService.saveBookmark(postId: _reviewPostDetail.id);
+    if (success) {
+      setState(() {
+        _isBookmarked = true;
+      });
+    }
+  }
+
   @override
   void dispose() {
-    _focusNode.dispose();
     _scrollController.dispose();
     _quillController.dispose();
+    _commentController.dispose();
+    _focusNode.dispose();
     _commentFocusNode.unfocus();
     super.dispose();
   }

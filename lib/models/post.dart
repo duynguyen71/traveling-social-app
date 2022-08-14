@@ -22,7 +22,7 @@ class Post with ChangeNotifier {
   int reactionCount = 0;
   int commentCount = 0;
   List<Comment>myComments = [];
-  Reaction?myReaction;
+  Reaction? myReaction;
 
   Post.fromJson(dynamic json) {
    id = json['id'];

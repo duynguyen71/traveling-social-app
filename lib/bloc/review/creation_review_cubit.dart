@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:traveling_social_app/dto/attachment_dto.dart';
 import 'package:traveling_social_app/dto/creation_review_post.dart';
 
+import '../../models/tag.dart';
 import '../../services/post_service.dart';
 
 part 'creation_review_state.dart';
@@ -22,6 +23,7 @@ class CreateReviewPostCubit extends Cubit<CreateReviewPostState> {
     String? contentJson,
     AttachmentDto? coverImage,
     List<AttachmentDto>? images,
+    List<Tag>? tags,
   }) {
     emit(
       CreateReviewPostState(
@@ -36,6 +38,7 @@ class CreateReviewPostCubit extends Cubit<CreateReviewPostState> {
           shortDescription: shortDescription,
           coverImage: coverImage,
           images: images,
+          tags: tags
         ),
       ),
     );
@@ -56,12 +59,12 @@ class CreateReviewPostCubit extends Cubit<CreateReviewPostState> {
       emit(state.copyWith(status: ReviewPostStatus.success));
     } on Exception catch (e) {
     } finally {
-      emit(
-        state.copyWith(
-          status: ReviewPostStatus.success,
-          post: const CreationReviewPost(),
-        ),
-      );
+      // emit(
+      //   state.copyWith(
+      //     status: ReviewPostStatus.success,
+      //     post: const CreationReviewPost(),
+      //   ),
+      // );
     }
   }
 }

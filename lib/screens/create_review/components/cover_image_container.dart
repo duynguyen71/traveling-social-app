@@ -9,10 +9,6 @@ class CoverImageContainer extends StatelessWidget {
     return AspectRatio(
       aspectRatio: 16 / 9,
       child: Container(
-        // decoration: BoxDecoration(
-        //   borderRadius: BorderRadius.circular(8.0),
-        // ),
-        // margin: const EdgeInsets.all(4.0),
         height: 180,
         constraints: const BoxConstraints(minHeight: 180),
         width: double.infinity,

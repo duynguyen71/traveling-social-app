@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/review/review_post_detail_screen.dart';
-import 'package:traveling_social_app/utilities/application_utility.dart';
 
 import '../../../models/Base_review_post_response.dart';
 import '../../create_review/components/cover_image_container.dart';
 
-class BaseReviewPostWidget extends StatefulWidget {
-  const BaseReviewPostWidget({
+class ReviewPostCard extends StatefulWidget {
+  const ReviewPostCard({
     Key? key,
     required this.reviewPost,
   }) : super(key: key);
@@ -17,10 +16,10 @@ class BaseReviewPostWidget extends StatefulWidget {
   final BaseReviewPostResponse reviewPost;
 
   @override
-  State<BaseReviewPostWidget> createState() => _BaseReviewPostWidgetState();
+  State<ReviewPostCard> createState() => _ReviewPostCardState();
 }
 
-class _BaseReviewPostWidgetState extends State<BaseReviewPostWidget>
+class _ReviewPostCardState extends State<ReviewPostCard>
     with AutomaticKeepAliveClientMixin {
   BaseReviewPostResponse get reviewPost => widget.reviewPost;
 
@@ -52,8 +51,7 @@ class _BaseReviewPostWidgetState extends State<BaseReviewPostWidget>
                   borderRadius: kReviewPostBorderRadius,
                   child: CachedNetworkImage(
                     alignment: Alignment.center,
-                    imageUrl:
-                        '$imageUrl${reviewPost.coverImage!.name}',
+                    imageUrl: '$imageUrl${reviewPost.coverImage!.name}',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -65,7 +63,7 @@ class _BaseReviewPostWidgetState extends State<BaseReviewPostWidget>
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  onTap: () {},
+                  onTap: _onTap,
                   child: Ink(
                     child: Container(
                       padding: const EdgeInsets.symmetric(
@@ -85,8 +83,9 @@ class _BaseReviewPostWidgetState extends State<BaseReviewPostWidget>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Hi ${reviewPost.title.toString()}!",
+                            "${reviewPost.title}",
                             style: const TextStyle(
+                              fontSize: 14,
                                 color: Colors.black87,
                                 fontWeight: FontWeight.w700),
                             overflow: TextOverflow.ellipsis,
