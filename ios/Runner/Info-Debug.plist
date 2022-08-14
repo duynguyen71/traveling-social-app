@@ -65,6 +65,7 @@
      <key>io.flutter.embedded_views_preview</key>
      <string>YES</string>
      <key>FirebaseAppDelegateProxyEnabled</key>
+     <no/>
      <false/>
      <key>CFBundleLocalizations</key>
      <array>
