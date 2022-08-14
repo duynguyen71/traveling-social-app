@@ -264,13 +264,13 @@ class _PostEntryState extends State<PostEntry>
                             child: child,
                           ),
                           child: _isFavorite
-                              ? const Icon(
+                              ?  Icon(
                                   size: 24.0,
                                   Icons.favorite,
                                   color: Colors.red,
                                   key: ValueKey('icon1'),
                                 )
-                              : const Icon(
+                              :  Icon(
                                   size: 24.0,
                                   Icons.favorite_border,
                                   color: Colors.black45,
