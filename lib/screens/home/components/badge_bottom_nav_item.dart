@@ -33,7 +33,7 @@ class BadgeBottomNavItem extends StatelessWidget {
               Transform.scale(
                 scale: isSelected ? 1.2 : 1,
                 child: SizedBox(
-                  width: kDefaultBottomNavIconSize + 10,
+                  width: 24.0 + 10,
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
@@ -43,7 +43,7 @@ class BadgeBottomNavItem extends StatelessWidget {
                         color: isSelected
                             ? Colors.black54
                             : Colors.grey.withOpacity(.5),
-                        size: kDefaultBottomNavIconSize,
+                        size: 24.0,
                       ),
                       const Positioned(
                         child: NumberBadge(number: 12),

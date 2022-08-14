@@ -22,7 +22,8 @@ class ReactionBar extends StatefulWidget {
   State<ReactionBar> createState() => _ReactionBarState();
 }
 
-class _ReactionBarState extends State<ReactionBar> with AutomaticKeepAliveClientMixin {
+class _ReactionBarState extends State<ReactionBar>
+    with AutomaticKeepAliveClientMixin {
   bool _isFavorite = false;
   int _numOfReaction = 0, _numOfComment = 0;
 
@@ -87,14 +88,14 @@ class _ReactionBarState extends State<ReactionBar> with AutomaticKeepAliveClient
                       child: child,
                     ),
                     child: _isFavorite
-                        ? const Icon(
-                            size: kDefaultBottomNavIconSize,
+                        ? Icon(
+                            size: 24.0,
                             Icons.favorite,
                             color: Colors.red,
                             key: ValueKey('icon1'),
                           )
-                        : const Icon(
-                            size: kDefaultBottomNavIconSize,
+                        : Icon(
+                            size: 24.0,
                             Icons.favorite_border,
                             color: Colors.black45,
                             key: ValueKey('icon2'),
@@ -121,8 +122,8 @@ class _ReactionBarState extends State<ReactionBar> with AutomaticKeepAliveClient
                   // ),
                   icon: SvgPicture.asset(
                     'assets/icons/comment.svg',
-                    width: kDefaultBottomNavIconSize,
-                    height: kDefaultBottomNavIconSize,
+                    width: 24.0,
+                    height: 24.0,
                   ),
                 ),
                 Text(
@@ -141,8 +142,8 @@ class _ReactionBarState extends State<ReactionBar> with AutomaticKeepAliveClient
                   onPressed: () {},
                   icon: SvgPicture.asset(
                     'assets/icons/share.svg',
-                    width: kDefaultBottomNavIconSize,
-                    height: kDefaultBottomNavIconSize,
+                    width: 24.0,
+                    height: 24.0,
                   ),
                 ),
               ],

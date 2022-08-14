@@ -96,7 +96,7 @@ class _AccountScreenState extends State<AccountScreen>
                 child: Icon(
                   Icons.ac_unit_outlined,
                   color: Colors.white,
-                  size: kDefaultBottomNavIconSize,
+                  size: 24.0,
                 ),
               ),
               title: AppLocalizations.of(context)!.following,
@@ -118,7 +118,7 @@ class _AccountScreenState extends State<AccountScreen>
                 child: Icon(
                   Icons.ac_unit_outlined,
                   color: Colors.white,
-                  size: kDefaultBottomNavIconSize,
+                  size: 24.0,
                 ),
               ),
               title: AppLocalizations.of(context)!.review,
@@ -129,7 +129,7 @@ class _AccountScreenState extends State<AccountScreen>
                 child: Icon(
                   Icons.ac_unit_outlined,
                   color: Colors.white,
-                  size: kDefaultBottomNavIconSize,
+                  size: 24.0,
                 ),
               ),
               title: AppLocalizations.of(context)!.post,

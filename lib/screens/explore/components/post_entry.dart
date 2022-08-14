@@ -265,13 +265,13 @@ class _PostEntryState extends State<PostEntry>
                           ),
                           child: _isFavorite
                               ? const Icon(
-                                  size: kDefaultBottomNavIconSize,
+                                  size: 24.0,
                                   Icons.favorite,
                                   color: Colors.red,
                                   key: ValueKey('icon1'),
                                 )
                               : const Icon(
-                                  size: kDefaultBottomNavIconSize,
+                                  size: 24.0,
                                   Icons.favorite_border,
                                   color: Colors.black45,
                                   key: ValueKey('icon2'),
@@ -307,8 +307,8 @@ class _PostEntryState extends State<PostEntry>
                         // ),
                         icon: SvgPicture.asset(
                           'assets/icons/comment.svg',
-                          width: kDefaultBottomNavIconSize,
-                          height: kDefaultBottomNavIconSize,
+                          width: 24.0,
+                          height: 24.0,
                         ),
                       ),
                       Text(
@@ -327,8 +327,8 @@ class _PostEntryState extends State<PostEntry>
                         onPressed: () {},
                         icon: SvgPicture.asset(
                           'assets/icons/share.svg',
-                          width: kDefaultBottomNavIconSize,
-                          height: kDefaultBottomNavIconSize,
+                          width: 24.0,
+                          height: 24.0,
                         ),
                       ),
                     ],
