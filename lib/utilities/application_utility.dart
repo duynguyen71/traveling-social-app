@@ -14,7 +14,7 @@ class ApplicationUtility {
   //push new screen
   static Future<dynamic> navigateToScreen(
       BuildContext context, Widget screen) async {
-    return   Navigator.push(context, MaterialPageRoute(builder: (c) => screen));
+    return Navigator.push(context, MaterialPageRoute(builder: (c) => screen));
   }
 
   static Future<dynamic> pushAndReplace(BuildContext context, Widget screen) {
@@ -40,6 +40,7 @@ class ApplicationUtility {
       backgroundColor: Colors.transparent,
     );
   }
+
   static Future<dynamic> showBottomDialog(
       BuildContext context, List<BottomDialogItem> items) async {
     showModalBottomSheet(
@@ -52,12 +53,11 @@ class ApplicationUtility {
     );
   }
 
- static Future<File?> compressImage(String filePath, {int? quality}) async {
+  static Future<File?> compressImage(String filePath, {int? quality}) async {
     final lastIndex = filePath.lastIndexOf(RegExp(r'.jp'));
     final splitName = filePath.substring(0, (lastIndex));
     final outPath = "${splitName}_out${filePath.substring(lastIndex)}";
     return await FlutterImageCompress.compressAndGetFile(filePath, outPath,
-        quality: quality ?? 20);
+        quality: quality ?? 75);
   }
-
 }

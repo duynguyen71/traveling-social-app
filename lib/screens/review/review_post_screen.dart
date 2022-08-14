@@ -6,6 +6,7 @@ import 'package:traveling_social_app/models/Base_review_post_response.dart';
 import 'package:traveling_social_app/models/base_user.dart';
 import 'package:traveling_social_app/screens/profile/profile_screen.dart';
 import 'package:traveling_social_app/screens/review/components/review_post_entry.dart';
+import 'package:traveling_social_app/screens/review/review_post_detail_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/rounded_image_container.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -124,7 +125,7 @@ class _ReviewPostScreenState extends State<ReviewPostScreen>
             // ),
             SliverToBoxAdapter(
               child: Container(
-                padding: const EdgeInsets.only(left: 8.0,top: 20.0),
+                padding: const EdgeInsets.only(left: 8.0, top: 20.0),
                 height: 150,
                 child: NotificationListener<ScrollNotification>(
                   onNotification: (scrollNotification) {
@@ -163,7 +164,11 @@ class _ReviewPostScreenState extends State<ReviewPostScreen>
                   scrollDirection: Axis.vertical,
                   itemBuilder: (context, index) {
                     var post = _posts[index];
-                    return ReviewPostEntry(post: post);
+                    return ReviewPostEntry(
+                      post: post,
+                      onTap: () => Navigator.push(
+                          context, ReviewPostDetailScreen.route(post.id!)),
+                    );
                   },
                   itemCount: _posts.length,
                   shrinkWrap: true),

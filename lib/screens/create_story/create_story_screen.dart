@@ -27,7 +27,7 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
   final _captionController = TextEditingController();
   bool _isLoading = false;
 
-  final int _compressQuality = 10;
+  final int _compressQuality = 80;
 
   _getImageFromCamera() async {
     XFile? file = await _imagePicker.pickImage(source: ImageSource.camera);

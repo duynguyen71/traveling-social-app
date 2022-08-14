@@ -275,7 +275,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                     for (int i = 0; i < xFiles.length; i++) {
                                       File? file = await ApplicationUtility
                                           .compressImage(xFiles[i].path,
-                                              quality: 20);
+                                              quality: 80);
                                       setState(() {
                                         _pickedFiles.add(file!);
                                       });
@@ -297,7 +297,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                     if (xFile != null) {
                                       File? f = await ApplicationUtility
                                           .compressImage(xFile.path,
-                                              quality: 10);
+                                              quality: 80);
                                       if (f != null) {
                                         setState(() {
                                           _pickedFiles.add(f);

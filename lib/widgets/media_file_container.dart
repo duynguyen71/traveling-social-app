@@ -62,7 +62,11 @@ class _MediaFileContainerState extends State<MediaFileContainer>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  RoundedIconButton(onClick: () {}, icon: Icons.description, size: 20,),
+                  RoundedIconButton(
+                    onClick: () {},
+                    icon: Icons.description,
+                    size: 20,
+                  ),
                   const SizedBox(width: 10),
                   RoundedIconButton(
                     onClick: () async {
@@ -75,7 +79,7 @@ class _MediaFileContainerState extends State<MediaFileContainer>
                           CropAspectRatioPreset.ratio4x3,
                           CropAspectRatioPreset.ratio16x9
                         ],
-                        compressQuality: 70,
+                        // compressQuality: 70,
                         uiSettings: [
                           AndroidUiSettings(
                               toolbarTitle: 'Cropper',
@@ -93,7 +97,8 @@ class _MediaFileContainerState extends State<MediaFileContainer>
                             : null;
                       }
                     },
-                    icon: Icons.brush_outlined, size: 20,
+                    icon: Icons.brush_outlined,
+                    size: 20,
                   ),
                 ],
               ),

@@ -127,7 +127,7 @@ class _ProfileAvtAndCoverState extends State<ProfileAvtAndCover> {
     XFile? pickedFile = await ImagePicker().pickImage(source: source);
     if (pickedFile != null) {
       File? file =
-          await ApplicationUtility.compressImage(pickedFile.path, quality: 70);
+          await ApplicationUtility.compressImage(pickedFile.path, quality: 80);
       if (file == null) {
         return null;
       }

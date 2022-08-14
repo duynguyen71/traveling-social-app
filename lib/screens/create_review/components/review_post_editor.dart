@@ -65,7 +65,7 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
     context.read<CreateReviewPostCubit>().updateReviewPost(images: images);
   }
 
-  Future<String?> _compress(File? file, {int quality = 50}) async {
+  Future<String?> _compress(File? file, {int quality = 80}) async {
     if (file == null) {
       return null;
     }
@@ -88,7 +88,7 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
           .read<CreateReviewPostCubit>()
           .updateStatus(ReviewPostStatus.loadingCoverImage);
       File? compress =
-          await ApplicationUtility.compressImage(pickImage.path, quality: 60);
+          await ApplicationUtility.compressImage(pickImage.path, quality: 80);
 
       var coverImage = const AttachmentDto();
       if (compress == null) {
