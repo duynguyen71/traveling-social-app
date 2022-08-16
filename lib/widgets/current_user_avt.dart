@@ -18,32 +18,33 @@ class CurrentUserAvt extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        builder: (context, state) {
-          return GestureDetector(
-            onTap: () => onTap(),
-            child: Container(
-              margin: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(150),
-              ),
-              child: ClipOval(
+      builder: (context, state) {
+        return GestureDetector(
+          onTap: () => onTap(),
+          child: Container(
+            margin: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(150),
+            ),
+            child: ClipOval(
+              clipBehavior: Clip.hardEdge,
+              child: FittedBox(
+                alignment: Alignment.center,
                 clipBehavior: Clip.hardEdge,
-                child: FittedBox(
-                  alignment: Alignment.center,
-                  clipBehavior: Clip.hardEdge,
-                  child: CachedNetworkImage(
-                    imageUrl: '$imageUrl${state.user.avt}',
-                    height: size,
-                    width: size,
-                    fit: BoxFit.cover,
-                    errorWidget: (context, value, c) =>
-                        Image.asset('assets/images/blank-profile-picture.png'),
-                  ),
+                child: CachedNetworkImage(
+                  imageUrl: '$imageUrl${state.user.avt}',
+                  height: size,
+                  width: size,
+                  fit: BoxFit.cover,
+                  errorWidget: (context, value, c) =>
+                      Image.asset('assets/images/blank-profile-picture.png'),
                 ),
               ),
             ),
-          );
-        },
-     );
+          ),
+        );
+      },
+    );
   }
 }

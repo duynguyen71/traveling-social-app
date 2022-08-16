@@ -7,6 +7,10 @@ abstract class StoryEvent extends Equatable {
 
 @immutable
 class FetchStory extends StoryEvent {
+  final bool isRefreshing;
+
+  const FetchStory({this.isRefreshing = false});
+
   @override
   List<Object?> get props => [];
 }

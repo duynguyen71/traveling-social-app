@@ -42,16 +42,6 @@ class _ReviewPostScreenState extends State<ReviewPostScreen>
   void initState() {
     super.initState();
     getReviewPosts();
-    getTopActiveUsers();
-  }
-
-  getTopActiveUsers() async {
-    if (_users.isEmpty) {
-      List<BaseUserInfo> users = await _userService.getTopActiveUsers();
-      setState(() {
-        _users = users;
-      });
-    }
   }
 
   int _page = 0;
@@ -95,37 +85,11 @@ class _ReviewPostScreenState extends State<ReviewPostScreen>
       child: NotificationListener<ScrollNotification>(
         child: CustomScrollView(
           slivers: [
-            // SliverToBoxAdapter(
-            //   child: Container(
-            //     padding: const EdgeInsets.all(8.0),
-            //     margin: const EdgeInsets.symmetric(vertical: 8.0),
-            //     constraints: const BoxConstraints(
-            //       minHeight: 40,
-            //     ),
-            //     color: Colors.white,
-            //     child: SingleChildScrollView(
-            //       scrollDirection: Axis.horizontal,
-            //       child: Row(
-            //         children: _users
-            //             .map((e) => Padding(
-            //                   padding:
-            //                       const EdgeInsets.symmetric(horizontal: 8.0),
-            //                   child: UserAvatar(
-            //                       size: 40,
-            //                       avt: e.avt.toString(),
-            //                       onTap: () {
-            //                         ApplicationUtility.navigateToScreen(
-            //                             context, ProfileScreen(userId: e.id!));
-            //                       }),
-            //                 ))
-            //             .toList(),
-            //       ),
-            //     ),
-            //   ),
-            // ),
+            const SliverToBoxAdapter(child: SizedBox(height: 10)),
             SliverToBoxAdapter(
               child: Container(
-                padding: const EdgeInsets.only(left: 8.0, top: 20.0),
+                color: Colors.white,
+                padding: const EdgeInsets.all(8.0),
                 height: 150,
                 child: NotificationListener<ScrollNotification>(
                   onNotification: (scrollNotification) {
@@ -158,20 +122,24 @@ class _ReviewPostScreenState extends State<ReviewPostScreen>
               ),
             ),
             // List random review post
+            const SliverToBoxAdapter(child: SizedBox(height: 10)),
             SliverToBoxAdapter(
-              child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) {
-                    var post = _posts[index];
-                    return ReviewPostEntry(
-                      post: post,
-                      onTap: () => Navigator.push(
-                          context, ReviewPostDetailScreen.route(post.id!)),
-                    );
-                  },
-                  itemCount: _posts.length,
-                  shrinkWrap: true),
+              child: Container(
+                color: Colors.white,
+                child: ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (context, index) {
+                      var post = _posts[index];
+                      return ReviewPostEntry(
+                        post: post,
+                        onTap: () => Navigator.push(
+                            context, ReviewPostDetailScreen.route(post.id!)),
+                      );
+                    },
+                    itemCount: _posts.length,
+                    shrinkWrap: true),
+              ),
             )
           ],
         ),

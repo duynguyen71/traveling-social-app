@@ -12,6 +12,7 @@ import '../config/expired_token_retry.dart';
 import '../config/base_interceptor.dart';
 import '../dto/attachment_dto.dart';
 import '../dto/creation_review_post.dart';
+import '../models/Author.dart';
 import '../models/Base_review_post_response.dart';
 import '../models/comment.dart';
 import '../models/file_upload.dart';
@@ -363,6 +364,16 @@ class PostService {
     return {};
   }
 
+  Future<Author> getReviewPostAuthInfo({required int reviewPostId}) async {
+    final url =
+        Uri.parse('$baseUrl/api/v1/member/review-posts/$reviewPostId/auth');
+    var resp = await client.get(url);
+    if (resp.statusCode == 200) {
+      return Author.fromJson(jsonDecode(resp.body)['data']);
+    }
+    return Author.empty();
+  }
+
   /// Comment on review post
   Future<Comment> commentReviewPost(
       {int? postId,
@@ -423,11 +434,12 @@ class PostService {
 
   /// Get current user review posts
   Future<List<BaseReviewPostResponse>> getCurrentUserReviewPosts() async {
-    final url = Uri.parse('$baseUrl/api/v1/member/users/me/review-post');
+    final url = Uri.parse('$baseUrl/api/v1/member/users/me/review-posts');
     final resp = await client.get(url);
     if (resp.statusCode == 200) {
-      var data = jsonDecode(resp.body)['data'] as List;
-      return data.map((item) => BaseReviewPostResponse.fromJson(json)).toList();
+      var json = jsonDecode(resp.body) as Map<String, dynamic>;
+      var data = json['data'] as List<dynamic>;
+      return data.map((e) => BaseReviewPostResponse.fromJson(e)).toList();
     }
     return [];
   }

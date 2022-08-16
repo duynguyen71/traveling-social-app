@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:traveling_social_app/models/Author.dart';
 
 import '../../../authentication/bloc/authentication_bloc.dart';
 import '../../../constants/app_theme_constants.dart';
-import '../../../models/base_user.dart';
+import '../../../widgets/my_outline_button.dart';
 import '../../../widgets/user_avt.dart';
 import '../../profile/components/follow_count.dart';
 import '../../profile/profile_screen.dart';
@@ -10,16 +11,22 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthTag extends StatefulWidget {
-  const AuthTag({Key? key, required this.auth}) : super(key: key);
+  const AuthTag(
+      {Key? key,
+      required this.auth,
+      required this.onTapFollow,
+    })
+      : super(key: key);
 
   @override
   State<AuthTag> createState() => _AuthTagState();
 
-  final BaseUserInfo auth;
+  final Author auth;
+  final Function onTapFollow;
 }
 
-class _AuthTagState extends State<AuthTag> {
-  BaseUserInfo get author => widget.auth;
+class _AuthTagState extends State<AuthTag> with AutomaticKeepAliveClientMixin {
+  Author get author => widget.auth;
 
   _navigateToAuthorProfile() {
     if (context.read<AuthenticationBloc>().state.user.id == author.id!) return;
@@ -28,6 +35,7 @@ class _AuthTagState extends State<AuthTag> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey.shade100,
@@ -37,14 +45,14 @@ class _AuthTagState extends State<AuthTag> {
         ),
         borderRadius: BorderRadius.circular(8.0),
       ),
-      padding: const EdgeInsets.all( 8.0),
+      padding: const EdgeInsets.all(8.0),
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-           Text(
-           AppLocalizations.of(context)!.aboutAuthor,
+          Text(
+            AppLocalizations.of(context)!.aboutAuthor,
             style: const TextStyle(
               fontSize: 16,
               color: Colors.black87,
@@ -81,25 +89,26 @@ class _AuthTagState extends State<AuthTag> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                       context.read<AuthenticationBloc>().state.user.id != author.id?Container(
-                            decoration: BoxDecoration(
-                              color: Colors.blue,
-                              borderRadius: BorderRadius.circular(80.0),
-                            ),
-                            child: TextButton(
-                              onPressed: () {},
-                              style: TextButton.styleFrom(
-                                  padding: EdgeInsets.zero,
-                                  minimumSize: const Size(100, 30),
-                                  tapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
-                                  alignment: Alignment.center),
-                              child:  Text(
-                                AppLocalizations.of(context)!.follow,
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ):const SizedBox.shrink()
+                          context.read<AuthenticationBloc>().state.user.id !=
+                                  author.id
+                              ? SizedBox(
+                                  width: 100,
+                                  child: MyOutlineButton(
+                                    onClick: () => widget.onTapFollow(),
+                                    text: author.isFollowing
+                                        ? AppLocalizations.of(context)!
+                                            .following
+                                        : AppLocalizations.of(context)!.follow,
+                                    color: author.isFollowing
+                                        ? kPrimaryColor
+                                        : null,
+                                    textColor: author.isFollowing
+                                        ? Colors.white
+                                        : null,
+                                    minWidth: 80,
+                                  ),
+                                )
+                              : const SizedBox.shrink()
                         ],
                       ),
                       Padding(
@@ -108,9 +117,15 @@ class _AuthTagState extends State<AuthTag> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            FollowCount(title:  AppLocalizations.of(context)!.review, count: 1),
-                            FollowCount(title:  AppLocalizations.of(context)!.post, count: 21),
-                            FollowCount(title:  AppLocalizations.of(context)!.follower, count: 21),
+                            FollowCount(
+                                title: AppLocalizations.of(context)!.review,
+                                count: author.numOfReviewPost),
+                            FollowCount(
+                                title: AppLocalizations.of(context)!.post,
+                                count: author.numOfPost),
+                            FollowCount(
+                                title: AppLocalizations.of(context)!.follower,
+                                count: author.numOfFollower),
                           ],
                         ),
                       )
@@ -124,4 +139,7 @@ class _AuthTagState extends State<AuthTag> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

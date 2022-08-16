@@ -28,7 +28,7 @@ class ApplicationUtility {
   static Future<PaletteGenerator?> getPaletteGenerator(String? image) async {
     var paletteGenerator = await PaletteGenerator.fromImageProvider(
       Image.network('$imageUrl$image').image,
-      maximumColorCount: 5,
+      maximumColorCount: 4,
     );
     return paletteGenerator;
   }

@@ -29,7 +29,6 @@ class _ReactionBarState extends State<ReactionBar>
 
   @override
   void didChangeDependencies() {
-    print('did change dependency');
     if (widget.isLoved) {
       setState(() {
         _isFavorite = true;

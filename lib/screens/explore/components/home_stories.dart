@@ -21,109 +21,111 @@ class _HomeStoriesState extends State<HomeStories>
   @override
   void initState() {
     super.initState();
-    context.read<StoryBloc>().add(FetchStory());
+    context.read<StoryBloc>().add(const FetchStory());
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Container(
-      constraints: const BoxConstraints(
-        minHeight: 210,
-      ),
-      width: double.infinity,
-      decoration: const BoxDecoration(color: Colors.white),
-      padding: const EdgeInsets.all(8),
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      child: BlocBuilder<StoryBloc, StoryState>(
-        builder: (context, state) {
-          var stories = state.stories;
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              SizedBox(
-                height: 180,
-                child: NotificationListener<ScrollNotification>(
-                  onNotification: (_) {
-                    if (_.metrics.pixels == _.metrics.maxScrollExtent) {
-                      context.read<StoryBloc>().add(FetchStory());
-                      return true;
-                    }
-                    return false;
-                  },
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: const BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      if (index == stories.length) {
-                        return Center(
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 40.0),
-                            child: state.status == StoryStateStatus.fetching
-                                ? const CupertinoActivityIndicator()
-                                : const SizedBox.shrink(),
-                          ),
-                        );
+    Size size = MediaQuery.of(context).size;
+    return SliverToBoxAdapter(
+      child: Container(
+        constraints: BoxConstraints(
+          minHeight: size.height * .35,
+        ),
+        width: double.infinity,
+        decoration: const BoxDecoration(color: Colors.white),
+        padding: const EdgeInsets.all(8),
+        child: BlocBuilder<StoryBloc, StoryState>(
+          builder: (context, state) {
+            var stories = state.stories;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                SizedBox(
+                  height: 180,
+                  child: NotificationListener<ScrollNotification>(
+                    onNotification: (_) {
+                      if (_.metrics.pixels == _.metrics.maxScrollExtent) {
+                        context.read<StoryBloc>().add(const FetchStory());
+                        return true;
                       }
-                      return StoryCard(
-                          key: ValueKey(stories.elementAt(index).id),
-                          story: stories.elementAt(index),
-                          onClick: () {
-                            context
-                                .read<StoryBloc>()
-                                .add(UpdateScrollIndex(index));
-                            ApplicationUtility.navigateToScreen(
-                                context, const StoriesScrollScreen());
-                          });
+                      return false;
                     },
-                    itemCount: stories.length + 1,
-                    scrollDirection: Axis.horizontal,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: const BouncingScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        if (index == stories.length) {
+                          return Center(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 40.0),
+                              child: state.status == StoryStateStatus.fetching
+                                  ? const CupertinoActivityIndicator()
+                                  : const SizedBox.shrink(),
+                            ),
+                          );
+                        }
+                        return StoryCard(
+                            key: ValueKey(stories.elementAt(index).id),
+                            story: stories.elementAt(index),
+                            onClick: () {
+                              context
+                                  .read<StoryBloc>()
+                                  .add(UpdateScrollIndex(index));
+                              ApplicationUtility.navigateToScreen(
+                                  context, const StoriesScrollScreen());
+                            });
+                      },
+                      itemCount: stories.length + 1,
+                      scrollDirection: Axis.horizontal,
+                    ),
                   ),
                 ),
-              ),
-              //SHOW MORE STORIES BUTTON
-              stories.isNotEmpty && stories.length > 1
-                  ? Align(
-                      alignment: Alignment.bottomRight,
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: () {
-                            ApplicationUtility.navigateToScreen(
-                                context, const StoriesScreen());
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color: Colors.black12,
-                                  ),
-                                ),
-                              ),
-                              child: Text(
-                                AppLocalizations.of(context)!.showMore,
-                                style: const TextStyle(
-                                    color: kPrimaryColor,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 12
-                                    // decoration: TextDecoration.underline,
-                                    // decorationThickness: 4,
-                                    ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  : const SizedBox.shrink(),
-            ],
-          );
-        },
+                //SHOW MORE STORIES BUTTON
+                // stories.isNotEmpty && stories.length > 1
+                //     ? Align(
+                //         alignment: Alignment.bottomRight,
+                //         child: Material(
+                //           color: Colors.transparent,
+                //           child: InkWell(
+                //             onTap: () {
+                //               ApplicationUtility.navigateToScreen(
+                //                   context, const StoriesScreen());
+                //             },
+                //             child: Padding(
+                //               padding: const EdgeInsets.all(8.0),
+                //               child: Container(
+                //                 decoration: const BoxDecoration(
+                //                   border: Border(
+                //                     bottom: BorderSide(
+                //                       color: Colors.black12,
+                //                     ),
+                //                   ),
+                //                 ),
+                //                 child: Text(
+                //                   AppLocalizations.of(context)!.showMore,
+                //                   style: const TextStyle(
+                //                       color: kPrimaryColor,
+                //                       fontWeight: FontWeight.w500,
+                //                       fontSize: 12
+                //                       // decoration: TextDecoration.underline,
+                //                       // decorationThickness: 4,
+                //                       ),
+                //                 ),
+                //               ),
+                //             ),
+                //           ),
+                //         ),
+                //       )
+                //     : const SizedBox.shrink(),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

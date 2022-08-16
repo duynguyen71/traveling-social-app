@@ -21,6 +21,13 @@ class StoryBloc extends Bloc<StoryEvent, StoryState> {
   }
 
   _fetchStories(FetchStory event, emit) async {
+    if (event.isRefreshing) {
+      emit(state.copyWith(
+          hasReachMax: false,
+          page: 0,
+          stories: {},
+          status: StoryStateStatus.initial));
+    }
     if (state.hasReachMax || state.status == StoryStateStatus.fetching) {
       return;
     }

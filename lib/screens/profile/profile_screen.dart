@@ -175,7 +175,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   SizedBox(
-                                    width: 70,
+                                    width: 100,
                                     child: MyOutlineButton(
                                       onClick: () async {
                                         if (isFollowed) {

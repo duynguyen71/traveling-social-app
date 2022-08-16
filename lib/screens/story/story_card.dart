@@ -24,9 +24,9 @@ class _StoryCardState extends State<StoryCard>
     with AutomaticKeepAliveClientMixin {
   String? _imageName;
   double? _displayRatio;
-  final List<Color> _colors = [
-    Colors.black54,
-    Colors.black,
+  List<Color> _colors = [
+    Colors.black38,
+    Colors.black87,
   ];
 
   @override
@@ -44,6 +44,19 @@ class _StoryCardState extends State<StoryCard>
     setState(() {
       _displayRatio = ratio;
     });
+    // if(ratio>=1){
+    // _getColors();
+    // }
+  }
+
+  _getColors() async {
+    var paletteGenerator =
+        await ApplicationUtility.getPaletteGenerator(_imageName);
+    if (paletteGenerator == null) return;
+    var colors = paletteGenerator.colors;
+    setState(() {
+      _colors = [...colors];
+    });
   }
 
   List<Content> get contents => widget.story.contents ?? [];
@@ -51,10 +64,10 @@ class _StoryCardState extends State<StoryCard>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    Size size = MediaQuery.of(context).size;
     return Container(
-      height: kDefaultStoryCardHeight,
-      constraints: const BoxConstraints(
-        minHeight: kDefaultStoryCardHeight,
+      constraints: BoxConstraints(
+        minHeight: size.height * .3,
       ),
       margin: const EdgeInsets.symmetric(horizontal: 1),
       padding: const EdgeInsets.all(5),

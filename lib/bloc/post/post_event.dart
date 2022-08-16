@@ -7,7 +7,9 @@ abstract class PostEvent extends Equatable {
 
 @immutable
 class FetchPost extends PostEvent {
-  const FetchPost();
+  final bool isRefreshing;
+
+  const FetchPost({this.isRefreshing = false});
 
   @override
   List<Object?> get props => [];
@@ -45,12 +47,14 @@ class IncrementCommentCount extends PostEvent {
   @override
   List<Object?> get props => [postId];
 }
+
 @immutable
 class RemoveComment extends PostEvent {
   final int id;
   final int commentId;
 
-  const RemoveComment(this.id,this.commentId);
+  const RemoveComment(this.id, this.commentId);
+
   @override
   List<Object?> get props => [id];
 }

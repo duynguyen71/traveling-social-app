@@ -24,33 +24,37 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     on<RemoveComment>(_removeComment);
   }
 
-  /// Handle get posts
-  _handleFetchPost(event, emit) async {
-    if (event is FetchPost) {
-      // fetch post if post hasReachMax = false && PostStateStatus != Fetching
-      if (!state.hasReachMax && state.status != PostStateStatus.fetching) {
-        try {
-          emit(state.copyWith(
-            status: PostStateStatus.fetching,
-          ));
-          Set<Post> posts =
-              await _postService.getPosts(page: state.page, pageSize: 6);
-          // stop fetching if hasReachMax
-          bool hasReachMax = true;
-          // get next page value
-          int nextPage = state.page;
-          if (posts.isNotEmpty) {
-            hasReachMax = false;
-            nextPage += 1;
-          }
-          emit(state.copyWith(
-              posts: {...state.posts, ...posts},
-              page: nextPage,
-              hasReachMax: hasReachMax,
-              status: PostStateStatus.success));
-        } on Exception {
-          emit(state.copyWith(status: PostStateStatus.failed));
+  _handleFetchPost(FetchPost event, emit) async {
+    if (event.isRefreshing) {
+      emit(state.copyWith(
+          hasReachMax: false,
+          page: 0,
+          posts: {},
+          status: PostStateStatus.initial));
+    }
+    // fetch post if post hasReachMax = false && PostStateStatus != Fetching
+    if (!state.hasReachMax && state.status != PostStateStatus.fetching) {
+      try {
+        emit(state.copyWith(
+          status: PostStateStatus.fetching,
+        ));
+        Set<Post> posts =
+            await _postService.getPosts(page: state.page, pageSize: 6);
+        // stop fetching if hasReachMax
+        bool hasReachMax = true;
+        // get next page value
+        int nextPage = state.page;
+        if (posts.isNotEmpty) {
+          hasReachMax = false;
+          nextPage += 1;
         }
+        emit(state.copyWith(
+            posts: {...state.posts, ...posts},
+            page: nextPage,
+            hasReachMax: hasReachMax,
+            status: PostStateStatus.success));
+      } on Exception {
+        emit(state.copyWith(status: PostStateStatus.failed));
       }
     }
   }
