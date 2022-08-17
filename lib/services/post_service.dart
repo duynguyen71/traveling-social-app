@@ -14,6 +14,7 @@ import '../dto/attachment_dto.dart';
 import '../dto/creation_review_post.dart';
 import '../models/Author.dart';
 import '../models/Base_review_post_response.dart';
+import '../models/Review_post_report.dart';
 import '../models/comment.dart';
 import '../models/file_upload.dart';
 import 'package:path/path.dart';
@@ -302,21 +303,26 @@ class PostService {
     //
     var requestJson = request.toJson();
     //upload cover image
-    var coverImage = request.coverImage;
-    if (coverImage!.id == null) {
-      var coverImageResp = await uploadImage(coverImage.file);
+    var coverImage = request.coverPhoto;
+    if (coverImage?.id == null) {
+      var coverImageResp = await uploadImage(coverImage!.file);
       requestJson['coverImageId'] = coverImageResp.id;
+    } else {
+      requestJson['coverImageId'] = request.coverPhoto?.id;
     }
     // upload images
     List<AttachmentDto> attachmentRequests = [];
     for (int i = 0; i < request.images.length; i++) {
       var attachmentRequest = request.images[i];
+      //
       if (attachmentRequest.id == null && attachmentRequest.imageId == null) {
         var uploadResp = await uploadImage(attachmentRequest.file);
         attachmentRequest =
             attachmentRequest.copyWith(imageId: uploadResp.id, pos: i);
-        attachmentRequests.add(attachmentRequest);
+      } else {
+        attachmentRequest = attachmentRequest.copyWith(pos: i);
       }
+      attachmentRequests.add(attachmentRequest);
     }
     requestJson['images'] = attachmentRequests.map((e) => e.toJson()).toList();
     //
@@ -426,22 +432,35 @@ class PostService {
     if (resp.statusCode == 200) {
       var body = jsonDecode(resp.body);
       var list = body['data'] as List<dynamic>;
-      print('get tag success $list');
       return list.map((e) => Tag.fromJson(e)).toList();
     }
     return [];
   }
 
-  /// Get current user review posts
-  Future<List<BaseReviewPostResponse>> getCurrentUserReviewPosts() async {
+  /// Get current user review posts report
+  Future<List<ReviewPostReport>> getCurrentUserReviewPosts() async {
     final url = Uri.parse('$baseUrl/api/v1/member/users/me/review-posts');
     final resp = await client.get(url);
     if (resp.statusCode == 200) {
       var json = jsonDecode(resp.body) as Map<String, dynamic>;
       var data = json['data'] as List<dynamic>;
-      return data.map((e) => BaseReviewPostResponse.fromJson(e)).toList();
+      return data.map((e) => ReviewPostReport.fromJson(e)).toList();
     }
     return [];
+  }
+
+  /// Get current user review posts edit detail
+  Future<CreationReviewPost?> getCurrentUserEditReviewPostDetail(int id) async {
+    final url =
+        Uri.parse('$baseUrl/api/v1/member/users/me/review-posts/$id/detail');
+    final resp = await client.get(url);
+    if (resp.statusCode == 200) {
+      var creationReviewPost =
+          CreationReviewPost.fromJson(jsonDecode(resp.body)['data']);
+      print(creationReviewPost);
+      return creationReviewPost;
+    }
+    return null;
   }
 
   /// Get bookmarks

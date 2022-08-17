@@ -9,7 +9,7 @@ class SelectedTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FittedBox(
+    return tag.status==1? FittedBox(
       alignment: Alignment.center,
       child: Stack(
         alignment: Alignment.center,
@@ -42,6 +42,6 @@ class SelectedTag extends StatelessWidget {
               ))
         ],
       ),
-    );
+    ):const SizedBox.shrink();
   }
 }

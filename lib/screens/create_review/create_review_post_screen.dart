@@ -11,9 +11,6 @@ import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/base_sliver_app_bar.dart';
 import 'package:traveling_social_app/widgets/loading_widget.dart';
 import 'package:traveling_social_app/widgets/rounded_icon_button.dart';
-import 'package:provider/provider.dart';
-import '../../constants/app_theme_constants.dart';
-import '../../my_theme.dart';
 import '../../services/post_service.dart';
 
 class CreateReviewPostScreen extends StatefulWidget {
@@ -21,6 +18,9 @@ class CreateReviewPostScreen extends StatefulWidget {
 
   @override
   State<CreateReviewPostScreen> createState() => _CreateReviewPostScreenState();
+
+  static Route route() =>
+      MaterialPageRoute(builder: (context) => const CreateReviewPostScreen());
 }
 
 class _CreateReviewPostScreenState extends State<CreateReviewPostScreen>
@@ -33,7 +33,6 @@ class _CreateReviewPostScreenState extends State<CreateReviewPostScreen>
   void initState() {
     super.initState();
     _loadPrevData();
-    PostService().getTags(page:0,pageSize: 100,name: null);
   }
 
   _loadPrevData() {
@@ -53,19 +52,21 @@ class _CreateReviewPostScreenState extends State<CreateReviewPostScreen>
     }
   }
 
+  // Change to review mode
   _changeToViewMode() {
     ApplicationUtility.hideKeyboard();
     var json = jsonEncode(_controller.document.toDelta().toJson());
     context
         .read<CreateReviewPostCubit>()
         .updateReviewPost(contentJson: json, title: _titleController.text);
-    showModalBottomSheet(
+    return showModalBottomSheet(
         context: context,
         builder: (context) {
           return EditorReview(controller: _controller);
         },
         backgroundColor: Colors.transparent,
-        isScrollControlled: true);
+        isScrollControlled: true,
+        isDismissible: true);
   }
 
   @override
@@ -73,7 +74,8 @@ class _CreateReviewPostScreenState extends State<CreateReviewPostScreen>
     super.build(context);
     return WillPopScope(
       onWillPop: () {
-        _updateReviewPostState(context);
+        context.read<CreateReviewPostCubit>().clear();
+        // _updateReviewPostState(context);
         return Future.value(true);
       },
       child: Scaffold(

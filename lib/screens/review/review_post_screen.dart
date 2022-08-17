@@ -15,6 +15,7 @@ import '../../services/post_service.dart';
 import '../../services/user_service.dart';
 import '../../widgets/my_divider.dart';
 import '../../widgets/user_avt.dart';
+import 'components/post_meta.dart';
 import 'components/review_post_card.dart';
 
 class ReviewPostScreen extends StatefulWidget {
@@ -132,9 +133,13 @@ class _ReviewPostScreenState extends State<ReviewPostScreen>
                     itemBuilder: (context, index) {
                       var post = _posts[index];
                       return ReviewPostEntry(
-                        post: post,
+                        imageName: post.coverPhoto?.name,
+                        title: post.title,
                         onTap: () => Navigator.push(
                             context, ReviewPostDetailScreen.route(post.id!)),
+                        child: PostMetadata(
+                            username: post.user?.username,
+                            createDate: post.createDate),
                       );
                     },
                     itemCount: _posts.length,

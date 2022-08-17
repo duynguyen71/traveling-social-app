@@ -7,8 +7,10 @@ import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:traveling_social_app/bloc/review/creation_review_cubit.dart';
+import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/dto/attachment_dto.dart';
+import 'package:traveling_social_app/dto/creation_review_post.dart';
 import 'package:traveling_social_app/my_theme.dart';
 import 'package:traveling_social_app/screens/create_review/components/cover_image_container.dart';
 import 'package:traveling_social_app/screens/create_review/components/day_cost_input_dialog.dart';
@@ -49,7 +51,7 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
       CreateReviewPostCubit bloc = context.read<CreateReviewPostCubit>();
       if (path == null) return;
       var images = [...bloc.state.post.images];
-      images.add(AttachmentDto(path: path, pos: pos));
+      images.add(AttachmentDto(path: path, pos: pos, status: 1));
       bloc.updateReviewPost(images: images);
     } on Exception catch (e) {
     } finally {
@@ -61,8 +63,18 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
 
   _removeImageFromGallery(int index) {
     var images = [...context.read<CreateReviewPostCubit>().state.post.images];
-    images.removeAt(index);
+    var image = images[index];
+    if (image.id != null && image.imageId != null) {
+      images = images
+          .map((e) => e.id == image.id ? e.copyWith(status: 0) : e)
+          .toList();
+      // images.removeAt(index);
+    } else {
+      images.removeAt(index);
+    }
     context.read<CreateReviewPostCubit>().updateReviewPost(images: images);
+    var images2 = context.read<CreateReviewPostCubit>().state.post.images;
+    print(images2);
   }
 
   Future<String?> _compress(File? file, {int quality = 80}) async {
@@ -89,13 +101,12 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
           .updateStatus(ReviewPostStatus.loadingCoverImage);
       File? compress =
           await ApplicationUtility.compressImage(pickImage.path, quality: 80);
-
       var coverImage = const AttachmentDto();
       if (compress == null) {
-        coverImage = coverImage.copyWith(path: pickImage.path);
+        coverImage = coverImage.copyWith(path: pickImage.path, status: 1);
       } else {
         setState(() {
-          coverImage = coverImage.copyWith(path: compress.path);
+          coverImage = coverImage.copyWith(path: compress.path, status: 1);
         });
       }
       context
@@ -139,6 +150,7 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // COVER IMAGE
         TapEffectWidget(
@@ -153,12 +165,16 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
                   decoration: BoxDecoration(
                     color: Colors.grey.shade200,
                     borderRadius: kReviewPostBorderRadius,
-                    image: state.post.coverImage == null
+                    image: (state.post.coverPhoto == null)
                         ? null
                         : DecorationImage(
-                            image: FileImage(
-                              File(state.post.coverImage!.path!),
-                            ),
+                            image: state.post.coverPhoto!.id == null
+                                ? FileImage(
+                                    File(state.post.coverPhoto!.path!),
+                                  )
+                                : NetworkImage(
+                                        '$imageUrl${state.post.coverPhoto?.name}')
+                                    as ImageProvider,
                             fit: BoxFit.cover,
                             alignment: Alignment.center,
                             onError: (_, stack) {
@@ -192,10 +208,8 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
                     icon: Icons.tag,
                     bgColor: Colors.blueAccent,
                     textColor: Colors.white,
-                    onTap: () => Navigator.push(context,
-                            PickTagScreen.route(callback: (tagNames) {
-                          print(tagNames);
-                        }))),
+                    onTap: () => Navigator.push(
+                        context, PickTagScreen.route(callback: (tagNames) {}))),
                 MyTextIconButton(
                     text: 'Money',
                     icon: Icons.attach_money,
@@ -244,89 +258,80 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
         ),
         // End of editor
         Container(
+          margin: const EdgeInsets.symmetric(horizontal: 8.0),
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           width: 200.0,
           child:
               MyOutlineButton(onClick: _pickGalleryImages, text: 'Add images'),
         ),
         // IMAGE LIST
-        BlocBuilder<CreateReviewPostCubit, CreateReviewPostState>(
-          builder: (context, state) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 140,
-                  child: ReorderableListView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, int index) {
-                      // show circular when loading new image
-                      if (index == state.post.images.length) {
-                        return state.status == ReviewPostStatus.loadingImages
-                            ? GestureDetector(
-                                key: ValueKey(index),
-                                child: AspectRatio(
-                                  aspectRatio: 1,
-                                  child: Container(
-                                    height: 180,
-                                    constraints:
-                                        const BoxConstraints(minHeight: 180),
-                                    child: const Center(
-                                        child: CupertinoActivityIndicator()),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: BlocBuilder<CreateReviewPostCubit, CreateReviewPostState>(
+            builder: (context, state) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 140,
+                    child: ReorderableListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (BuildContext context, int index) {
+                        // show circular when loading new image
+                        if (index == state.post.images.length) {
+                          return state.status == ReviewPostStatus.loadingImages
+                              ? GestureDetector(
+                                  key: ValueKey(index),
+                                  child: AspectRatio(
+                                    aspectRatio: 1,
+                                    child: Container(
+                                      height: 180,
+                                      constraints:
+                                          const BoxConstraints(minHeight: 180),
+                                      child: const Center(
+                                          child: CupertinoActivityIndicator()),
+                                    ),
                                   ),
-                                ),
-                              )
-                            : SizedBox.shrink(
-                                key: ValueKey(index),
-                              );
-                      }
-                      return ReviewPostImageContainer(
-                          key: ValueKey(index),
-                          onErr: (_, stack) {
-                            var images = [...state.post.images];
-                            images.removeAt(index);
-                            context
-                                .read<CreateReviewPostCubit>()
-                                .updateReviewPost(images: images);
-                          },
-                          onTap: () {
-                            _showImageGallery(context, index);
-                          },
-                          image: state.post.images[index].file,
-                          onRemove: () => _removeImageFromGallery(index));
-                    },
-                    itemCount: state.post.images.length + 1,
-                    onReorder: ((oldIndex, newIndex) {
-                      if (newIndex > oldIndex) {
-                        newIndex = newIndex - 1;
-                      }
-                      var list = [...state.post.images];
-                      var el = list.removeAt(oldIndex);
-                      list.insert(newIndex, el);
-                      context
-                          .read<CreateReviewPostCubit>()
-                          .updateReviewPost(images: list);
-                    }),
+                                )
+                              : SizedBox.shrink(
+                                  key: ValueKey(index),
+                                );
+                        }
+                        var image = state.post.images[index];
+                        return ReviewPostImageContainer(
+                            key: ValueKey(image),
+                            onErr: (_, stack) {},
+                            onTap: () {
+                              _showImageGallery(context, index);
+                            },
+                            image: image,
+                            onRemove: () => _removeImageFromGallery(index));
+                        // : const SizedBox.shrink();
+                      },
+                      itemCount: state.post.images.length + 1,
+                      onReorder: ((oldIndex, newIndex) {
+                        if (newIndex == state.post.images.length + 1 ||
+                            state.post.images[oldIndex].status == 0) return;
+                        if (newIndex > oldIndex) {
+                          newIndex = newIndex - 1;
+                        }
+                        var list = [...state.post.images];
+                        var el = list.removeAt(oldIndex);
+                        list.insert(newIndex, el);
+                        context
+                            .read<CreateReviewPostCubit>()
+                            .updateReviewPost(images: list);
+                      }),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        '${state.post.images.length} images',
-                        style: MyTheme.bodyText1.copyWith(
-                            color: Colors.black54, fontWeight: FontWeight.w800),
-                      )),
-                ),
-              ],
-            );
-          },
+                ],
+              );
+            },
+          ),
         ),
-
         const SizedBox(
           height: 300,
         )
@@ -335,30 +340,31 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
   }
 
   void _showCostInputDialog(BuildContext context) {
-      showDialog(
+    showDialog(
       context: context,
       barrierDismissible: true,
-       builder: (context) {
-         return const Dialog(
-           child: DayCostInputDialog(),
-           alignment: Alignment.center,
-           backgroundColor: Colors.transparent,
-           insetPadding: EdgeInsets.zero,
-         );
-       },
+      builder: (context) {
+        return const Dialog(
+          child: DayCostInputDialog(),
+          alignment: Alignment.center,
+          backgroundColor: Colors.transparent,
+          insetPadding: EdgeInsets.zero,
+        );
+      },
     );
   }
 
   void _showImageGallery(BuildContext context, int index) {
     showModalBottomSheet(
-        context: context,
-        builder: (context) {
-          return ReviewPostGalleryView(
-            initialIndex: index,
-          );
-        },
-        backgroundColor: Colors.transparent,
-        isScrollControlled: true);
+      context: context,
+      builder: (context) {
+        return ReviewPostGalleryView(
+          initialIndex: index,
+        );
+      },
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+    );
   }
 
   _pickGalleryImages() async {
@@ -397,14 +403,13 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
   // Crop cover image
   _cropAndUpdateCoverImg() async {
     var post = context.read<CreateReviewPostCubit>().state.post;
-    if (post.coverImage == null) {
+    if (post.coverPhoto == null) {
       return;
     }
-    String? path = await _cropImage(post.coverImage!.path!);
+    String? path = await _cropImage(post.coverPhoto!.path!);
     if (path != null) {
-      context
-          .read<CreateReviewPostCubit>()
-          .updateReviewPost(coverImage: post.coverImage!.copyWith(path: path));
+      context.read<CreateReviewPostCubit>().updateReviewPost(
+          coverImage: post.coverPhoto!.copyWith(path: path, status: 1));
     }
   }
 }

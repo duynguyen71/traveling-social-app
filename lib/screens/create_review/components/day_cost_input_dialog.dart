@@ -15,6 +15,7 @@ class DayCostInputDialog extends StatefulWidget {
 class _DayCostInputDialogState extends State<DayCostInputDialog> {
   final _costController = TextEditingController();
   final _dayController = TextEditingController();
+  final _numOfParticipantController = TextEditingController();
   String? costError;
   String? dayError;
 
@@ -23,9 +24,11 @@ class _DayCostInputDialogState extends State<DayCostInputDialog> {
     // if (cost.isEmpty ||!ValidationUntil.isNumber(cost)) setState(() => costError = "Please select cost");
     var days = _dayController.text;
     // if (days.isEmpty||!ValidationUntil.isNumber(days)) setState(() => dayError = "Please select days");
+    var numOfParticipant = _numOfParticipantController.text;
     context.read<CreateReviewPostCubit>().updateReviewPost(
           cost: double.tryParse(cost),
           days: int.tryParse(days),
+          numOfParticipant: int.tryParse(numOfParticipant),
         );
     Navigator.pop(context);
   }
@@ -34,18 +37,22 @@ class _DayCostInputDialogState extends State<DayCostInputDialog> {
   void initState() {
     super.initState();
     var post = context.read<CreateReviewPostCubit>().state.post;
-    _dayController.text = post.days.toString();
-    _dayController.selection = TextSelection.fromPosition(
-        TextPosition(offset: _dayController.text.length));
+    _dayController.text = post.totalDay.toString();
+    // _dayController.selection = TextSelection.fromPosition(
+    //     TextPosition(offset: _dayController.text.length));
     _costController.text = post.cost.toString();
-    _costController.selection = TextSelection.fromPosition(
-        TextPosition(offset: _costController.text.length));
+
+    _numOfParticipantController.text =
+        post.numOfParticipant != null ? '${post.numOfParticipant}' : '1';
+    // _costController.selection = TextSelection.fromPosition(
+    //     TextPosition(offset: _costController.text.length));
   }
 
   @override
   void dispose() {
     _costController.dispose();
     _dayController.dispose();
+    _numOfParticipantController.dispose();
     super.dispose();
   }
 
@@ -73,6 +80,12 @@ class _DayCostInputDialogState extends State<DayCostInputDialog> {
                   ),
                   controller: _dayController,
                   keyboardType: TextInputType.number,
+                ),
+                TextField(
+                  decoration: InputDecoration(
+                      labelText: 'Number of participant', errorText: costError),
+                  keyboardType: TextInputType.number,
+                  controller: _numOfParticipantController,
                 ),
                 TextField(
                   decoration:

@@ -284,17 +284,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       children: [
-                                        const IconWithText(
+                                        const IconTextButton(
                                             text: "Ho Chi Minh city",
-                                            icon: Icons.location_on_outlined),
+                                            icon:      Icon(
+                                  Icons.location_on_outlined,
+                                  color: Colors.black87,
+                                  size: 16,
+                                )),
                                         const SizedBox(width: 10),
-                                        IconWithText(
+                                        IconTextButton(
                                             text: AppLocalizations.of(context)!
                                                 .joinedDate(
                                                     Jiffy(_user?.createDate)
                                                         .format('dd-MM-yyyy')),
                                             icon:
-                                                Icons.calendar_today_outlined),
+                                            Icon(
+                                              Icons.calendar_today_outlined,
+                                              color: Colors.black87,
+                                              size: 16,
+                                            )),
                                       ],
                                     ),
                                     const SizedBox(height: 10),
@@ -302,13 +310,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       children: const [
-                                        IconWithText(
+                                        IconTextButton(
                                             text: "Ho Chi Minh city",
-                                            icon: Icons.location_on_outlined),
+                                            icon:      Icon(
+                                              Icons.location_on_outlined,
+                                              color: Colors.black87,
+                                              size: 16,
+                                            )),
                                         SizedBox(width: 10),
-                                        IconWithText(
-                                            text: "Ho Chi Minh city",
-                                            icon: Icons.location_on_outlined),
+
                                       ],
                                     ),
                                   ],

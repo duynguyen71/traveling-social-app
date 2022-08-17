@@ -23,7 +23,6 @@ class CommentScreen extends StatefulWidget {
 
 class _CommentScreenState extends State<CommentScreen>
     with AutomaticKeepAliveClientMixin {
-
   final CommentService _commentService = CommentService();
 
   final Set<Comment> _comments = <Comment>{};

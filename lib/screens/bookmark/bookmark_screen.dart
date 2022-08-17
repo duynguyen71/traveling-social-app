@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/models/review_post_detail.dart';
+import 'package:traveling_social_app/screens/review/components/post_meta.dart';
 import 'package:traveling_social_app/screens/review/components/review_post_entry.dart';
 import 'package:traveling_social_app/widgets/base_sliver_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../models/Base_review_post_response.dart';
 import '../../services/post_service.dart';
 import '../review/review_post_detail_screen.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class BookmarkScreen extends StatefulWidget {
   const BookmarkScreen({Key? key}) : super(key: key);
@@ -102,11 +104,13 @@ class _BookmarkScreenState extends State<BookmarkScreen>
                 },
                 key: Key(post.id.toString()),
                 child: ReviewPostEntry(
-                  post: post,
+                  imageName: post.coverPhoto?.name,
+                  title: post.title,
                   showFooter: false,
                   coverImgHeight: 40,
                   onTap: () => Navigator.push(
                       context, ReviewPostDetailScreen.route(post.id!)),
+                  child: PostMetadata(username: post.user?.username, createDate: post.createDate),
                 ),
               );
             },

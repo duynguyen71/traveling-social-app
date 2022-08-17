@@ -8,14 +8,19 @@ import 'package:timeago/timeago.dart' as timeago;
 class ReviewPostEntry extends StatelessWidget {
   const ReviewPostEntry(
       {Key? key,
-      required this.post,
+      // required this.post,
       this.coverImgHeight,
-      this.showFooter = true, required this.onTap})
+      this.showFooter = true,
+      required this.onTap,
+      required this.child,
+      this.imageName,
+      this.title})
       : super(key: key);
-  final BaseReviewPostResponse post;
   final double? coverImgHeight;
   final bool showFooter;
   final Function onTap;
+  final Widget child;
+  final String? imageName, title;
 
   @override
   Widget build(BuildContext context) {
@@ -32,63 +37,29 @@ class ReviewPostEntry extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
               children: [
                 RoundedImageContainer(
-                  name: post.coverImage?.name,
+                  name: '$imageName',
                   height: coverImgHeight ?? 60,
                 ),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    post.title.toString(),
+                    '$title',
                     softWrap: true,
-                    maxLines: 4,
+                    maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                         color: Colors.black87,
                         fontSize: 14,
                         letterSpacing: .8,
-                        fontWeight: FontWeight.w600),
+                        fontWeight: FontWeight.w500),
                   ),
                 ),
               ],
             ),
-            showFooter
-                ? Row(
-                    children: [
-                      Text.rich(
-                        TextSpan(
-                          children: [
-                            TextSpan(
-                                text: '${post.user?.username}',
-                                style: const TextStyle(color: Colors.blue)),
-                            const TextSpan(text: ' - '),
-                            TextSpan(
-                                text: timeago.format(
-                                    DateTime.parse(post.createDate.toString()),
-                                    locale: Localizations.localeOf(context)
-                                        .languageCode)),
-                          ],
-                        ),
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
-                        maxLines: 1,
-                      ),
-                      const Spacer(),
-                      IconButton(
-                        padding: const EdgeInsets.all(4.0),
-                        constraints: const BoxConstraints(),
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.bookmark_add_outlined,
-                          color: Colors.black54,
-                          size: 18,
-                        ),
-                      )
-                    ],
-                  )
-                : const SizedBox.shrink(),
+            child,
             const MyDivider(color: Colors.black12, width: .5),
           ],
         ),

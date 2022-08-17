@@ -14,7 +14,6 @@ import 'package:traveling_social_app/widgets/comment_input_reply_widget.dart';
 import '../../constants/api_constants.dart';
 import '../../constants/app_theme_constants.dart';
 import '../../models/Author.dart';
-import '../../models/base_user.dart';
 import '../../models/review_post_detail.dart';
 import '../../services/post_service.dart';
 import '../../services/user_service.dart';
@@ -138,7 +137,7 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
                                         TextButton(
                                           style: TextButton.styleFrom(
                                               padding: EdgeInsets.zero,
-                                              minimumSize: Size(50, 30),
+                                              minimumSize:const Size(50, 30),
                                               alignment: Alignment.centerRight,
                                               tapTargetSize:
                                                   MaterialTapTargetSize
@@ -181,7 +180,7 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
                                       child: CachedNetworkImage(
                                         alignment: Alignment.center,
                                         imageUrl:
-                                            '$imageUrl${_reviewPostDetail.coverImage!.name}',
+                                            '$imageUrl${_reviewPostDetail.coverPhoto!.name}',
                                         fit: BoxFit.cover,
                                       ),
                                     ),

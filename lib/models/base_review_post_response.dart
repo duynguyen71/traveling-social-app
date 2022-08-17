@@ -7,7 +7,7 @@ class BaseReviewPostResponse {
     this.id,
     this.title,
     this.content,
-    this.coverImage,
+    this.coverPhoto,
     this.user,
     this.createDate,
   });
@@ -16,8 +16,8 @@ class BaseReviewPostResponse {
     id = json['id'];
     title = json['title'];
     content = json['content'];
-    coverImage = json['coverImage'] != null
-        ? FileUpload.fromJson(json['coverImage'])
+    coverPhoto = json['coverPhoto'] != null
+        ? FileUpload.fromJson(json['coverPhoto'])
         : null;
     user = json['user'] != null ? BaseUserInfo.fromJson(json['user']) : null;
     createDate = json['createDate'];
@@ -26,7 +26,7 @@ class BaseReviewPostResponse {
   int? id;
   String? title;
   String? content;
-  FileUpload? coverImage;
+  FileUpload? coverPhoto;
   BaseUserInfo? user;
   String? createDate;
 
@@ -35,8 +35,8 @@ class BaseReviewPostResponse {
     map['id'] = id;
     map['title'] = title;
     map['content'] = content;
-    if (coverImage != null) {
-      map['coverImage'] = coverImage?.toJson();
+    if (coverPhoto != null) {
+      map['coverPhoto'] = coverPhoto?.toJson();
     }
     if (user != null) {
       map['user'] = user?.toJson();

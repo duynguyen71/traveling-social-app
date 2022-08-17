@@ -49,7 +49,6 @@ class _PostEntryState extends State<PostEntry>
 
   @override
   void initState() {
-    print('post ${widget.post.id} render');
     _likeCount = widget.post.reactionCount;
     _isFavorite = (myReaction != null);
     _getAttachments();
@@ -127,7 +126,6 @@ class _PostEntryState extends State<PostEntry>
                   children: [
                     UsernameText(username: widget.post.user!.username!),
                     Text(
-                      // Jiffy(widget.post.createDate).fromNow(),
                       timeago.format(
                           DateTime.parse(widget.post.createDate.toString()),
                           locale: Localizations.localeOf(context).languageCode),
@@ -138,62 +136,7 @@ class _PostEntryState extends State<PostEntry>
                 const Spacer(),
                 IconButton(
                   onPressed: () {
-                    showCupertinoModalPopup(
-                      context: context,
-                      builder: (context) {
-                        return CupertinoActionSheet(
-                          actions: [
-                            CupertinoActionSheetAction(
-                                onPressed: () {
-                                  showCupertinoDialog(
-                                    context: context,
-                                    barrierDismissible: true,
-                                    builder: (context) {
-                                      return CupertinoAlertDialog(
-                                        title: const Text(
-                                            'Are you sure delete this post?'),
-                                        actions: [
-                                          CupertinoDialogAction(
-                                            child: const Text('Delete'),
-                                            onPressed: () {
-                                              context.read<PostBloc>().add(
-                                                  RemovePost(widget.post.id!));
-                                              Navigator.of(context,
-                                                      rootNavigator: true)
-                                                  .pop("Discard");
-                                            },
-                                            isDestructiveAction: true,
-                                          ),
-                                          CupertinoDialogAction(
-                                            child: const Text('Cancel'),
-                                            isDefaultAction: true,
-                                            onPressed: () {
-                                              Navigator.of(context,
-                                                      rootNavigator: true)
-                                                  .pop("Cancel");
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                                child: const Text('Delete'))
-                          ],
-                          cancelButton: CupertinoActionSheetAction(
-                            onPressed: () {
-                              Navigator.of(context, rootNavigator: true)
-                                  .pop("Cancel");
-                            },
-                            isDefaultAction: true,
-                            child: const Text(
-                              'Cancel',
-                            ),
-                          ),
-                          // title: const Text('duy nguyen posts'),
-                        );
-                      },
-                    );
+                    _showActionModalPopup(context);
                   },
                   icon: const Icon(Icons.more_horiz),
                 ),
@@ -339,6 +282,65 @@ class _PostEntryState extends State<PostEntry>
           )
         ],
       ),
+    );
+  }
+
+  void _showActionModalPopup(BuildContext context) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) {
+        return CupertinoActionSheet(
+          actions: [
+            CupertinoActionSheetAction(
+                onPressed: () {
+                  showCupertinoDialog(
+                    context: context,
+                    barrierDismissible: true,
+                    builder: (context) {
+                      return CupertinoAlertDialog(
+                        title: const Text(
+                            'Are you sure delete this post?'),
+                        actions: [
+                          CupertinoDialogAction(
+                            child: const Text('Delete'),
+                            onPressed: () {
+                              context.read<PostBloc>().add(
+                                  RemovePost(widget.post.id!));
+                              Navigator.of(context,
+                                      rootNavigator: true)
+                                  .pop("Discard");
+                            },
+                            isDestructiveAction: true,
+                          ),
+                          CupertinoDialogAction(
+                            child: const Text('Cancel'),
+                            isDefaultAction: true,
+                            onPressed: () {
+                              Navigator.of(context,
+                                      rootNavigator: true)
+                                  .pop("Cancel");
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: const Text('Delete'))
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true)
+                  .pop("Cancel");
+            },
+            isDefaultAction: true,
+            child: const Text(
+              'Cancel',
+            ),
+          ),
+          // title: const Text('duy nguyen posts'),
+        );
+      },
     );
   }
 

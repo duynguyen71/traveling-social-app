@@ -25,19 +25,21 @@ class PickTagScreen extends StatefulWidget {
 
 class _PickTagScreenState extends State<PickTagScreen> {
   final _postService = PostService();
-  final Set<Tag> _selectedTags = {};
+  final _tagEditController = TextEditingController();
+  Set<Tag> _selectedTags = {};
   List<Tag> _tags = [];
   Timer? _debounce;
 
   @override
   void initState() {
-  _selectedTags.addAll(context.read<CreateReviewPostCubit>().state.post.tags);
+    _selectedTags.addAll(context.read<CreateReviewPostCubit>().state.post.tags);
     super.initState();
   }
 
   @override
   void dispose() {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _tagEditController.dispose();
     super.dispose();
   }
 
@@ -48,13 +50,31 @@ class _PickTagScreenState extends State<PickTagScreen> {
       // do something with query
       var tags =
           await _postService.getTags(pageSize: 20, page: 0, name: str.trim());
-      if (tags.isEmpty) {
-        setState(() {
-          _tags.insert(0, Tag(name: str.trim()));
-        });
-      } else {
-        setState(() => _tags = tags);
-      }
+      setState(() {
+        _tags = [Tag(name: str.trim()), ...tags];
+      });
+    });
+  }
+
+  _saveTags(BuildContext context) {
+    context
+        .read<CreateReviewPostCubit>()
+        .updateReviewPost(tags: _selectedTags.toList());
+    Navigator.pop(context);
+  }
+
+   _addTag(Tag tag) {
+    setState(() {
+      _selectedTags.add(tag.copyWith(status: 1));
+      _tagEditController.clear();
+    });
+  }
+
+   _removeTag(Tag e) {
+    setState(() {
+      _selectedTags = _selectedTags
+          .map((t) => t.name == e.name ? e.copyWith(status: 0) : t)
+          .toSet();
     });
   }
 
@@ -77,6 +97,7 @@ class _PickTagScreenState extends State<PickTagScreen> {
                   backgroundColor: Colors.white,
                   centerTitle: true,
                   title: TextField(
+                    controller: _tagEditController,
                     onChanged: _onChange,
                   ),
                   actions: [
@@ -87,7 +108,7 @@ class _PickTagScreenState extends State<PickTagScreen> {
                             text: 'Save',
                             bgColor: Colors.blueAccent,
                             icon: Icons.safety_check,
-                            onTap: () {}),
+                            onTap: () => _saveTags(context)),
                       ),
                     )
                   ],
@@ -109,10 +130,10 @@ class _PickTagScreenState extends State<PickTagScreen> {
                         spacing: 5.0,
                         children: _selectedTags
                             .map((e) => SelectedTag(
+                                key: ValueKey(e),
                                 tag: e,
                                 remove: () {
-                                  _selectedTags.removeWhere(
-                                      (element) => element.name == e.name);
+                                  _removeTag(e);
                                 }))
                             .toList(),
                       ),
@@ -125,9 +146,7 @@ class _PickTagScreenState extends State<PickTagScreen> {
                         var tag = _tags[index];
                         return TapEffectWidget(
                           tap: () {
-                            setState(() {
-                              _selectedTags.add(tag);
-                            });
+                            _addTag(tag);
                           },
                           child: Container(
                             decoration: BoxDecoration(

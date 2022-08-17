@@ -15,7 +15,7 @@ class ReviewPostDetail {
     int? numOfParticipant,
     int? totalDay,
     int? status,
-    FileUpload? coverImage,
+    FileUpload? coverPhoto,
     List<ReviewPostAttachment> images = const [],
     List<Tag> tags = const [],
     BaseUserInfo? user,
@@ -30,7 +30,7 @@ class ReviewPostDetail {
     numOfParticipant = numOfParticipant;
     totalDay = totalDay;
     status = status;
-    coverImage = coverImage;
+    coverPhoto = coverPhoto;
     images = images;
     user = user;
     createDate = createDate;
@@ -51,8 +51,8 @@ class ReviewPostDetail {
     totalDay = json['totalDay'];
     status = json['status'];
     hasBookmark = json['hasBookmark'];
-    coverImage = json['coverImage'] != null
-        ? FileUpload.fromJson(json['coverImage'])
+    coverPhoto = json['coverPhoto'] != null
+        ? FileUpload.fromJson(json['coverPhoto'])
         : null;
     if (json['images'] != null) {
       json['images'].forEach((v) {
@@ -80,7 +80,7 @@ class ReviewPostDetail {
   int numOfComment = 0;
   int? totalDay;
   int? status;
-  FileUpload? coverImage;
+  FileUpload? coverPhoto;
   List<ReviewPostAttachment> images = [];
   List<Tag> tags = [];
   BaseUserInfo? user;
@@ -97,7 +97,7 @@ class ReviewPostDetail {
     int? numOfParticipant,
     int? totalDay,
     int? status,
-    FileUpload? coverImage,
+    FileUpload? coverPhoto,
     List<ReviewPostAttachment> images = const [],
     List<Tag> tags = const [],
     BaseUserInfo? user,
@@ -112,31 +112,9 @@ class ReviewPostDetail {
           numOfParticipant: numOfParticipant ?? this.numOfParticipant,
           totalDay: totalDay ?? this.totalDay,
           status: status ?? this.status,
-          coverImage: coverImage ?? this.coverImage,
+          coverPhoto: coverPhoto ?? this.coverPhoto,
           images: images,
           user: user ?? user,
           createDate: createDate ?? createDate,
           tags: tags);
-
-// Map<String, dynamic> toJson() {
-//   final map = <String, dynamic>{};
-//   map['id'] = id;
-//   map['title'] = title;
-//   map['content'] = content;
-//   map['contentJson'] = contentJson;
-//   map['cost'] = cost;
-//   map['numOfParticipant'] = numOfParticipant;
-//   map['totalDay'] = totalDay;
-//   map['status'] = status;
-//   if (coverImage != null) {
-//     map['coverImage'] = coverImage?.toJson();
-//   }
-//   map['images'] = images.map((v) => v.toJson()).toList();
-//   if (user != null) {
-//     map['user'] = user?.toJson();
-//   }
-//   map['createDate'] = createDate;
-//   map['tags'] = tags.map((e) => e.toJson()).toList();
-//   return map;
-// }
 }

@@ -77,11 +77,15 @@ class ProfileCoverBackground extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              const IconWithText(
+                              const IconTextButton(
                                   text: "Ho Chi Minh city",
-                                  icon: Icons.location_on_outlined),
+                                  icon: Icon(
+                                    Icons.location_on_outlined,
+                                    color: Colors.black87,
+                                    size: 16,
+                                  )),
                               const SizedBox(width: 10),
-                              IconWithText(
+                              IconTextButton(
                                   // text: AppLocalizations.of(context)!
                                   //     .joinedDate(timeago.format(DateTime.parse(
                                   //         context
@@ -97,16 +101,24 @@ class ProfileCoverBackground extends StatelessWidget {
                                           .createDate
                                           .toString())
                                       .format('dd-MM-yyyy'),
-                                  icon: Icons.calendar_today_outlined),
+                                  icon: const Icon(
+                                    Icons.calendar_today_outlined,
+                                    color: Colors.black87,
+                                    size: 16,
+                                  )),
                             ],
                           ),
                           const SizedBox(height: 10),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: const [
-                              IconWithText(
+                              IconTextButton(
                                   text: "Live in",
-                                  icon: Icons.location_on_outlined),
+                                  icon: Icon(
+                                    Icons.location_on_outlined,
+                                    color: Colors.black87,
+                                    size: 16,
+                                  )),
                             ],
                           ),
                         ],

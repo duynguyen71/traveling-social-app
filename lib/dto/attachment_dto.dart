@@ -27,13 +27,23 @@ class AttachmentDto extends Equatable {
     return map;
   }
 
+  factory AttachmentDto.fromJson(dynamic json) {
+    return AttachmentDto(
+      id: json['id'],
+      imageId: json['imageId'],
+      name: json['name'],
+      status: 1,
+      pos: json['pos'],
+    );
+  }
+
   AttachmentDto copyWith({
     int? id,
     String? name,
     int? pos,
     String? path,
     int? imageId,
-    int status = 1,
+    int? status,
   }) =>
       AttachmentDto(
           id: id ?? this.id,
@@ -41,12 +51,12 @@ class AttachmentDto extends Equatable {
           pos: pos ?? this.pos,
           imageId: imageId ?? this.imageId,
           path: path ?? this.path,
-          status: status);
+          status: status ?? this.status);
 
   File get file {
     return File(path!);
   }
 
   @override
-  List<Object?> get props => [id, name, pos, path, status];
+  List<Object?> get props => [id, name, pos, path, status, imageId];
 }

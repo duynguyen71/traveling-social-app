@@ -29,7 +29,6 @@ class ReviewPostTags extends StatelessWidget {
                   child: ListView.builder(
                     shrinkWrap: true,
                     padding: EdgeInsets.zero,
-                    // itemExtent: null,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                       var tag = tags[index];
@@ -54,26 +53,6 @@ class ReviewPostTags extends StatelessWidget {
                           ),
                         ),
                       );
-                      // return TextButton(
-                      //   style: TextButton.styleFrom(
-                      //       padding: EdgeInsets.zero,
-                      //       alignment: Alignment.center,
-                      //       tapTargetSize: MaterialTapTargetSize.padded),
-                      //   onPressed: () {},
-                      //   child: Row(
-                      //     mainAxisSize: MainAxisSize.min,
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     crossAxisAlignment: CrossAxisAlignment.center,
-                      //     children: [
-                      //       const Icon(
-                      //         Icons.tag,
-                      //         size: 12,
-                      //       ),
-                      //       Text(tag.name!,
-                      //           style: const TextStyle(color: Colors.blueAccent)),
-                      //     ],
-                      //   ),
-                      // );
                     },
                     itemCount: tags.length,
                   ),

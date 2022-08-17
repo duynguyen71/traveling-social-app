@@ -12,11 +12,20 @@ part 'creation_review_state.dart';
 class CreateReviewPostCubit extends Cubit<CreateReviewPostState> {
   CreateReviewPostCubit() : super(const CreateReviewPostState());
 
+  setReviewPost(CreationReviewPost creationReviewPost) {
+    emit(CreateReviewPostState(
+        post: creationReviewPost, status: ReviewPostStatus.initial));
+  }
+
+  clear() {
+    emit(const CreateReviewPostState());
+  }
+
   updateReviewPost({
     int? id,
     String? title,
     String? shortDescription,
-    int? numOfParticipants,
+    int? numOfParticipant,
     int? days,
     double? cost,
     String? content,
@@ -28,18 +37,17 @@ class CreateReviewPostCubit extends Cubit<CreateReviewPostState> {
     emit(
       CreateReviewPostState(
         post: state.post.copyWith(
-          id: id,
-          content: content,
-          title: title,
-          cost: cost,
-          days: days,
-          contentJson: contentJson,
-          numOfParticipants: numOfParticipants,
-          shortDescription: shortDescription,
-          coverImage: coverImage,
-          images: images,
-          tags: tags
-        ),
+            id: id,
+            content: content,
+            title: title,
+            cost: cost,
+            days: days,
+            contentJson: contentJson,
+            numOfParticipant: numOfParticipant,
+            shortDescription: shortDescription,
+            coverPhoto: coverImage,
+            images: images,
+            tags: tags),
       ),
     );
   }

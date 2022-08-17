@@ -51,7 +51,7 @@ class _ReviewPostCardState extends State<ReviewPostCard>
                   borderRadius: kReviewPostBorderRadius,
                   child: CachedNetworkImage(
                     alignment: Alignment.center,
-                    imageUrl: '$imageUrl${reviewPost.coverImage!.name}',
+                    imageUrl: '$imageUrl${reviewPost.coverPhoto?.name}',
                     fit: BoxFit.cover,
                   ),
                 ),
