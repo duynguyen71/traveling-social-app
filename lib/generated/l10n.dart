@@ -120,10 +120,10 @@ class S {
     );
   }
 
-  /// `My Feed`
+  /// `Feed`
   String get myFeed {
     return Intl.message(
-      'My Feed',
+      'Feed',
       name: 'myFeed',
       desc: '',
       args: [],

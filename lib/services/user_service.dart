@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart';
+import 'package:http_interceptor/http/intercepted_client.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/models/base_user.dart';
 import 'package:traveling_social_app/models/file_upload.dart';
@@ -11,12 +13,20 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
 
+import '../config/base_interceptor.dart';
+import '../config/expired_token_retry.dart';
+
 class UserService {
   UserService() {
     _storage = const FlutterSecureStorage();
   }
 
   late final FlutterSecureStorage _storage;
+
+  // Create base http client
+  Client client = InterceptedClient.build(interceptors: [
+    BaseInterceptor(),
+  ], retryPolicy: ExpiredTokenRetryPolicy());
 
   //login
   Future<Map<String, dynamic>> login(username, password) async {
@@ -335,5 +345,26 @@ class UserService {
   }
   Future<void> getNotificationMessage() async {
 
+  }
+
+  // Get following
+  Future<List<BaseUserInfo>> getFollowing({int? page ,int? pageSize})async{
+    final url = Uri.parse("$baseUrl/api/v1/member/users/me/following?page=$page&pageSize=$pageSize");
+    final resp = await client.get(url);
+    if(resp.statusCode==200){
+      var list = jsonDecode(resp.body)['data'] as List<dynamic>;
+      return list.map((e) => BaseUserInfo.fromJson(e)).toList();
+    }
+    return [];
+  }  // Get followr
+  Future<List<BaseUserInfo>> getFollower({int? page ,int? pageSize})async{
+    final url = Uri.parse("$baseUrl/api/v1/member/users/me/followers?page=$page&pageSize=$pageSize");
+    final resp = await client.get(url);
+    if(resp.statusCode==200){
+      var list = jsonDecode(resp.body)['data'] as List<dynamic>;
+      print(list);
+      return list.map((e) => BaseUserInfo.fromJson(e)).toList();
+    }
+    return [];
   }
 }

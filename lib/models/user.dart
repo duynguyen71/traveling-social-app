@@ -18,7 +18,7 @@ class User with ChangeNotifier {
     bio = json['bio'];
     background = json['background'];
     createDate = json['createDate'];
-    isFollowed = json['isFollowed']??false;
+    isFollowing = json['isFollowing']??false;
   }
 
   int? id;
@@ -30,7 +30,7 @@ class User with ChangeNotifier {
   String? bio;
   String? background;
   String? createDate;
-  bool isFollowed = false;
+  bool isFollowing = false;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

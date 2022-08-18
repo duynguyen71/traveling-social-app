@@ -7,24 +7,24 @@ String userToJson(BaseUserInfo data) => json.encode(data.toJson());
 
 class BaseUserInfo {
   BaseUserInfo(
-      {int? id, String? username, String? avt, bool isFollowed = false}) {
+      {int? id, String? username, String? avt, bool isFollowing = false}) {
     _id = id;
     _username = username;
     _avt = avt;
-    _isFollowed = isFollowed;
+    _isFollowing = isFollowing;
   }
 
   BaseUserInfo.fromJson(dynamic json) {
     _id = json['id'];
     _username = json['username'];
     _avt = json['avt'];
-    _isFollowed = json['isFollowed'] ?? false;
+    _isFollowing = json['isFollowing'] ?? false;
   }
 
   int? _id;
   String? _username;
   String? _avt;
-  bool _isFollowed = false;
+  bool _isFollowing = false;
 
   BaseUserInfo copyWith({
     int? id,
@@ -43,14 +43,14 @@ class BaseUserInfo {
 
   String? get avt => _avt;
 
-  bool get isFollowed => _isFollowed;
+  bool get isFollowing => _isFollowing;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['id'] = _id;
     map['username'] = _username;
     map['avt'] = _avt;
-    map['isFollowed'] = _isFollowed;
+    map['isFollowing'] = _isFollowing;
     return map;
   }
 }

@@ -73,7 +73,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _isLoading = i;
       });
 
-  get isFollowed => _user != null ? _user!.isFollowed : false;
+  get isFollowing => _user != null ? _user!.isFollowing : false;
 
   @override
   Widget build(BuildContext context) {
@@ -178,12 +178,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     width: 100,
                                     child: MyOutlineButton(
                                       onClick: () async {
-                                        if (isFollowed) {
+                                        if (isFollowing) {
                                           bool success = await _userService
                                               .unFollow(userId: widget.userId);
                                           if (success) {
                                             setState(() {
-                                              _user!.isFollowed = false;
+                                              _user!.isFollowing = false;
                                             });
                                           }
                                         } else {
@@ -191,19 +191,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               .follow(userId: widget.userId);
                                           if (success) {
                                             setState(() {
-                                              _user!.isFollowed = true;
+                                              _user!.isFollowing = true;
                                             });
                                           }
                                         }
                                       },
-                                      text: isFollowed
+                                      text: isFollowing
                                           ? AppLocalizations.of(context)!
                                               .following
                                           : AppLocalizations.of(context)!
                                               .follow,
-                                      color: isFollowed ? kPrimaryColor : null,
+                                      color: isFollowing ? kPrimaryColor : null,
                                       textColor:
-                                          isFollowed ? Colors.white : null,
+                                          isFollowing ? Colors.white : null,
                                       minWidth: 80,
                                     ),
                                   ),

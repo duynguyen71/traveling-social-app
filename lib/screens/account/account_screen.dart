@@ -15,6 +15,8 @@ import '../../constants/app_theme_constants.dart';
 import '../../widgets/username_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../follow/follower_screen.dart';
+import '../follow/following_screen.dart';
 import '../review/current_user_review_post_screen.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -38,7 +40,7 @@ class _AccountScreenState extends State<AccountScreen>
       headerSliverBuilder: (context, innerBoxIsScrolled) {
         return [
           BaseSliverAppBar(
-              title: AppLocalizations.of(context)!.account, actions: const[])
+              title: AppLocalizations.of(context)!.account, actions: const [])
         ];
       },
       body: Container(
@@ -93,7 +95,7 @@ class _AccountScreenState extends State<AccountScreen>
             ),
             const MyDivider(width: 3),
             MyListTile(
-              onClick: () {},
+              onClick: () => Navigator.push(context, FollowingScreen.route()),
               leading: const LinearGradiantMask(
                 child: Icon(
                   Icons.ac_unit_outlined,
@@ -104,7 +106,7 @@ class _AccountScreenState extends State<AccountScreen>
               title: AppLocalizations.of(context)!.following,
             ),
             MyListTile(
-              onClick: () {},
+              onClick: () => Navigator.push(context, FollowerScreen.route()),
               leading: const LinearGradiantMask(
                 child: Icon(
                   Icons.ac_unit_outlined,
@@ -115,7 +117,8 @@ class _AccountScreenState extends State<AccountScreen>
             ),
             const MyDivider(width: 2.5),
             MyListTile(
-              onClick: ()=>Navigator.push(context,CurrentUserReviewPostScreen.route()),
+              onClick: () =>
+                  Navigator.push(context, CurrentUserReviewPostScreen.route()),
               leading: const LinearGradiantMask(
                 child: Icon(
                   Icons.ac_unit_outlined,

@@ -21,11 +21,10 @@ class ProfileAppbar extends StatelessWidget {
         backgroundColor: Colors.transparent,
       );
     }
-
     return SliverAppBar(
       centerTitle: true,
-      title:   BlocConsumer<AuthenticationBloc, AuthenticationState>(
-        builder: (context,state) => Text(
+      title: BlocConsumer<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) => Text(
           state.user.username,
           style: const TextStyle(
             color: Colors.black87,
@@ -51,7 +50,6 @@ class ProfileAppbar extends StatelessWidget {
         ),
       ),
       backgroundColor: Colors.white,
-      // title: Text('Traveling Crew',style: TextStyle(color: Colors.black,fontSize: 20),),
       floating: true,
       actions: [
         IconButton(

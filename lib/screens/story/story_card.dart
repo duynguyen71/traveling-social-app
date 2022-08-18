@@ -1,9 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:palette_generator/palette_generator.dart';
-import 'package:traveling_social_app/app.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
-import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/models/post_content.dart';
 import 'package:traveling_social_app/models/post.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
@@ -44,9 +41,6 @@ class _StoryCardState extends State<StoryCard>
     setState(() {
       _displayRatio = ratio;
     });
-    // if(ratio>=1){
-    // _getColors();
-    // }
   }
 
   _getColors() async {
@@ -69,8 +63,7 @@ class _StoryCardState extends State<StoryCard>
       constraints: BoxConstraints(
         minHeight: size.height * .3,
       ),
-      margin: const EdgeInsets.symmetric(horizontal: 1),
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Material(
         color: Colors.transparent,
         child: InkWell(

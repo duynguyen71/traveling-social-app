@@ -35,7 +35,7 @@ class MyBottomNavItem extends StatelessWidget {
                     color: isSelected
                         ? Colors.black54
                         : Colors.grey.withOpacity(.5),
-                    size: 24.0),
+                    size: 24.0,),
               ),
               //nav label
               Text(

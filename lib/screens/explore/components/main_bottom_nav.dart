@@ -20,6 +20,12 @@ class MainBottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: kBottomNavigationBarHeight,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+              top: BorderSide(
+            color: Colors.grey.shade200,
+          ))),
       alignment: Alignment.center,
       child: Center(
         child: Row(
@@ -27,14 +33,17 @@ class MainBottomNav extends StatelessWidget {
           children: [
             Expanded(
               child: MyBottomNavItem(
-                  iconData: Icons.home,
+                  iconData:
+                      currentPageIndex == 0 ? Icons.home : Icons.home_outlined,
                   label: AppLocalizations.of(context)!.home,
                   onClick: () => setCurrentPageIndex(0),
                   isSelected: currentPageIndex == 0),
             ),
             Expanded(
               child: MyBottomNavItem(
-                  iconData: Icons.bookmark,
+                  iconData: currentPageIndex == 1
+                      ? Icons.bookmark
+                      : Icons.bookmark_border_outlined,
                   label: AppLocalizations.of(context)!.bookmark,
                   onClick: () => setCurrentPageIndex(1),
                   isSelected: currentPageIndex == 1),
@@ -73,14 +82,18 @@ class MainBottomNav extends StatelessWidget {
             ),
             Expanded(
               child: BadgeBottomNavItem(
-                  iconData: Icons.notifications,
+                  iconData: currentPageIndex == 2
+                      ? Icons.notifications
+                      : Icons.notifications_outlined,
                   label: AppLocalizations.of(context)!.notification,
                   onClick: () => setCurrentPageIndex(2),
                   isSelected: currentPageIndex == 2),
             ),
             Expanded(
               child: MyBottomNavItem(
-                  iconData: Icons.person,
+                  iconData: currentPageIndex == 3
+                      ? Icons.person
+                      : Icons.person_outline,
                   label: AppLocalizations.of(context)!.account,
                   onClick: () => setCurrentPageIndex(3),
                   isSelected: currentPageIndex == 3),

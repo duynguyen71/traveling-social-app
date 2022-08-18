@@ -192,7 +192,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                           ],
                                         ),
                                         const Spacer(),
-                                        e.isFollowed
+                                        e.isFollowing
                                             ? const SizedBox.shrink()
                                             : IconButton(
                                                 onPressed: () {},

@@ -89,7 +89,17 @@ class _ReviewPostScreenState extends State<ReviewPostScreen>
             const SliverToBoxAdapter(child: SizedBox(height: 10)),
             SliverToBoxAdapter(
               child: Container(
-                color: Colors.white,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border(
+                    top: BorderSide(
+                      color: Colors.grey.shade200,
+                    ),
+                    bottom: BorderSide(
+                      color: Colors.grey.shade200,
+                    ),
+                  ),
+                ),
                 padding: const EdgeInsets.all(8.0),
                 height: 150,
                 child: NotificationListener<ScrollNotification>(

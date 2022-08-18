@@ -98,7 +98,7 @@ class _AppViewState extends State<AppView> with WidgetsBindingObserver {
         navigatorKey: _navigatorKey,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          scaffoldBackgroundColor: Colors.white,
+          scaffoldBackgroundColor: Colors.grey.shade100,
           visualDensity: VisualDensity.adaptivePlatformDensity,
           textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
           // textTheme: GoogleFonts.robotoTextTheme(),

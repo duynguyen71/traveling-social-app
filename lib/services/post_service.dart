@@ -449,6 +449,19 @@ class PostService {
     return [];
   }
 
+  /// Get user fileuploads
+  Future<List<FileUpload>> getUserFileUploads(userId,
+      {int? page, int? pageSize}) async {
+    final url = Uri.parse(
+        '$baseUrl/api/v1/member/users/$userId/file-uploads?page=$page&pageSize=$pageSize');
+    final resp = await client.get(url);
+    if (resp.statusCode == 200) {
+      var list = jsonDecode(resp.body)['data'] as List<dynamic>;
+      return list.map((e) => FileUpload.fromJson(e)).toList();
+    }
+    return [];
+  }
+
   /// Get current user review posts edit detail
   Future<CreationReviewPost?> getCurrentUserEditReviewPostDetail(int id) async {
     final url =

@@ -119,12 +119,14 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.white,
       body: LoginBackground(
         isLoading: _isLoading,
         child: SingleChildScrollView(
           child: Container(
             alignment: Alignment.center,
             height: size.height,
+            color: Colors.white,
             constraints: const BoxConstraints(maxWidth: 600),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

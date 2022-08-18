@@ -88,15 +88,14 @@ class _PostEntryState extends State<PostEntry>
     super.build(context);
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
-      // padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(
           top: BorderSide(
-            color: Colors.grey.shade100,
+            color: Colors.grey.shade200,
           ),
           bottom: BorderSide(
-            color: Colors.grey.shade100,
+            color: Colors.grey.shade200,
           ),
         ),
       ),
@@ -115,7 +114,7 @@ class _PostEntryState extends State<PostEntry>
                   size: 40,
                   avt: '${widget.post.user!.avt}',
                   onTap: () {
-                    ApplicationUtility.navigateToScreen(
+                  context.read<AuthenticationBloc>().state.user.id == widget.post.user?.id ?(){}:  ApplicationUtility.navigateToScreen(
                         context, ProfileScreen(userId: widget.post.user!.id!));
                   },
                 ),

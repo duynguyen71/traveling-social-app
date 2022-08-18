@@ -62,7 +62,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "love": MessageLookupByLibrary.simpleMessage("Love"),
         "message": MessageLookupByLibrary.simpleMessage("Message"),
-        "myFeed": MessageLookupByLibrary.simpleMessage("My Feed"),
+        "myFeed": MessageLookupByLibrary.simpleMessage("Feed"),
         "newPhotoFromCamera":
             MessageLookupByLibrary.simpleMessage("New photo from camera"),
         "newPhotoFromGallery":

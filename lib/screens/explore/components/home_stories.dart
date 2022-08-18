@@ -2,12 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:traveling_social_app/bloc/story/story_bloc.dart';
-import 'package:traveling_social_app/constants/app_theme_constants.dart';
-import 'package:traveling_social_app/screens/story/stories_screen.dart';
 import 'package:traveling_social_app/screens/story/stories_scroll_screen.dart';
 import 'package:traveling_social_app/screens/story/story_card.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeStories extends StatefulWidget {
   const HomeStories({Key? key}) : super(key: key);
@@ -34,8 +31,12 @@ class _HomeStoriesState extends State<HomeStories>
           minHeight: size.height * .35,
         ),
         width: double.infinity,
-        decoration: const BoxDecoration(color: Colors.white),
-        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border(
+                top: BorderSide(color: Colors.grey.shade200),
+                bottom: BorderSide(color: Colors.grey.shade200))),
+        padding: const EdgeInsets.symmetric(horizontal: 4),
         child: BlocBuilder<StoryBloc, StoryState>(
           builder: (context, state) {
             var stories = state.stories;

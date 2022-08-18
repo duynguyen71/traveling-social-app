@@ -73,35 +73,30 @@ class _HomeScreenState extends State<HomeScreen>
             bottom: PreferredSize(
               preferredSize: const Size.fromHeight(56),
               //TAB BAR
-              child: TabBar(
-                isScrollable: false,
-                controller: _tabController,
-                // labelColor: Colors.white,
-                labelColor: Colors.black87,
-                unselectedLabelColor: Colors.black54,
-                // indicator: BoxDecoration(
-                //   border:Border(
-                //     bottom: BorderSide(
-                //       color: Colors.black87,
-                //     ),
-                //   ),
-                // borderRadius: BorderRadius.circular(
-                //   25.0,
-                // ),
-                // color: kPrimaryLightColor.withOpacity(.8),
-                // ),
-                indicatorSize: TabBarIndicatorSize.tab,
-                indicatorColor: kPrimaryColor,
-                indicatorPadding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                labelStyle: MyTheme.heading2.copyWith(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16,
+              child: Container(
+                decoration: BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(color: Colors.grey.shade200))),
+                child: TabBar(
+                  isScrollable: false,
+                  controller: _tabController,
+                  labelColor: Colors.black87,
+                  unselectedLabelColor: Colors.black54,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  indicatorColor: kPrimaryColor,
+                  padding: EdgeInsets.zero,
+                  indicatorPadding: EdgeInsets.zero,
+                  labelPadding: EdgeInsets.zero,
+                  indicatorWeight: 1.75,
+                  labelStyle: MyTheme.heading2.copyWith(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                  ),
+                  tabs: [
+                    Tab(text: AppLocalizations.of(context)!.myFeed),
+                    Tab(text: AppLocalizations.of(context)!.review),
+                  ],
                 ),
-                tabs: [
-                  Tab(text: AppLocalizations.of(context)!.myFeed),
-                  Tab(text: AppLocalizations.of(context)!.review),
-                ],
               ),
             ),
             forceElevated: innerBoxIsScrolled,
