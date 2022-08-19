@@ -38,7 +38,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   //handle login
   Future<void> _handleLogin() async {
-    print(baseUrl);
+    setState(() {
+      _errorMessage = null;
+    });
     ApplicationUtility.hideKeyboard();
     final username = _usernameController.text.toString();
     final password = _passwordController.text.toString();

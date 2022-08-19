@@ -50,6 +50,10 @@ class _ExploreScreenState extends State<ExploreScreen>
     super.build(context);
     return WillPopScope(
       onWillPop: () async {
+         _pageController.jumpToPage(0);
+        setState(() {
+          _currentPageIndex = 0;
+        });
         return false;
       },
       child: Scaffold(

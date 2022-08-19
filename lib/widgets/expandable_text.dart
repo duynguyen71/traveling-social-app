@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class ExpandableText extends StatefulWidget {
   const ExpandableText(
       {Key? key,
@@ -18,7 +19,8 @@ class ExpandableText extends StatefulWidget {
   State<ExpandableText> createState() => _ExpandableTextState();
 }
 
-class _ExpandableTextState extends State<ExpandableText> {
+class _ExpandableTextState extends State<ExpandableText>
+    with AutomaticKeepAliveClientMixin {
   bool isExpandableText = false;
 
   @override
@@ -36,10 +38,15 @@ class _ExpandableTextState extends State<ExpandableText> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Text(
           widget.text,
@@ -56,7 +63,9 @@ class _ExpandableTextState extends State<ExpandableText> {
                   });
                 },
                 child: Text(
-                  isExpandableText ?AppLocalizations.of(context)!.showMore : AppLocalizations.of(context)!.showLess,
+                  isExpandableText
+                      ? AppLocalizations.of(context)!.showMore
+                      : AppLocalizations.of(context)!.showLess,
                   style: const TextStyle(color: Colors.blueGrey),
                 ),
                 style: TextButton.styleFrom(

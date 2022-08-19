@@ -11,12 +11,11 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthTag extends StatefulWidget {
-  const AuthTag(
-      {Key? key,
-      required this.auth,
-      required this.onTapFollow,
-    })
-      : super(key: key);
+  const AuthTag({
+    Key? key,
+    required this.auth,
+    required this.onTapFollow,
+  }) : super(key: key);
 
   @override
   State<AuthTag> createState() => _AuthTagState();

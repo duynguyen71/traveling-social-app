@@ -7,6 +7,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/widgets/bottom_select_dialog.dart';
+import 'dart:math';
 
 class ApplicationUtility {
   //hide input keyboard
@@ -59,27 +60,62 @@ class ApplicationUtility {
   }
 
   static Future<File?> compressImage(String filePath, {int? quality}) async {
+    // var size = await getFileSize(filePath, 0);
+    var mb = getFileSizeInMb(File(filePath));
+    print('file length mb: $mb');
+    if(mb<=.8){
+      print('ko commpress image');
+      return File(filePath);
+    }
     final lastIndex = filePath.lastIndexOf(RegExp(r'.jp'));
     final splitName = filePath.substring(0, (lastIndex));
     final outPath = "${splitName}_out${filePath.substring(lastIndex)}";
     return await FlutterImageCompress.compressAndGetFile(filePath, outPath,
-        quality: quality ?? 75);
+        quality: quality ?? 50);
+  }
+
+  static getFileSize(String filepath, int decimals) async {
+    var file = File(filepath);
+    int bytes = await file.length();
+    if (bytes <= 0) return "0 B";
+    const suffixes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    var i = (log(bytes) / log(1024)).floor();
+    return ((bytes / pow(1024, i)).toStringAsFixed(decimals)) +
+        ' ' +
+        suffixes[i];
+  }
+
+  static double getFileSizeInMb(File file) {
+    int sizeInBytes = file.lengthSync();
+    double sizeInMb = sizeInBytes / (1024 * 1024);
+    return sizeInMb;
   }
 
   //get image info
-  static Future<ui.Image> getImageInfo(String? name) async {
-    Completer<ui.Image> completer = Completer<ui.Image>();
-    NetworkImage('$imageUrl$name')
-        .resolve(const ImageConfiguration())
-        .addListener(ImageStreamListener((image, synchronousCall) {
-      completer.complete(image.image);
-    }));
-    ui.Image info = await completer.future;
-    return info;
+  static Future<ui.Image?> getImageInfo(String? name) async {
+    try {
+      Completer<ui.Image?> completer = Completer<ui.Image?>();
+      var url = '$imageUrl$name';
+      NetworkImage(url)
+          .resolve(const ImageConfiguration())
+          .addListener(ImageStreamListener(
+            (image, synchronousCall) {
+              completer.complete(image.image);
+            },
+            onError: (exception, stackTrace) {
+              return;
+            },
+          ));
+      ui.Image? info = await completer.future;
+      return info;
+    } on Exception catch (e) {
+      return null;
+    }
   }
 
-  static Future<double> getRatio(String? name) async {
+  static Future<double?> getRatio(String? name) async {
     var info = await getImageInfo(name);
+    if (info == null) return null;
     // return info.height / info.width;
     return info.width / info.height;
   }

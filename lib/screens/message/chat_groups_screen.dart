@@ -39,9 +39,9 @@ class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
     if (group.users.length == 2) {
       User? user = group.users[0];
       if (context.read<AuthenticationBloc>().state.user.id != user.id) {
-        return user.avt.toString();
+        return user.avt;
       } else {
-        return group.users[1].avt.toString();
+        return group.users[1].avt;
       }
     }
     return null;

@@ -7,11 +7,13 @@ import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
 
 class StoryCard extends StatefulWidget {
-  const StoryCard({Key? key, required this.story, required this.onClick})
+  const StoryCard(
+      {Key? key, required this.story, required this.onClick, this.height = 180})
       : super(key: key);
 
   final Post story;
   final Function onClick;
+  final double height;
 
   @override
   State<StoryCard> createState() => _StoryCardState();
@@ -28,12 +30,13 @@ class _StoryCardState extends State<StoryCard>
 
   @override
   void initState() {
+    super.initState();
+    print('init state story card: ${widget.story.id}');
     _imageName =
         (contents.asMap().containsKey(0) ? contents[0].attachment?.name : null);
     if (_imageName != null) {
       _getImageRatio();
     }
-    super.initState();
   }
 
   _getImageRatio() async {
@@ -58,11 +61,7 @@ class _StoryCardState extends State<StoryCard>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    Size size = MediaQuery.of(context).size;
     return Container(
-      constraints: BoxConstraints(
-        minHeight: size.height * .3,
-      ),
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Material(
         color: Colors.transparent,

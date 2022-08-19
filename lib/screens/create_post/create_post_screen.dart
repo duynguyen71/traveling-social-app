@@ -60,13 +60,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   @override
   void initState() {
     super.initState();
-    _focusNode.requestFocus();
-    _captionController.text = lorem(paragraphs: 2,words: 140);
+    // _focusNode.requestFocus();
+    // _captionController.text = lorem(paragraphs: 2,words: 140);
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    var viewInsetBottom = MediaQuery.of(context).viewInsets.bottom;
     return Stack(
       children: [
         Scaffold(
@@ -197,7 +198,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                       if (newIndex > oldIndex) {
                                         newIndex = newIndex - 1;
                                       }
-                                      final element = _pickedFiles.removeAt(oldIndex);
+                                      final element =
+                                          _pickedFiles.removeAt(oldIndex);
                                       _pickedFiles.insert(newIndex, element);
                                     }),
                                     itemBuilder: (context, index) {
@@ -248,81 +250,83 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 //IMAGE SELECTED
 
                 // MediaQuery.of(context).viewInsets.bottom > 0
-                MediaQuery.of(context).viewInsets.bottom > 0
-                    ? Positioned(
-                        child: Container(
-                          width: size.width,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border(
-                              top: BorderSide(
-                                color: Colors.grey.shade300,
-                                width: .5,
-                              ),
-                            ),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 5),
-                          child: Row(
-                            children: [
-                              //PICK IMAGES FROM GALLERY
-                              IconButton(
-                                onPressed: () async {
-                                  List<XFile>? xFiles =
-                                      await _imagePicker.pickMultiImage(
-                                          imageQuality: _imagePickerQty);
-                                  if (xFiles != null && xFiles.isNotEmpty) {
-                                    for (int i = 0; i < xFiles.length; i++) {
-                                      File? file = await ApplicationUtility
-                                          .compressImage(xFiles[i].path,
-                                              quality: 80);
-                                      setState(() {
-                                        _pickedFiles.add(file!);
-                                      });
-                                    }
-                                  }
-                                  _focusNode.requestFocus();
-                                },
-                                icon: const Icon(
-                                  Icons.photo_album_outlined,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              //PICK IMAGES FROM CAMERA
-                              IconButton(
-                                  onPressed: () async {
-                                    XFile? xFile = await _imagePicker.pickImage(
-                                        source: ImageSource.camera,
-                                        imageQuality: _imagePickerQty);
-                                    if (xFile != null) {
-                                      File? f = await ApplicationUtility
-                                          .compressImage(xFile.path,
-                                              quality: 80);
-                                      if (f != null) {
-                                        setState(() {
-                                          _pickedFiles.add(f);
-                                        });
-                                      }
-                                    }
-                                    _focusNode.requestFocus();
-                                  },
-                                  icon: const Icon(
-                                    Icons.camera_alt_outlined,
-                                    color: Colors.black87,
-                                  )),
-                              IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.location_on_outlined,
-                                  color: Colors.black87,
-                                ),
-                              )
-                            ],
+                // viewInsetBottom > 0
+                //     ?
+                Positioned(
+                  child: Container(
+                    width: size.width,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border(
+                        top: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: Row(
+                      children: [
+                        //PICK IMAGES FROM GALLERY
+                        IconButton(
+                          onPressed: () async {
+                            List<XFile>? xFiles = await _imagePicker
+                                .pickMultiImage(imageQuality: _imagePickerQty);
+                            if (xFiles != null && xFiles.isNotEmpty) {
+                              for (int i = 0; i < xFiles.length; i++) {
+                                File? file =
+                                    await ApplicationUtility.compressImage(
+                                        xFiles[i].path,
+                                        quality: 50);
+                                setState(() {
+                                  _pickedFiles.add(file!);
+                                });
+                              }
+                            }
+                            _focusNode.requestFocus();
+                          },
+                          icon: const Icon(
+                            Icons.photo_album_outlined,
+                            color: Colors.black87,
                           ),
                         ),
-                        bottom: MediaQuery.of(context).viewInsets.bottom,
-                      )
-                    : const SizedBox.shrink(),
+                        //PICK IMAGES FROM CAMERA
+                        IconButton(
+                            onPressed: () async {
+                              XFile? xFile = await _imagePicker.pickImage(
+                                  source: ImageSource.camera,
+                                  imageQuality: _imagePickerQty);
+                              if (xFile != null) {
+                                File? f =
+                                    await ApplicationUtility.compressImage(
+                                        xFile.path,
+                                        quality: 50);
+                                if (f != null) {
+                                  setState(() {
+                                    _pickedFiles.add(f);
+                                  });
+                                }
+                              }
+                              _focusNode.requestFocus();
+                            },
+                            icon: const Icon(
+                              Icons.camera_alt_outlined,
+                              color: Colors.black87,
+                            )),
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.location_on_outlined,
+                            color: Colors.black87,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  bottom: viewInsetBottom > 0 ? viewInsetBottom : 10,
+                )
+                // : const SizedBox.shrink(),
               ],
             ),
           ),

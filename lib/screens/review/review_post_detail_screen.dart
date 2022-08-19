@@ -70,7 +70,7 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
 
   _getAuthor() async {
     var auth =
-        await _postService.getReviewPostAuthInfo(reviewPostId: widget.id);
+    await _postService.getReviewPostAuthInfo(reviewPostId: widget.id);
     setState(() => _author = auth);
   }
 
@@ -113,208 +113,219 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
                     children: [
                       _isFetching
                           ? SizedBox(
-                              height: MediaQuery.of(context).size.height,
-                              child: const Center(
-                                child: CupertinoActivityIndicator(),
-                              ),
-                            )
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .height,
+                        child: const Center(
+                          child: CupertinoActivityIndicator(),
+                        ),
+                      )
                           : Column(
-                              children: [
-                                // POST TITLE
-                                ReviewPostTitle(
-                                  title: _reviewPostDetail.title!,
-                                  padding: const EdgeInsets.only(top: 8.0),
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Row(
+                        children: [
+                          // POST TITLE
+                          ReviewPostTitle(
+                            title: _reviewPostDetail.title!,
+                            padding: const EdgeInsets.only(top: 8.0),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Row(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                        padding: EdgeInsets.zero,
+                                        minimumSize: const Size(50, 30),
+                                        alignment: Alignment.centerRight,
+                                        tapTargetSize:
+                                        MaterialTapTargetSize
+                                            .shrinkWrap),
+                                    onPressed: () {},
+                                    child: Row(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.end,
                                       children: [
-                                        TextButton(
-                                          style: TextButton.styleFrom(
-                                              padding: EdgeInsets.zero,
-                                              minimumSize:const Size(50, 30),
-                                              alignment: Alignment.centerRight,
-                                              tapTargetSize:
-                                                  MaterialTapTargetSize
-                                                      .shrinkWrap),
-                                          onPressed: () {},
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 4.0),
-                                                child: Text(
-                                                    _reviewPostDetail
-                                                        .numOfVisitor
-                                                        .toString(),
-                                                    style: const TextStyle(
-                                                        fontSize: 14)),
-                                              ),
-                                              const Icon(
-                                                Icons.visibility,
-                                                size: 16,
-                                              ),
-                                            ],
-                                          ),
-                                        )
+                                        Padding(
+                                          padding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 4.0),
+                                          child: Text(
+                                              _reviewPostDetail
+                                                  .numOfVisitor
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                  fontSize: 14)),
+                                        ),
+                                        const Icon(
+                                          Icons.visibility,
+                                          size: 16,
+                                        ),
                                       ],
-                                    )
-                                  ],
-                                ),
-                                // POST COVER IMAGE
-                                CoverImageContainer(
-                                  child: Container(
-                                    color: Colors.grey.shade200,
-                                    child: ClipRRect(
-                                      borderRadius: kReviewPostBorderRadius,
-                                      child: CachedNetworkImage(
-                                        alignment: Alignment.center,
-                                        imageUrl:
-                                            '$imageUrl${_reviewPostDetail.coverPhoto!.name}',
-                                        fit: BoxFit.cover,
-                                      ),
                                     ),
-                                  ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                          // POST COVER IMAGE
+                          CoverImageContainer(
+                            child: Container(
+                              color: Colors.grey.shade200,
+                              child: ClipRRect(
+                                borderRadius: kReviewPostBorderRadius,
+                                child: CachedNetworkImage(
+                                  alignment: Alignment.center,
+                                  imageUrl:
+                                  '$imageUrl${_reviewPostDetail.coverPhoto!
+                                      .name}',
+                                  fit: BoxFit.cover,
                                 ),
-                                // QUILL CONTROLLER
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8.0),
-                                  child: quill.QuillEditor(
-                                    controller: _quillController,
-                                    readOnly: true,
-                                    scrollable: false,
-                                    scrollController: _scrollController,
-                                    focusNode: _focusNode,
-                                    autoFocus: false,
-                                    expands: false,
-                                    padding: EdgeInsets.zero,
-                                    showCursor: false, // add th
-                                  ),
-                                ),
-                                //
-                              ],
+                              ),
                             ),
+                          ),
+                          // QUILL CONTROLLER
+                          Padding(
+                            padding:
+                            const EdgeInsets.symmetric(vertical: 8.0),
+                            child: quill.QuillEditor(
+                              controller: _quillController,
+                              readOnly: true,
+                              scrollable: false,
+                              scrollController: _scrollController,
+                              focusNode: _focusNode,
+                              autoFocus: false,
+                              expands: false,
+                              padding: EdgeInsets.zero,
+                              showCursor: false, // add th
+                            ),
+                          ),
+                          //
+                        ],
+                      ),
                       (_isFetching || _reviewPostDetail.images.isEmpty)
                           ? const SizedBox.shrink()
                           : Container(
-                              height: 120,
-                              constraints: const BoxConstraints(minHeight: 120),
-                              // padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: ListView.builder(
-                                padding: EdgeInsets.zero,
-                                scrollDirection: Axis.horizontal,
-                                physics: const BouncingScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      _showAttScrollView(index);
-                                    },
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 8.0),
-                                      child: AspectRatio(
-                                        aspectRatio: 1,
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              kReviewPostImageGalleryBorder,
-                                          child: CachedNetworkImage(
-                                              fit: BoxFit.cover,
-                                              imageUrl:
-                                                  '$imageUrl${_reviewPostDetail.images[index].image!.name}'),
-                                        ),
-                                      ),
-                                    ),
-                                  );
+                          height: 120,
+                          constraints: const BoxConstraints(minHeight: 120),
+                          // padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: ListView.builder(
+                            padding: EdgeInsets.zero,
+                            scrollDirection: Axis.horizontal,
+                            physics: const BouncingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  _showAttScrollView(index);
                                 },
-                                itemCount: _reviewPostDetail.images.length,
-                                shrinkWrap: true,
-                              )),
+                                child: Padding(
+                                  padding:
+                                  const EdgeInsets.only(right: 8.0),
+                                  child: AspectRatio(
+                                    aspectRatio: 1,
+                                    child: ClipRRect(
+                                      borderRadius:
+                                      kReviewPostImageGalleryBorder,
+                                      child: CachedNetworkImage(
+                                          fit: BoxFit.cover,
+                                          imageUrl:
+                                          '$imageUrl${_reviewPostDetail
+                                              .images[index].image!.name}'),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                            itemCount: _reviewPostDetail.images.length,
+                            shrinkWrap: true,
+                          )),
                       //ABOUT AUTHOR
                       _isFetching
                           ? const SizedBox.shrink()
                           : AuthTag(
-                              auth: _author,
-                              onTapFollow: () {
-                                setState(() {
-                                  _author = _author.copyWith(
-                                      isFollowing: _author.isFollowing);
-                                });
-                              },
-                            ),
+                        auth: _author,
+                        onTapFollow: () async {
+                          if (_author.isFollowing) {
+                            await _userService.unFollow(
+                                userId: _author.id!);
+                          } else {
+                            await _userService.follow(userId: _author.id!);
+                          }
+                          setState(() {
+                            _author = _author.copyWith(
+                                isFollowing: !_author.isFollowing);
+                          });
+                        },
+                      ),
                       // TAGS
                       _isFetching
                           ? const SizedBox()
                           : ReviewPostTags(
-                              tags: _reviewPostDetail.tags, onTap: (tag) {}),
+                          tags: _reviewPostDetail.tags, onTap: (tag) {}),
                       // REACTION BAR
                       _isFetching
                           ? const SizedBox.shrink()
                           : ReactionBar(
-                              isLoved: _reviewPostDetail.myReaction != null,
-                              onLike: (int? type) async {
-                                await _postService.reactionReviewPost(
-                                    reviewPostId: _reviewPostDetail.id!,
-                                    reactionId: type);
-                              },
-                              onComment: () {
-                                setState(() {
-                                  _commentFocusNode.requestFocus();
-                                });
-                              },
-                              onShare: () {},
-                              numOfReaction: _reviewPostDetail.numOfReaction,
-                              numOfComment: _reviewPostDetail.numOfComment,
-                            ),
+                        isLoved: _reviewPostDetail.myReaction != null,
+                        onLike: (int? type) async {
+                          await _postService.reactionReviewPost(
+                              reviewPostId: _reviewPostDetail.id!,
+                              reactionId: type);
+                        },
+                        onComment: () {
+                          setState(() {
+                            _commentFocusNode.requestFocus();
+                          });
+                        },
+                        onShare: () {},
+                        numOfReaction: _reviewPostDetail.numOfReaction,
+                        numOfComment: _reviewPostDetail.numOfComment,
+                      ),
                       _isFetching
                           ? const SizedBox.shrink()
                           : ReviewPostCommentSection(
-                              currentFocusReplyId: _currentFocusReplyId,
-                              postId: _reviewPostDetail.id!,
-                              currentReplyId: _replyComment?.id,
-                              comments: _comments,
-                              // setComments: (comments) =>
-                              //     setState(() => _comments = comments),
-                              setReplyComment: (e) {
-                                print('set reply comment $e');
-                                setState(() => _replyComment = e);
-                              },
-                              hideComment: (id) {},
-                              setRemoveCommentId: (id) {
-                                if (id == null) {
-                                  setState(() {
-                                    _removedCommentId = null;
-                                  });
-                                  return;
-                                }
-                                print('removed comment $id');
-                                try {
-                                  _postService.hideReviewPostComment(
-                                      commentId: id);
-                                  setState(() {
-                                    _removedCommentId = id;
-                                  });
-                                  // _removedCommentId = null;
-                                } on Exception {}
-                              },
-                              removedCommentId: _removedCommentId,
-                              getComments: () async {
-                                final resp =
-                                    await _postService.getReviewPostComments(
-                                        postId: _reviewPostDetail.id!);
-                                setState(() => _comments = resp);
-                              },
-                            ),
+                        currentFocusReplyId: _currentFocusReplyId,
+                        postId: _reviewPostDetail.id!,
+                        currentReplyId: _replyComment?.id,
+                        comments: _comments,
+                        // setComments: (comments) =>
+                        //     setState(() => _comments = comments),
+                        setReplyComment: (e) {
+                          print('set reply comment $e');
+                          setState(() => _replyComment = e);
+                        },
+                        hideComment: (id) {},
+                        setRemoveCommentId: (id) {
+                          if (id == null) {
+                            setState(() {
+                              _removedCommentId = null;
+                            });
+                            return;
+                          }
+                          print('removed comment $id');
+                          try {
+                            _postService.hideReviewPostComment(
+                                commentId: id);
+                            setState(() {
+                              _removedCommentId = id;
+                            });
+                            // _removedCommentId = null;
+                          } on Exception {}
+                        },
+                        removedCommentId: _removedCommentId,
+                        getComments: () async {
+                          final resp =
+                          await _postService.getReviewPostComments(
+                              postId: _reviewPostDetail.id!);
+                          setState(() => _comments = resp);
+                        },
+                      ),
                       // SPACER
                       const SizedBox(
                         height: 100,
@@ -337,7 +348,10 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
                   focusNode: _commentFocusNode,
                   onSendButtonClick: _uploadComment,
                 ),
-                bottom: MediaQuery.of(context).viewInsets.bottom,
+                bottom: MediaQuery
+                    .of(context)
+                    .viewInsets
+                    .bottom,
               ),
             ],
           ),
@@ -361,50 +375,51 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
               title: _isFetching
                   ? const SizedBox.shrink()
                   : Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    UserAvatar(
+                        size: 40,
+                        avt: '${_author.avt}',
+                        onTap: _navigateToAuthorProfile),
+                    Padding(
+                      padding:
+                      const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          UserAvatar(
-                              size: 40,
-                              avt: '${_author.avt}',
-                              onTap: _navigateToAuthorProfile),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  _author.username!,
-                                  style: const TextStyle(
-                                      color: Colors.black87, fontSize: 16),
-                                ),
-                                Text(
-                                  timeago.format(
-                                      DateTime.parse(_reviewPostDetail
-                                          .createDate
-                                          .toString()),
-                                      locale: Localizations.localeOf(context)
-                                          .languageCode),
-                                  style: const TextStyle(
-                                      color: Colors.black26, fontSize: 12),
-                                ),
-                              ],
-                            ),
-                          )
+                          Text(
+                            _author.username!,
+                            style: const TextStyle(
+                                color: Colors.black87, fontSize: 16),
+                          ),
+                          Text(
+                            timeago.format(
+                                DateTime.parse(_reviewPostDetail
+                                    .createDate
+                                    .toString()),
+                                locale: Localizations
+                                    .localeOf(context)
+                                    .languageCode),
+                            style: const TextStyle(
+                                color: Colors.black26, fontSize: 12),
+                          ),
                         ],
                       ),
-                    ),
+                    )
+                  ],
+                ),
+              ),
               actions: [
                 IconButton(
                   onPressed: _bookmarkPost,
                   icon: _isBookmarked
                       ? const Icon(
-                          Icons.bookmark_add_rounded,
-                          color: Colors.lightBlue,
-                        )
+                    Icons.bookmark_add_rounded,
+                    color: Colors.lightBlue,
+                  )
                       : const Icon(Icons.bookmark_add_outlined),
                   color: Colors.black38,
                 ),
@@ -454,17 +469,22 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
   }
 
   _navigateToAuthorProfile(int id) {
-    if (context.read<AuthenticationBloc>().state.user.id == id) return;
+    if (context
+        .read<AuthenticationBloc>()
+        .state
+        .user
+        .id == id) return;
     Navigator.push(context, ProfileScreen.route(id));
   }
 
   _showAttScrollView(int index) {
     showModalBottomSheet(
       context: context,
-      builder: (_) => ReviewPostAttachmentScrollView(
-        attachments: _reviewPostDetail.images,
-        initialIndex: index,
-      ),
+      builder: (_) =>
+          ReviewPostAttachmentScrollView(
+            attachments: _reviewPostDetail.images,
+            initialIndex: index,
+          ),
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
     );
@@ -472,7 +492,7 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
 
   _bookmarkPost() async {
     bool success =
-        await _postService.saveBookmark(postId: _reviewPostDetail.id);
+    await _postService.saveBookmark(postId: _reviewPostDetail.id);
     if (success) {
       setState(() {
         _isBookmarked = true;

@@ -1,22 +1,19 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:traveling_social_app/models/group.dart';
 import 'package:traveling_social_app/models/user.dart';
-import 'package:traveling_social_app/screens/explore/components/post_entry.dart';
 import 'package:traveling_social_app/services/chat_service.dart';
 import 'package:traveling_social_app/services/post_service.dart';
 import 'package:traveling_social_app/widgets/my_outline_button.dart';
-import 'package:traveling_social_app/widgets/user_avt.dart';
 
-import '../../constants/api_constants.dart';
 import '../../constants/app_theme_constants.dart';
-import '../../models/post.dart';
 import '../../services/user_service.dart';
 import '../message/chat_screen.dart';
-import 'components/follow_count.dart';
-import 'components/icon_with_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'components/post_list.dart';
+import 'components/profile_header.dart';
+import 'components/profile_tab_bar.dart';
+import 'components/user_file_upload_grid.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key, required this.userId}) : super(key: key);
@@ -33,326 +30,124 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final _userService = UserService();
   final _postService = PostService();
-
-  final Set<Post> _posts = <Post>{};
   User? _user;
-  int _page = 0;
-
-  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
     getUserDetail();
-    getUserPosts();
   }
 
   getUserDetail() async {
-    isLoading = true;
     User? user = await _userService.getUserDetail(userId: widget.userId);
     setState(() {
       _user = user;
     });
-    isLoading = false;
   }
 
-  getUserPosts() async {
-    isLoading = true;
-    List<Post> posts = await _postService.getUserPosts(
-        userId: widget.userId, page: _page, pageSize: 2);
-    setState(() => _posts.addAll(posts));
-    if (posts.isNotEmpty) {
-      _page = _page + 1;
-    } else if (_page >= 1) {
-      _page = _page - 1;
-    }
-    isLoading = false;
-  }
 
-  set isLoading(bool i) => setState(() {
-        _isLoading = i;
-      });
 
   get isFollowing => _user != null ? _user!.isFollowing : false;
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            SliverAppBar(
-              floating: true,
-              snap: true,
-              iconTheme: const IconThemeData(color: Colors.black87),
-              forceElevated: innerBoxIsScrolled,
-              backgroundColor: Colors.white,
-              leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.arrow_back_ios)),
-              title: Text(
-                _user != null ? _user!.username.toString() : '',
-                style: const TextStyle(color: Colors.black87),
-              ),
-              centerTitle: true,
-              actions: [
-                IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
-              ],
-            ),
-          ];
-        },
-        body: NotificationListener<ScrollNotification>(
-          onNotification: (notification) {
-            if (!_isLoading) {
-              var position = notification.metrics;
-              if (position.pixels == position.maxScrollExtent) {
-                getUserPosts();
-              }
-              return true;
-            }
-            return false;
-          },
-          child: CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
+      body: DefaultTabController(
+        length: 2,
+        initialIndex: 0,
+        child: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              SliverList(
+                  delegate: SliverChildListDelegate([
+                ProfileHeader(
+                  username: _user?.username,
+                  avt: _user?.avt,
+                  bgImage: _user?.background,
+                  followerCount: _user?.followerCounts,
+                  followingCount: _user?.followingCounts,
+                  joinedDate: _user?.createDate,
+                  onTapAvt: () {},
+                  onTapBg: () {},
+                  buttons: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      //AVT
                       SizedBox(
-                        height: size.height * .4,
-                        width: double.infinity,
-                        child: Stack(
-                          children: [
-                            Container(
-                              height: (size.height * .4 - 80),
-                              width: double.infinity,
-                              color: Colors.grey.shade50,
-                              child: GestureDetector(
-                                onTap: () {},
-                                child: AspectRatio(
-                                  aspectRatio: 16 / 9,
-                                  child: _user != null
-                                      ? CachedNetworkImage(
-                                          fit: BoxFit.cover,
-                                          imageUrl: '$imageUrl${_user!.background}',
-                                          errorWidget: (context, url, error) =>
-                                              Image.asset(
-                                            "assets/images/home_bg.png",
-                                            fit: BoxFit.cover,
-                                          ),
-                                        )
-                                      : null,
-                                ),
-                              ),
-                            ),
-
-                            //CURRENT USER AVT
-                            _user != null
-                                ? Positioned(
-                                    bottom: 0,
-                                    left: kDefaultPadding,
-                                    child: UserAvatar(
-                                      size: 150,
-                                      onTap: () {},
-                                      avt: _user!.avt.toString(),
-                                    ),
-                                  )
-                                : const SizedBox.shrink(),
-                            Positioned(
-                              bottom: 0,
-                              right: kDefaultPadding / 2,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    width: 100,
-                                    child: MyOutlineButton(
-                                      onClick: () async {
-                                        if (isFollowing) {
-                                          bool success = await _userService
-                                              .unFollow(userId: widget.userId);
-                                          if (success) {
-                                            setState(() {
-                                              _user!.isFollowing = false;
-                                            });
-                                          }
-                                        } else {
-                                          bool success = await _userService
-                                              .follow(userId: widget.userId);
-                                          if (success) {
-                                            setState(() {
-                                              _user!.isFollowing = true;
-                                            });
-                                          }
-                                        }
-                                      },
-                                      text: isFollowing
-                                          ? AppLocalizations.of(context)!
-                                              .following
-                                          : AppLocalizations.of(context)!
-                                              .follow,
-                                      color: isFollowing ? kPrimaryColor : null,
-                                      textColor:
-                                          isFollowing ? Colors.white : null,
-                                      minWidth: 80,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 5),
-                                  SizedBox(
-                                    width: 70,
-                                    child: MyOutlineButton(
-                                      onClick: () async {
-                                        print('get chat group');
-                                        var chatService = ChatService();
-                                        Group? chatGroup = await chatService
-                                            .getChatGroupBetweenTwoUsers(
-                                                widget.userId);
-                                        if (chatGroup != null) {
-                                          Navigator.push(
-                                              context,
-                                              ChatScreen.route(
-                                                  groupId: chatGroup.id!,
-                                                  name: _user!.username));
-                                        }
-                                      },
-                                      text: 'Message',
-                                      minWidth: 70,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
+                        width: 100,
+                        child: MyOutlineButton(
+                          onClick: () async {
+                            if (isFollowing) {
+                              bool success = await _userService.unFollow(
+                                  userId: widget.userId);
+                              if (success) {
+                                setState(() {
+                                  _user!.isFollowing = false;
+                                });
+                              }
+                            } else {
+                              bool success = await _userService.follow(
+                                  userId: widget.userId);
+                              if (success) {
+                                setState(() {
+                                  _user!.isFollowing = true;
+                                });
+                              }
+                            }
+                          },
+                          text: isFollowing
+                              ? AppLocalizations.of(context)!.following
+                              : AppLocalizations.of(context)!.follow,
+                          color: isFollowing ? kPrimaryColor : null,
+                          textColor: isFollowing ? Colors.white : null,
+                          minWidth: 80,
                         ),
                       ),
-                      //  INFO
-                      //USER INFO
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 12.0),
-                                child: Text(
-                                  _user != null
-                                      ? '@${_user!.username.toString()}'
-                                      : '',
-                                  style: const TextStyle(
-                                      color: Colors.black54, fontSize: 18),
-                                ),
-                              ),
-                              _user != null
-                                  ? Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        FollowCount(
-                                            title: AppLocalizations.of(context)!
-                                                .following,
-                                            count: _user!.followingCounts),
-                                        FollowCount(
-                                            title: AppLocalizations.of(context)!
-                                                .follower,
-                                            count: _user!.followerCounts),
-                                      ],
-                                    )
-                                  : const SizedBox.shrink(),
-                              const SizedBox(height: 5),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8.0, horizontal: 5),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        const IconTextButton(
-                                            text: "Ho Chi Minh city",
-                                            icon:      Icon(
-                                  Icons.location_on_outlined,
-                                  color: Colors.black87,
-                                  size: 16,
-                                )),
-                                        const SizedBox(width: 10),
-                                        IconTextButton(
-                                            text: AppLocalizations.of(context)!
-                                                .joinedDate(
-                                                    Jiffy(_user?.createDate)
-                                                        .format('dd-MM-yyyy')),
-                                            icon:
-                                            Icon(
-                                              Icons.calendar_today_outlined,
-                                              color: Colors.black87,
-                                              size: 16,
-                                            )),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: const [
-                                        IconTextButton(
-                                            text: "Ho Chi Minh city",
-                                            icon:      Icon(
-                                              Icons.location_on_outlined,
-                                              color: Colors.black87,
-                                              size: 16,
-                                            )),
-                                        SizedBox(width: 10),
-
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              //BIO
-                              SizedBox(
-                                child: const Divider(indent: 1, thickness: 1),
-                                width: size.width * .7,
-                              ),
-                              Text(
-                                _user != null ? _user!.bio ?? '' : '',
-                                style: const TextStyle(
-                                  color: Colors.black87,
-                                ),
-                              ),
-                            ],
-                          ),
+                      const SizedBox(width: 5),
+                      SizedBox(
+                        width: 70,
+                        child: MyOutlineButton(
+                          onClick: () async {
+                            print('get chat group');
+                            var chatService = ChatService();
+                            Group? chatGroup = await chatService
+                                .getChatGroupBetweenTwoUsers(widget.userId);
+                            if (chatGroup != null) {
+                              Navigator.push(
+                                  context,
+                                  ChatScreen.route(
+                                      groupId: chatGroup.id!,
+                                      name: _user!.username));
+                            }
+                          },
+                          text: 'Message',
+                          minWidth: 70,
                         ),
                       )
                     ],
                   ),
                 ),
-              ),
-              SliverToBoxAdapter(
-                child: Column(
-                    children: List.generate(_posts.length, (index) {
-                  var post = _posts.elementAt(index);
-                  return PostEntry(
-                    post: post,
-                    key: ValueKey(post.id),
-                  );
-                })),
-              )
+                const SizedBox(height: 10)
+              ]))
+            ];
+          },
+          body: Column(
+            children: [
+              const ProfileTabBar(),
+              Expanded(
+                  child: TabBarView(
+                children: [
+                  PostList(
+                    fetchPosts: (int? page, int? pageSize) async {
+                      return _postService.getUserPosts(
+                          userId: widget.userId,
+                          page: page,
+                          pageSize: pageSize);
+                    },
+                  ),
+                  UserFileUploadGrid(userId: widget.userId),
+                ],
+              ))
             ],
           ),
         ),

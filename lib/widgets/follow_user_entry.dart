@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/profile/profile_screen.dart';
 import 'package:traveling_social_app/services/user_service.dart';
+import 'package:traveling_social_app/widgets/user_avt.dart';
 
 import '../constants/api_constants.dart';
 import 'my_outline_button.dart';
@@ -13,7 +14,8 @@ class FollowUserEntry extends StatefulWidget {
       this.avt,
       required this.isFollowing,
       required this.userService,
-      required this.userId,  this.followText ='Follow'})
+      required this.userId,
+      this.followText = 'Follow'})
       : super(key: key);
 
   final String? username, avt;
@@ -52,11 +54,11 @@ class _FollowUserEntryState extends State<FollowUserEntry> {
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
         child: Row(
           children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage(
-                '$imageUrl${widget.avt}',
-              ),
-            ),
+            UserAvatar(
+                size: 40,
+                avt: widget.avt,
+                onTap: () => Navigator.push(
+                    context, ProfileScreen.route(widget.userId),),),
             const SizedBox(width: 10),
             Expanded(child: Text('${widget.username}')),
             MyOutlineButton(

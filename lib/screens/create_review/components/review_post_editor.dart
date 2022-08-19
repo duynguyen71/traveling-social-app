@@ -100,7 +100,7 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
           .read<CreateReviewPostCubit>()
           .updateStatus(ReviewPostStatus.loadingCoverImage);
       File? compress =
-          await ApplicationUtility.compressImage(pickImage.path, quality: 80);
+          await ApplicationUtility.compressImage(pickImage.path, quality: 50);
       var coverImage = const AttachmentDto();
       if (compress == null) {
         coverImage = coverImage.copyWith(path: pickImage.path, status: 1);

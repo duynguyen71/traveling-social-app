@@ -14,6 +14,7 @@ class HomePosts extends StatelessWidget {
       builder: (context, state) {
         var posts = state.posts;
         return SliverList(
+
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               if (index == posts.length) {
@@ -29,6 +30,7 @@ class HomePosts extends StatelessWidget {
                 key: ValueKey(posts.elementAt(index).id),
               );
             },
+            addAutomaticKeepAlives: true,
             childCount: posts.length + 1,
           ),
         );

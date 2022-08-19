@@ -42,7 +42,7 @@ class CommentInputWidget extends StatelessWidget {
           color: bgColor ?? Colors.grey.shade100,
           border: Border(
             top: BorderSide(
-              color: Colors.grey.withOpacity(.1),
+              color: Colors.grey.shade200,
               width: 1,
             ),
           ),

@@ -30,12 +30,15 @@ class _PostAttachmentContainerState extends State<PostAttachmentContainer>
 
   @override
   void initState() {
-    _getDisplayRadio();
     super.initState();
+    _getDisplayRadio();
   }
 
   _getDisplayRadio() async {
-    if (attachments.asMap().containsKey(_attachmentIndex)) {
+    if (!mounted) {
+      return;
+    }
+    if (attachments.asMap().containsKey(0)) {
       var ratio = await ApplicationUtility.getRatio(attachments[0].name);
       setState(() {
         _displayRatio = ratio;

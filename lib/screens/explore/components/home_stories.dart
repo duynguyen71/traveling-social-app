@@ -27,10 +27,12 @@ class _HomeStoriesState extends State<HomeStories>
     Size size = MediaQuery.of(context).size;
     return SliverToBoxAdapter(
       child: Container(
-        constraints: BoxConstraints(
-          minHeight: size.height * .35,
-        ),
-        width: double.infinity,
+        // constraints: BoxConstraints(
+        //   minHeight: size.height * .2,
+        //   maxHeight: 300,
+        // ),
+
+        // width: double.infinity,
         decoration: BoxDecoration(
             color: Colors.white,
             border: Border(
@@ -45,8 +47,12 @@ class _HomeStoriesState extends State<HomeStories>
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
               children: [
-                SizedBox(
-                  height: 180,
+                Container(
+                  height: size.height*.3,
+                  constraints: BoxConstraints(
+                    minHeight: size.height*.3
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: NotificationListener<ScrollNotification>(
                     onNotification: (_) {
                       if (_.metrics.pixels == _.metrics.maxScrollExtent) {
@@ -71,6 +77,7 @@ class _HomeStoriesState extends State<HomeStories>
                           );
                         }
                         return StoryCard(
+                            height: size.height * .2,
                             key: ValueKey(stories.elementAt(index).id),
                             story: stories.elementAt(index),
                             onClick: () {

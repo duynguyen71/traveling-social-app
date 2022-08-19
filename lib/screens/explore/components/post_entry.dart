@@ -49,10 +49,18 @@ class _PostEntryState extends State<PostEntry>
 
   @override
   void initState() {
-    _likeCount = widget.post.reactionCount;
-    _isFavorite = (myReaction != null);
-    _getAttachments();
     super.initState();
+
+    _getAttachments();
+  }
+
+  @override
+  void didChangeDependencies() {
+    setState(() {
+      _likeCount = widget.post.reactionCount;
+      _isFavorite = (myReaction != null);
+    });
+    super.didChangeDependencies();
   }
 
   _getAttachments() {
@@ -104,8 +112,11 @@ class _PostEntryState extends State<PostEntry>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // USER AVT AVT
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          Container(
+            // decoration: BoxDecoration(
+            //     border:
+            //         Border(bottom: BorderSide(color: Colors.grey.shade100))),
+            padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -114,8 +125,11 @@ class _PostEntryState extends State<PostEntry>
                   size: 40,
                   avt: '${widget.post.user!.avt}',
                   onTap: () {
-                  context.read<AuthenticationBloc>().state.user.id == widget.post.user?.id ?(){}:  ApplicationUtility.navigateToScreen(
-                        context, ProfileScreen(userId: widget.post.user!.id!));
+                    context.read<AuthenticationBloc>().state.user.id ==
+                            widget.post.user?.id
+                        ? () {}
+                        : ApplicationUtility.navigateToScreen(context,
+                            ProfileScreen(userId: widget.post.user!.id!));
                   },
                 ),
                 const SizedBox(width: 10),
@@ -143,16 +157,17 @@ class _PostEntryState extends State<PostEntry>
             ),
           ),
           //CAPTION
-          mainCaption.toString().isNotEmpty
-              ? Padding(
-                  padding: const EdgeInsets.only(left: 8, bottom: 8.0),
+          mainCaption.toString().isEmpty
+              ? const Padding(padding: EdgeInsets.symmetric(vertical: 4))
+              : Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
                   child: ExpandableText(
-                    text: mainCaption.toString().trim(),
+                    text: '${mainCaption?.trim()}',
                     textStyle:
-                        const TextStyle(fontSize: 18, color: Colors.black87),
+                        const TextStyle(fontSize: 16, color: Colors.black87),
                   ),
-                )
-              : const SizedBox.shrink(),
+                ),
           PostAttachmentContainer(attachments: _attachments),
           //BUTTONS
           Container(
@@ -161,7 +176,7 @@ class _PostEntryState extends State<PostEntry>
                 borderRadius: BorderRadius.circular(40),
                 border: Border.all(width: .1, color: Colors.grey.shade400),
                 boxShadow: [
-                  kDefaultPostActionBarShadow,
+                  // kDefaultPostActionBarShadow,
                 ]),
             alignment: Alignment.center,
             padding: const EdgeInsets.all(4),
@@ -206,13 +221,13 @@ class _PostEntryState extends State<PostEntry>
                             child: child,
                           ),
                           child: _isFavorite
-                              ?  Icon(
+                              ? Icon(
                                   size: 24.0,
                                   Icons.favorite,
                                   color: Colors.red,
                                   key: ValueKey('icon1'),
                                 )
-                              :  Icon(
+                              : Icon(
                                   size: 24.0,
                                   Icons.favorite_border,
                                   color: Colors.black45,
@@ -297,16 +312,15 @@ class _PostEntryState extends State<PostEntry>
                     barrierDismissible: true,
                     builder: (context) {
                       return CupertinoAlertDialog(
-                        title: const Text(
-                            'Are you sure delete this post?'),
+                        title: const Text('Are you sure delete this post?'),
                         actions: [
                           CupertinoDialogAction(
                             child: const Text('Delete'),
                             onPressed: () {
-                              context.read<PostBloc>().add(
-                                  RemovePost(widget.post.id!));
-                              Navigator.of(context,
-                                      rootNavigator: true)
+                              context
+                                  .read<PostBloc>()
+                                  .add(RemovePost(widget.post.id!));
+                              Navigator.of(context, rootNavigator: true)
                                   .pop("Discard");
                             },
                             isDestructiveAction: true,
@@ -315,8 +329,7 @@ class _PostEntryState extends State<PostEntry>
                             child: const Text('Cancel'),
                             isDefaultAction: true,
                             onPressed: () {
-                              Navigator.of(context,
-                                      rootNavigator: true)
+                              Navigator.of(context, rootNavigator: true)
                                   .pop("Cancel");
                             },
                           ),
@@ -329,8 +342,7 @@ class _PostEntryState extends State<PostEntry>
           ],
           cancelButton: CupertinoActionSheetAction(
             onPressed: () {
-              Navigator.of(context, rootNavigator: true)
-                  .pop("Cancel");
+              Navigator.of(context, rootNavigator: true).pop("Cancel");
             },
             isDefaultAction: true,
             child: const Text(

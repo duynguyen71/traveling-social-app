@@ -26,7 +26,6 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen>
     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   final _postService = PostService();
   List<Post> _posts = [];
-  List<ReviewPostReport> _reviewPosts = [];
 
   @override
   void initState() {
@@ -92,8 +91,6 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen>
                     unselectedLabelColor: Colors.black54,
                     indicatorSize: TabBarIndicatorSize.tab,
                     indicatorColor: kPrimaryColor,
-                    // labelPadding: const EdgeInsets.symmetric(vertical: 8.0),
-                    // indicatorPadding: const EdgeInsets.symmetric(vertical: 5),
                     indicatorPadding: EdgeInsets.zero,
                     padding: EdgeInsets.zero,
                     labelStyle: MyTheme.heading2.copyWith(

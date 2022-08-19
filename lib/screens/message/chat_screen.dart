@@ -298,7 +298,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         message: message.message.toString(),
                         isFavorite: false,
                         onDoubleTap: () {},
-                        avt: message.user!.avt.toString(),
+                        avt: message.user?.avt,
                       );
                     }),
               ),
