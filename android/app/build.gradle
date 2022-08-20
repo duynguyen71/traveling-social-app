@@ -50,6 +50,11 @@ android {
         multiDexEnabled true
     }
 
+    lintOptions {
+        disable 'InvalidPackage'
+        checkReleaseBuilds false
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.

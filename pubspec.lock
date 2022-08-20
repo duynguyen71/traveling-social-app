@@ -292,7 +292,7 @@ packages:
       name: flutter_image_compress
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "1.1.1"
   flutter_inappwebview_quill:
     dependency: transitive
     description:
