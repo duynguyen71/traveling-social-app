@@ -74,6 +74,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
                 var user = _users[index];
                 assert(user.id != null);
                 return FollowUserEntry(
+                  key: ValueKey(user.id),
                   userId: user.id!,
                   isFollowing: true,
                   username: user.username,

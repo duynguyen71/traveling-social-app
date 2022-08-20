@@ -71,7 +71,7 @@ class ApplicationUtility {
     final splitName = filePath.substring(0, (lastIndex));
     final outPath = "${splitName}_out${filePath.substring(lastIndex)}";
     return await FlutterImageCompress.compressAndGetFile(filePath, outPath,
-        quality: quality ?? 50);
+        quality: 50);
   }
 
   static getFileSize(String filepath, int decimals) async {

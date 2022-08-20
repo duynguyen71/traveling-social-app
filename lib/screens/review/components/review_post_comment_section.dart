@@ -51,33 +51,42 @@ class _ReviewPostCommentSectionState extends State<ReviewPostCommentSection> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(4.0),
-        // color: Colors.grey.shade50,
+        color: Colors.white,
       ),
-      child: ListView.builder(
-        shrinkWrap: true,
-        padding: EdgeInsets.zero,
-        scrollDirection: Axis.vertical,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (context, index) {
-          var comment = comments.elementAt(index);
-          return ReviewPostCommentEntry(
-            postService: _postService,
-            currentReplyCommentId: widget.currentReplyId,
-            comment: comment,
-            commentContent: comment.content!,
-            commentId: comment.id!,
-            userAvt: comment.user?.avt,
-            currentFocusReplyId: widget.currentFocusReplyId,
-            removedCommentId: widget.removedCommentId,
-            replyCount: comment.replyCount,
-            level: 0,
-            onTap: (c) => showDialog(c),
-          );
-        },
-        itemCount: comments.length,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(
+            color: Colors.grey.shade200,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: ListView.builder(
+          shrinkWrap: true,
+          padding: EdgeInsets.zero,
+          scrollDirection: Axis.vertical,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            var comment = comments.elementAt(index);
+            return ReviewPostCommentEntry(
+              postService: _postService,
+              currentReplyCommentId: widget.currentReplyId,
+              comment: comment,
+              commentContent: comment.content!,
+              commentId: comment.id!,
+              userAvt: comment.user?.avt,
+              currentFocusReplyId: widget.currentFocusReplyId,
+              removedCommentId: widget.removedCommentId,
+              replyCount: comment.replyCount,
+              level: 0,
+              onTap: (c) => showDialog(c),
+            );
+          },
+          itemCount: comments.length,
+        ),
       ),
     );
   }

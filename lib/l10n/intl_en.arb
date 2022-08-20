@@ -67,10 +67,10 @@
   "whatRUT": "What are you thinking?",
   "addLocation": "Add location",
   "posting": "Post",
-  "@helloWorld": {
-    "description": "The conventional newborn programmer greeting"
-  },
   "viewYourProfile": "View your profile",
   "viewPhoto": "View photo",
-  "aboutAuthor": "About author"
+  "aboutAuthor": "About author",
+  "noCommentYet": "No comments yet",
+  "notInformation": "There is no information on this use",
+  "beTheFirstToComment": "Be the first to comment"
 }

@@ -30,9 +30,9 @@
   "alreadyHaveAccount": "Đã có tài khoản",
   "DoNotHaveAccount": "Chưa có tài khoản",
   "verificationCode": "Mã xác nhận",
-  "badCredentials": "Username hoặc mật khẩu không chính xác",
+  "badCredentials": "Tên hoặc mật khẩu không chính xác",
   "emailExist": "Email đã tồn tại",
-  "usernameExist": "Username đã tồn tại",
+  "usernameExist": "Tên đã tồn tại",
   "editProfile": "Chỉnh sửa",
   "follower": "Người theo dõi",
   "following": "Đang theo dõi",
@@ -67,10 +67,10 @@
   "whatRUT": "Bạn đang nghĩ gì?",
   "addLocation": "Chọn địa điểm",
   "posting": "Đăng bài",
-  "@helloWorld": {
-    "description": "The conventional newborn programmer greeting"
-  },
   "viewYourProfile": "Xem trang cá nhân của bạn",
   "viewPhoto": "Xem ảnh",
-  "aboutAuthor": "Tác giả"
+  "aboutAuthor": "Tác giả",
+  "noCommentYet": "Chưa có bình luận nào cả",
+  "notInformation": "Không có thông tin nào trong mục này",
+  "beTheFirstToComment": "Hãy là người bình luận đầu tiên"
 }

@@ -6,9 +6,13 @@ import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/services/comment_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/comment_input_reply_widget.dart';
+import 'package:traveling_social_app/widgets/scroll_end_notification.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../models/comment.dart';
 import '../../widgets/comment_entry.dart';
 import 'package:provider/provider.dart';
+
+import '../../widgets/empty_mesage_widget.dart';
 
 class CommentScreen extends StatefulWidget {
   const CommentScreen(
@@ -27,7 +31,7 @@ class _CommentScreenState extends State<CommentScreen>
 
   final Set<Comment> _comments = <Comment>{};
   final FocusNode _focusNode = FocusNode();
-  final ScrollController _scrollController = ScrollController();
+
   bool _isLoading = false;
 
   List<Comment> get myComments => widget.myComments;
@@ -59,8 +63,6 @@ class _CommentScreenState extends State<CommentScreen>
           setState(() {
             _comments.add(commentResp);
           });
-          _scrollController
-              .jumpTo(_scrollController.position.maxScrollExtent + 80);
         }
         context.read<PostBloc>().add(IncrementCommentCount(widget.postId));
       }
@@ -106,6 +108,7 @@ class _CommentScreenState extends State<CommentScreen>
 
   @override
   void initState() {
+    super.initState();
     //get current user comments
     if (myComments.isNotEmpty) {
       setState(() {
@@ -116,18 +119,7 @@ class _CommentScreenState extends State<CommentScreen>
     _getOtherUserComments();
     _commentController.text =
         DateTime.now().millisecond.toString() + " comment";
-    _scrollController.addListener(() async {
-      var pixels2 = _scrollController.position.pixels;
-      var maxScrollExtent2 = _scrollController.position.maxScrollExtent;
-      if ((maxScrollExtent2 - pixels2) <=
-          MediaQueryData.fromWindow(WidgetsBinding.instance.window)
-                  .size
-                  .height *
-              .3) {
-      }
-    });
-    super.initState();
-    _commentController.text = lorem(words: 12,paragraphs: 1);
+    _commentController.text = lorem(words: 12, paragraphs: 1);
   }
 
   _getOtherUserComments() async {
@@ -150,150 +142,147 @@ class _CommentScreenState extends State<CommentScreen>
   Widget build(BuildContext context) {
     super.build(context);
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.grey.withOpacity(.1),
-      body: Container(
-        height: size.height,
-        color: Colors.transparent,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            _buildSpace(),
-            Expanded(
-              flex: 10,
-              child: Container(
-                height: size.height - 200,
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(20),
-                    topLeft: Radius.circular(20),
-                  ),
-                ),
-                child: Stack(
-                  alignment: Alignment.topCenter,
+    return DraggableScrollableSheet(
+      initialChildSize: .9,
+      minChildSize: 0.5,
+      expand: false,
+      builder: (context, scrollController) {
+        return Container(
+          height: size.height,
+          decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              )),
+          child: Stack(
+            children: [
+              MyScrollEndNotification(
+                onEndNotification: (no) {
+                  if (_isLoading) return false;
+                  return true;
+                },
+                child: ListView(
+                  controller: scrollController,
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
                   children: [
-                    SingleChildScrollView(
-                      controller: _scrollController,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 80.0),
-                        child: Column(
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                "Comments",
-                                style: TextStyle(
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20),
-                              ),
-                            ),
-                            //RENDER COMMENT TREE
-                            ...List.generate(
-                              _comments.length + 1,
-                              (index) {
-                                if (index == _comments.length) {
-                                  return Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 5),
-                                    child: _isLoading
-                                        ? const Center(
-                                            child: CupertinoActivityIndicator(),
-                                          )
-                                        : const SizedBox.shrink(),
-                                  );
-                                }
-                                var c = _comments.elementAt(index);
-                                return CommentEntry(
-                                  hideComment: (c) => hideComment(c),
-                                  comment: c,
-                                  postId: widget.postId,
-                                  level: 0,
-                                  isShowChildren:
-                                      // (_currentReplyComment != null &&
-                                      //     _currentReplyComment!.id == c.id),
-                                      true,
-                                  currentReplyComment: _currentReplyComment,
-                                  key: ValueKey(c.id.toString()),
-                                  replyCommentRequest: (c) =>
-                                      replyCommentRequest(c),
-                                  editCommentRequest: (c) =>
-                                      editCommentRequest(c),
-                                  editedComment: (_editedComment != null &&
-                                          _editedComment!.id == c.id)
-                                      ? _editedComment
-                                      : null,
-                                  userId: c.user?.id,
-                                  avt: c.user?.avt,
-                                  username: c.user?.username,
-                                );
-                              },
-                            )
-                          ],
+                    Center(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                                bottom:
+                                    BorderSide(color: Colors.grey.shade200))),
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                        AppLocalizations.of(context)!.comment,
+                          style: const TextStyle(
+                              color: Colors.black87,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18),
                         ),
                       ),
                     ),
-                    //
-                    Positioned(
-                      child: CommentInputReplyWidget(
-                        message: _currentFocusReplyComment != null
-                            ? _currentFocusReplyComment!.content.toString()
-                            : '',
-                        onClose: () {
-                          ApplicationUtility.hideKeyboard();
-                          setState(() {
-                            _currentFocusReplyComment = null;
-                            _currentReplyComment = null;
-                          });
-                        },
-                        showReplyUser: _currentFocusReplyComment != null,
-                        replyUsername: (_currentFocusReplyComment != null &&
-                                _currentFocusReplyComment!.user != null)
-                            ? _currentFocusReplyComment!.user!.username
-                            : null,
-                        onChange: (text) {},
-                        sendBtnColor: kPrimaryLightColor,
-                        controller: _commentController,
-                        focusNode: _focusNode,
-                        onSendButtonClick: () {
-                          _sendComment();
-                        },
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 80.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          //RENDER COMMENT TREE
+                          ...List.generate(
+                            _comments.length + 1,
+                            (index) {
+                              if (index == _comments.length) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  child: _isLoading
+                                      ? const Center(
+                                          child: CupertinoActivityIndicator(),
+                                        )
+                                      : const SizedBox.shrink(),
+                                );
+                              }
+                              var c = _comments.elementAt(index);
+                              return CommentEntry(
+                                hideComment: (c) => hideComment(c),
+                                comment: c,
+                                postId: widget.postId,
+                                level: 0,
+                                isShowChildren:
+                                    // (_currentReplyComment != null &&
+                                    //     _currentReplyComment!.id == c.id),
+                                    true,
+                                currentReplyComment: _currentReplyComment,
+                                key: ValueKey(c.id.toString()),
+                                replyCommentRequest: (c) =>
+                                    replyCommentRequest(c),
+                                editCommentRequest: (c) =>
+                                    editCommentRequest(c),
+                                editedComment: (_editedComment != null &&
+                                        _editedComment!.id == c.id)
+                                    ? _editedComment
+                                    : null,
+                                userId: c.user?.id,
+                                avt: c.user?.avt,
+                                username: c.user?.username,
+                              );
+                            },
+                          )
+                        ],
                       ),
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                    ),
+                    )
                   ],
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
+             !_isLoading && _comments.isEmpty
+                  ? Positioned(
+                      child: Center(
+                        child: EmptyMessageWidget(
+                          message: AppLocalizations.of(context)!.noCommentYet,
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+              Positioned(
+                child: CommentInputReplyWidget(
+                  message: _currentFocusReplyComment != null
+                      ? _currentFocusReplyComment!.content.toString()
+                      : '',
+                  onClose: () {
+                    ApplicationUtility.hideKeyboard();
+                    setState(() {
+                      _currentFocusReplyComment = null;
+                      _currentReplyComment = null;
+                    });
+                  },
+                  showReplyUser: _currentFocusReplyComment != null,
+                  replyUsername: (_currentFocusReplyComment != null &&
+                          _currentFocusReplyComment!.user != null)
+                      ? _currentFocusReplyComment!.user!.username
+                      : null,
+                  onChange: (text) {},
+                  sendBtnColor: kPrimaryLightColor,
+                  controller: _commentController,
+                  focusNode: _focusNode,
+                  onSendButtonClick: () {
+                    _sendComment();
+                  },
+                ),
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildSpace() {
-    return Expanded(
-      flex: 2,
-      child: GestureDetector(
-        onTap: () {
-          Navigator.of(context).pop();
-        },
-        child: Container(
-          width: double.infinity,
-          color: Colors.grey.withOpacity(.1),
-        ),
-      ),
-    );
-  }
 
   @override
   void dispose() {
     _commentController.dispose();
     _focusNode.dispose();
-    _scrollController.dispose();
     super.dispose();
   }
 

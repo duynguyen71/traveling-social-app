@@ -33,6 +33,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "appearance": MessageLookupByLibrary.simpleMessage("Appearance"),
         "badCredentials": MessageLookupByLibrary.simpleMessage(
             "Username or password is not correct"),
+        "beTheFirstToComment":
+            MessageLookupByLibrary.simpleMessage("Be the first to comment"),
         "bio": MessageLookupByLibrary.simpleMessage("Bio"),
         "bookmark": MessageLookupByLibrary.simpleMessage("Bookmark"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
@@ -67,6 +69,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("New photo from camera"),
         "newPhotoFromGallery":
             MessageLookupByLibrary.simpleMessage("New photo from gallery"),
+        "noCommentYet": MessageLookupByLibrary.simpleMessage("No comments yet"),
+        "notInformation": MessageLookupByLibrary.simpleMessage(
+            "There is no information on this use"),
         "notification": MessageLookupByLibrary.simpleMessage("Notifications"),
         "position": MessageLookupByLibrary.simpleMessage("Position"),
         "post": MessageLookupByLibrary.simpleMessage("Post"),

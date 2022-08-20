@@ -32,7 +32,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Đã có tài khoản"),
         "appearance": MessageLookupByLibrary.simpleMessage("Hiển thị"),
         "badCredentials": MessageLookupByLibrary.simpleMessage(
-            "Username hoặc mật khẩu không chính xác"),
+            "Tên hoặc mật khẩu không chính xác"),
+        "beTheFirstToComment": MessageLookupByLibrary.simpleMessage(
+            "Hãy là người bình luận đầu tiên"),
         "bio": MessageLookupByLibrary.simpleMessage("Tiểu sử"),
         "bookmark": MessageLookupByLibrary.simpleMessage("Đã lưu"),
         "cancel": MessageLookupByLibrary.simpleMessage("Hủy"),
@@ -63,6 +65,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Chụp ảnh mới"),
         "newPhotoFromGallery":
             MessageLookupByLibrary.simpleMessage("Hình trong thư viện"),
+        "noCommentYet":
+            MessageLookupByLibrary.simpleMessage("Chưa có bình luận nào cả"),
+        "notInformation": MessageLookupByLibrary.simpleMessage(
+            "Không có thông tin nào trong mục này"),
         "notification": MessageLookupByLibrary.simpleMessage("Thông báo"),
         "position": MessageLookupByLibrary.simpleMessage("Vị trí"),
         "post": MessageLookupByLibrary.simpleMessage("Bài viết"),
@@ -88,8 +94,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "typeInYourText":
             MessageLookupByLibrary.simpleMessage("Nhập nội dung tin nhắn"),
         "username": MessageLookupByLibrary.simpleMessage("Tên người dùng"),
-        "usernameExist":
-            MessageLookupByLibrary.simpleMessage("Username đã tồn tại"),
+        "usernameExist": MessageLookupByLibrary.simpleMessage("Tên đã tồn tại"),
         "verificationCode": MessageLookupByLibrary.simpleMessage("Mã xác nhận"),
         "viewPhoto": MessageLookupByLibrary.simpleMessage("Xem ảnh"),
         "viewYourProfile":

@@ -143,6 +143,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               alignment: Alignment.topLeft,
               children: [
                 SingleChildScrollView(
+                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,

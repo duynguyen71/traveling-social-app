@@ -78,15 +78,19 @@ class _UserFileUploadGridState extends State<UserFileUploadGrid>
                     color: Colors.white,
                   ),
                   height: 180,
-                  // child: CachedNetworkImage(
-                  //   imageUrl: '$imageUrl${e.name}',
-                  //   fit: BoxFit.cover,
-                  // ),
+                  constraints: const BoxConstraints(
+                    minHeight: 180
+                  ),
                   child: Image.network(
                     '$imageUrl${e.name}',
                     cacheHeight: 180,
+                    filterQuality: FilterQuality.medium,
                     // cacheWidth: 180,
-
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        color: Colors.grey,
+                      );
+                    },
                     fit: BoxFit.fitHeight,
                   ),
                 ))

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
 
 import '../../constants/app_theme_constants.dart';

@@ -10,7 +10,7 @@ class RoundedImageContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: height,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(5),
@@ -19,6 +19,7 @@ class RoundedImageContainer extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(color: Colors.grey.shade200),
             child: CachedNetworkImage(
+              memCacheHeight: int.tryParse('$height'),
               imageUrl: '$imageUrl$name',
               fit: BoxFit.cover,
             ),

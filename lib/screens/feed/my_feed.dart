@@ -22,10 +22,20 @@ class MyFeed extends StatefulWidget {
 }
 
 class _MyFeedState extends State<MyFeed> with AutomaticKeepAliveClientMixin {
+  final _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
     context.read<PostBloc>().add(const FetchPost());
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _scrollController.addListener(() {
+        var position = _scrollController.position;
+        if (position.pixels == position.maxScrollExtent) {
+          context.read<PostBloc>().add(const FetchPost());
+        }
+      });
+    });
   }
 
   @override
@@ -36,36 +46,26 @@ class _MyFeedState extends State<MyFeed> with AutomaticKeepAliveClientMixin {
         context.read<StoryBloc>().add(const FetchStory(isRefreshing: true));
         context.read<PostBloc>().add(const FetchPost(isRefreshing: true));
       },
-      child: NotificationListener<ScrollNotification>(
-        onNotification: (scrollNotification) {
-          var position = scrollNotification.metrics;
-          if (position.pixels == position.maxScrollExtent) {
-            context.read<PostBloc>().add(const FetchPost());
-            return true;
-          }
-          return false;
-        },
-        child: const CustomScrollView(
-          shrinkWrap: true,
-          slivers: [
-            //STORIES
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: 10,
-              ),
+      child: CustomScrollView(
+        controller: _scrollController,
+        shrinkWrap: true,
+        slivers: [
+          //STORIES
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 10,
             ),
-            HomeStories(),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: 10,
-              ),
+          ),
+          HomeStories(),
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 10,
             ),
+          ),
 
-            HomePosts(),
-
-            // BUILDER FOR POSTS STATE
-          ],
-        ),
+          HomePosts(),
+          // BUILDER FOR POSTS STATE
+        ],
       ),
     );
   }

@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final _scrollViewController = ScrollController();
+  // final _scrollViewController = ScrollController();
 
   @override
   void initState() {
@@ -37,7 +37,6 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     super.build(context);
     return NestedScrollView(
-      controller: _scrollViewController,
       headerSliverBuilder: (context, innerBoxIsScrolled) {
         return [
           SliverAppBar(
@@ -120,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void dispose() {
     _tabController.dispose();
-    _scrollViewController.dispose();
+    // _scrollViewController.dispose();
     super.dispose();
   }
 

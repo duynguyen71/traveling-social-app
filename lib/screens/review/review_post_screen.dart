@@ -1,20 +1,12 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/models/Base_review_post_response.dart';
 import 'package:traveling_social_app/models/base_user.dart';
-import 'package:traveling_social_app/screens/profile/profile_screen.dart';
 import 'package:traveling_social_app/screens/review/components/review_post_entry.dart';
 import 'package:traveling_social_app/screens/review/review_post_detail_screen.dart';
-import 'package:traveling_social_app/utilities/application_utility.dart';
-import 'package:traveling_social_app/widgets/rounded_image_container.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 import '../../services/post_service.dart';
 import '../../services/user_service.dart';
-import '../../widgets/my_divider.dart';
-import '../../widgets/user_avt.dart';
 import 'components/post_meta.dart';
 import 'components/review_post_card.dart';
 
@@ -64,7 +56,6 @@ class _ReviewPostScreenState extends State<ReviewPostScreen>
           _page = _page + 1;
         });
       }
-    } catch (e) {
     } finally {
       isLoading = false;
     }
@@ -143,6 +134,7 @@ class _ReviewPostScreenState extends State<ReviewPostScreen>
                     itemBuilder: (context, index) {
                       var post = _posts[index];
                       return ReviewPostEntry(
+                        key: ValueKey(post.id),
                         imageName: post.coverPhoto?.name,
                         title: post.title,
                         onTap: () => Navigator.push(

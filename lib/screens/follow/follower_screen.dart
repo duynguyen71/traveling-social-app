@@ -74,9 +74,9 @@ class _FollowerScreenState extends State<FollowerScreen> {
               itemBuilder: (context, index) {
                 var user = _users[index];
                 assert(user.id != null);
-                print(user.isFollowing);
                 return FollowUserEntry(
                   followText: 'Follow back',
+                  key: ValueKey(user.id),
                   userId: user.id!,
                   isFollowing: user.isFollowing,
                   username: user.username,

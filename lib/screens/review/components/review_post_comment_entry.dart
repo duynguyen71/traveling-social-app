@@ -89,7 +89,9 @@ class _ReviewPostCommentEntryState extends State<ReviewPostCommentEntry> {
                 Padding(
                   padding: (level > 0)
                       ? EdgeInsets.only(
-                          left: level <= 3 ? level * 25 : 4 * 25, top: 5)
+                          left: level <= 3 ? level * 25 : 4 * 25,
+                          top: 10,
+                        )
                       : EdgeInsets.zero,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,10 +161,11 @@ class _ReviewPostCommentEntryState extends State<ReviewPostCommentEntry> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  GestureDetector(
-                                    child: Text('level ${widget.level}'),
-                                    onTap: () {},
-                                  )
+                                  // GestureDetector(
+                                  // child: Text('level ${widget.level}'),
+                                  // onTap: () {
+                                  // },
+                                  // )
                                 ],
                               ),
                             ],

@@ -8,12 +8,11 @@ import 'package:traveling_social_app/widgets/user_avt.dart';
 
 class StoryCard extends StatefulWidget {
   const StoryCard(
-      {Key? key, required this.story, required this.onClick, this.height = 180})
+      {Key? key, required this.story, required this.onClick})
       : super(key: key);
 
   final Post story;
   final Function onClick;
-  final double height;
 
   @override
   State<StoryCard> createState() => _StoryCardState();

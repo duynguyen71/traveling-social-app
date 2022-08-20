@@ -135,6 +135,7 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
             child: Stack(
               children: [
                 SingleChildScrollView(
+                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                   child: Column(
                     children: [
                       Container(

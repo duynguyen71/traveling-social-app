@@ -172,12 +172,10 @@ class _PostEntryState extends State<PostEntry>
           //BUTTONS
           Container(
             decoration: BoxDecoration(
-                color: Colors.lightBlueAccent.withOpacity(.05),
-                borderRadius: BorderRadius.circular(40),
-                border: Border.all(width: .1, color: Colors.grey.shade400),
-                boxShadow: [
-                  // kDefaultPostActionBarShadow,
-                ]),
+              color: Colors.lightBlueAccent.withOpacity(.05),
+              borderRadius: BorderRadius.circular(40),
+              border: Border.all(width: .1, color: Colors.grey.shade400),
+            ),
             alignment: Alignment.center,
             padding: const EdgeInsets.all(4),
             margin: const EdgeInsets.all(8),
@@ -247,21 +245,18 @@ class _PostEntryState extends State<PostEntry>
                     children: [
                       IconButton(
                         onPressed: () {
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
-                              opaque: false,
-                              pageBuilder: (BuildContext context, _, __) =>
-                                  CommentScreen(
-                                postId: widget.post.id!,
-                                myComments: widget.post.myComments,
-                              ),
-                            ),
-                          );
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (context) {
+                                return CommentScreen(
+                                  postId: widget.post.id!,
+                                  myComments: widget.post.myComments,
+                                );
+                              },
+                              backgroundColor: Colors.transparent,
+                              isScrollControlled: true,
+                              isDismissible: true);
                         },
-                        // icon: const Icon(
-                        //   Icons.chat_bubble_outline,
-                        //   color: Colors.black87,
-                        // ),
                         icon: SvgPicture.asset(
                           'assets/icons/comment.svg',
                           width: 24.0,
@@ -269,7 +264,7 @@ class _PostEntryState extends State<PostEntry>
                         ),
                       ),
                       Text(
-                        widget.post.commentCount.toString(),
+                        '${widget.post.commentCount}',
                       ),
                     ],
                   ),
@@ -317,6 +312,7 @@ class _PostEntryState extends State<PostEntry>
                           CupertinoDialogAction(
                             child: const Text('Delete'),
                             onPressed: () {
+                              Navigator.pop(context);
                               context
                                   .read<PostBloc>()
                                   .add(RemovePost(widget.post.id!));

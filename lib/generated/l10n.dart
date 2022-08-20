@@ -659,6 +659,36 @@ class S {
       args: [],
     );
   }
+
+  /// `No comments yet`
+  String get noCommentYet {
+    return Intl.message(
+      'No comments yet',
+      name: 'noCommentYet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `There is no information on this use`
+  String get notInformation {
+    return Intl.message(
+      'There is no information on this use',
+      name: 'notInformation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Be the first to comment`
+  String get beTheFirstToComment {
+    return Intl.message(
+      'Be the first to comment',
+      name: 'beTheFirstToComment',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -26,12 +26,12 @@ class UserAvatar extends StatelessWidget {
           Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(size),
-                  color: Colors.black54),
+                  color: Colors.grey.shade300),
               constraints: BoxConstraints(minWidth: size, minHeight: size),
-              child:
-                  // avt != null?
-                  CachedNetworkImage(
+              child: CachedNetworkImage(
                 imageUrl: '$imageUrl$avt',
+                memCacheHeight: int.tryParse('$size'),
+                memCacheWidth: int.tryParse('$size'),
                 imageBuilder: (context, imageProvider) => Container(
                   height: size,
                   width: size,
@@ -55,20 +55,7 @@ class UserAvatar extends StatelessWidget {
                     ),
                   ),
                 ),
-              )
-              // : Container(
-              //     height: size,
-              //     width: size,
-              //     decoration: const BoxDecoration(
-              //       borderRadius: BorderRadius.all(Radius.circular(100)),
-              //       image: DecorationImage(
-              //         image: AssetImage(
-              //             'assets/images/blank-profile-picture.png'),
-              //         fit: BoxFit.cover,
-              //       ),
-              //     ),
-              //   ),
-              ),
+              )),
           Positioned(
             bottom: 0,
             right: 0,

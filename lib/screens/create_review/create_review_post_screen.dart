@@ -85,6 +85,7 @@ class _CreateReviewPostScreenState extends State<CreateReviewPostScreen>
             NestedScrollView(
               body: ListView(
                 padding: EdgeInsets.zero,
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                 children: [
                   ReviewPostEditor(
                     controller: _controller,

@@ -48,9 +48,9 @@ class _HomeStoriesState extends State<HomeStories>
               mainAxisSize: MainAxisSize.max,
               children: [
                 Container(
-                  height: size.height*.3,
+                  height: size.height*.35,
                   constraints: BoxConstraints(
-                    minHeight: size.height*.3
+                    minHeight: size.height*.35
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: NotificationListener<ScrollNotification>(
@@ -77,7 +77,6 @@ class _HomeStoriesState extends State<HomeStories>
                           );
                         }
                         return StoryCard(
-                            height: size.height * .2,
                             key: ValueKey(stories.elementAt(index).id),
                             story: stories.elementAt(index),
                             onClick: () {
