@@ -27,12 +27,6 @@ class _HomeStoriesState extends State<HomeStories>
     Size size = MediaQuery.of(context).size;
     return SliverToBoxAdapter(
       child: Container(
-        // constraints: BoxConstraints(
-        //   minHeight: size.height * .2,
-        //   maxHeight: 300,
-        // ),
-
-        // width: double.infinity,
         decoration: BoxDecoration(
             color: Colors.white,
             border: Border(
@@ -76,9 +70,10 @@ class _HomeStoriesState extends State<HomeStories>
                             ),
                           );
                         }
+                        var story = stories.elementAt(index);
                         return StoryCard(
-                            key: ValueKey(stories.elementAt(index).id),
-                            story: stories.elementAt(index),
+                            key: ValueKey(story.id),
+                            story: story,
                             onClick: () {
                               context
                                   .read<StoryBloc>()
@@ -92,43 +87,6 @@ class _HomeStoriesState extends State<HomeStories>
                     ),
                   ),
                 ),
-                //SHOW MORE STORIES BUTTON
-                // stories.isNotEmpty && stories.length > 1
-                //     ? Align(
-                //         alignment: Alignment.bottomRight,
-                //         child: Material(
-                //           color: Colors.transparent,
-                //           child: InkWell(
-                //             onTap: () {
-                //               ApplicationUtility.navigateToScreen(
-                //                   context, const StoriesScreen());
-                //             },
-                //             child: Padding(
-                //               padding: const EdgeInsets.all(8.0),
-                //               child: Container(
-                //                 decoration: const BoxDecoration(
-                //                   border: Border(
-                //                     bottom: BorderSide(
-                //                       color: Colors.black12,
-                //                     ),
-                //                   ),
-                //                 ),
-                //                 child: Text(
-                //                   AppLocalizations.of(context)!.showMore,
-                //                   style: const TextStyle(
-                //                       color: kPrimaryColor,
-                //                       fontWeight: FontWeight.w500,
-                //                       fontSize: 12
-                //                       // decoration: TextDecoration.underline,
-                //                       // decorationThickness: 4,
-                //                       ),
-                //                 ),
-                //               ),
-                //             ),
-                //           ),
-                //         ),
-                //       )
-                //     : const SizedBox.shrink(),
               ],
             );
           },

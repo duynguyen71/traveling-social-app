@@ -10,18 +10,7 @@ class SplashScreen extends StatelessWidget {
       MaterialPageRoute<void>(builder: (context) => const SplashScreen());
 
   final LinearGradient _shimmerGradient = const LinearGradient(
-    colors: [
-      // Color(0xFFEBEBF4),
-      Colors.redAccent,
-      Colors.blue, Colors.orange
-    ],
-    // stops: [
-    //   0.1,
-    //   0.3,
-    //   0.4,
-    // ],
-    // begin: Alignment(-1.0, -0.3),
-    // end: Alignment(1.0, 0.3),
+    colors: [Colors.redAccent, Colors.blue, Colors.orange],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     tileMode: TileMode.mirror,
@@ -35,11 +24,12 @@ class SplashScreen extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            ShaderMask(
-              shaderCallback: (Rect bounds) {
-                return _shimmerGradient.createShader(bounds);
-              },
-              child: const CupertinoActivityIndicator(),
+            // Center(child: const CupertinoActivityIndicator(),),
+            Center(
+              child: Image.asset(
+                'assets/icons/tc_launcher_icon.png',
+                filterQuality: FilterQuality.high,
+              ),
             ),
             Positioned(
               bottom: 0,

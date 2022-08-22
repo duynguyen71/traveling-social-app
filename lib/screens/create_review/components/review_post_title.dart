@@ -14,7 +14,6 @@ class ReviewPostTitle extends StatelessWidget {
       padding: padding,
       child: Text(
         title,
-        textAlign: TextAlign.start,
         style: reviewPostTitleTextStyle,
       ),
     );

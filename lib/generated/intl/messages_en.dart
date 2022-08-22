@@ -81,6 +81,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "register": MessageLookupByLibrary.simpleMessage("Register"),
         "review": MessageLookupByLibrary.simpleMessage("Review"),
         "searchInChat": MessageLookupByLibrary.simpleMessage("Search in chat"),
+        "searchTCSocial":
+            MessageLookupByLibrary.simpleMessage("Search TC Social"),
         "send": MessageLookupByLibrary.simpleMessage("Send"),
         "setting": MessageLookupByLibrary.simpleMessage("Setting"),
         "settingAppearanceDescription":

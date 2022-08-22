@@ -3,7 +3,7 @@ import 'package:timeago/timeago.dart';
 class MyCustomViMessages implements LookupMessages {
   @override
   String aDay(int hours) {
-    return '$hours ngày trước';
+    return '1 ngày trước';
   }
 
   @override

@@ -21,6 +21,7 @@ class RoundedImageContainer extends StatelessWidget {
             child: CachedNetworkImage(
               memCacheHeight: int.tryParse('$height'),
               imageUrl: '$imageUrl$name',
+              filterQuality: FilterQuality.medium,
               fit: BoxFit.cover,
             ),
           ),

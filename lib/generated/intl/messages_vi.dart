@@ -79,6 +79,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "review": MessageLookupByLibrary.simpleMessage("Bài review"),
         "searchInChat":
             MessageLookupByLibrary.simpleMessage("Tìm kiếm tin nhắn"),
+        "searchTCSocial":
+            MessageLookupByLibrary.simpleMessage("Tìm trong TC Social"),
         "send": MessageLookupByLibrary.simpleMessage("Gửi"),
         "setting": MessageLookupByLibrary.simpleMessage("Cài đặt"),
         "settingAppearanceDescription": MessageLookupByLibrary.simpleMessage(
@@ -86,7 +88,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "settingLanguageDescription":
             MessageLookupByLibrary.simpleMessage("Chọn ngôn ngữ hiển thị"),
         "showLess": MessageLookupByLibrary.simpleMessage("Thu lại"),
-        "showMore": MessageLookupByLibrary.simpleMessage("Tất cả"),
+        "showMore": MessageLookupByLibrary.simpleMessage("Xem hết"),
         "story": MessageLookupByLibrary.simpleMessage("Bản tin nhanh"),
         "tcLogin": MessageLookupByLibrary.simpleMessage("TC Đăng Nhập"),
         "tcRegister": MessageLookupByLibrary.simpleMessage("TC Đăng Ký"),

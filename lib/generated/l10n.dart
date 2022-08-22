@@ -689,6 +689,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Search TC Social`
+  String get searchTCSocial {
+    return Intl.message(
+      'Search TC Social',
+      name: 'searchTCSocial',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

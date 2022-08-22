@@ -19,7 +19,7 @@
   "message": "Tin nhắn",
   "logOut": "Đăng xuất",
   "aboutUs": "Về chúng tôi",
-  "showMore": "Tất cả",
+  "showMore": "Xem hết",
   "showLess": "Thu lại",
   "tcLogin": "TC Đăng Nhập",
   "tcRegister": "TC Đăng Ký",
@@ -72,5 +72,6 @@
   "aboutAuthor": "Tác giả",
   "noCommentYet": "Chưa có bình luận nào cả",
   "notInformation": "Không có thông tin nào trong mục này",
-  "beTheFirstToComment": "Hãy là người bình luận đầu tiên"
+  "beTheFirstToComment": "Hãy là người bình luận đầu tiên",
+  "searchTCSocial": "Tìm trong TC Social"
 }

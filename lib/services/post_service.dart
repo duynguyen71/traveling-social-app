@@ -504,4 +504,25 @@ class PostService {
     }
     return false;
   }
+
+  /// Remove bookmark
+  Future<bool> removeBookmark(int id) async {
+    final url =
+        Uri.parse(baseUrl + "/api/v1/member/review-posts/bookmarks/$id");
+    final resp = await client.put(url);
+    if (resp.statusCode == 200) return true;
+    return false;
+  }
+
+  // Search review-post
+  Future<List<BaseReviewPostResponse>> searchReviewPosts(key) async {
+    final url =
+        Uri.parse(baseUrl + "/api/v1/member/review-posts/search?keyWord=$key");
+    final resp = await client.get(url);
+    if (resp.statusCode == 200) {
+      var list = jsonDecode(resp.body)['data'] as List<dynamic>;
+      return list.map((e) => BaseReviewPostResponse.fromJson(e)).toList();
+    }
+    return [];
+  }
 }

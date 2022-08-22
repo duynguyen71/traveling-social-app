@@ -119,10 +119,14 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
                           : Column(
                               children: [
                                 // POST TITLE
-                                ReviewPostTitle(
-                                  title: _reviewPostDetail.title!,
-                                  padding: const EdgeInsets.only(top: 8.0),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: ReviewPostTitle(
+                                    title: _reviewPostDetail.title!,
+                                    padding: const EdgeInsets.only(top: 8.0),
+                                  ),
                                 ),
+
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   crossAxisAlignment: CrossAxisAlignment.center,

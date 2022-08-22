@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/services/post_service.dart';
@@ -70,28 +69,26 @@ class _UserFileUploadGridState extends State<UserFileUploadGrid>
         padding: EdgeInsets.zero,
         crossAxisCount: 3,
         childAspectRatio: 1,
-        crossAxisSpacing: 1,
-        mainAxisSpacing: 1,
+        crossAxisSpacing: 2,
+        mainAxisSpacing: 2,
         children: _files
             .map((e) => Container(
                   decoration: const BoxDecoration(
                     color: Colors.white,
                   ),
                   height: 180,
-                  constraints: const BoxConstraints(
-                    minHeight: 180
-                  ),
+                  constraints: const BoxConstraints(minHeight: 180),
                   child: Image.network(
                     '$imageUrl${e.name}',
                     cacheHeight: 180,
                     filterQuality: FilterQuality.medium,
-                    // cacheWidth: 180,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
                         color: Colors.grey,
                       );
                     },
-                    fit: BoxFit.fitHeight,
+                    // fit: BoxFit.fitHeight,
+                    fit: BoxFit.cover,
                   ),
                 ))
             .toList(),

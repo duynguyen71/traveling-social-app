@@ -55,6 +55,7 @@ class _BookmarkScreenState extends State<BookmarkScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    Size size = MediaQuery.of(context).size;
     return NestedScrollView(
       headerSliverBuilder: (context, innerBoxIsScrolled) {
         return [
@@ -62,75 +63,92 @@ class _BookmarkScreenState extends State<BookmarkScreen>
               title: AppLocalizations.of(context)!.bookmark, actions: const [])
         ];
       },
-      body: _bookmarks.isEmpty
-          ? Center(
-              child: EmptyMessageWidget(
-                message: AppLocalizations.of(context)!.notInformation,
-                icon: Transform.rotate(
-                    angle: -math.pi / 12,
-                    child: SvgPicture.asset('assets/icons/bookmark.svg',color:Colors.black54)),
-              ),
-            )
-          : NotificationListener<ScrollNotification>(
-              onNotification: (scrollNotification) {
-                var position = scrollNotification.metrics;
-                if (position.pixels == position.maxScrollExtent &&
-                    !_hasReachMax &&
-                    !_isLoading) {
-                  _getBookmarks();
-                  return true;
-                }
-                return false;
-              },
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  final rs = await _postService.getBookmarkedReviewPosts(
-                      page: 0, pageSize: 8);
-                  setState(() {
-                    _bookmarks = rs;
-                    _page = 1;
-                    _hasReachMax = false;
-                  });
-                },
-                child: ListView.builder(
-                  addAutomaticKeepAlives: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) {
-                    var post = _bookmarks[index];
-                    return Dismissible(
-                      background: Container(
-                        color: Colors.red,
-                        child: const Center(
-                          child: Icon(
-                            Icons.remove,
-                            color: Colors.white,
-                          ),
+      body: NotificationListener<ScrollNotification>(
+        onNotification: (scrollNotification) {
+          var position = scrollNotification.metrics;
+          if (position.pixels == position.maxScrollExtent &&
+              !_hasReachMax &&
+              !_isLoading) {
+            _getBookmarks();
+            return true;
+          }
+          return false;
+        },
+        child: RefreshIndicator(
+          onRefresh: () async {
+            final rs = await _postService.getBookmarkedReviewPosts(
+                page: 0, pageSize: 8);
+            setState(() {
+              _bookmarks = rs;
+              _page = 1;
+              _hasReachMax = false;
+              _isLoading = false;
+            });
+          },
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+          ( _bookmarks.isEmpty&&!_isLoading)?   Positioned(
+                child: Center(
+                  child: EmptyMessageWidget(
+                    message: AppLocalizations.of(context)!.notInformation,
+                    icon: Transform.rotate(
+                        angle: -math.pi / 12,
+                        child: SvgPicture.asset('assets/icons/bookmark.svg',
+                            color: Colors.black54)),
+                  ),
+                ),
+              ):const SizedBox.shrink(),
+              ListView.builder(
+                addAutomaticKeepAlives: true,
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                itemBuilder: (context, index) {
+                  var post = _bookmarks[index];
+                  return Dismissible(
+                    key: UniqueKey(),
+                    background: Container(
+                      color: Colors.red,
+                      child: const Center(
+                        child: Icon(
+                          Icons.remove,
+                          color: Colors.white,
                         ),
                       ),
-                      onDismissed: (direction) async {
-                        _bookmarks.removeAt(index);
-                      },
-                      key: Key(post.id.toString()),
-                      child: ReviewPostEntry(
-                        imageName: post.coverPhoto?.name,
-                        title: post.title,
-                        showFooter: false,
-                        coverImgHeight: 40,
-                        onTap: () => Navigator.push(
-                            context, ReviewPostDetailScreen.route(post.id!)),
-                        child: PostMetadata(
-                            username: post.user?.username,
-                            createDate: post.createDate),
-                      ),
-                    );
-                  },
-                  itemCount: _bookmarks.length,
-                ),
+                    ),
+                    onDismissed: (direction) async {
+                      assert(post.id != null);
+                      _removeBookmark(post.id!, index);
+                    },
+                    child: ReviewPostEntry(
+                      imageName: post.coverPhoto?.name,
+                      title: post.title,
+                      showFooter: false,
+                      coverImgHeight: 40,
+                      onTap: () => Navigator.push(
+                          context, ReviewPostDetailScreen.route(post.id!)),
+                      child: PostMetadata(
+                          username: post.user?.username,
+                          createDate: post.createDate),
+                    ),
+                  );
+                },
+                itemCount: _bookmarks.length,
               ),
-            ),
+            ],
+          ),
+        ),
+      ),
     );
+  }
+
+  void _removeBookmark(int id, int index) async {
+    bool success = await _postService.removeBookmark(id);
+    if (success) {
+      print('remove bookmark post id: $id success!');
+      _bookmarks.removeAt(index);
+    }
   }
 
   @override

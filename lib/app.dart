@@ -165,7 +165,6 @@ class _AppViewState extends State<AppView> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.addObserver(this);
-    print('app view dispose');
     super.dispose();
   }
 }

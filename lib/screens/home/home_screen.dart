@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:traveling_social_app/screens/search/search_input_screen.dart';
 
 import '../../constants/app_theme_constants.dart';
 import '../../my_theme.dart';
 import '../feed/my_feed.dart';
 import '../review/review_post_screen.dart';
-import '../search/search_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -20,8 +20,6 @@ class _HomeScreenState extends State<HomeScreen>
   late TabController _tabController;
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  // final _scrollViewController = ScrollController();
 
   @override
   void initState() {
@@ -37,6 +35,17 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     super.build(context);
     return NestedScrollView(
+      body: Container(
+        color: Colors.grey[100],
+        child: TabBarView(
+          controller: _tabController,
+          physics: const NeverScrollableScrollPhysics(),
+          children: const [
+            MyFeed(),
+            ReviewPostScreen(),
+          ],
+        ),
+      ),
       headerSliverBuilder: (context, innerBoxIsScrolled) {
         return [
           SliverAppBar(
@@ -56,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen>
             actions: [
               IconButton(
                 onPressed: () =>
-                    Navigator.push(context, SearchScreen.route('')),
+                    Navigator.push(context,MaterialPageRoute(builder: (_) =>SearchInputScreen())),
                 icon: SvgPicture.asset(
                   "assets/icons/search.svg",
                   color: Colors.black87,
@@ -66,7 +75,6 @@ class _HomeScreenState extends State<HomeScreen>
             backgroundColor: Colors.white,
             floating: true,
             snap: true,
-            // expandedHeight: 700,
             collapsedHeight: 56,
             elevation: 0,
             bottom: PreferredSize(
@@ -102,24 +110,12 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         ];
       },
-      body: Container(
-        color: Colors.grey[100],
-        child: TabBarView(
-          controller: _tabController,
-          physics: const NeverScrollableScrollPhysics(),
-          children: const [
-            MyFeed(),
-            ReviewPostScreen(),
-          ],
-        ),
-      ),
     );
   }
 
   @override
   void dispose() {
     _tabController.dispose();
-    // _scrollViewController.dispose();
     super.dispose();
   }
 
