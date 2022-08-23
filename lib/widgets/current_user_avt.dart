@@ -11,9 +11,11 @@ class CurrentUserAvt extends StatelessWidget {
     Key? key,
     required this.onTap,
     required this.size,
+    this.padding,
   }) : super(key: key);
   final Function onTap;
   final double size;
+  final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +24,7 @@ class CurrentUserAvt extends StatelessWidget {
         return GestureDetector(
           onTap: () => onTap(),
           child: Container(
+            padding: padding,
             margin: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               color: Colors.grey.shade100,

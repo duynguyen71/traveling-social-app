@@ -266,42 +266,45 @@ class _StoryFullScreenState extends State<StoryFullScreen>
             //MESSAGE INPUT
             Positioned(
               child: Container(
-                height: size.height * .1,
-                constraints: const BoxConstraints(maxHeight: 80),
+                // height: size.height * .1,
+                // constraints: const BoxConstraints(maxHeight: 80),
                 alignment: Alignment.center,
                 width: size.width,
                 padding: const EdgeInsets.all(10),
                 decoration: const BoxDecoration(
-                    color: Colors.black87,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10))),
+                  color: Colors.black87,
+                ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
                       child: TextField(
-                        style: const TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white,fontSize: 14,),
+                        obscureText: false,
+                        maxLines: null,
                         decoration: InputDecoration(
-                            border: const OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(50)),
-                              borderSide: BorderSide(
-                                width: 1,
-                              ),
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 8.0,vertical: 12.0),
+                          isCollapsed: true,
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            borderSide: BorderSide(
+                              width: 1,
                             ),
-                            focusedBorder: const OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(50)),
-                              borderSide: BorderSide(
-                                  width: 1, color: kPrimaryLightColor),
-                            ),
-                            filled: true,
-                            hintStyle: const TextStyle(color: Colors.white10),
-                            hintText:
-                                AppLocalizations.of(context)!.typeInYourText,
-                            fillColor: Colors.white10),
+                          ),
+                          focusedBorder: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            borderSide:
+                                BorderSide(width: 1, color: kPrimaryLightColor),
+                          ),
+                          filled: true,
+                          hintStyle: const TextStyle(
+                              color: Colors.white10, fontSize: 14),
+                          hintText:
+                              AppLocalizations.of(context)!.typeInYourText,
+                          fillColor: Colors.white10,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 10),

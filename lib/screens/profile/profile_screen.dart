@@ -45,8 +45,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-
-
   get isFollowing => _user != null ? _user!.isFollowing : false;
 
   @override
@@ -62,10 +60,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   delegate: SliverChildListDelegate([
                 ProfileHeader(
                   username: _user?.username,
+                  fullName: _user?.fullName,
+                  website: _user?.website,
+                  bio: _user?.bio,
                   avt: _user?.avt,
                   bgImage: _user?.background,
-                  followerCount: _user?.followerCounts,
-                  followingCount: _user?.followingCounts,
+                  followerCount: _user?.followerCounts ?? 0,
+                  followingCount: _user?.followingCounts ?? 0,
                   joinedDate: _user?.createDate,
                   onTapAvt: () {},
                   onTapBg: () {},
@@ -108,7 +109,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         width: 70,
                         child: MyOutlineButton(
                           onClick: () async {
-                            print('get chat group');
                             var chatService = ChatService();
                             Group? chatGroup = await chatService
                                 .getChatGroupBetweenTwoUsers(widget.userId);

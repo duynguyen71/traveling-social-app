@@ -7,10 +7,10 @@ User afvFromJson(String str) => User.fromJson(json.decode(str));
 String afvToJson(User data) => json.encode(data.toJson());
 
 class User with ChangeNotifier {
-
   User.fromJson(dynamic json) {
     id = json['id'];
     username = json['username'];
+    fullName = json['fullName'];
     avt = json['avt'];
     email = json['email'];
     followerCounts = json['followerCounts'] ?? 0;
@@ -18,16 +18,21 @@ class User with ChangeNotifier {
     bio = json['bio'];
     background = json['background'];
     createDate = json['createDate'];
-    isFollowing = json['isFollowing']??false;
+    isFollowing = json['isFollowing'] ?? false;
+    website = json['website'];
+    birthdate = json['birthdate'];
   }
 
   int? id;
   String? username;
+  String? fullName;
   String? avt;
   String? email;
   int followerCounts = 0;
   int followingCounts = 0;
   String? bio;
+  String? website;
+  String? birthdate;
   String? background;
   String? createDate;
   bool isFollowing = false;
@@ -36,10 +41,12 @@ class User with ChangeNotifier {
     final map = <String, dynamic>{};
     map['id'] = id;
     map['username'] = username;
+    map['fullName'] = fullName;
     map['avt'] = avt;
     map['email'] = email;
     map['followerCounts'] = followerCounts;
     map['followingCounts'] = followingCounts;
+    map['birthdate'] = birthdate;
     return map;
   }
 
@@ -55,6 +62,4 @@ class User with ChangeNotifier {
 
   @override
   int get hashCode => id.hashCode;
-
-
 }

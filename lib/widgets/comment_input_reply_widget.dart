@@ -59,59 +59,60 @@ class CommentInputReplyWidget extends StatelessWidget {
         children: [
           showReplyUser
               ? Container(
-            decoration: BoxDecoration(
-              color: Colors.grey.shade200,
-              border: Border(
-                top: BorderSide(
-                  color: Colors.grey.withOpacity(.2),
-                  width: 1,
-                ),
-              ),
-            ),
-            padding:
-            const EdgeInsets.symmetric(horizontal: 10,),
-            alignment: Alignment.centerLeft,
-            width: size.width,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    width: size.width * .7,
-                    constraints: BoxConstraints(
-                      maxWidth: size.width * .7,
-                    ),
-                    child: RichText(
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'Reply to $replyUsername: ',
-                            style: const TextStyle(
-                                color: Colors.black87,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          TextSpan(
-                            text: ' ${message.toString()}',
-                            style: const TextStyle(
-                              color: Colors.blueAccent,
-                            ),
-                          ),
-                        ],
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade200,
+                    border: Border(
+                      top: BorderSide(
+                        color: Colors.grey.withOpacity(.2),
+                        width: 1,
                       ),
                     ),
                   ),
-                ),
-                IconButton(
-                  onPressed: () => onClose(),
-                  icon: const Icon(Icons.close),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                  ),
+                  alignment: Alignment.centerLeft,
+                  width: size.width,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          width: size.width * .7,
+                          constraints: BoxConstraints(
+                            maxWidth: size.width * .7,
+                          ),
+                          child: RichText(
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'Reply to $replyUsername: ',
+                                  style: const TextStyle(
+                                      color: Colors.black87,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                TextSpan(
+                                  text: ' ${message.toString()}',
+                                  style: const TextStyle(
+                                    color: Colors.blueAccent,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => onClose(),
+                        icon: const Icon(Icons.close),
+                      )
+                    ],
+                  ),
                 )
-              ],
-            ),
-          )
               : const SizedBox.shrink(),
           Container(
-            constraints: const BoxConstraints(maxHeight: 60),
+            // constraints: const BoxConstraints(maxHeight: 60),
             alignment: Alignment.center,
             width: size.width,
             decoration: BoxDecoration(
@@ -125,6 +126,7 @@ class CommentInputReplyWidget extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
+                      obscureText: false,
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       autofocus: false,
@@ -132,27 +134,34 @@ class CommentInputReplyWidget extends StatelessWidget {
                       onChanged: (text) => onChange(text),
                       focusNode: focusNode,
                       controller: controller,
-                      style: TextStyle(color: placeHolderColor ?? Colors.black87),
+                      style: TextStyle(
+                          color: placeHolderColor ?? Colors.black87,
+                          fontSize: 14),
                       decoration: InputDecoration(
-                          // enabledBorder: OutlineInputBorder(
-                          //   borderRadius: inputBorderRadius ??
-                          //       const BorderRadius.all(Radius.circular(90)),
-                          //   borderSide: BorderSide(
-                          //       width: 1,
-                          //       color: inputBorderColor ?? Colors.white),
-                          // ),
-                          // focusedBorder: OutlineInputBorder(
-                          //   borderRadius:
-                          //       const BorderRadius.all(Radius.circular(1)),
-                          //   borderSide: BorderSide(
-                          //       width: 1,
-                          //       color: inputBorderColor ?? Colors.white),
-                          // ),
-                          filled: true,
-                          hintStyle: TextStyle(
-                              color: placeHolderColor ?? Colors.black54),
-                          hintText: placeHolderText ?? "Type in your text",
-                          fillColor: inputBgColor ?? Colors.white),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: inputBorderRadius ??
+                              const BorderRadius.all(Radius.circular(20)),
+                          borderSide: BorderSide(
+                              width: 1,
+                              color: inputBorderColor ?? Colors.white),
+                        ),
+                        isCollapsed: true,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(20)),
+                          borderSide: BorderSide(
+                              width: 1,
+                              color: inputBorderColor ?? Colors.white),
+                        ),
+                        filled: true,
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 12),
+                        hintStyle: TextStyle(
+                            color: placeHolderColor ?? Colors.black54,
+                            fontSize: 14),
+                        hintText: placeHolderText ?? "Type in your text",
+                        fillColor: inputBgColor ?? Colors.white,
+                      ),
                     ),
                   ),
                 ),
@@ -167,7 +176,6 @@ class CommentInputReplyWidget extends StatelessWidget {
               ],
             ),
           ),
-
         ],
       ),
     );

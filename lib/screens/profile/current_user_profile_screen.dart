@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/explore/components/post_entry.dart';
-import 'package:traveling_social_app/screens/profile/components/profile_cover_background.dart';
+import 'package:traveling_social_app/screens/profile/components/current_user_profile_header.dart';
 import '../../models/post.dart';
-import '../../models/Review_post_report.dart';
 import '../../my_theme.dart';
 import '../../services/post_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,10 +31,6 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen>
     _postService
         .getCurrentUserPosts(page: 0, pageSize: 10, status: 1)
         .then((value) => setState(() => _posts = value));
-    // _postService
-    //     .getCurrentUserReviewPosts()
-    //     .then((value) => setState(() => _reviewPosts = value));
-    // _postService.getUserFileUploads(context.read<AuthenticationBloc>().state.user.id).then((value) => );
     super.initState();
   }
 
@@ -43,25 +38,6 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      // appBar: PreferredSize(
-      //   preferredSize:const Size.fromHeight(40),
-      //   child: Container(
-      //     decoration: BoxDecoration(
-      //       border: Border(
-      //         bottom: BorderSide(color: Colors.grey.shade200),
-      //       ),
-      //     ),
-      //     child: AppBar(
-      //       elevation: 0,
-      //       centerTitle: false,
-      //       backgroundColor: Colors.white,
-      //       title: Text("Nguyen Khanh Duy"),
-      //       actions: [
-      //         IconButton(onPressed: () {}, icon: const Icon(Icons.add_box_outlined))
-      //       ],
-      //     ),
-      //   ),
-      // ),
       body: DefaultTabController(
         length: 2,
         initialIndex: 0,
@@ -71,7 +47,7 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen>
                 SliverList(
                   delegate: SliverChildListDelegate(
                     [
-                      const ProfileCoverBackground(),
+                      const CurrentUserProfileHeader(),
                       const SizedBox(
                         height: 10,
                       )
@@ -81,7 +57,7 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen>
               ];
             },
             body: Column(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.max,
               children: [
                 Material(
                   color: Colors.white,

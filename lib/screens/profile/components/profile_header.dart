@@ -14,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'icon_with_text.dart';
+import 'package:traveling_social_app/extension/string_apis.dart';
 
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader(
@@ -25,9 +26,13 @@ class ProfileHeader extends StatelessWidget {
       this.bgImage,
       this.joinedDate,
       required this.onTapAvt,
-      required this.onTapBg, required this.buttons})
+      required this.onTapBg,
+      required this.buttons,
+      this.fullName,
+      this.bio,
+      this.website})
       : super(key: key);
-  final String? username;
+  final String? username, fullName, bio, website;
   final int? followingCount, followerCount;
   final String? avt, bgImage, joinedDate;
   final Function onTapAvt, onTapBg;
@@ -79,18 +84,14 @@ class ProfileHeader extends StatelessWidget {
                 Positioned(
                   bottom: 0,
                   right: kDefaultPadding / 2,
-                  // child: Container(
-                  //   constraints: const BoxConstraints(minWidth: 130),
-                  //   padding: const EdgeInsets.symmetric(horizontal: 15),
-                  //   height: 40,
-                  //   child: const ButtonEditProfile(),
-                  // ),
                   child: buttons,
                 ),
               ],
             ),
           ),
-          //USER INFO
+          const SizedBox(
+            height: 10,
+          ),
           Align(
             alignment: Alignment.topLeft,
             child: Padding(
@@ -100,12 +101,22 @@ class ProfileHeader extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  fullName.isNullOrBlank
+                      ? const SizedBox.shrink()
+                      : Text(
+                          '$fullName',
+                          style: const TextStyle(
+                              color: Colors.black87,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: .6),
+                        ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    padding: const EdgeInsets.only(bottom: 8.0),
                     child: Text(
-                      '$username',
+                      '@${username ?? ''}',
                       style:
-                          const TextStyle(color: Colors.black54, fontSize: 18),
+                          const TextStyle(color: Colors.black54, fontSize: 16),
                     ),
                   ),
                   Row(
@@ -138,33 +149,42 @@ class ProfileHeader extends StatelessWidget {
                                 )),
                             const SizedBox(width: 10),
                             IconTextButton(
-                                text: Jiffy(joinedDate == null
-                                        ? DateTime.now()
-                                        : DateTime.parse('$joinedDate'))
-                                    .format('dd-MM-yyyy'),
-                                icon: const Icon(
-                                  Icons.calendar_today_outlined,
-                                  color: Colors.black87,
-                                  size: 16,
-                                )),
+                              text: Jiffy(joinedDate == null
+                                      ? DateTime.now()
+                                      : DateTime.parse('$joinedDate'))
+                                  .format('dd-MM-yyyy'),
+                              icon: const Icon(
+                                Icons.calendar_today_outlined,
+                                color: Colors.black87,
+                                size: 16,
+                              ),
+                            ),
                           ],
                         ),
                         const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: const [
-                            IconTextButton(
-                                text: "Live in",
-                                icon: Icon(
-                                  Icons.location_on_outlined,
+                        website.isNullOrBlank
+                            ? const SizedBox.shrink()
+                            : IconTextButton(
+                                text: '$website',
+                                icon: const Icon(
+                                  Icons.link,
                                   color: Colors.black87,
                                   size: 16,
-                                )),
-                          ],
-                        ),
+                                ),
+                              ),
                       ],
                     ),
                   ),
+                bio.isNullOrBlank?const SizedBox.shrink():  Container(
+                    margin: const EdgeInsets.only(bottom: 8.0),
+                    child: Text(
+                      bio ?? '',
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style:
+                          const TextStyle(color: Colors.black87, fontSize: 14),
+                    ),
+                  )
                 ],
               ),
             ),

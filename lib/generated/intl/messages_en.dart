@@ -27,7 +27,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "aboutAuthor": MessageLookupByLibrary.simpleMessage("About author"),
         "aboutUs": MessageLookupByLibrary.simpleMessage("About us"),
         "account": MessageLookupByLibrary.simpleMessage("Account"),
+        "addBio":
+            MessageLookupByLibrary.simpleMessage("Add a bio to your profile"),
         "addLocation": MessageLookupByLibrary.simpleMessage("Add location"),
+        "addWebsite": MessageLookupByLibrary.simpleMessage("Add your website"),
+        "addYourBirthDate":
+            MessageLookupByLibrary.simpleMessage("Add your birthday"),
+        "addYourFullName":
+            MessageLookupByLibrary.simpleMessage("Add your full name"),
+        "addYourLocation":
+            MessageLookupByLibrary.simpleMessage("Add your location"),
         "alreadyHaveAccount":
             MessageLookupByLibrary.simpleMessage("Already have account"),
         "appearance": MessageLookupByLibrary.simpleMessage("Appearance"),
@@ -36,6 +45,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "beTheFirstToComment":
             MessageLookupByLibrary.simpleMessage("Be the first to comment"),
         "bio": MessageLookupByLibrary.simpleMessage("Bio"),
+        "birthDate": MessageLookupByLibrary.simpleMessage("Birthday"),
         "bookmark": MessageLookupByLibrary.simpleMessage("Bookmark"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "comment": MessageLookupByLibrary.simpleMessage("Comment"),
@@ -56,10 +66,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "following": MessageLookupByLibrary.simpleMessage("Following"),
         "forgotPassword":
             MessageLookupByLibrary.simpleMessage("Forgot password"),
+        "fullName": MessageLookupByLibrary.simpleMessage("Full name"),
         "home": MessageLookupByLibrary.simpleMessage("Home"),
         "joinedDate": m0,
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "liveIn": MessageLookupByLibrary.simpleMessage("Live in"),
+        "location": MessageLookupByLibrary.simpleMessage("Location"),
         "logOut": MessageLookupByLibrary.simpleMessage("Logout"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "love": MessageLookupByLibrary.simpleMessage("Love"),
@@ -80,6 +92,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "profile": MessageLookupByLibrary.simpleMessage("Profile"),
         "register": MessageLookupByLibrary.simpleMessage("Register"),
         "review": MessageLookupByLibrary.simpleMessage("Review"),
+        "save": MessageLookupByLibrary.simpleMessage("Save"),
         "searchInChat": MessageLookupByLibrary.simpleMessage("Search in chat"),
         "searchTCSocial":
             MessageLookupByLibrary.simpleMessage("Search TC Social"),

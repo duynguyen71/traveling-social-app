@@ -1,11 +1,25 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
-import 'package:traveling_social_app/screens/edit_profile/edit_profile_screen.dart';
-import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:traveling_social_app/models/update_base_user_info.dart';
+
+import '../edit_profile.dart';
 
 class ButtonEditProfile extends StatelessWidget {
-  const ButtonEditProfile({Key? key}) : super(key: key);
+  const ButtonEditProfile(
+      {Key? key,
+      required this.onUpdateCallback,
+      required this.onTapUserAvt,
+      required this.onTapCoverBg})
+      : super(key: key);
+
+  final Future<void> Function(UpdateBaseUserInfo userInfo) onUpdateCallback;
+  final Function(BuildContext context) onTapUserAvt;
+  final Function(BuildContext context) onTapCoverBg;
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +34,24 @@ class ButtonEditProfile extends StatelessWidget {
       ),
       child: TextButton(
         onPressed: () {
-          ApplicationUtility.navigateToScreen(
-              context, const EditProfileScreen());
+          showModalBottomSheet(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              context: context,
+              builder: (context) {
+                return EditProfile(
+                  onUpdateCallback: onUpdateCallback,
+                  onTapUserAvt: (BuildContext context) {
+                    onTapUserAvt(context);
+                  },
+                  onTapCoverBg: (BuildContext context) {
+                    onTapCoverBg(context);
+                  },
+                );
+              },
+              backgroundColor: Colors.transparent,
+              isDismissible: true,
+              isScrollControlled: true);
         },
         child: Text(
           AppLocalizations.of(context)!.editProfile,

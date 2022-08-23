@@ -29,6 +29,8 @@ class SplashScreen extends StatelessWidget {
               child: Image.asset(
                 'assets/icons/tc_launcher_icon.png',
                 filterQuality: FilterQuality.high,
+                height: 64,
+                width: 64,
               ),
             ),
             Positioned(

@@ -73,5 +73,14 @@
   "noCommentYet": "Chưa có bình luận nào cả",
   "notInformation": "Không có thông tin nào trong mục này",
   "beTheFirstToComment": "Hãy là người bình luận đầu tiên",
-  "searchTCSocial": "Tìm trong TC Social"
+  "searchTCSocial": "Tìm trong TC Social",
+  "addBio": "Thêm tiểu sử",
+  "addWebsite": "Thêm trang web cá nhân",
+  "save": "Lưu",
+  "location": "Địa chỉ",
+  "addYourLocation": "Thêm địa chỉ của bạn",
+  "birthDate": "Ngày sinh",
+  "addYourBirthDate": "Thêm ngày sinh",
+  "fullName": "Họ & tên",
+  "addYourFullName": "Thêm họ tên của bạn"
 }

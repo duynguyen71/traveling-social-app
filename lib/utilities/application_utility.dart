@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:intl/intl.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/widgets/bottom_select_dialog.dart';
@@ -63,7 +64,7 @@ class ApplicationUtility {
     // var size = await getFileSize(filePath, 0);
     var mb = getFileSizeInMb(File(filePath));
     print('file length mb: $mb');
-    if(mb<=.8){
+    if (mb <= .8) {
       print('ko commpress image');
       return File(filePath);
     }
@@ -118,5 +119,17 @@ class ApplicationUtility {
     if (info == null) return null;
     // return info.height / info.width;
     return info.width / info.height;
+  }
+
+  static String? formatDate(String? str,
+      {Locale? locale, String formatPattern = "dd-MMM-yyyy"}) {
+    try {
+      var format = DateFormat(formatPattern, locale?.toString())
+          .format(DateTime.parse('$str'));
+      return format;
+    } catch (e) {
+      print('failed to format date: $e');
+      return null;
+    }
   }
 }

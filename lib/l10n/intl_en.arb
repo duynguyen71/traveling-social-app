@@ -73,5 +73,14 @@
   "noCommentYet": "No comments yet",
   "notInformation": "There is no information on this use",
   "beTheFirstToComment": "Be the first to comment",
-  "searchTCSocial": "Search TC Social"
+  "searchTCSocial": "Search TC Social",
+  "addBio": "Add a bio to your profile",
+  "addWebsite": "Add your website",
+  "save": "Save",
+  "location": "Location",
+  "addYourLocation": "Add your location",
+  "birthDate": "Birthday",
+  "addYourBirthDate": "Add your birthday",
+  "fullName": "Full name",
+  "addYourFullName": "Add your full name"
 }

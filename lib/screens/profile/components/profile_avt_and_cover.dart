@@ -16,6 +16,7 @@ import 'package:traveling_social_app/widgets/current_user_avt.dart';
 import '../../../constants/api_constants.dart';
 import '../../../constants/app_theme_constants.dart';
 
+import '../../../models/update_base_user_info.dart';
 import 'button_edit_profile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -34,8 +35,8 @@ class _ProfileAvtAndCoverState extends State<ProfileAvtAndCover> {
   @override
   void initState() {
     super.initState();
-
   }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -69,8 +70,7 @@ class _ProfileAvtAndCoverState extends State<ProfileAvtAndCover> {
             width: double.infinity,
             child: GestureDetector(
               onTap: () {
-                ApplicationUtility.showBottomDialog(
-                    context, _backgroundPhotoBottomDialogItems);
+                _onTapCoverBg(context);
               },
               //BACKGROUND
               child: AspectRatio(
@@ -94,13 +94,9 @@ class _ProfileAvtAndCoverState extends State<ProfileAvtAndCover> {
             bottom: 0,
             left: kDefaultPadding,
             child: CurrentUserAvt(
+              padding: const EdgeInsets.all(4.0),
               onTap: () {
-                ApplicationUtility.showModelBottomDialog(
-                  context,
-                  MyBottomDialog(
-                    items: _bottomDialogItems,
-                  ),
-                );
+                _onTapUserAvt(context);
               },
               size: 150,
             ),
@@ -112,7 +108,17 @@ class _ProfileAvtAndCoverState extends State<ProfileAvtAndCover> {
               constraints: const BoxConstraints(minWidth: 130),
               padding: const EdgeInsets.symmetric(horizontal: 15),
               height: 40,
-              child: const ButtonEditProfile(),
+              child: ButtonEditProfile(
+                onUpdateCallback: (UpdateBaseUserInfo info) async {
+                  bool isSuccess = await _userService.updateBaseUserInfo(info);
+                  if (isSuccess) {
+                    context.read<AuthenticationBloc>().add(UserInfoChanged());
+                  }
+                  return;
+                },
+                onTapUserAvt: (context) => _onTapUserAvt(context),
+                onTapCoverBg: (context) => _onTapCoverBg(context),
+              ),
             ),
           ),
         ],
@@ -120,10 +126,26 @@ class _ProfileAvtAndCoverState extends State<ProfileAvtAndCover> {
     );
   }
 
+  void _onTapCoverBg(BuildContext context) {
+    ApplicationUtility.showBottomDialog(
+        context, _backgroundPhotoBottomDialogItems);
+  }
+
+  void _onTapUserAvt(BuildContext context) {
+    ApplicationUtility.showModelBottomDialog(
+      context,
+      MyBottomDialog(
+        items: _bottomDialogItems,
+      ),
+    );
+  }
+
   Future<File?> _pickImageFromGallery(
-      {required CropStyle cropStyle,
-      required List<CropAspectRatioPreset> presets,
-      required ImageSource source}) async {
+      {CropStyle cropStyle = CropStyle.rectangle,
+      List<CropAspectRatioPreset> presets = const [
+        CropAspectRatioPreset.ratio16x9
+      ],
+      ImageSource source = ImageSource.gallery}) async {
     XFile? pickedFile = await ImagePicker().pickImage(source: source);
     if (pickedFile != null) {
       File? file =
@@ -142,7 +164,6 @@ class _ProfileAvtAndCoverState extends State<ProfileAvtAndCover> {
             initAspectRatio: CropAspectRatioPreset.square,
             lockAspectRatio: false,
             cropFrameColor: Colors.transparent,
-
           ),
           IOSUiSettings(
             title: 'Cropper',

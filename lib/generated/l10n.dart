@@ -699,6 +699,96 @@ class S {
       args: [],
     );
   }
+
+  /// `Add a bio to your profile`
+  String get addBio {
+    return Intl.message(
+      'Add a bio to your profile',
+      name: 'addBio',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add your website`
+  String get addWebsite {
+    return Intl.message(
+      'Add your website',
+      name: 'addWebsite',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save`
+  String get save {
+    return Intl.message(
+      'Save',
+      name: 'save',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Location`
+  String get location {
+    return Intl.message(
+      'Location',
+      name: 'location',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add your location`
+  String get addYourLocation {
+    return Intl.message(
+      'Add your location',
+      name: 'addYourLocation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Birthday`
+  String get birthDate {
+    return Intl.message(
+      'Birthday',
+      name: 'birthDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add your birthday`
+  String get addYourBirthDate {
+    return Intl.message(
+      'Add your birthday',
+      name: 'addYourBirthDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Full name`
+  String get fullName {
+    return Intl.message(
+      'Full name',
+      name: 'fullName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add your full name`
+  String get addYourFullName {
+    return Intl.message(
+      'Add your full name',
+      name: 'addYourFullName',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

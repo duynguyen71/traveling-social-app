@@ -27,7 +27,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "aboutAuthor": MessageLookupByLibrary.simpleMessage("Tác giả"),
         "aboutUs": MessageLookupByLibrary.simpleMessage("Về chúng tôi"),
         "account": MessageLookupByLibrary.simpleMessage("Tài khoản"),
+        "addBio": MessageLookupByLibrary.simpleMessage("Thêm tiểu sử"),
         "addLocation": MessageLookupByLibrary.simpleMessage("Chọn địa điểm"),
+        "addWebsite":
+            MessageLookupByLibrary.simpleMessage("Thêm trang web cá nhân"),
+        "addYourBirthDate":
+            MessageLookupByLibrary.simpleMessage("Thêm ngày sinh"),
+        "addYourFullName":
+            MessageLookupByLibrary.simpleMessage("Thêm họ tên của bạn"),
+        "addYourLocation":
+            MessageLookupByLibrary.simpleMessage("Thêm địa chỉ của bạn"),
         "alreadyHaveAccount":
             MessageLookupByLibrary.simpleMessage("Đã có tài khoản"),
         "appearance": MessageLookupByLibrary.simpleMessage("Hiển thị"),
@@ -36,6 +45,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "beTheFirstToComment": MessageLookupByLibrary.simpleMessage(
             "Hãy là người bình luận đầu tiên"),
         "bio": MessageLookupByLibrary.simpleMessage("Tiểu sử"),
+        "birthDate": MessageLookupByLibrary.simpleMessage("Ngày sinh"),
         "bookmark": MessageLookupByLibrary.simpleMessage("Đã lưu"),
         "cancel": MessageLookupByLibrary.simpleMessage("Hủy"),
         "comment": MessageLookupByLibrary.simpleMessage("Bình luận"),
@@ -52,10 +62,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "follower": MessageLookupByLibrary.simpleMessage("Người theo dõi"),
         "following": MessageLookupByLibrary.simpleMessage("Đang theo dõi"),
         "forgotPassword": MessageLookupByLibrary.simpleMessage("Quên mật khẩu"),
+        "fullName": MessageLookupByLibrary.simpleMessage("Họ & tên"),
         "home": MessageLookupByLibrary.simpleMessage("Trang chủ"),
         "joinedDate": m0,
         "language": MessageLookupByLibrary.simpleMessage("Ngôn ngữ"),
         "liveIn": MessageLookupByLibrary.simpleMessage("Sống tại"),
+        "location": MessageLookupByLibrary.simpleMessage("Địa chỉ"),
         "logOut": MessageLookupByLibrary.simpleMessage("Đăng xuất"),
         "login": MessageLookupByLibrary.simpleMessage("Đăng nhập"),
         "love": MessageLookupByLibrary.simpleMessage("Yêu thích"),
@@ -77,6 +89,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "profile": MessageLookupByLibrary.simpleMessage("Hồ sơ"),
         "register": MessageLookupByLibrary.simpleMessage("Đăng ký"),
         "review": MessageLookupByLibrary.simpleMessage("Bài review"),
+        "save": MessageLookupByLibrary.simpleMessage("Lưu"),
         "searchInChat":
             MessageLookupByLibrary.simpleMessage("Tìm kiếm tin nhắn"),
         "searchTCSocial":

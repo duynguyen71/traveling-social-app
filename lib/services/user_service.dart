@@ -8,10 +8,12 @@ import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/models/base_user.dart';
 import 'package:traveling_social_app/models/file_upload.dart';
 import 'package:traveling_social_app/models/post.dart';
+import 'package:traveling_social_app/models/update_base_user_info.dart';
 import 'package:traveling_social_app/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:traveling_social_app/utilities/application_utility.dart';
 
 import '../config/base_interceptor.dart';
 import '../config/expired_token_retry.dart';
@@ -75,6 +77,18 @@ class UserService {
     return null;
   }
 
+  /// Update base user info
+  Future<bool> updateBaseUserInfo(UpdateBaseUserInfo info) async {
+    final url = Uri.parse("$baseUrl/api/v1/member/users/me");
+    final resp = await client.put(url,
+        body: jsonEncode(info.toJson()));
+    if (resp.statusCode == 200) {
+      print('Update user info success');
+      return true;
+    }
+    return false;
+  }
+
   Future<User?> getUserDetail({required int userId}) async {
     final url = Uri.parse(baseUrl + "/api/v1/member/users/$userId");
     final resp = await http.get(url, headers: await authorizationHeader());
@@ -118,7 +132,7 @@ class UserService {
 
   //validate user input @return String error message
   Future<String?> checkValidationInput(
-      {required String input, required String value}) async {
+      {required String input, required String? value}) async {
     final url = Uri.parse(
         baseUrl + '/api/v1/public/validation-input?input=$input&value=$value');
     final resp = await http.get(url);
@@ -343,24 +357,26 @@ class UserService {
       print(jsonDecode(resp.body));
     }
   }
-  Future<void> getNotificationMessage() async {
 
-  }
+  Future<void> getNotificationMessage() async {}
 
   // Get following
-  Future<List<BaseUserInfo>> getFollowing({int? page ,int? pageSize})async{
-    final url = Uri.parse("$baseUrl/api/v1/member/users/me/following?page=$page&pageSize=$pageSize");
+  Future<List<BaseUserInfo>> getFollowing({int? page, int? pageSize}) async {
+    final url = Uri.parse(
+        "$baseUrl/api/v1/member/users/me/following?page=$page&pageSize=$pageSize");
     final resp = await client.get(url);
-    if(resp.statusCode==200){
+    if (resp.statusCode == 200) {
       var list = jsonDecode(resp.body)['data'] as List<dynamic>;
       return list.map((e) => BaseUserInfo.fromJson(e)).toList();
     }
     return [];
-  }  // Get followr
-  Future<List<BaseUserInfo>> getFollower({int? page ,int? pageSize})async{
-    final url = Uri.parse("$baseUrl/api/v1/member/users/me/followers?page=$page&pageSize=$pageSize");
+  } // Get followr
+
+  Future<List<BaseUserInfo>> getFollower({int? page, int? pageSize}) async {
+    final url = Uri.parse(
+        "$baseUrl/api/v1/member/users/me/followers?page=$page&pageSize=$pageSize");
     final resp = await client.get(url);
-    if(resp.statusCode==200){
+    if (resp.statusCode == 200) {
       var list = jsonDecode(resp.body)['data'] as List<dynamic>;
       print(list);
       return list.map((e) => BaseUserInfo.fromJson(e)).toList();
