@@ -11,7 +11,8 @@ class GroupChatEntry extends StatelessWidget {
       required this.onClick,
       this.avt,
       required this.countMember,
-      this.lastMessage, this.isUserActive})
+      this.lastMessage,
+      this.isUserActive})
       : super(key: key);
 
   final String name;
@@ -45,7 +46,12 @@ class GroupChatEntry extends StatelessWidget {
                     Stack(
                       alignment: Alignment.center,
                       children: [
-                        UserAvatar(size: 40, avt: avt, onTap: () {},isActive: isUserActive,),
+                        UserAvatar(
+                          size: 40,
+                          avt: avt,
+                          onTap: () {},
+                          isActive: isUserActive,
+                        ),
                         Visibility(
                           visible: countMember > 2,
                           child: Positioned(
@@ -78,11 +84,15 @@ class GroupChatEntry extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                         //lasted message
-                        Text(
-                          lastMessage != null
-                              ? lastMessage!.message.toString()
-                              : '',
-                          style: MyTheme.bodyText1,
+                        Container(
+                          constraints: BoxConstraints(
+                              maxWidth: MediaQuery.of(context).size.width * .6),
+                          child: Text(
+                            lastMessage?.message ?? '',
+                            style: MyTheme.bodyText1,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
                         ),
                       ],
                     ),

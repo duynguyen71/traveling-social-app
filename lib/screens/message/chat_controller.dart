@@ -10,6 +10,7 @@ class ChatController extends StatelessWidget {
     required this.onSendBtnPressed,
     this.focusNode,
     this.onChange,
+    this.onSubmitted,
     required this.isTextMessageEmpty,
   }) : super(key: key);
 
@@ -17,77 +18,71 @@ class ChatController extends StatelessWidget {
   final TextEditingController messageController;
   final FocusNode? focusNode;
   final Function onSendBtnPressed;
-  final Function? onChange;
+  final Function(String str)? onChange;
+  final Function(String value)? onSubmitted;
   final bool isTextMessageEmpty;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: kChatControllerHeight,
-      // constraints: const BoxConstraints(
-      //   minHeight: kChatControllerHeight,
-      // ),
-      decoration: const BoxDecoration(
-        color: kPrimaryColor,
-      ),
+      constraints: const BoxConstraints(maxHeight: 200),
+      decoration: BoxDecoration(
+          color: kPrimaryColor,
+          border: Border(
+            top: BorderSide(color: kPrimaryLightColor, width: 1),
+          )),
+      padding: const EdgeInsets.all(4.0),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          IconButton(
-            alignment: Alignment.center,
-            constraints: const BoxConstraints(),
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            onPressed: () {},
-            icon: const Icon(
-              Icons.face_retouching_natural,
-              color: Colors.white,
-            ),
-          ),
           Expanded(
             child: Container(
-              alignment: Alignment.center,
-              // constraints: BoxConstraints(
-              //   minHeight: kChatControllerHeight,
-              // ),
-              height: kChatControllerHeight - 10,
-              decoration: BoxDecoration(
-                  color: Colors.grey.shade50,
-                  borderRadius: BorderRadius.circular(40)),
-              // margin: const EdgeInsets.symmetric(horizontal: 5),
+              color: Colors.transparent,
+              constraints: const BoxConstraints(maxHeight: 200),
               child: TextField(
-                style: const TextStyle(color: kPrimaryColor),
+                style: const TextStyle(color: kPrimaryColor, fontSize: 14),
                 keyboardType: TextInputType.multiline,
                 textAlign: TextAlign.left,
-                // minLines: null,
                 maxLines: null,
-                textInputAction: TextInputAction.next,
-                // expands: true,
-
-                onChanged: (string) =>
-                    onChange != null ? onChange!(string) : () {},
+                textInputAction: TextInputAction.send,
+                onSubmitted: onSubmitted,
+                onChanged: onChange,
                 focusNode: focusNode,
                 controller: messageController,
                 decoration: InputDecoration(
-                  // isDense: true,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                  enabledBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  focusedBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  isCollapsed: true,
+                  filled: true,
+                  fillColor: Colors.grey.shade200,
+                  contentPadding: const EdgeInsets.all(8.0),
                   border: InputBorder.none,
                   hintStyle: TextStyle(
                     color: Colors.white.withOpacity(.55),
+                    fontSize: 14,
                   ),
                   hintText: "Enter message",
                 ),
               ),
             ),
           ),
-          IconButton(
-            alignment: Alignment.center,
-            constraints: const BoxConstraints(),
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            onPressed: () => !isTextMessageEmpty ? onSendBtnPressed() : null,
-            icon: Icon(
-              Icons.send,
-              color: isTextMessageEmpty ? Colors.grey : Colors.white,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: TextButton(
+              onPressed: () => isTextMessageEmpty ? null : onSendBtnPressed(),
+              style: TextButton.styleFrom(
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                minimumSize: const Size.fromRadius(10),
+              ),
+              child: Icon(
+                Icons.send,
+                color: isTextMessageEmpty ? Colors.grey : Colors.white,
+              ),
             ),
           ),
         ],

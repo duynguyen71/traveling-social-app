@@ -75,19 +75,13 @@ class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
                         },
                         icon: Icons.add,
                         size: 30,
-                        // child: IconButton(
-                        //   onPressed: () {},
-                        //   icon: const Icon(Icons.add, color: Colors.black45),
-                        // ),
                       ),
                     ),
                   ),
                 ],
 
                 backgroundColor: Colors.white,
-                // floating: true,
                 pinned: true,
-                // snap: true,
                 centerTitle: true,
                 title: RoundedInputContainer(
                   color: Colors.grey.shade100,
@@ -98,13 +92,17 @@ class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
                       print('on submitted');
                     },
                     decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Search in chat',
-                        hintStyle: TextStyle(
-                          letterSpacing: .5,
-                          fontSize: 14,
-                          // fontStyle: FontStyle.italic
-                        )),
+                      isCollapsed: true,
+                      border: InputBorder.none,
+                      hintText: 'Search in chat',
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                      hintStyle: TextStyle(
+                        letterSpacing: .5,
+                        fontSize: 14,
+                        // fontStyle: FontStyle.italic
+                      ),
+                    ),
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   margin: EdgeInsets.zero,

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:stomp_dart_client/stomp.dart';
@@ -9,6 +10,7 @@ import 'package:stomp_dart_client/stomp_config.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
+import 'package:traveling_social_app/extension/string_apis.dart';
 import 'package:traveling_social_app/models/chat_group_status.dart';
 import 'package:traveling_social_app/models/group_status.dart';
 import 'package:traveling_social_app/screens/message/components/chat_screen_drawer.dart';
@@ -22,6 +24,7 @@ import '../../models/base_user.dart';
 import '../../models/message.dart';
 import 'chat_controller.dart';
 import 'package:provider/provider.dart';
+import 'dart:math' as Math;
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({
@@ -37,10 +40,11 @@ class ChatScreen extends StatefulWidget {
   _ChatScreenState createState() => _ChatScreenState();
 
   static Route route({required int groupId, String? name}) => MaterialPageRoute(
-      builder: (_) => ChatScreen(
-            groupId: groupId,
-            tmpGroupName: name,
-          ));
+        builder: (_) => ChatScreen(
+          groupId: groupId,
+          tmpGroupName: name,
+        ),
+      );
 }
 
 class _ChatScreenState extends State<ChatScreen> {
@@ -59,29 +63,47 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _scrollController.addListener(() {
+        var position = _scrollController.position;
+        if ((position.maxScrollExtent - position.pixels) <=
+            MediaQueryData.fromWindow(WidgetsBinding.instance.window)
+                    .size
+                    .height *
+                .2) {
+          if (!_isLoading) {
+            isLoading = true;
+            _chatService
+                .getMessages(widget.groupId,
+                    direction: "DESC",
+                    sortBy: "createDate",
+                    page: ++_page,
+                    pageSize: _pageSize)
+                .then((value) => setState(() => _messages.addAll(value)))
+                .whenComplete(() => isLoading = false);
+          }
+        }
+      });
+    });
     //get chat group detail
-    _getGroupDetail();
+    // _getGroupDetail();
     //get messages
     _getMessages(page: _page, pageSize: _pageSize);
     //connect socket
-    _connectSocketServer();
-    // mock data
-    _chatController.text = 'Message ${DateTime.now().millisecondsSinceEpoch}';
-    _focusNode.addListener(() {
-      if (_focusNode.hasFocus &&
-          MediaQuery.of(context).viewInsets.bottom != 0) {
-        _scrollController.animateTo(0,
-            duration: const Duration(milliseconds: 0), curve: Curves.linear);
-      }
-    });
+    if (mounted) {
+      _connectSocketServer();
+    }
+    // mock message data
+    _chatController.text =
+        lorem(paragraphs: 1, words: Math.Random().nextInt(10) + 6);
     _isTextMessageEmpty = false;
-    super.initState();
   }
 
   int get groupId => widget.groupId;
 
   _getGroupDetail() async {
-    var chatGroupDetail = await _chatService.getChatGroupDetail(groupId);
+    // var chatGroupDetail = await _chatService.getChatGroupDetail(groupId);
   }
 
   // StompBadStateException
@@ -93,17 +115,11 @@ class _ChatScreenState extends State<ChatScreen> {
           "Authorization": 'Bearer ${await _storage.read(key: 'accessToken')}'
         },
         onConnect: (StompFrame frame) {
-          print("Connect web socket success");
           //subscribe messages
           _stompClient.subscribe(
             destination: '/queue/groups/$groupId',
             callback: (frame) {
-              var jsonMessage =
-                  (jsonDecode(frame.body.toString()) as Map<String, dynamic>);
-              var m = Message.fromJson(jsonMessage);
-              setState(() {
-                _messages = {m}.union(_messages);
-              });
+              _onReciveMessage(frame);
             },
           );
           //subscribe to group status
@@ -124,13 +140,26 @@ class _ChatScreenState extends State<ChatScreen> {
     _stompClient.activate();
   }
 
+  void _onReciveMessage(StompFrame frame) {
+    var jsonMessage =
+        (jsonDecode(frame.body.toString()) as Map<String, dynamic>);
+    var m = Message.fromJson(jsonMessage);
+    var newMessages = {m, ..._messages};
+    setState(() {
+      _messages = newMessages;
+      // _scrollController.jumpTo(0);
+    });
+  }
+
   // handle group status changes
   _handleFrameStatusChange(Map<String, dynamic> json) {
+    if (!mounted) return;
     GroupStatus groupStatus = GroupStatus.fromJson(json);
     if (!isMyAccount(groupStatus.user!)) {
-      if (groupStatus.status == ChatGroupStatus.typing.value) {
+      var isTyping = groupStatus.status == ChatGroupStatus.typing.value;
+      if (isTyping && _isTyping != true) {
         setState(() => _isTyping = true);
-      } else {
+      } else if (!isTyping && _isTyping != false) {
         setState(() => _isTyping = false);
       }
     }
@@ -158,8 +187,9 @@ class _ChatScreenState extends State<ChatScreen> {
       print('Failed to send message: $e');
     } finally {
       _sendStatus(status: ChatGroupStatus.sent.value);
-      text = "Message ${DateTime.now().millisecondsSinceEpoch}";
-      // _clearTextMessage();
+      _chatController.text =
+          lorem(words: Math.Random().nextInt(10) + 5, paragraphs: 1);
+      _scrollController.jumpTo(0);
     }
   }
 
@@ -187,28 +217,10 @@ class _ChatScreenState extends State<ChatScreen> {
       setState(() => _messages = messages);
     } on Exception catch (e) {
       print('Failed to get group $groupId messages: $e');
+      Navigator.pop(context);
+      return;
     } finally {
       isLoading = false;
-      _scrollController.addListener(() {
-        var position = _scrollController.position;
-        if ((position.maxScrollExtent - position.pixels) <=
-            MediaQueryData.fromWindow(WidgetsBinding.instance.window)
-                    .size
-                    .height *
-                .2) {
-          if (!_isLoading) {
-            isLoading = true;
-            _chatService
-                .getMessages(widget.groupId,
-                    direction: "DESC",
-                    sortBy: "createDate",
-                    page: ++_page,
-                    pageSize: _pageSize)
-                .then((value) => setState(() => _messages.addAll(value)))
-                .whenComplete(() => isLoading = false);
-          }
-        }
-      });
     }
   }
 
@@ -231,83 +243,60 @@ class _ChatScreenState extends State<ChatScreen> {
       body: SizedBox(
         height: size.height,
         child: Stack(
-          alignment: Alignment.topCenter,
           children: [
-            // ChatBackground(size: size),
-            GestureDetector(
-              onTap: () {
-                if (FocusScope.of(context).hasFocus) {
-                  FocusScope.of(context).unfocus();
-                }
-              },
-              //MESSAGE LIST CONTAINER
-              child: Container(
-                alignment: Alignment.topCenter,
-                color: Colors.grey.shade50,
-                padding: const EdgeInsets.only(
-                  right: 5,
-                  left: 5,
-                  // bottom: kChatControllerHeight,
-                ),
-                margin: const EdgeInsets.only(
-                  bottom: kChatControllerHeight,
-                ),
-                child: ListView.builder(
-                    reverse: true,
-                    keyboardDismissBehavior:
-                        ScrollViewKeyboardDismissBehavior.manual,
-                    physics: const BouncingScrollPhysics(),
-                    controller: _scrollController,
-                    itemCount: _messages.length + 1,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      if (index == _messages.length) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 20.0),
-                          child: Visibility(
-                            visible: _isLoading,
-                            child: const CupertinoActivityIndicator(),
-                          ),
-                        );
-                      }
-                      var message = _messages.elementAt(index);
-                      DateTime time = DateTime.fromMicrosecondsSinceEpoch(
-                          DateTime.now().millisecondsSinceEpoch);
-                      var fmt = DateFormat('hh:mm a').format(time);
-                      return MessageWidget(
-                        timeFormat: fmt,
-                        hasError: false,
-                        onLongPress: () {},
-                        isFirst: false,
-                        isLast: false,
-                        color: context
-                                    .read<AuthenticationBloc>()
-                                    .state
-                                    .user
-                                    .username
-                                    .toString() !=
-                                message.user?.username.toString()
-                            ? kPrimaryLightColor
-                            : kPrimaryLightColor.withOpacity(.85),
-                        isSender: context
+            ListView.builder(
+                padding: const EdgeInsets.only(bottom: 100, top: 56,left: 4.0),
+                controller: _scrollController,
+                addAutomaticKeepAlives: true,
+                addRepaintBoundaries: true,
+                reverse: true,
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                physics: const BouncingScrollPhysics(),
+                itemCount: _messages.length + 1,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  if (index == _messages.length) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20.0),
+                      child: Visibility(
+                        visible: _isLoading,
+                        child: const CupertinoActivityIndicator(),
+                      ),
+                    );
+                  }
+                  var message = _messages.elementAt(index);
+                  DateTime time = DateTime.fromMicrosecondsSinceEpoch(
+                      DateTime.now().millisecondsSinceEpoch);
+                  var fmt = DateFormat('hh:mm a').format(time);
+                  var currentUserName = context
                                 .read<AuthenticationBloc>()
                                 .state
                                 .user
-                                .username ==
-                            message.user?.username,
-                        message: message.message.toString(),
-                        isFavorite: false,
-                        onDoubleTap: () {},
-                        avt: message.user?.avt,
-                      );
-                    }),
-              ),
-              //  END OF MESSAGE LIST
-            ),
-
-            //chat controller
+                                .username;
+                  return MessageWidget(
+                    timeFormat: fmt,
+                    hasError: false,
+                    onLongPress: () {},
+                    isFirst: false,
+                    isLast: false,
+                    color: currentUserName !=
+                            message.user?.username
+                        ? kPrimaryLightColor
+                        : kPrimaryLightColor.withOpacity(.85),
+                    isSender: currentUserName ==
+                        message.user?.username,
+                    message: message.message.toString(),
+                    isFavorite: false,
+                    onDoubleTap: () {},
+                    avt: message.user?.avt,
+                  );
+                }),
             Positioned(
               child: ChatController(
+                onSubmitted: (value) {
+                  _sendMessage();
+                },
                 size: size,
                 messageController: _chatController,
                 onSendBtnPressed: _sendMessage,
@@ -336,13 +325,14 @@ class _ChatScreenState extends State<ChatScreen> {
 
   set isTextMessageEmpty(bool i) => setState(() => _isTextMessageEmpty = i);
 
-// @override
-// void dispose() {
-//   _sendStatus(status: 'LEAVE');
-//   _stompClient.deactivate();
-//   _chatController.dispose();
-//   _scrollController.dispose();
-//   _focusNode.dispose();
-//   super.dispose();
-// }
+  @override
+  void dispose() {
+    _sendStatus(status: 'LEAVE');
+    _stompClient.deactivate();
+    _focusNode.dispose();
+    _scrollController.dispose();
+    _chatController.dispose();
+
+    super.dispose();
+  }
 }
