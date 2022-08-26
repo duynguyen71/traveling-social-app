@@ -10,8 +10,9 @@ import 'package:traveling_social_app/models/message.dart';
 class ChatService {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
-  Future<List<Group>> getChatGroups() async {
-    final url = Uri.parse(baseUrl + "/api/v1/member/users/me/chat-groups");
+  Future<List<Group>> getChatGroups({int? page, int? pageSize}) async {
+    final url = Uri.parse(baseUrl +
+        "/api/v1/member/users/me/chat-groups?page=$page&pageSize=$pageSize");
     final resp = await http.get(url, headers: await authorizationHeader());
     if (resp.statusCode == 200) {
       final list = (jsonDecode(resp.body) as Map<String, dynamic>)['data']

@@ -12,7 +12,7 @@ Post postFromJson(String str) => Post.fromJson(json.decode(str));
 class Post with ChangeNotifier {
   int? id;
   String? caption;
-  int?status;
+  int? status;
   int? active;
   User? user;
   List<Content>? contents = [];
@@ -21,11 +21,11 @@ class Post with ChangeNotifier {
   int likeCount = 0;
   int reactionCount = 0;
   int commentCount = 0;
-  List<Comment>myComments = [];
+  List<Comment> myComments = [];
   Reaction? myReaction;
 
   Post.fromJson(dynamic json) {
-   id = json['id'];
+    id = json['id'];
     caption = json['caption'];
     status = json['status'];
     active = json['active'];
@@ -102,5 +102,4 @@ class Post with ChangeNotifier {
 
   @override
   int get hashCode => id.hashCode;
-
 }

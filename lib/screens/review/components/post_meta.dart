@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:timeago/timeago.dart'as timeago;
-
+import 'package:timeago/timeago.dart' as timeago;
 
 class PostMetadata extends StatelessWidget {
-  const PostMetadata({Key? key, required this.username, required this.createDate}) : super(key: key);
-final String? username,createDate;
+  const PostMetadata(
+      {Key? key, required this.username, required this.createDate})
+      : super(key: key);
+  final String? username, createDate;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -17,10 +18,8 @@ final String? username,createDate;
                   style: const TextStyle(color: Colors.blue)),
               const TextSpan(text: ' - '),
               TextSpan(
-                  text: timeago.format(
-                      DateTime.parse('$createDate'),
-                      locale: Localizations.localeOf(context)
-                          .languageCode)),
+                  text: timeago.format(DateTime.parse('$createDate'),
+                      locale: Localizations.localeOf(context).languageCode)),
             ],
           ),
           style: const TextStyle(

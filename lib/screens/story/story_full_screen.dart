@@ -280,12 +280,15 @@ class _StoryFullScreenState extends State<StoryFullScreen>
                   children: [
                     Expanded(
                       child: TextField(
-                        style: const TextStyle(color: Colors.white,fontSize: 14,),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
                         obscureText: false,
                         maxLines: null,
                         decoration: InputDecoration(
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 8.0,vertical: 12.0),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 12.0),
                           isCollapsed: true,
                           border: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(10)),

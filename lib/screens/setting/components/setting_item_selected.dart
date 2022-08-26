@@ -3,7 +3,10 @@ import 'package:traveling_social_app/widgets/my_divider.dart';
 
 class SettingItemSelected extends StatelessWidget {
   const SettingItemSelected(
-      {Key? key, required this.text, this.isChecked = false, required this.onClick})
+      {Key? key,
+      required this.text,
+      this.isChecked = false,
+      required this.onClick})
       : super(key: key);
 
   final String text;

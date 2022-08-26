@@ -21,6 +21,7 @@ class ProfileAppbar extends StatelessWidget {
         backgroundColor: Colors.transparent,
       );
     }
+
     return SliverAppBar(
       centerTitle: true,
       title: BlocConsumer<AuthenticationBloc, AuthenticationState>(

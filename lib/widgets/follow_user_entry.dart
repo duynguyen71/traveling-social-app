@@ -55,10 +55,13 @@ class _FollowUserEntryState extends State<FollowUserEntry> {
         child: Row(
           children: [
             UserAvatar(
-                size: 40,
-                avt: widget.avt,
-                onTap: () => Navigator.push(
-                    context, ProfileScreen.route(widget.userId),),),
+              size: 40,
+              avt: widget.avt,
+              onTap: () => Navigator.push(
+                context,
+                ProfileScreen.route(widget.userId),
+              ),
+            ),
             const SizedBox(width: 10),
             Expanded(child: Text('${widget.username}')),
             MyOutlineButton(

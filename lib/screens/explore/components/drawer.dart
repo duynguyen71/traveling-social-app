@@ -18,57 +18,54 @@ class HomeDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        width: 250.0,
-        color: Colors.white,
-        child: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/home_bg.png"),
-                  fit: BoxFit.cover,
-                ),
+    return Container(
+      width: 250.0,
+      color: Colors.white,
+      child: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/home_bg.png"),
+                fit: BoxFit.cover,
               ),
-              padding: const EdgeInsets.all(kDefaultPadding),
             ),
-            Column(
-              children: [
-                ListTile(
-                  title: Text(AppLocalizations.of(context)!.message),
-                  leading: const Icon(Icons.message),
-                  onTap: () {
-                    _closeDrawer(context);
-                    Navigator.push(context, ChatGroupsScreen.route());
-                  },
-                ),
-                ListTile(
-                  title: Text(AppLocalizations.of(context)!.setting),
-                  leading: const Icon(Icons.settings),
-                  onTap: () {
-                    _closeDrawer(context);
-                    Navigator.push(context, SettingScreen.route());
-                  },
-                ),
-                ListTile(
-                  title: Text(AppLocalizations.of(context)!.logOut),
-                  leading: const Icon(Icons.logout),
-                  onTap: () {
-                    context.read<ChatBloc>().add(InitialChatGroup());
-                    context.read<PostBloc>().add(Reset());
-                    context.read<StoryBloc>().add(ResetStoryState());
-                    context
-                        .read<AuthenticationBloc>()
-                        .add(AuthenticationLogoutRequested());
-                  },
-                ),
-              ],
-            )
-            // const DrawerFooter(),
-          ],
-        ),
+            padding: const EdgeInsets.all(kDefaultPadding),
+          ),
+          Column(
+            children: [
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.message),
+                leading: const Icon(Icons.message),
+                onTap: () {
+                  _closeDrawer(context);
+                  Navigator.push(context, ChatGroupsScreen.route());
+                },
+              ),
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.setting),
+                leading: const Icon(Icons.settings),
+                onTap: () {
+                  _closeDrawer(context);
+                  Navigator.push(context, SettingScreen.route());
+                },
+              ),
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.logOut),
+                leading: const Icon(Icons.logout),
+                onTap: () {
+                  context.read<PostBloc>().add(Reset());
+                  context.read<StoryBloc>().add(ResetStoryState());
+                  context
+                      .read<AuthenticationBloc>()
+                      .add(AuthenticationLogoutRequested());
+                },
+              ),
+            ],
+          )
+          // const DrawerFooter(),
+        ],
       ),
     );
   }

@@ -42,9 +42,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-
             children: [
-
               SizedBox(height: size.height * .02),
               Column(
                 children: [

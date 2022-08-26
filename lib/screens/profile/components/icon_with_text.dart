@@ -12,7 +12,7 @@ class IconTextButton extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-   icon,
+        icon,
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4.0),
           child: Text(

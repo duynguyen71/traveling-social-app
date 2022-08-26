@@ -68,13 +68,15 @@ class CommentService {
     }
     throw 'Failed to post comment';
   }
- Future<Comment> commentReviewPost(
+
+  Future<Comment> commentReviewPost(
       {int? postId,
       int? commentId,
       String? contentText,
       int? attachmentId,
       int? parentCommentId}) async {
-    final url = Uri.parse(baseUrl + "/api/v1/member/review-posts/$postId/comments");
+    final url =
+        Uri.parse(baseUrl + "/api/v1/member/review-posts/$postId/comments");
     final resp = await http.post(
       url,
       headers: await authorizationHeader(),

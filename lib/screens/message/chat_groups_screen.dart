@@ -8,6 +8,7 @@ import 'package:traveling_social_app/models/group.dart';
 import 'package:traveling_social_app/screens/message/components/group_chat_entry.dart';
 import 'package:traveling_social_app/screens/message/create_message_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
+import 'package:traveling_social_app/widgets/my_divider.dart';
 import 'package:traveling_social_app/widgets/rounded_icon_button.dart';
 import 'package:traveling_social_app/widgets/rounded_input_container.dart';
 import 'bloc/chat_bloc.dart';
@@ -28,11 +29,11 @@ class ChatGroupsScreen extends StatefulWidget {
 class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
   @override
   void initState() {
+    super.initState();
     if (mounted) {
       setState(() {});
     }
-    context.read<ChatBloc>().add(FetchChatGroup());
-    super.initState();
+    context.read<ChatBloc>().add(const FetchChatGroup());
   }
 
   String? getGroupAvt(Group group) {
@@ -54,137 +55,178 @@ class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              sliver: SliverAppBar(
-                iconTheme: const IconThemeData(color: Colors.black),
-                leading: IconButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  icon: const Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.black87,
-                  ),
+            SliverAppBar(
+              iconTheme: const IconThemeData(color: Colors.black),
+              leading: IconButton(
+                padding: EdgeInsets.only(left: 8.0),
+                onPressed: () => Navigator.of(context).pop(),
+                alignment: Alignment.center,
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  size: 20,
+                  color: Colors.black54,
                 ),
-                actions: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Center(
-                      child: RoundedIconButton(
-                        onClick: () {
-                          Navigator.push(context, CreateMessageScreen.route());
-                        },
-                        icon: Icons.add,
-                        size: 30,
-                      ),
-                    ),
-                  ),
-                ],
-
-                backgroundColor: Colors.white,
-                pinned: true,
-                centerTitle: true,
-                title: RoundedInputContainer(
-                  color: Colors.grey.shade100,
-                  child: TextField(
-                    controller: TextEditingController(),
-                    textAlign: TextAlign.left,
-                    onSubmitted: (value) {
-                      print('on submitted');
-                    },
-                    decoration: const InputDecoration(
-                      isCollapsed: true,
-                      border: InputBorder.none,
-                      hintText: 'Search in chat',
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                      hintStyle: TextStyle(
-                        letterSpacing: .5,
-                        fontSize: 14,
-                        // fontStyle: FontStyle.italic
-                      ),
-                    ),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  margin: EdgeInsets.zero,
-                ),
-                // bottom: const PreferredSize(
-                //   preferredSize: Size.fromHeight(10),
-                // child: MyDivider(),
-                // ),
-                forceElevated: innerBoxIsScrolled,
               ),
-            )
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: Center(
+                    child: RoundedIconButton(
+                      onClick: () {
+                        Navigator.push(context, CreateMessageScreen.route());
+                      },
+                      icon: Icons.add,
+                      size: 30,
+                    ),
+                  ),
+                ),
+              ],
+              leadingWidth: 20,
+              elevation: 0,
+              backgroundColor: Colors.white,
+              pinned: true,
+              centerTitle: true,
+              title: RoundedInputContainer(
+                color: Colors.grey.shade100,
+                child: TextField(
+                  controller: TextEditingController(),
+                  textAlign: TextAlign.left,
+                  onSubmitted: (value) {
+                    print('on submitted');
+                  },
+                  decoration: const InputDecoration(
+                    isCollapsed: true,
+                    border: InputBorder.none,
+                    hintText: 'Search in chat',
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                    hintStyle: TextStyle(
+                      letterSpacing: .5,
+                      fontSize: 14,
+                      // fontStyle: FontStyle.italic
+                    ),
+                  ),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                margin: EdgeInsets.zero,
+              ),
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(1),
+                child: MyDivider(
+                  color: Colors.grey.shade200,
+                ),
+              ),
+            ),
           ];
         },
         body: RefreshIndicator(
-          onRefresh: () async {},
+          onRefresh: () async {
+            context.read<ChatBloc>().add(const FetchChatGroup());
+          },
           child: CustomScrollView(
+            physics: const BouncingScrollPhysics(),
             slivers: [
               SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    BlocBuilder<ChatBloc, ChatState>(
-                      builder: ((context, state) => Visibility(
-                            visible: state.status == ChatGroupStatus.loading,
-                            child: const Center(
-                              child: Padding(
-                                padding: EdgeInsets.all(kDefaultPadding),
-                                child: CupertinoActivityIndicator(),
+                child: Container(
+                  color: Colors.white,
+                  child: Column(
+                    children: [
+                      //LOADING
+                      BlocBuilder<ChatBloc, ChatState>(
+                        builder: ((context, state) => Visibility(
+                              visible: state.status == ChatGroupStatus.loading,
+                              child: const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.all(kDefaultPadding),
+                                  child: CupertinoActivityIndicator(),
+                                ),
                               ),
+                            )),
+                      ),
+                      //
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: const [
+                            Text(
+                              "Messages",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 15,
+                                  letterSpacing: .6,
+                                  color: Colors.black87),
                             ),
-                          )),
-                    ),
-                    BlocBuilder<ChatBloc, ChatState>(
-                      builder: (context, state) {
-                        List<Group> groups = state.chatGroups;
-                        return Column(
-                          children: List.generate(
-                            groups.length,
-                            (index) {
-                              Group group = groups[index];
-                              String? groupName;
-                              String? groupAvt;
-                              if (group.users.length == 2) {
-                                User? user = group.users[0];
-                                if (context
-                                        .read<AuthenticationBloc>()
-                                        .state
-                                        .user
-                                        .id !=
-                                    user.id) {
-                                  groupAvt = user.avt;
-                                  groupName = user.username;
+                          ],
+                        ),
+                      ),
+                      BlocBuilder<ChatBloc, ChatState>(
+                        builder: (context, state) {
+                          List<Group> groups = state.chatGroups;
+                          return Column(
+                            children: List.generate(
+                              groups.length,
+                              (index) {
+                                Group group = groups[index];
+                                String? groupName;
+                                String? groupAvt;
+                                if (group.users.length == 2) {
+                                  User? user = group.users[0];
+                                  if (context
+                                          .read<AuthenticationBloc>()
+                                          .state
+                                          .user
+                                          .id !=
+                                      user.id) {
+                                    groupAvt = user.avt;
+                                    groupName = user.username;
+                                  } else {
+                                    groupAvt = group.users[1].avt;
+                                    groupName = group.users[1].username;
+                                  }
                                 } else {
-                                  groupAvt = group.users[1].avt;
-                                  groupName = group.users[1].username;
+                                  groupName = group.name;
                                 }
-                              } else {
-                                groupName = group.name;
-                              }
-                              return GroupChatEntry(
-                                name: groupName.toString(),
-                                lastMessage: group.lastMessage,
-                                isUserActive: true,
-                                onClick: () {
-                                  ApplicationUtility.navigateToScreen(
-                                    context,
-                                    ChatScreen(
-                                      groupId: group.id!,
-                                      tmpGroupName: groupName,
-                                    ),
-                                  );
-                                },
-                                avt: groupAvt,
-                                countMember: group.users.length,
-                              );
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                                return GroupChatEntry(
+                                  name: groupName.toString(),
+                                  lastMessage: group.lastMessage,
+                                  isUserActive: true,
+                                  onClick: () {
+                                    ApplicationUtility.navigateToScreen(
+                                      context,
+                                      ChatScreen(
+                                        groupId: group.id!,
+                                        tmpGroupName: groupName,
+                                      ),
+                                    );
+                                  },
+                                  avt: groupAvt,
+                                  countMember: group.users.length,
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: const [
+                            Text(
+                              "Suggestions",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 15,
+                                  letterSpacing: .6,
+                                  color: Colors.black87),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
+              // NO MESSAGE WIDGET
               BlocBuilder<ChatBloc, ChatState>(
                 builder: (context, state) {
                   return SliverToBoxAdapter(

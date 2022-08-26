@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 
-
 class ButtonFollow extends StatefulWidget {
-  const ButtonFollow(
-      {Key? key, required this.uid, required this.username})
+  const ButtonFollow({Key? key, required this.uid, required this.username})
       : super(key: key);
 
   final String uid;
@@ -31,8 +29,7 @@ class _ButtonFollowState extends State<ButtonFollow> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title:
-                        Text("Are you sure unfollow ${widget.username}"),
+                    title: Text("Are you sure unfollow ${widget.username}"),
                     actions: [
                       TextButton(
                           onPressed: () => Navigator.pop(context),
@@ -56,7 +53,7 @@ class _ButtonFollowState extends State<ButtonFollow> {
             border: Border.all(
               width: 1,
               style: BorderStyle.solid,
-              color: followed? kPrimaryLightColor : Colors.white,
+              color: followed ? kPrimaryLightColor : Colors.white,
             ),
             borderRadius: BorderRadius.circular(40),
           ),

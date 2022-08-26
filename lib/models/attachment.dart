@@ -1,13 +1,16 @@
 import 'dart:convert';
 
-Attachment attachmentFromJson(String str) => Attachment.fromJson(json.decode(str));
+Attachment attachmentFromJson(String str) =>
+    Attachment.fromJson(json.decode(str));
 String attachmentToJson(Attachment data) => json.encode(data.toJson());
+
 class Attachment {
   Attachment({
     int? id,
     String? name,
     String? contentType,
-    String? uploadDate,}){
+    String? uploadDate,
+  }) {
     _id = id;
     _name = name;
     _contentType = contentType;
@@ -24,15 +27,18 @@ class Attachment {
   String? _name;
   String? _contentType;
   String? _uploadDate;
-  Attachment copyWith({  int? id,
+  Attachment copyWith({
+    int? id,
     String? name,
     String? contentType,
     String? uploadDate,
-  }) => Attachment(  id: id ?? _id,
-    name: name ?? _name,
-    contentType: contentType ?? _contentType,
-    uploadDate: uploadDate ?? _uploadDate,
-  );
+  }) =>
+      Attachment(
+        id: id ?? _id,
+        name: name ?? _name,
+        contentType: contentType ?? _contentType,
+        uploadDate: uploadDate ?? _uploadDate,
+      );
   int? get id => _id;
   String? get name => _name;
   String? get contentType => _contentType;
@@ -51,5 +57,4 @@ class Attachment {
   String toString() {
     return '{id : $id, name: $name, contentType: $contentType}';
   }
-
 }

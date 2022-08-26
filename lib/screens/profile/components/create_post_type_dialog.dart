@@ -52,6 +52,14 @@ class CreatePostTypeDialog extends StatelessWidget {
                       ApplicationUtility.navigateToScreen(
                           context, const CreateReviewPostScreen());
                     }),
+                const SizedBox(child: MyDivider()),
+                BottomModelItem(
+                    title: AppLocalizations.of(context)!.createQuestion,
+                    onClick: () {
+                      Navigator.of(context).pop();
+                      ApplicationUtility.navigateToScreen(
+                          context, const CreateReviewPostScreen());
+                    }),
               ],
             ),
           ),

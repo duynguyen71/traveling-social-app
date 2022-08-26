@@ -88,17 +88,20 @@ class _BookmarkScreenState extends State<BookmarkScreen>
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
-          ( _bookmarks.isEmpty&&!_isLoading)?   Positioned(
-                child: Center(
-                  child: EmptyMessageWidget(
-                    message: AppLocalizations.of(context)!.notInformation,
-                    icon: Transform.rotate(
-                        angle: -math.pi / 12,
-                        child: SvgPicture.asset('assets/icons/bookmark.svg',
-                            color: Colors.black54)),
-                  ),
-                ),
-              ):const SizedBox.shrink(),
+              (_bookmarks.isEmpty && !_isLoading)
+                  ? Positioned(
+                      child: Center(
+                        child: EmptyMessageWidget(
+                          message: AppLocalizations.of(context)!.notInformation,
+                          icon: Transform.rotate(
+                              angle: -math.pi / 12,
+                              child: SvgPicture.asset(
+                                  'assets/icons/bookmark.svg',
+                                  color: Colors.black54)),
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
               ListView.builder(
                 addAutomaticKeepAlives: true,
                 physics: const NeverScrollableScrollPhysics(),

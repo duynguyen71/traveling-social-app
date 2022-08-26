@@ -1,5 +1,4 @@
 class MessageResponse {
-
   String? message;
   String? sendFrom;
 

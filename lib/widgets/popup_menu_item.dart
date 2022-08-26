@@ -12,7 +12,9 @@ class MyPopupMenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: const BoxConstraints(minWidth: 100.0,),
+      constraints: const BoxConstraints(
+        minWidth: 100.0,
+      ),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(

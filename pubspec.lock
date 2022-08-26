@@ -253,6 +253,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.2"
+  fk_user_agent:
+    dependency: "direct main"
+    description:
+      name: fk_user_agent
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -431,6 +438,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.2"
+  flutter_signin_button:
+    dependency: "direct main"
+    description:
+      name: flutter_signin_button
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -443,6 +457,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_user_agentx:
+    dependency: "direct main"
+    description:
+      name: flutter_user_agentx
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.4"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -455,6 +476,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "8.0.9"
+  font_awesome_flutter:
+    dependency: transitive
+    description:
+      name: font_awesome_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "9.2.0"
   gallery_saver:
     dependency: transitive
     description:
@@ -616,13 +644,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
-  logging:
-    dependency: transitive
-    description:
-      name: logging
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.2"
   matcher:
     dependency: transitive
     description:
@@ -852,20 +873,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  socket_io_client:
-    dependency: "direct main"
-    description:
-      name: socket_io_client
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.2"
-  socket_io_common:
-    dependency: transitive
-    description:
-      name: socket_io_common
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.1"
   source_span:
     dependency: transitive
     description:
@@ -978,6 +985,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.1"
+  ua_client_hints:
+    dependency: "direct main"
+    description:
+      name: ua_client_hints
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.1"
   url_launcher:
     dependency: transitive
     description:

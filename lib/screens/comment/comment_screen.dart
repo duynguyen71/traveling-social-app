@@ -175,7 +175,7 @@ class _CommentScreenState extends State<CommentScreen>
                                     BorderSide(color: Colors.grey.shade200))),
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                        AppLocalizations.of(context)!.comment,
+                          AppLocalizations.of(context)!.comment,
                           style: const TextStyle(
                               color: Colors.black87,
                               fontWeight: FontWeight.w600,
@@ -235,7 +235,7 @@ class _CommentScreenState extends State<CommentScreen>
                   ],
                 ),
               ),
-             !_isLoading && _comments.isEmpty
+              !_isLoading && _comments.isEmpty
                   ? Positioned(
                       child: Center(
                         child: EmptyMessageWidget(
@@ -277,7 +277,6 @@ class _CommentScreenState extends State<CommentScreen>
       },
     );
   }
-
 
   @override
   void dispose() {

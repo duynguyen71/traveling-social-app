@@ -540,6 +540,16 @@ class S {
     );
   }
 
+  /// `Create question`
+  String get createQuestion {
+    return Intl.message(
+      'Create question',
+      name: 'createQuestion',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Cancel`
   String get cancel {
     return Intl.message(

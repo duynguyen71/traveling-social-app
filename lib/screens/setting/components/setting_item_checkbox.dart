@@ -1,14 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/screens/setting/components/settting_item_leading.dart';
+
 class SettingItemCheckBox extends StatelessWidget {
   const SettingItemCheckBox(
       {Key? key,
       required this.isLast,
       required this.title,
-       this.description,
-        required this.onChange,
-      required this.leadingBg,  this.value = false})
+      this.description,
+      required this.onChange,
+      required this.leadingBg,
+      this.value = false})
       : super(key: key);
   final bool isLast;
   final String title;
@@ -49,11 +51,13 @@ class SettingItemCheckBox extends StatelessWidget {
                         style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.w500),
                       ),
-                   description!=null?   Text(
-                        description!,
-                        style: const TextStyle(
-                            fontSize: 14, color: Colors.black54),
-                      ):const SizedBox.shrink(),
+                      description != null
+                          ? Text(
+                              description!,
+                              style: const TextStyle(
+                                  fontSize: 14, color: Colors.black54),
+                            )
+                          : const SizedBox.shrink(),
                     ],
                   ),
                 ),

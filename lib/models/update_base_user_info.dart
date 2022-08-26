@@ -17,8 +17,8 @@ class UpdateBaseUserInfo {
   String? website;
   String? location;
 
-  Map<String,dynamic> toJson(){
-    Map<String,dynamic> map = {};
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> map = {};
     map['username'] = username;
     map['fullName'] = fullName;
     map['birthdate'] = birthdate;

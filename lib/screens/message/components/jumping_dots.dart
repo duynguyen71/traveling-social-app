@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:traveling_social_app/screens/message/components/dot.dart';
 
 class JumpingDots extends StatefulWidget {
-  const JumpingDots({Key? key, required this.numberOfDots, required this.dotSize}) : super(key: key);
+  const JumpingDots(
+      {Key? key, required this.numberOfDots, required this.dotSize})
+      : super(key: key);
 
   @override
   State<JumpingDots> createState() => _JumpingDotsState();
@@ -75,29 +77,28 @@ class _JumpingDotsState extends State<JumpingDots>
 
   @override
   Widget build(BuildContext context) {
-    return
-       Row(
-         mainAxisAlignment: MainAxisAlignment.start,
-         children: List.generate(widget.numberOfDots, (index) {
-           //AnimatedBuilder widget will rebuild it self when
-           //_animationControllers[index] value changes.
-           return AnimatedBuilder(
-             animation: _animationControllers[index],
-             builder: (context, child) {
-               return Container(
-                 padding: const EdgeInsets.all(2.5),
-                 //Transform widget's translate constructor will help us to move the dot
-                 //in upward direction by changing the offset of the dot.
-                 //X-axis position of dot will not change.
-                 //Only Y-axis position will change.
-                 child: Transform.translate(
-                   offset: Offset(0, _animations[index].value),
-                   child: Dot(size: widget.dotSize),
-                 ),
-               );
-             },
-           );
-         }).toList(),
-       );
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: List.generate(widget.numberOfDots, (index) {
+        //AnimatedBuilder widget will rebuild it self when
+        //_animationControllers[index] value changes.
+        return AnimatedBuilder(
+          animation: _animationControllers[index],
+          builder: (context, child) {
+            return Container(
+              padding: const EdgeInsets.all(2.5),
+              //Transform widget's translate constructor will help us to move the dot
+              //in upward direction by changing the offset of the dot.
+              //X-axis position of dot will not change.
+              //Only Y-axis position will change.
+              child: Transform.translate(
+                offset: Offset(0, _animations[index].value),
+                child: Dot(size: widget.dotSize),
+              ),
+            );
+          },
+        );
+      }).toList(),
+    );
   }
 }

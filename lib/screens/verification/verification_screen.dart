@@ -7,7 +7,6 @@ import 'package:traveling_social_app/widgets/loading_widget.dart';
 import 'package:traveling_social_app/widgets/rounded_button.dart';
 import 'package:provider/provider.dart';
 
-
 class VerificationScreen extends StatefulWidget {
   const VerificationScreen({Key? key}) : super(key: key);
 

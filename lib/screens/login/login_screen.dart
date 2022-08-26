@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_signin_button/button_list.dart';
+import 'package:flutter_signin_button/button_view.dart';
 import 'package:provider/provider.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
@@ -12,6 +14,7 @@ import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/already_have_account_check.dart';
 import 'package:traveling_social_app/widgets/custom_input_field.dart';
+import 'package:traveling_social_app/widgets/my_divider.dart';
 import 'package:traveling_social_app/widgets/rounded_button.dart';
 import 'package:traveling_social_app/widgets/rounded_input_container.dart';
 
@@ -70,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _showSocketErrAlertDialog() {
-     showDialog(
+    showDialog(
         context: context,
         builder: (context) {
           return CupertinoAlertDialog(
@@ -125,6 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: LoginBackground(
         isLoading: _isLoading,
         child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Container(
             alignment: Alignment.center,
             height: size.height,
@@ -219,7 +223,40 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ],
-                )
+                ),
+                SizedBox(height: size.height * .03),
+                SizedBox(
+                  width: size.width * .8,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: MyDivider(
+                          color: Colors.grey.shade200,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 30,
+                        child: Text("or"),
+                      ),
+                      Expanded(
+                        child: MyDivider(
+                          color: Colors.grey.shade200,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SignInButton(
+                  Buttons.Google,
+                  onPressed: () {},
+                  elevation: 0,
+                ),
+                SignInButton(
+                  Buttons.Facebook,
+                  onPressed: () {},
+                  elevation: 0,
+
+                ),
               ],
             ),
           ),

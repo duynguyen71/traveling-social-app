@@ -4,13 +4,14 @@ import 'package:flutter_svg/svg.dart';
 import '../../../constants/app_theme_constants.dart';
 
 class FeedActionButton extends StatelessWidget {
-  const FeedActionButton({Key? key, required this.onClick, required this.asset}) : super(key: key);
+  const FeedActionButton({Key? key, required this.onClick, required this.asset})
+      : super(key: key);
 
   final Function onClick;
   final String asset;
   @override
   Widget build(BuildContext context) {
-    return      Material(
+    return Material(
       child: InkWell(
         onTap: () {
           onClick();
@@ -18,7 +19,7 @@ class FeedActionButton extends StatelessWidget {
         child: Ink(
           child: Padding(
             padding:
-            const EdgeInsets.symmetric(horizontal: 16.0,vertical: 10.0),
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
             child: Container(
               decoration: BoxDecoration(
                 color: kPrimaryLightColor,

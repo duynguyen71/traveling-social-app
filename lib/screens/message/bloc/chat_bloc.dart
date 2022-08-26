@@ -8,6 +8,7 @@ import 'package:stomp_dart_client/stomp.dart';
 import 'package:stomp_dart_client/stomp_config.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';
 import 'package:traveling_social_app/services/chat_service.dart';
+import 'package:traveling_social_app/services/user_service.dart';
 
 import '../../../constants/api_constants.dart';
 import '../../../models/group.dart';
@@ -17,71 +18,53 @@ part 'chat_event.dart';
 part 'chat_state.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
-  final ChatService _chatService = ChatService();
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
-  late StompClient _stompClient;
+  final UserService _chatService = UserService();
 
   ChatBloc() : super(const ChatState()) {
-    on<FetchChatGroup>(_onFetchPost);
-    on<InitialChatGroup>(
-      (event, emit) {
-        emit(const ChatState(
-            hasReachMax: false,
-            status: ChatGroupStatus.initial,
-            chatGroups: []));
-      },
-    );
+    on<FetchChatGroup>(_onFetchChatGroup);
+    on<FetchMoreChatGroup>(_fetchMoreGroups);
   }
 
-  _onFetchPost(ChatEvent event, Emitter<ChatState> emit) async {
-    if (state.hasReachMax) return;
+  _onFetchChatGroup(FetchChatGroup event, Emitter<ChatState> emit) async {
     try {
       //loading
-      if (state.status == ChatGroupStatus.initial) {
-        emit(state.copyWith(status: ChatGroupStatus.loading));
-        //client
-        // _stompClient = StompClient(
-        //   config: StompConfig(
-        //     url: kSocketUrl,
-        //     stompConnectHeaders: {
-        //       "Authorization":
-        //           'Bearer ${await _storage.read(key: 'accessToken')}'
-        //     },
-        //     onConnect: (StompFrame frame) {
-        //       _stompClient.subscribe(
-        //           destination: "/users/{userId}/messages",
-        //           callback: (StompFrame frame) {
-        //             if (frame.body != null) {
-        //               print(jsonDecode(frame.body!));
-        //             }
-        //           });
-        //     },
-        //     onWebSocketError: (_) {
-        //       print('failed connect web socket channel on chat bloc $_');
-        //     },
-        //   ),
-        // );
-        // _stompClient.activate();
-        //client
-        //fetch chat groups
-        List<Group> chatGroups = await _fetchChatGroups();
-        return emit(state.copyWith(
-            groups: chatGroups, status: ChatGroupStatus.success));
-      }
+      emit(state.copyWith(status: ChatGroupStatus.loading));
+      List<Group> chatGroups = await _fetchChatGroups(page: 0);
+      var newPage = state.page + 1;
+      return emit(
+        state.copyWith(
+            groups: chatGroups,
+            status: ChatGroupStatus.success,
+            page: newPage,
+            hasReachMax: chatGroups.isEmpty),
+      );
     } catch (_) {
       emit(state.copyWith(status: ChatGroupStatus.failure));
-    } finally {
-      emit(state.copyWith(status: ChatGroupStatus.success));
+    } finally {}
+  }
+
+  _fetchMoreGroups(event, emit) async {
+    if (state.hasReachMax) return;
+    try {
+      emit(state.copyWith(status: ChatGroupStatus.loading));
+      var resp = await _fetchChatGroups(page: state.page);
+      print('get chat group ${resp.length}');
+      var copy = [...state.chatGroups];
+      copy.addAll(resp);
+      var isEmpty = resp.isEmpty;
+      emit(state.copyWith(
+          status: ChatGroupStatus.success,
+          hasReachMax: isEmpty,
+          groups: copy,
+          page: state.page + 1));
+    } catch (_) {
+      emit(state.copyWith(status: ChatGroupStatus.failure));
     }
   }
 
-  // dispose()async{
-  // emit(state.copyWith(status: ChatGroupStatus.failure));
-  // emit(const ChatState(chatGroups: [],hasReachMax: false,status: ChatGroupStatus.initial));
-  // }
-
-  _fetchChatGroups() async {
-    List<Group> chatGroups = await _chatService.getChatGroups();
+  Future<List<Group>> _fetchChatGroups({int? page}) async {
+    List<Group> chatGroups =
+        await _chatService.getChatGroups(page: page, pageSize: 10);
     return chatGroups;
   }
 }

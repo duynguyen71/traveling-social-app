@@ -11,8 +11,6 @@ class ChatScreenDrawer extends StatefulWidget {
 class _ChatScreenDrawerState extends State<ChatScreenDrawer> {
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-
-    );
+    return Drawer();
   }
 }

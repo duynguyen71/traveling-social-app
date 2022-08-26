@@ -116,9 +116,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.white,
       body: RegisterBackground(
         isLoading: _isLoading,
         child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Container(
             alignment: Alignment.center,
             width: double.infinity,
@@ -170,7 +172,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: TextFormField(
                       validator: (text) {
                         return null;
-                      
+
                         // if (text == null) {
                         //   return "Required password";
                         // } else if (text.length < 3) {

@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:traveling_social_app/authentication/bloc/authentication_event.dart';
 import 'package:traveling_social_app/screens/message/chat_groups_screen.dart';
 import 'package:traveling_social_app/screens/profile/current_user_profile_screen.dart';
 import 'package:traveling_social_app/screens/setting/language_setting_screen.dart';
@@ -11,6 +13,8 @@ import 'package:traveling_social_app/widgets/icon_gradient.dart';
 import 'package:traveling_social_app/widgets/my_divider.dart';
 import 'package:traveling_social_app/widgets/my_list_tile.dart';
 
+import '../../bloc/post/post_bloc.dart';
+import '../../bloc/story/story_bloc.dart';
 import '../../constants/app_theme_constants.dart';
 import '../../widgets/username_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -200,6 +204,47 @@ class _AccountScreenState extends State<AccountScreen>
                 ),
               ),
               title: AppLocalizations.of(context)!.aboutUs,
+            ),
+            const MyDivider(width: 2.5),
+
+            MyListTile(
+              onClick: () {
+                // showAboutDialog(context: context);
+                showCupertinoDialog(
+                  context: context,
+                  builder: (context) {
+                    return CupertinoAlertDialog(
+                      //TODO: translate
+                      title: Text("Thông báo"),
+                      content: Text("Bạn có chắc muốn đăng xuất?"),
+                      actions: <Widget>[
+                        CupertinoDialogAction(
+                          isDefaultAction: true,
+                          child: Text("Đồng ý"),
+                          onPressed: () {
+                            context.read<PostBloc>().add(Reset());
+                            context.read<StoryBloc>().add(ResetStoryState());
+                            context
+                                .read<AuthenticationBloc>()
+                                .add(AuthenticationLogoutRequested());
+                          },
+                        ),
+                        CupertinoDialogAction(
+                          child: Text("Hủy"),
+                          onPressed: () => Navigator.pop(context),
+                        )
+                      ],
+                    );
+                  },
+                );
+              },
+              leading: const LinearGradiantMask(
+                child: Icon(
+                  Icons.logout,
+                  color: Colors.white,
+                ),
+              ),
+              title: AppLocalizations.of(context)!.logOut,
             ),
             // Column(
             //   children: List.generate(

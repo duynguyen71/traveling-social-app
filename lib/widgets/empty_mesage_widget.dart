@@ -4,7 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import '../constants/app_theme_constants.dart';
 
 class EmptyMessageWidget extends StatelessWidget {
-  const EmptyMessageWidget({Key? key, required this.message, this.icon}) : super(key: key);
+  const EmptyMessageWidget({Key? key, required this.message, this.icon})
+      : super(key: key);
   final String message;
   final Widget? icon;
   @override
@@ -17,10 +18,12 @@ class EmptyMessageWidget extends StatelessWidget {
         SizedBox(
           height: 120,
           width: 120,
-          child:icon!=null? icon: SvgPicture.asset(
-            'assets/icons/inbox_message.svg',
-            color: kPrimaryColor.withOpacity(.4),
-          ),
+          child: icon != null
+              ? icon
+              : SvgPicture.asset(
+                  'assets/icons/inbox_message.svg',
+                  color: kPrimaryColor.withOpacity(.4),
+                ),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -29,9 +32,7 @@ class EmptyMessageWidget extends StatelessWidget {
             softWrap: true,
             maxLines: 2,
             style: TextStyle(
-                color: Colors.black54,
-                fontSize: 16,
-                letterSpacing: .8),
+                color: Colors.black54, fontSize: 16, letterSpacing: .8),
           ),
         ),
       ],

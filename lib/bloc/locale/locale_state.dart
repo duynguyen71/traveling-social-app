@@ -10,4 +10,3 @@ abstract class LocaleState {
 class SelectedLocale extends LocaleState {
   const SelectedLocale(Locale locale) : super(locale);
 }
-

@@ -85,7 +85,7 @@ class _ReviewPostCardState extends State<ReviewPostCard>
                           Text(
                             "${reviewPost.title}",
                             style: const TextStyle(
-                              fontSize: 14,
+                                fontSize: 14,
                                 color: Colors.black87,
                                 fontWeight: FontWeight.w700),
                             overflow: TextOverflow.ellipsis,

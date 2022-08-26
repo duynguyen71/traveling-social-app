@@ -49,7 +49,6 @@ dependencies:
   video_player: ^2.4.0
   image_cropper: ^2.0.0
   flutter_image_compress: ^1.1.1
-  socket_io_client: ^1.0.2
   stomp_dart_client: ^0.4.4
   flutter_bloc: ^8.0.1
   equatable: ^2.0.0
@@ -64,7 +63,10 @@ dependencies:
   flutter_lorem: ^2.0.0
   shimmer: ^2.0.0
   flutter_quill: 5.4.0
-
+  flutter_user_agentx: ^1.2.4
+  ua_client_hints: ^1.1.1
+  fk_user_agent: ^2.1.0
+  flutter_signin_button: ^2.0.0
 
 dev_dependencies:
   flutter_test:

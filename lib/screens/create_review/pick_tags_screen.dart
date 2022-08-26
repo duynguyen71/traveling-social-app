@@ -63,14 +63,14 @@ class _PickTagScreenState extends State<PickTagScreen> {
     Navigator.pop(context);
   }
 
-   _addTag(Tag tag) {
+  _addTag(Tag tag) {
     setState(() {
       _selectedTags.add(tag.copyWith(status: 1));
       _tagEditController.clear();
     });
   }
 
-   _removeTag(Tag e) {
+  _removeTag(Tag e) {
     setState(() {
       _selectedTags = _selectedTags
           .map((t) => t.name == e.name ? e.copyWith(status: 0) : t)

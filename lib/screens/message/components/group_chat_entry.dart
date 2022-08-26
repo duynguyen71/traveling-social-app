@@ -24,15 +24,9 @@ class GroupChatEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Container(
-      width: size.width,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      // decoration: BoxDecoration(
-      //   border: Border(
-      //     bottom: BorderSide(color: Colors.grey.shade100),
-      //   ),
-      // ),
+      color: Colors.white,
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
       child: Row(
         children: [
           Expanded(
@@ -72,29 +66,29 @@ class GroupChatEntry extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        //group name
-                        Text(
-                          name,
-                          style: MyTheme.heading2.copyWith(fontSize: 16),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        //lasted message
-                        Container(
-                          constraints: BoxConstraints(
-                              maxWidth: MediaQuery.of(context).size.width * .6),
-                          child: Text(
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          //GROUP NAME
+                          Text(
+                            name,
+                            style: MyTheme.heading2.copyWith(
+                              fontSize: 14,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          //lasted message
+                          Text(
                             lastMessage?.message ?? '',
                             style: MyTheme.bodyText1,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),

@@ -8,8 +8,8 @@ class StoriesScrollScreen extends StatefulWidget {
 
   @override
   _StoriesScrollScreenState createState() => _StoriesScrollScreenState();
-  static Route route() => MaterialPageRoute(builder: (_) => const StoriesScrollScreen());
-
+  static Route route() =>
+      MaterialPageRoute(builder: (_) => const StoriesScrollScreen());
 }
 
 class _StoriesScrollScreenState extends State<StoriesScrollScreen>

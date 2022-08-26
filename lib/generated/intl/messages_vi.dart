@@ -50,6 +50,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancel": MessageLookupByLibrary.simpleMessage("Hủy"),
         "comment": MessageLookupByLibrary.simpleMessage("Bình luận"),
         "createPost": MessageLookupByLibrary.simpleMessage("Tạo bài viết"),
+        "createQuestion": MessageLookupByLibrary.simpleMessage("Tạo câu hỏi"),
         "createReviewPost":
             MessageLookupByLibrary.simpleMessage("Viết bài review"),
         "createStory": MessageLookupByLibrary.simpleMessage("Tạo tin nhanh"),

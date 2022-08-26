@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:traveling_social_app/screens/message/chat_groups_screen.dart';
 import 'package:traveling_social_app/screens/search/search_input_screen.dart';
+import 'package:traveling_social_app/widgets/rounded_container.dart';
 
 import '../../constants/app_theme_constants.dart';
 import '../../my_theme.dart';

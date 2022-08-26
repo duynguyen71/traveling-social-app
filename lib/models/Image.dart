@@ -1,9 +1,10 @@
 class Image {
   Image({
-      this.id, 
-      this.name, 
-      this.contentType, 
-      this.createDate,});
+    this.id,
+    this.name,
+    this.contentType,
+    this.createDate,
+  });
 
   Image.fromJson(dynamic json) {
     id = json['id'];
@@ -15,15 +16,18 @@ class Image {
   String? name;
   String? contentType;
   String? createDate;
-Image copyWith({  int? id,
-  String? name,
-  String? contentType,
-  String? createDate,
-}) => Image(  id: id ?? this.id,
-  name: name ?? this.name,
-  contentType: contentType ?? this.contentType,
-  createDate: createDate ?? this.createDate,
-);
+  Image copyWith({
+    int? id,
+    String? name,
+    String? contentType,
+    String? createDate,
+  }) =>
+      Image(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        contentType: contentType ?? this.contentType,
+        createDate: createDate ?? this.createDate,
+      );
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['id'] = id;
@@ -32,5 +36,4 @@ Image copyWith({  int? id,
     map['createDate'] = createDate;
     return map;
   }
-
 }

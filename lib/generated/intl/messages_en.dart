@@ -50,6 +50,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "comment": MessageLookupByLibrary.simpleMessage("Comment"),
         "createPost": MessageLookupByLibrary.simpleMessage("Create post"),
+        "createQuestion":
+            MessageLookupByLibrary.simpleMessage("Create question"),
         "createReviewPost":
             MessageLookupByLibrary.simpleMessage("Create review post"),
         "createStory": MessageLookupByLibrary.simpleMessage("Create story"),

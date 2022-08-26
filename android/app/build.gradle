@@ -45,6 +45,7 @@ android {
         applicationId "com.tvc.traveling_social_app"
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        compileSdkVersion 32
         minSdkVersion 22
         targetSdkVersion 32
         multiDexEnabled true

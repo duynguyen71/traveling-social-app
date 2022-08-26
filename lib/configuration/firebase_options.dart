@@ -63,7 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '853959956689',
     projectId: 'tc-social-6b04b',
     storageBucket: 'tc-social-6b04b.appspot.com',
-    iosClientId: '853959956689-fdjakkst62pes36inechumk20f2tbng4.apps.googleusercontent.com',
+    iosClientId:
+        '853959956689-fdjakkst62pes36inechumk20f2tbng4.apps.googleusercontent.com',
     iosBundleId: 'com.tvc.travelingSocialApp',
   );
 }

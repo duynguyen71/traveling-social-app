@@ -12,7 +12,7 @@ class PostList extends StatefulWidget {
   State<PostList> createState() => _PostListState();
 }
 
-class _PostListState extends State<PostList>{
+class _PostListState extends State<PostList> {
   final Set<Post> _posts = {};
   bool _hasReachMax = false;
   int _page = 0;

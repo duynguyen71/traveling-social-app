@@ -1,7 +1,6 @@
 import 'package:traveling_social_app/models/attachment.dart';
 import 'package:traveling_social_app/models/base_user.dart';
 
-
 class ReviewPost {
   ReviewPost({
     int? id,

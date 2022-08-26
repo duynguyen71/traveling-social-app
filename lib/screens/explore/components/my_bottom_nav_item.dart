@@ -31,11 +31,12 @@ class MyBottomNavItem extends StatelessWidget {
             children: [
               Transform.scale(
                 scale: isSelected ? 1.2 : 1,
-                child: Icon(iconData,
-                    color: isSelected
-                        ? Colors.black54
-                        : Colors.grey.withOpacity(.5),
-                    size: 24.0,),
+                child: Icon(
+                  iconData,
+                  color:
+                      isSelected ? Colors.black54 : Colors.grey.withOpacity(.5),
+                  size: 24.0,
+                ),
               ),
               //nav label
               Text(

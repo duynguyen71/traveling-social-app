@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class NavigationItem{
+class NavigationItem {
   String title;
   IconData iconData;
 
@@ -10,6 +10,7 @@ class NavigationItem{
     required this.iconData,
   });
 }
+
 List<NavigationItem> navigationItems = [
   NavigationItem(title: "New", iconData: Icons.create),
   NavigationItem(title: "Message", iconData: Icons.message_outlined),
@@ -18,4 +19,3 @@ List<NavigationItem> navigationItems = [
   NavigationItem(title: "About us", iconData: Icons.ac_unit),
   NavigationItem(title: "Log out", iconData: Icons.logout),
 ];
-

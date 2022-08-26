@@ -99,18 +99,14 @@ class _EditorReviewState extends State<EditorReview> {
                         Icons.group,
                         color: Colors.black54,
                       )),
-                  const SizedBox(
-                    width: 10
-                  ),
+                  const SizedBox(width: 10),
                   IconTextButton(
                       text: '${post.cost}',
                       icon: Icon(
                         Icons.monetization_on,
                         color: Colors.black54,
                       )),
-                  const SizedBox(
-                    width: 10
-                  ),
+                  const SizedBox(width: 10),
                   IconTextButton(
                       text: '${post.totalDay} days',
                       icon: Icon(

@@ -168,7 +168,8 @@ class _CommentEntryState extends State<CommentEntry> {
                                             BottomDialogItem(
                                                 title: 'Hide',
                                                 onClick: () {
-                                                  widget.hideComment(widget.comment);
+                                                  widget.hideComment(
+                                                      widget.comment);
                                                   setState(() {
                                                     _hiding = true;
                                                   });

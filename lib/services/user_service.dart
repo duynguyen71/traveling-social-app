@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_user_agentx/flutter_user_agent.dart';
 import 'package:http/http.dart';
 import 'package:http_interceptor/http/intercepted_client.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
@@ -17,6 +18,9 @@ import 'package:traveling_social_app/utilities/application_utility.dart';
 
 import '../config/base_interceptor.dart';
 import '../config/expired_token_retry.dart';
+import '../models/chat_group_detail.dart';
+import '../models/group.dart';
+import '../models/message.dart';
 
 class UserService {
   UserService() {
@@ -29,28 +33,6 @@ class UserService {
   Client client = InterceptedClient.build(interceptors: [
     BaseInterceptor(),
   ], retryPolicy: ExpiredTokenRetryPolicy());
-
-  //login
-  Future<Map<String, dynamic>> login(username, password) async {
-    try {
-      final resp = await http.post(Uri.parse(baseUrl + "/api/v1/auth/login"),
-          headers: {
-            "Content-Type": "application/json",
-            'Access-Control-Allow-Origin': '*'
-          },
-          body: jsonEncode({'email': username, 'password': password}));
-      final statusCode = resp.statusCode;
-      if (statusCode == 200) {
-        final data = jsonDecode(resp.body) as Map<String, dynamic>;
-        //save token to secure storage
-        await saveToken(data);
-        return data;
-      }
-    } on Exception catch (e) {
-      throw e.toString();
-    }
-    throw 'Failed to login';
-  }
 
   Future<void> saveToken(Map<String, dynamic> data) async {
     await _storage.write(key: 'accessToken', value: data['accessToken']);
@@ -80,8 +62,7 @@ class UserService {
   /// Update base user info
   Future<bool> updateBaseUserInfo(UpdateBaseUserInfo info) async {
     final url = Uri.parse("$baseUrl/api/v1/member/users/me");
-    final resp = await client.put(url,
-        body: jsonEncode(info.toJson()));
+    final resp = await client.put(url, body: jsonEncode(info.toJson()));
     if (resp.statusCode == 200) {
       print('Update user info success');
       return true;
@@ -382,5 +363,64 @@ class UserService {
       return list.map((e) => BaseUserInfo.fromJson(e)).toList();
     }
     return [];
+  }
+
+  Future<List<Group>> getChatGroups({int? page, int? pageSize}) async {
+    final url = Uri.parse(baseUrl +
+        "/api/v1/member/users/me/chat-groups?page=$page&pageSize=$pageSize");
+    final resp = await client.get(url);
+    if (resp.statusCode == 200) {
+      final list = (jsonDecode(resp.body) as Map<String, dynamic>)['data']
+          as List<dynamic>;
+      return list.map((json) => Group.fromJson(json)).toList();
+    }
+    return [];
+  }
+
+  Future<Set<Message>> getMessages(int groupId,
+      {int? page, int? pageSize, String? direction, String? sortBy}) async {
+    final url = Uri.parse(baseUrl +
+        "/api/v1/member/chat-groups/$groupId/messages?page=$page"
+            "&pageSize=$pageSize"
+            "&sortBy=$sortBy"
+            "&direction=$direction");
+    final resp = await client.get(url);
+    if (resp.statusCode == 200) {
+      final data = (jsonDecode(resp.body) as Map<String, dynamic>)['data']
+          as List<dynamic>;
+      return data.map((e) => Message.fromJson(e)).toSet();
+    }
+    return <Message>{};
+  }
+
+  /// get chat group between two user
+  Future<Group?> getChatGroupBetweenTwoUsers(userId) async {
+    final url =
+        Uri.parse('$baseUrl/api/v1/member/users/me/chat-groups/users/$userId');
+    final resp = await client.get(url);
+    if (resp.statusCode == 200) {
+      final data = (jsonDecode(resp.body) as Map<String, dynamic>)['data']
+          as Map<String, dynamic>;
+      var group = Group.fromJson(data);
+      print(data);
+      return group;
+    } else {
+      final data = (jsonDecode(resp.body));
+      print(data);
+    }
+    return null;
+  }
+
+  Future<ChatGroupDetail?> getChatGroupDetail(int groupId) async {
+    final url =
+        Uri.parse('$baseUrl/api/v1/member/users/me/chat-groups/$groupId');
+    final resp = await client.get(url, headers: await authorizationHeader());
+    if (resp.statusCode == 200) {
+      final data = (jsonDecode(resp.body) as Map<String, dynamic>)['data']
+          as Map<String, dynamic>;
+      var group = ChatGroupDetail.fromJson(data);
+      return group;
+    }
+    return null;
   }
 }

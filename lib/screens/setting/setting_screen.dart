@@ -50,7 +50,8 @@ class _SettingScreenState extends State<SettingScreen> {
                   SettingItemWithMoreIcon(
                     isLast: false,
                     title: AppLocalizations.of(context)!.appearance,
-                    description: AppLocalizations.of(context)!.settingAppearanceDescription,
+                    description: AppLocalizations.of(context)!
+                        .settingAppearanceDescription,
                     onClick: () {},
                     asset: 'assets/icons/language.svg',
                   ),
@@ -64,7 +65,8 @@ class _SettingScreenState extends State<SettingScreen> {
                   SettingItemWithMoreIcon(
                     isLast: true,
                     title: AppLocalizations.of(context)!.language,
-                    description: AppLocalizations.of(context)!.settingLanguageDescription,
+                    description: AppLocalizations.of(context)!
+                        .settingLanguageDescription,
                     onClick: () {
                       Navigator.push(context, LanguageSettingScreen.route());
                     },
@@ -119,9 +121,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 isLast: true,
                 title: 'Dark mode',
                 leadingBg: Colors.redAccent,
-                onChange: (bool value) {
-
-                },
+                onChange: (bool value) {},
               ),
             ),
           ],

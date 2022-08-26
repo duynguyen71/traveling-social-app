@@ -7,8 +7,7 @@ import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
 
 class StoryCard extends StatefulWidget {
-  const StoryCard(
-      {Key? key, required this.story, required this.onClick})
+  const StoryCard({Key? key, required this.story, required this.onClick})
       : super(key: key);
 
   final Post story;

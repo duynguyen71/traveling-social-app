@@ -42,9 +42,9 @@ class _HomeStoriesState extends State<HomeStories>
               mainAxisSize: MainAxisSize.max,
               children: [
                 Container(
-                  height: size.height*.35,
+                  height: size.height * .3,
                   constraints: BoxConstraints(
-                    minHeight: size.height*.35
+                    minHeight: size.height * .3,
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: NotificationListener<ScrollNotification>(

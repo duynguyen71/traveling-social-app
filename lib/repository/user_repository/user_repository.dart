@@ -6,7 +6,7 @@ import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/repository/authentication_repository/user.dart';
 import 'package:http/http.dart' as http;
 
-class UserRepository   {
+class UserRepository {
   User? _user;
   final _storage = const FlutterSecureStorage();
 
@@ -28,5 +28,4 @@ class UserRepository   {
       return null;
     }
   }
-
 }

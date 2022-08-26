@@ -245,7 +245,7 @@ class _ChatScreenState extends State<ChatScreen> {
         child: Stack(
           children: [
             ListView.builder(
-                padding: const EdgeInsets.only(bottom: 100, top: 56,left: 4.0),
+                padding: const EdgeInsets.only(bottom: 100, top: 56, left: 4.0),
                 controller: _scrollController,
                 addAutomaticKeepAlives: true,
                 addRepaintBoundaries: true,
@@ -269,23 +269,18 @@ class _ChatScreenState extends State<ChatScreen> {
                   DateTime time = DateTime.fromMicrosecondsSinceEpoch(
                       DateTime.now().millisecondsSinceEpoch);
                   var fmt = DateFormat('hh:mm a').format(time);
-                  var currentUserName = context
-                                .read<AuthenticationBloc>()
-                                .state
-                                .user
-                                .username;
+                  var currentUserName =
+                      context.read<AuthenticationBloc>().state.user.username;
                   return MessageWidget(
                     timeFormat: fmt,
                     hasError: false,
                     onLongPress: () {},
                     isFirst: false,
                     isLast: false,
-                    color: currentUserName !=
-                            message.user?.username
+                    color: currentUserName != message.user?.username
                         ? kPrimaryLightColor
                         : kPrimaryLightColor.withOpacity(.85),
-                    isSender: currentUserName ==
-                        message.user?.username,
+                    isSender: currentUserName == message.user?.username,
                     message: message.message.toString(),
                     isFavorite: false,
                     onDoubleTap: () {},

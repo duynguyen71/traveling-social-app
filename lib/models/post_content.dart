@@ -4,13 +4,15 @@ import 'attachment.dart';
 
 Content contentsFromJson(String str) => Content.fromJson(json.decode(str));
 String contentsToJson(Content data) => json.encode(data.toJson());
+
 class Content {
   Content({
     int? id,
     String? caption,
     Attachment? attachment,
     String? createDate,
-    String? updateDate,}){
+    String? updateDate,
+  }) {
     _id = id;
     _caption = caption;
     _attachment = attachment;
@@ -21,7 +23,9 @@ class Content {
   Content.fromJson(dynamic json) {
     _id = json['id'];
     _caption = json['caption'];
-    _attachment = json['attachment'] != null ? Attachment.fromJson(json['attachment']) : null;
+    _attachment = json['attachment'] != null
+        ? Attachment.fromJson(json['attachment'])
+        : null;
     _createDate = json['createDate'];
     _updateDate = json['updateDate'];
   }
@@ -30,17 +34,20 @@ class Content {
   Attachment? _attachment;
   String? _createDate;
   String? _updateDate;
-  Content copyWith({  int? id,
+  Content copyWith({
+    int? id,
     String? caption,
     Attachment? attachment,
     String? createDate,
     String? updateDate,
-  }) => Content(  id: id ?? _id,
-    caption: caption ?? _caption,
-    attachment: attachment ?? _attachment,
-    createDate: createDate ?? _createDate,
-    updateDate: updateDate ?? _updateDate,
-  );
+  }) =>
+      Content(
+        id: id ?? _id,
+        caption: caption ?? _caption,
+        attachment: attachment ?? _attachment,
+        createDate: createDate ?? _createDate,
+        updateDate: updateDate ?? _updateDate,
+      );
   int? get id => _id;
   String? get caption => _caption;
   Attachment? get attachment => _attachment;
@@ -63,5 +70,4 @@ class Content {
   String toString() {
     return '{id: $id, attachment: $attachment, caption: $caption}';
   }
-
 }

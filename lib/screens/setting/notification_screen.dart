@@ -14,7 +14,6 @@ class NotificationSettingScreen extends StatefulWidget {
 }
 
 class _NotificationSettingScreenState extends State<NotificationSettingScreen> {
-
   @override
   void initState() {
     super.initState();

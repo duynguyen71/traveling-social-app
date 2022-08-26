@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField(
       {Key? key,
-        this.hintText,
-        this.iconData,
-        required this.onChange,
-        required this.controller,
-        required this.validator,
-        this.node})
+      this.hintText,
+      this.iconData,
+      required this.onChange,
+      required this.controller,
+      required this.validator,
+      this.node})
       : super(key: key);
 
   final String? hintText;

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class CommentInputWidget extends StatelessWidget {
   const CommentInputWidget(
       {Key? key,
@@ -13,7 +12,9 @@ class CommentInputWidget extends StatelessWidget {
       this.inputBorderColor,
       this.inputBgColor,
       this.sendBtnColor,
-      this.controller, this.focusNode, required this.onChange})
+      this.controller,
+      this.focusNode,
+      required this.onChange})
       : super(key: key);
 
   final Function onSendButtonClick;

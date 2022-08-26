@@ -6,7 +6,8 @@ class RoundedIconButton extends StatelessWidget {
       required this.onClick,
       required this.icon,
       this.iconColor,
-      required this.size, this.bgColor})
+      required this.size,
+      this.bgColor})
       : super(key: key);
 
   final Function onClick;
@@ -25,7 +26,7 @@ class RoundedIconButton extends StatelessWidget {
         maxHeight: size,
       ),
       decoration: BoxDecoration(
-        color:bgColor?? Colors.black.withOpacity(.5),
+        color: bgColor ?? Colors.black.withOpacity(.5),
         borderRadius: BorderRadius.circular(size),
       ),
       child: IconButton(

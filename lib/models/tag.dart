@@ -13,9 +13,10 @@ class Tag extends Equatable {
     return Tag(id: json['id'], name: json['name']);
   }
 
-  Tag copyWith({int?status}){
-    return Tag(id: id,name: name,status: status);
+  Tag copyWith({int? status}) {
+    return Tag(id: id, name: name, status: status);
   }
+
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {};
     map['id'] = id;

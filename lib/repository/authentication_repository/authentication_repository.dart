@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'dart:convert';
+import 'package:ua_client_hints/ua_client_hints.dart';
+import 'package:fk_user_agent/fk_user_agent.dart';
 
 enum AuthenticationStatus {
   unknown,
@@ -25,13 +28,19 @@ class AuthenticationRepository {
     required String password,
   }) async {
     final url = Uri.parse(baseUrl + "/api/v1/auth/login");
+    await FkUserAgent.init();
+    var ua = FkUserAgent.userAgent;
+    //get push notification token
+    var token = await FirebaseMessaging.instance.getToken();
     try {
       final resp = await http.post(
         url,
         body: jsonEncode({"email": username, "password": password}),
         headers: {
           "Content-Type": "application/json",
-          'Access-Control-Allow-Origin': '*'
+          'Access-Control-Allow-Origin': '*',
+          "User-Agent": '$ua',
+          "pnt": '$token'
         },
       );
       if (resp.statusCode == 200) {
@@ -66,6 +75,7 @@ class AuthenticationRepository {
   }
 
   logOut() async {
+     FirebaseMessaging.instance.deleteToken();
     await _storage.deleteAll();
     _controller.add(AuthenticationStatus.unauthenticated);
     return;

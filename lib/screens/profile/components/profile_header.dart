@@ -175,16 +175,18 @@ class ProfileHeader extends StatelessWidget {
                       ],
                     ),
                   ),
-                bio.isNullOrBlank?const SizedBox.shrink():  Container(
-                    margin: const EdgeInsets.only(bottom: 8.0),
-                    child: Text(
-                      bio ?? '',
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style:
-                          const TextStyle(color: Colors.black87, fontSize: 14),
-                    ),
-                  )
+                  bio.isNullOrBlank
+                      ? const SizedBox.shrink()
+                      : Container(
+                          margin: const EdgeInsets.only(bottom: 8.0),
+                          child: Text(
+                            bio ?? '',
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                color: Colors.black87, fontSize: 14),
+                          ),
+                        )
                 ],
               ),
             ),

@@ -43,7 +43,6 @@ class _SearchResultsState extends State<SearchResults>
         animationDuration: Duration.zero);
   }
 
-
   _handleSearch() async {
     String keyword =
         widget.searchController.text.toString().trim().toLowerCase();
@@ -144,14 +143,14 @@ class _SearchResultsState extends State<SearchResults>
         },
         body: TabBarView(
           controller: _tabController,
-          children:  [
-            UserSearch(keyWord: widget.searchController.text,),
-            PostSearch(keyWord:widget.searchController.text),
+          children: [
+            UserSearch(
+              keyWord: widget.searchController.text,
+            ),
+            PostSearch(keyWord: widget.searchController.text),
           ],
         ),
       ),
     );
   }
-
-
 }

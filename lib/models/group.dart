@@ -4,7 +4,6 @@ import 'user.dart';
 import 'message.dart';
 
 class Group with ChangeNotifier {
-
   Group.fromJson(dynamic json) {
     id = json['id'];
     _name = json['name'];
@@ -35,7 +34,7 @@ class Group with ChangeNotifier {
     map['users'] = users.map((v) => v.toJson()).toList();
     var lastMessageJson = map['lastMessage'];
     if (lastMessageJson != null) {
-       lastMessage = Message.fromJson(lastMessageJson);
+      lastMessage = Message.fromJson(lastMessageJson);
     }
     map['createDate'] = createDate;
     map['updateDate'] = updateDate;
@@ -46,8 +45,8 @@ class Group with ChangeNotifier {
     if (_name == null || _name.toString().trim().isEmpty) {
       String rs = '';
       for (int i = 0; i < users.length; i++) {
-        rs += users[i].username.toString() +
-            (i == users.length - 1 ? '' : ', ');
+        rs +=
+            users[i].username.toString() + (i == users.length - 1 ? '' : ', ');
       }
       return rs;
     } else {

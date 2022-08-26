@@ -3,11 +3,12 @@
 
 class Reaction {
   Reaction({
-      int? id, 
-      String? type,}){
+    int? id,
+    String? type,
+  }) {
     _id = id;
     _type = type;
-}
+  }
 
   Reaction.fromJson(dynamic json) {
     _id = json['id'];
@@ -25,5 +26,4 @@ class Reaction {
     map['type'] = _type;
     return map;
   }
-
 }

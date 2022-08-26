@@ -35,14 +35,15 @@ class _ExploreScreenState extends State<ExploreScreen>
 
   @override
   void initState() {
-    FirebaseMessaging.instance.getToken().then(
-      (token) {
-        print('device notification token\n$token\n');
-      },
-    );
+    super.initState();
+
+    var firebaseMessaging = FirebaseMessaging.instance;
+    firebaseMessaging.onTokenRefresh.listen((event) {
+      print('device notification token refresh $event');
+    });
+    firebaseMessaging.getToken().then((value) => print('Firebase messaging token $value'));
     _pageController =
         PageController(initialPage: _currentPageIndex, keepPage: true);
-    super.initState();
   }
 
   @override
@@ -50,7 +51,7 @@ class _ExploreScreenState extends State<ExploreScreen>
     super.build(context);
     return WillPopScope(
       onWillPop: () async {
-         _pageController.jumpToPage(0);
+        _pageController.jumpToPage(0);
         setState(() {
           _currentPageIndex = 0;
         });

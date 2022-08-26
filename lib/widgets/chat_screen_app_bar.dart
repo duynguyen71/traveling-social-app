@@ -38,11 +38,12 @@ class ChatScreenAppBar extends StatelessWidget with PreferredSizeWidget {
         },
         icon: const Icon(Icons.arrow_drop_down, color: kPrimaryColor),
       ),
-      bottom:
-          PreferredSize(child: Container(
+      bottom: PreferredSize(
+          child: Container(
             height: 1,
             color: Colors.grey.shade200,
-          ), preferredSize: Size.fromHeight(1)),
+          ),
+          preferredSize: Size.fromHeight(1)),
       actions: [
         IconButton(
           onPressed: () {},
