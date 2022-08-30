@@ -54,7 +54,7 @@ class _FollowerScreenState extends State<FollowerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BaseAppBar(title: 'Follower'),
+      appBar: const BaseAppBar(title: 'Người theo dõi'),
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) => [],
         body: Container(
@@ -75,7 +75,7 @@ class _FollowerScreenState extends State<FollowerScreen> {
                 var user = _users[index];
                 assert(user.id != null);
                 return FollowUserEntry(
-                  followText: 'Follow back',
+                  followText: 'Theo dõi lại',
                   key: ValueKey(user.id),
                   userId: user.id!,
                   isFollowing: user.isFollowing,

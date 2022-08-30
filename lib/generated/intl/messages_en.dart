@@ -29,7 +29,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "account": MessageLookupByLibrary.simpleMessage("Account"),
         "addBio":
             MessageLookupByLibrary.simpleMessage("Add a bio to your profile"),
+        "addImage": MessageLookupByLibrary.simpleMessage("Add images"),
         "addLocation": MessageLookupByLibrary.simpleMessage("Add location"),
+        "addTag": MessageLookupByLibrary.simpleMessage("Add tags"),
         "addWebsite": MessageLookupByLibrary.simpleMessage("Add your website"),
         "addYourBirthDate":
             MessageLookupByLibrary.simpleMessage("Add your birthday"),
@@ -50,6 +52,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "comment": MessageLookupByLibrary.simpleMessage("Comment"),
         "createPost": MessageLookupByLibrary.simpleMessage("Create post"),
+        "createPostSuccess":
+            MessageLookupByLibrary.simpleMessage("Create post success"),
         "createQuestion":
             MessageLookupByLibrary.simpleMessage("Create question"),
         "createReviewPost":
@@ -89,10 +93,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "notification": MessageLookupByLibrary.simpleMessage("Notifications"),
         "position": MessageLookupByLibrary.simpleMessage("Position"),
         "post": MessageLookupByLibrary.simpleMessage("Post"),
+        "postTitle": MessageLookupByLibrary.simpleMessage("Post title"),
         "posting": MessageLookupByLibrary.simpleMessage("Post"),
         "privacy": MessageLookupByLibrary.simpleMessage("Privacy"),
         "profile": MessageLookupByLibrary.simpleMessage("Profile"),
+        "question": MessageLookupByLibrary.simpleMessage("Question"),
         "register": MessageLookupByLibrary.simpleMessage("Register"),
+        "removePostSuccess":
+            MessageLookupByLibrary.simpleMessage("Remove post success"),
         "review": MessageLookupByLibrary.simpleMessage("Review"),
         "save": MessageLookupByLibrary.simpleMessage("Save"),
         "searchInChat": MessageLookupByLibrary.simpleMessage("Search in chat"),
@@ -110,6 +118,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "tcLogin": MessageLookupByLibrary.simpleMessage("TC Login"),
         "tcRegister": MessageLookupByLibrary.simpleMessage("TC Register"),
         "title": MessageLookupByLibrary.simpleMessage("TC Social"),
+        "totalMoney": MessageLookupByLibrary.simpleMessage("Money"),
+        "travelDate": MessageLookupByLibrary.simpleMessage("Travel date"),
         "typeInYourText":
             MessageLookupByLibrary.simpleMessage("Type in your text"),
         "username": MessageLookupByLibrary.simpleMessage("Username"),

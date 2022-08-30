@@ -5,9 +5,9 @@ import '../constants/app_theme_constants.dart';
 
 class ChatScreenAppBar extends StatelessWidget with PreferredSizeWidget {
   const ChatScreenAppBar(
-      {Key? key, required this.groupName, required this.isTyping})
+      {Key? key,  this.groupName, required this.isTyping})
       : super(key: key);
-  final String groupName;
+  final String? groupName;
   final bool isTyping;
 
   @override
@@ -20,7 +20,7 @@ class ChatScreenAppBar extends StatelessWidget with PreferredSizeWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            groupName,
+            groupName??'',
             style: const TextStyle(
               color: kPrimaryColor,
               fontSize: 18,

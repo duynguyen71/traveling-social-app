@@ -20,6 +20,7 @@ import '../models/file_upload.dart';
 import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
 
+import '../models/question_post.dart';
 import '../models/review_post_detail.dart';
 import '../models/tag.dart';
 
@@ -91,9 +92,7 @@ class PostService {
       {int? page, int? pageSize, int? status}) async {
     var url = Uri.parse(baseUrl +
         "/api/v1/member/users/me/posts?page=$page&pageSize=$pageSize&status=$status");
-    final resp = await client.get(url, headers: {
-      "Authorization": 'Bearer ${await _storage.read(key: 'accessToken')}',
-    });
+    final resp = await client.get(url);
     if (resp.statusCode == 200) {
       final respBody = jsonDecode(resp.body) as Map<String, dynamic>;
       var list = respBody['data'] as List<dynamic>;
@@ -181,7 +180,10 @@ class PostService {
   }
 
   Future<Post> createPost(
-      Map<String, dynamic> post, List<File> attachments) async {
+      {required Map<String, dynamic> post,
+      required List<File> attachments,
+      int type = 1,
+      Set<Tag> tags = const {}}) async {
     var url = Uri.parse(baseUrl + "/api/v1/member/users/me/posts");
     List<int> attachmentIds = [];
     if (attachments.isNotEmpty) {
@@ -194,7 +196,7 @@ class PostService {
     var body = <String, dynamic>{
       "id": post['id'],
       "caption": post['caption'].toString().trim(),
-      "type": 1,
+      "type": type,
       "contents": attachmentIds
           .asMap()
           .entries
@@ -205,6 +207,7 @@ class PostService {
                 "caption": post['caption'].toString().trim()
               })
           .toList(),
+      "tags": tags.map((e) => e.toJson()).toList()
     };
     final resp = await http.post(url,
         headers: {
@@ -356,8 +359,8 @@ class PostService {
   /// Get review post comment replies
   Future<Set<Comment>> getReviewPostReplyComment(
       {required int parentCommentId}) async {
-    final url = Uri.parse(baseUrl +
-        "/api/v1/member/review-posts/comments/$parentCommentId/reply");
+    final url =
+        Uri.parse(baseUrl + "/api/v1/member/comments/$parentCommentId/reply");
     final resp = await client.get(url);
     if (resp.statusCode == 200) {
       final jsonBody = jsonDecode(resp.body) as Map<String, dynamic>;
@@ -468,6 +471,7 @@ class PostService {
         Uri.parse('$baseUrl/api/v1/member/users/me/review-posts/$id/detail');
     final resp = await client.get(url);
     if (resp.statusCode == 200) {
+      print(jsonDecode(resp.body));
       var creationReviewPost =
           CreationReviewPost.fromJson(jsonDecode(resp.body)['data']);
       print(creationReviewPost);
@@ -524,5 +528,44 @@ class PostService {
       return list.map((e) => BaseReviewPostResponse.fromJson(e)).toList();
     }
     return [];
+  }
+
+  Future<List<QuestionPost>> searchQuestions(key) async {
+    final url =
+        Uri.parse(baseUrl + "/api/v1/member/posts/search?keyWord=$key&type=2");
+    final resp = await client.get(url);
+    if (resp.statusCode == 200) {
+      var list = jsonDecode(resp.body)['data'] as List<dynamic>;
+      return list.map((e) => QuestionPost.fromJson(e)).toList();
+    }
+    return [];
+  }
+
+  Future<List<QuestionPost>> getCurrentUserQuestionPosts() async {
+    final url = Uri.parse(baseUrl + "/api/v1/member/users/me/questions");
+    final resp = await client.get(url);
+    if (resp.statusCode == 200) {
+      var list = jsonDecode(resp.body)['data'] as List<dynamic>;
+      return list.map((e) => QuestionPost.fromJson(e)).toList();
+    }
+    return [];
+  }
+
+  Future<QuestionPost?> getQuestionPostDetail(
+      {required int questionPostId}) async {
+    final url =
+        Uri.parse(baseUrl + "/api/v1/member/questions/$questionPostId/detail");
+    final resp = await client.get(url);
+    if (resp.statusCode == 200) {
+      var data = jsonDecode(resp.body)['data'] as Map<String, dynamic>;
+      return QuestionPost.fromJson(data);
+    }
+    return null;
+  }
+
+  Future<void> closeCommentOnPost({required int postId, int status = 0}) async {
+    final url =
+        Uri.parse(baseUrl + "/api/v1/member/users/me/questions/$postId/close/$status");
+    await client.put(url);
   }
 }

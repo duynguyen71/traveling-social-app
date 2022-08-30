@@ -33,7 +33,9 @@ class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
     if (mounted) {
       setState(() {});
     }
-    context.read<ChatBloc>().add(const FetchChatGroup());
+    if (context.read<ChatBloc>().state.chatGroups.isEmpty) {
+      context.read<ChatBloc>().add(const FetchChatGroup());
+    }
   }
 
   String? getGroupAvt(Group group) {
@@ -48,6 +50,10 @@ class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
     return null;
   }
 
+  _filterGroups(value) {
+    context.read<ChatBloc>().add(Filter(value));
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -58,7 +64,7 @@ class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
             SliverAppBar(
               iconTheme: const IconThemeData(color: Colors.black),
               leading: IconButton(
-                padding: EdgeInsets.only(left: 8.0),
+                padding: const EdgeInsets.only(left: 8.0),
                 onPressed: () => Navigator.of(context).pop(),
                 alignment: Alignment.center,
                 icon: const Icon(
@@ -89,15 +95,20 @@ class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
               title: RoundedInputContainer(
                 color: Colors.grey.shade100,
                 child: TextField(
-                  controller: TextEditingController(),
+                  // controller: _searchController,
                   textAlign: TextAlign.left,
+                  onChanged: (value) {
+                    if (value.isEmpty) {
+                      context.read<ChatBloc>().add(const Filter(null));
+                    }
+                  },
                   onSubmitted: (value) {
-                    print('on submitted');
+                    _filterGroups(value);
                   },
                   decoration: const InputDecoration(
                     isCollapsed: true,
                     border: InputBorder.none,
-                    hintText: 'Search in chat',
+                    hintText: 'Tìm tin nhắn',
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
                     hintStyle: TextStyle(
@@ -149,7 +160,7 @@ class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
                         child: Row(
                           children: const [
                             Text(
-                              "Messages",
+                              "Nhắn tin",
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 15,
@@ -161,7 +172,7 @@ class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
                       ),
                       BlocBuilder<ChatBloc, ChatState>(
                         builder: (context, state) {
-                          List<Group> groups = state.chatGroups;
+                          List<Group> groups = state.filtered;
                           return Column(
                             children: List.generate(
                               groups.length,
@@ -212,7 +223,7 @@ class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
                         child: Row(
                           children: const [
                             Text(
-                              "Suggestions",
+                              "Đề xuất",
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 15,
@@ -250,7 +261,7 @@ class _ChatGroupsScreenState extends State<ChatGroupsScreen> {
                                 ),
                                 Center(
                                   child: Text(
-                                    'No messages',
+                                    'Không có tin nhắn',
                                     style: TextStyle(
                                         color: kPrimaryColor.withOpacity(.8),
                                         fontSize: 18,

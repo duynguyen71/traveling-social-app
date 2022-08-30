@@ -1,14 +1,19 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/explore/components/post_entry.dart';
 import 'package:traveling_social_app/screens/profile/components/current_user_profile_header.dart';
+import 'package:traveling_social_app/utilities/application_utility.dart';
+import 'package:traveling_social_app/widgets/scroll_end_notification.dart';
+import '../../bloc/post/post_bloc.dart';
 import '../../models/post.dart';
 import '../../my_theme.dart';
 import '../../services/post_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'components/user_file_upload_grid.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CurrentUserProfileScreen extends StatefulWidget {
   const CurrentUserProfileScreen({Key? key}) : super(key: key);
@@ -22,16 +27,53 @@ class CurrentUserProfileScreen extends StatefulWidget {
 }
 
 class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin {
   final _postService = PostService();
   List<Post> _posts = [];
+  final _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
-    _postService
-        .getCurrentUserPosts(page: 0, pageSize: 10, status: 1)
-        .then((value) => setState(() => _posts = value));
     super.initState();
+    _fetchPost();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _scrollController.addListener(() {
+        var position = _scrollController.position;
+        if (position.pixels == position.maxScrollExtent) {
+          _fetchPost();
+        }
+      });
+    });
+  }
+
+  bool _isLoading = false;
+  int _page = 0;
+  bool _hasReachMax = false;
+
+  _fetchPost() async {
+    if (_isLoading || _hasReachMax) return;
+    try {
+      setState(() => _isLoading = true);
+      var post = await _postService.getCurrentUserPosts(
+          page: _page, pageSize: 5, status: 1);
+      setState(() {
+        _posts.addAll(post);
+        _isLoading = false;
+        _hasReachMax = post.isEmpty;
+        _page = post.isEmpty ? _page : (_page + 1);
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _hasReachMax = true;
+      });
+    }
   }
 
   @override
@@ -89,14 +131,20 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen>
                       ListView.builder(
                         itemBuilder: (context, index) {
                           var post = _posts[index];
-                          return PostEntry(post: post);
+                          return PostEntry(
+                            post: post,
+                            onTapMoreIcon: () =>
+                                _showActionModalPopup(post.id!),
+                          );
                         },
                         itemCount: _posts.length,
+                        controller: _scrollController,
                         padding: EdgeInsets.zero,
                       ),
-                      UserFileUploadGrid(
-                          userId:
-                              context.read<AuthenticationBloc>().state.user.id),
+                      Container(),
+                      // UserFileUploadGrid(
+                      //     userId:
+                      //         context.read<AuthenticationBloc>().state.user.id),
                     ],
                   ),
                 ),
@@ -106,8 +154,99 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen>
     );
   }
 
+  void _showActionModalPopup(int postId) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) {
+        return CupertinoActionSheet(
+          actions: [
+            CupertinoActionSheetAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                  showCupertinoDialog(
+                    context: context,
+                    barrierDismissible: true,
+                    builder: (context) {
+                      return CupertinoAlertDialog(
+                        title: const Text('Bạn có chắc muốn xóa bài viết này?'),
+                        actions: [
+                          CupertinoDialogAction(
+                            child: const Text('Xóa'),
+                            onPressed: () {
+                              setState(() {
+                                _posts.removeWhere(
+                                    (element) => element.id == postId);
+                                _postService.hidePost(postId: postId);
+                              });
+                              Navigator.pop(context);
+                              ApplicationUtility.showSuccessToast(
+                                  AppLocalizations.of(context)!
+                                      .removePostSuccess);
+                            },
+                            isDestructiveAction: true,
+                          ),
+                          CupertinoDialogAction(
+                            child: const Text('Hủy'),
+                            isDefaultAction: true,
+                            onPressed: () {
+                              Navigator.of(context, rootNavigator: true)
+                                  .pop("Hủy");
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: const Text('Xóa'))
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop("Hủy");
+            },
+            isDefaultAction: true,
+            child: const Text(
+              'Hủy',
+            ),
+          ),
+          // title: const Text('duy nguyen posts'),
+        );
+      },
+    );
+  }
+
+  // void showHidePostAlert( int postId) {
+  //   showDialog<void>(
+  //     context: context,
+  //     barrierDismissible: true,
+  //     builder: (BuildContext dialogContext) {
+  //       return CupertinoAlertDialog(
+  //         title: const Text("Thông báo"),
+  //         content: const Text("Bạn có chắc muốn xóa bài này?"),
+  //         actions: <Widget>[
+  //           CupertinoDialogAction(
+  //             child: const Text("Hủy"),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //           CupertinoDialogAction(
+  //             isDefaultAction: true,
+  //             child: const Text("Xóa",
+  //                 style: TextStyle(color: Colors.redAccent)),
+  //             onPressed: () {
+  //               context.read<PostBloc>().add(RemovePost(postId));
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
+
   @override
   bool get wantKeepAlive {
-    return true;
+    return false;
   }
 }

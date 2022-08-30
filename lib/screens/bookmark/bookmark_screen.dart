@@ -55,7 +55,6 @@ class _BookmarkScreenState extends State<BookmarkScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    Size size = MediaQuery.of(context).size;
     return NestedScrollView(
       headerSliverBuilder: (context, innerBoxIsScrolled) {
         return [
@@ -113,10 +112,16 @@ class _BookmarkScreenState extends State<BookmarkScreen>
                     key: UniqueKey(),
                     background: Container(
                       color: Colors.red,
-                      child: const Center(
-                        child: Icon(
-                          Icons.remove,
-                          color: Colors.white,
+                      child:  Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Xóa',style: TextStyle(color:Colors.white,fontWeight: FontWeight.bold),),
+                            Icon(
+                              Icons.remove,
+                              color: Colors.white,
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -132,6 +137,7 @@ class _BookmarkScreenState extends State<BookmarkScreen>
                       onTap: () => Navigator.push(
                           context, ReviewPostDetailScreen.route(post.id!)),
                       child: PostMetadata(
+                        showBookmark: false,
                           username: post.user?.username,
                           createDate: post.createDate),
                     ),

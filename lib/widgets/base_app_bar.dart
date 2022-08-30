@@ -28,6 +28,12 @@ class BaseAppBar extends StatelessWidget with PreferredSizeWidget {
         style: kDefaultAppBarTextTitleStyle,
       ),
       centerTitle: true,
+      bottom: PreferredSize(
+          child: Container(
+            height: 1,
+            color: Colors.grey.shade100,
+          ),
+          preferredSize: const Size.fromHeight(1)),
     );
   }
 

@@ -10,6 +10,7 @@ import '../../my_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'components/post_search.dart';
+import 'components/question_search.dart';
 import 'components/user_search.dart';
 
 class SearchResults extends StatefulWidget {
@@ -38,7 +39,7 @@ class _SearchResultsState extends State<SearchResults>
     super.initState();
     _tabController = TabController(
         vsync: this,
-        length: 2,
+        length: 3,
         initialIndex: 0,
         animationDuration: Duration.zero);
   }
@@ -93,11 +94,15 @@ class _SearchResultsState extends State<SearchResults>
                     tabs: const [
                       Tab(
                         height: 18,
-                        text: "Users",
+                        text: "Người dùng",
                       ),
                       Tab(
                         height: 18,
-                        text: "Posts",
+                        text: "Bài review",
+                      ),
+                      Tab(
+                        height: 18,
+                        text: "Câu hỏi",
                       ),
                     ],
                   ),
@@ -148,6 +153,7 @@ class _SearchResultsState extends State<SearchResults>
               keyWord: widget.searchController.text,
             ),
             PostSearch(keyWord: widget.searchController.text),
+            QuestionSearch(keyWord: widget.searchController.text),
           ],
         ),
       ),

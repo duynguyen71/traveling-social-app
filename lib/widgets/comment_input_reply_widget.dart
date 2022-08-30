@@ -87,7 +87,7 @@ class CommentInputReplyWidget extends StatelessWidget {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: 'Reply to $replyUsername: ',
+                                  text: 'Trả lời $replyUsername: ',
                                   style: const TextStyle(
                                       color: Colors.black87,
                                       fontWeight: FontWeight.w600),
@@ -159,7 +159,7 @@ class CommentInputReplyWidget extends StatelessWidget {
                         hintStyle: TextStyle(
                             color: placeHolderColor ?? Colors.black54,
                             fontSize: 14),
-                        hintText: placeHolderText ?? "Type in your text",
+                        hintText: placeHolderText ?? "Nhập nội dung trả lời",
                         fillColor: inputBgColor ?? Colors.white,
                       ),
                     ),

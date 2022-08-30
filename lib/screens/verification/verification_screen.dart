@@ -40,7 +40,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
         d5.isEmpty ||
         d6.isEmpty) {
       setState(() {
-        errorMessage = 'Code is not valid!';
+        errorMessage = 'Mã không hợp lệ!';
       });
     }
     try {
@@ -85,7 +85,6 @@ class _VerificationScreenState extends State<VerificationScreen> {
     var d4 = _digit4.text.toString();
     var d5 = _digit5.text.toString();
     var d6 = _digit6.text.toString();
-    print('$d1 + $d2 + $d3 + $d4 + $d5 + $d6 ');
     if (errorMessage != null) {
       setState(() {
         errorMessage = null;
@@ -122,7 +121,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   const Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      'Verification',
+                      'Xác thực tài khoản',
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
@@ -135,7 +134,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   const Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      "Enter your OTP code number",
+                      "Nhập mã gửi đến email của bạn",
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -219,7 +218,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                           width: double.infinity,
                           child: RoundedButton(
                             onPress: () => handleVerifyAccount(),
-                            text: 'Verify',
+                            text: 'Xác nhận',
                             bgColor: kPrimaryColor,
                             textColor: Colors.white,
                           ),
@@ -231,7 +230,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                     height: 18,
                   ),
                   const Text(
-                    "Didn't you receive any code?",
+                    "Không nhận được mã?",
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.black38,
@@ -242,7 +241,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                     height: 18,
                   ),
                   const Text(
-                    "Resend new code",
+                    "Gửi mã xác nhận mới",
                     style: TextStyle(
                       fontSize: 18,
                       color: kLoginPrimaryColor,

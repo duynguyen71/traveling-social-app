@@ -148,7 +148,7 @@ class _CreateStoryScreenState extends State<CreateStoryScreen> {
                           children: [
                             TextField(
                               decoration: const InputDecoration(
-                                  hintText: "caption...",
+                                  hintText: "Nhập nội dung bản tin nhanh",
                                   border: InputBorder.none),
                               controller: _captionController,
                               maxLines: null,

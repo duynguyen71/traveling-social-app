@@ -1,16 +1,17 @@
 import 'package:equatable/equatable.dart';
 import 'package:traveling_social_app/models/user.dart';
 
+import 'base_user.dart';
 import 'message.dart';
 
 class ChatGroupDetail extends Equatable {
   ChatGroupDetail.fromJson(dynamic json) {
     id = json['id'];
-    _name = json['name'];
+    name = json['name'];
     if (json['users'] != null) {
       users = [];
       json['users'].forEach((v) {
-        users.add(User.fromJson(v));
+        users.add(BaseUserInfo.fromJson(v));
       });
     }
     lastMessage = json['lastMessage'] != null
@@ -20,9 +21,27 @@ class ChatGroupDetail extends Equatable {
     updateDate = json['updateDate'];
   }
 
+  ChatGroupDetail copyWith({String? name,Message? lastMessage,List<BaseUserInfo>? users}) {
+    return ChatGroupDetail(
+        id: id,
+        name: name ?? this.name,
+        createDate: createDate,
+        lastMessage: lastMessage?? this.lastMessage,
+        updateDate: updateDate,
+        users:users?? this.users);
+  }
+
+  ChatGroupDetail(
+      {this.id,
+      this.name,
+      this.users = const [],
+      this.lastMessage,
+      this.createDate,
+      this.updateDate});
+
   int? id;
-  String? _name;
-  List<User> users = [];
+  String? name;
+  List<BaseUserInfo> users = [];
   Message? lastMessage;
   String? createDate;
   String? updateDate;
@@ -30,7 +49,7 @@ class ChatGroupDetail extends Equatable {
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['id'] = id;
-    map['name'] = _name;
+    map['name'] = name;
     map['users'] = users.map((v) => v.toJson()).toList();
     var lastMessageJson = map['lastMessage'];
     if (lastMessageJson != null) {

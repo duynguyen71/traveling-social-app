@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:traveling_social_app/screens/create_review/components/selected_tag.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/bottom_select_dialog.dart';
 import 'package:traveling_social_app/widgets/media_file_container.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
 import '../../bloc/post/post_bloc.dart';
+import '../../models/tag.dart';
 import '../../services/post_service.dart';
 import '../../widgets/loading_widget.dart';
 import 'components/user_draft_posts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class CreatePostScreen extends StatefulWidget {
-  const CreatePostScreen({Key? key}) : super(key: key);
+class CreateQuestionScreen extends StatefulWidget {
+  const CreateQuestionScreen({Key? key}) : super(key: key);
 
   @override
-  State<CreatePostScreen> createState() => _CreatePostScreenState();
+  State<CreateQuestionScreen> createState() => _CreateQuestionScreenState();
 }
 
-class _CreatePostScreenState extends State<CreatePostScreen> {
+class _CreateQuestionScreenState extends State<CreateQuestionScreen> {
   final PostService _postService = PostService();
   final _imagePickerQty = 60;
   final _imagePicker = ImagePicker();
@@ -28,6 +30,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   bool _isLoading = false;
   bool _isCaptionEmpty = true;
   final FocusNode _focusNode = FocusNode();
+  final Set<Tag> _selectedTags = {};
+  final _tagController = TextEditingController();
 
   _handleAddPost() async {
     //check post valid
@@ -38,11 +42,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     isLoading = true;
     Map<String, dynamic> post = {};
     post['caption'] = _captionController.text.toString();
-    post['type'] = 1;
+    post['type'] = 2;
     post['status'] = 1;
+
     try {
-      final resp = await _postService.createPost(post: post,attachments:  _pickedFiles,type: 1);
-      context.read<PostBloc>().add(AddPost(resp));
+      await _postService.createPost(
+          post: post, attachments: _pickedFiles, type: 2, tags: _selectedTags);
       Navigator.pop(context);
     } catch (e) {
       print("Failed to create post :" + e.toString());
@@ -60,8 +65,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   @override
   void initState() {
     super.initState();
-    // _focusNode.requestFocus();
-    // _captionController.text = lorem(paragraphs: 2,words: 140);
+    _captionController.text = lorem(paragraphs: 2, words: 8);
+    _tagController.text = "Hoidap question hoian vn";
   }
 
   @override
@@ -91,7 +96,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             leadingWidth: 80,
             elevation: 0,
             actions: [
-
               TextButton(
                 onPressed: () {
                   _handleAddPost();
@@ -139,6 +143,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 5),
                             margin: EdgeInsets.zero,
                             child: TextField(
+                              textInputAction: TextInputAction.newline,
                               focusNode: _focusNode,
                               onChanged: (value) {
                                 if (value.isEmpty && !_isCaptionEmpty) {
@@ -161,7 +166,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               showCursor: true,
                               cursorColor: Colors.blue,
                               decoration: InputDecoration(
-                                hintText: AppLocalizations.of(context)!.whatRUT,
+                                hintText: 'Bạn muốn đặt câu hỏi gì?',
                                 hintStyle: const TextStyle(
                                   color: Colors.black54,
                                 ),
@@ -211,22 +216,79 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               : const SizedBox.shrink(),
                         ],
                       ),
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      //   child: Row(
-                      //     children: [
-                      //       const Icon(
-                      //         Icons.location_on_outlined,
-                      //         color: Colors.blue,
-                      //       ),
-                      //       Text(
-                      //         // AppLocalizations.of(context)!.addLocation,
-                      //         style: const TextStyle(
-                      //             color: Colors.blue, fontSize: 12),
-                      //       )
-                      //     ],
-                      //   ),
-                      // ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Wrap(
+                            spacing: 8.0,
+                            runSpacing: 8.0,
+                            children: _selectedTags
+                                .map((e) => SelectedTag(
+                                    tag: e,
+                                    remove: () {
+                                      setState(() {
+                                        _selectedTags.removeWhere((element) =>
+                                            e.name == element.name);
+                                      });
+                                    }))
+                                .toList()),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text('Chọn thẻ'),
+                                  content: TextField(
+                                    controller: _tagController,
+                                    onChanged: (value) {},
+                                    decoration: InputDecoration(
+                                        hintStyle: TextStyle(fontSize: 12),
+                                        hintText:
+                                            "Mỗi thẻ cách nhau bởi dấu cách"),
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text('OK'),
+                                      onPressed: () {
+                                        var tagText = _tagController.text;
+                                        if (tagText.isNotEmpty) {
+                                          var split = tagText.split(' ');
+                                          for (var i = 0;
+                                              i < split.length;
+                                              i++) {
+                                            var tag = Tag(name: split[i]);
+                                            setState(() {
+                                              _selectedTags.add(tag);
+                                            });
+                                          }
+                                        }
+                                        _tagController.clear();
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.tag,
+                                color: Colors.blue,
+                              ),
+                              Text(
+                                AppLocalizations.of(context)!.addTag,
+                                style: const TextStyle(
+                                    color: Colors.blue, fontSize: 12),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -297,13 +359,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               Icons.camera_alt_outlined,
                               color: Colors.black87,
                             )),
-                        // IconButton(
-                        //   onPressed: () {},
-                        //   icon: const Icon(
-                        //     Icons.location_on_outlined,
-                        //     color: Colors.black87,
-                        //   ),
-                        // )
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.location_on_outlined,
+                            color: Colors.black87,
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -319,10 +381,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     );
   }
 
-  _showDrafts() async {
-    ApplicationUtility.showModelBottomDialog(context, const UserDraftPosts());
-  }
-
   discard() async {
     if (_focusNode.hasFocus) {
       _focusNode.unfocus();
@@ -334,12 +392,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     BottomDialogItem(title: 'Save as draft', onClick: () {}),
   ];
 
-  _handleCancelPress() {}
-
   @override
   void dispose() {
     _focusNode.dispose();
     _captionController.dispose();
+    _tagController.dispose();
     super.dispose();
   }
 }

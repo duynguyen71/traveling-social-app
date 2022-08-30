@@ -1,26 +1,18 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/bloc/post/post_bloc.dart';
-import 'package:traveling_social_app/constants/api_constants.dart';
-import 'package:traveling_social_app/generated/l10n.dart';
 import 'package:traveling_social_app/models/attachment.dart';
 import 'package:traveling_social_app/models/post.dart';
 import 'package:traveling_social_app/screens/comment/comment_screen.dart';
 import 'package:traveling_social_app/screens/explore/components/post_attachment_container.dart';
 import 'package:traveling_social_app/screens/profile/profile_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
-import 'package:traveling_social_app/widgets/bottom_select_dialog.dart';
 import 'package:traveling_social_app/widgets/expandable_text.dart';
-import 'package:traveling_social_app/widgets/popup_menu_item.dart';
-import 'package:traveling_social_app/widgets/rounded_icon_button.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
 import 'package:traveling_social_app/widgets/username_text.dart';
 
-import '../../../constants/app_theme_constants.dart';
 import '../../../models/post_content.dart';
 import '../../../models/reaction.dart';
 import '../../../services/post_service.dart';
@@ -28,12 +20,18 @@ import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class PostEntry extends StatefulWidget {
-  const PostEntry({Key? key, this.image, required this.post, this.padding})
+  const PostEntry(
+      {Key? key,
+      this.image,
+      required this.post,
+      this.padding,
+      this.onTapMoreIcon})
       : super(key: key);
 
   final String? image;
   final Post post;
   final Padding? padding;
+  final Function()? onTapMoreIcon;
 
   @override
   State<PostEntry> createState() => _PostEntryState();
@@ -113,9 +111,6 @@ class _PostEntryState extends State<PostEntry>
         children: [
           // USER AVT AVT
           Container(
-            // decoration: BoxDecoration(
-            //     border:
-            //         Border(bottom: BorderSide(color: Colors.grey.shade100))),
             padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -147,10 +142,9 @@ class _PostEntryState extends State<PostEntry>
                   ],
                 ),
                 const Spacer(),
+                // ICON MORE
                 IconButton(
-                  onPressed: () {
-                    _showActionModalPopup(context);
-                  },
+                  onPressed: widget.onTapMoreIcon,
                   icon: const Icon(Icons.more_horiz),
                 ),
               ],
@@ -269,115 +263,28 @@ class _PostEntryState extends State<PostEntry>
                     ],
                   ),
                 ),
-                Expanded(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: SvgPicture.asset(
-                          'assets/icons/share.svg',
-                          width: 24.0,
-                          height: 24.0,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                // Expanded(
+                //   child: Row(
+                //     crossAxisAlignment: CrossAxisAlignment.center,
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     mainAxisSize: MainAxisSize.max,
+                //     children: [
+                //       IconButton(
+                //         onPressed: () {},
+                //         icon: SvgPicture.asset(
+                //           'assets/icons/share.svg',
+                //           width: 24.0,
+                //           height: 24.0,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
           )
         ],
       ),
-    );
-  }
-
-  void _showActionModalPopup(BuildContext context) {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (context) {
-        return CupertinoActionSheet(
-          actions: [
-            CupertinoActionSheetAction(
-                onPressed: () {
-                  showCupertinoDialog(
-                    context: context,
-                    barrierDismissible: true,
-                    builder: (context) {
-                      return CupertinoAlertDialog(
-                        title: const Text('Are you sure delete this post?'),
-                        actions: [
-                          CupertinoDialogAction(
-                            child: const Text('Delete'),
-                            onPressed: () {
-                              Navigator.pop(context);
-                              context
-                                  .read<PostBloc>()
-                                  .add(RemovePost(widget.post.id!));
-                              Navigator.of(context, rootNavigator: true)
-                                  .pop("Discard");
-                            },
-                            isDestructiveAction: true,
-                          ),
-                          CupertinoDialogAction(
-                            child: const Text('Cancel'),
-                            isDefaultAction: true,
-                            onPressed: () {
-                              Navigator.of(context, rootNavigator: true)
-                                  .pop("Cancel");
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: const Text('Delete'))
-          ],
-          cancelButton: CupertinoActionSheetAction(
-            onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop("Cancel");
-            },
-            isDefaultAction: true,
-            child: const Text(
-              'Cancel',
-            ),
-          ),
-          // title: const Text('duy nguyen posts'),
-        );
-      },
-    );
-  }
-
-  void showHidePostAlert(BuildContext context) {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext dialogContext) {
-        return CupertinoAlertDialog(
-          title: const Text("Delete Post"),
-          content: const Text("Are you sure you want to delete this Post"),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              child: const Text("Cancel"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            CupertinoDialogAction(
-              isDefaultAction: true,
-              child: const Text("Delete",
-                  style: TextStyle(color: Colors.redAccent)),
-              onPressed: () {
-                context.read<PostBloc>().add(RemovePost(postId!));
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 

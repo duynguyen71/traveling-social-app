@@ -79,6 +79,33 @@ class ChatService {
     return null;
   }
 
+  Future<bool> updateGroupInfo({required int groupId, String? name}) async {
+    final url =
+        Uri.parse('$baseUrl/api/v1/member/users/me/chat-groups/$groupId');
+    final resp = await http.put(url,
+        body: jsonEncode({"name": name}), headers: await authorizationHeader());
+    if (resp.statusCode == 200) {
+      print('thay doi thong tin group thanh cong');
+      return true;
+    }
+    return false;
+  }
+
+  // add members
+  Future<bool> addMembersToGroup(
+      {required int groupId, required List<int> ids}) async {
+    print(ids);
+    final url = Uri.parse(
+        '$baseUrl/api/v1/member/users/me/chat-groups/$groupId/members');
+    final resp = await http.post(url,
+        body: jsonEncode({"ids": ids}), headers: await authorizationHeader());
+    if (resp.statusCode == 200) {
+      print('them cac user $ids thanh cong');
+      return true;
+    }
+    return false;
+  }
+
   Future<String> getToken() async {
     return 'Bearer ${await _storage.read(key: 'accessToken')}';
   }

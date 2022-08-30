@@ -83,5 +83,13 @@
   "birthDate": "Birthday",
   "addYourBirthDate": "Add your birthday",
   "fullName": "Full name",
-  "addYourFullName": "Add your full name"
+  "addYourFullName": "Add your full name",
+  "addTag": "Add tags",
+  "question": "Question",
+  "totalMoney": "Money",
+  "travelDate": "Travel date",
+  "addImage": "Add images",
+  "postTitle": "Post title",
+  "createPostSuccess": "Create post success",
+  "removePostSuccess": "Remove post success"
 }

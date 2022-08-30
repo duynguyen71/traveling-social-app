@@ -75,7 +75,7 @@ class _DayCostInputDialogState extends State<DayCostInputDialog> {
               children: [
                 TextField(
                   decoration: InputDecoration(
-                    labelText: 'Total day',
+                    labelText: 'Tổng ngày đi',
                     errorText: dayError,
                   ),
                   controller: _dayController,
@@ -83,13 +83,13 @@ class _DayCostInputDialogState extends State<DayCostInputDialog> {
                 ),
                 TextField(
                   decoration: InputDecoration(
-                      labelText: 'Number of participant', errorText: costError),
+                      labelText: 'Số người đi', errorText: costError),
                   keyboardType: TextInputType.number,
                   controller: _numOfParticipantController,
                 ),
                 TextField(
                   decoration:
-                      InputDecoration(labelText: 'Cost', errorText: costError),
+                      InputDecoration(labelText: 'Chi phí chuyến đi', errorText: costError),
                   keyboardType: TextInputType.number,
                   controller: _costController,
                 ),
@@ -105,7 +105,7 @@ class _DayCostInputDialogState extends State<DayCostInputDialog> {
                       child: TextButton(
                         onPressed: () => _saveCost(context),
                         child: const Text(
-                          "Save",
+                          "Lưu",
                           style: TextStyle(color: Colors.white),
                         ),
                         style: TextButton.styleFrom(

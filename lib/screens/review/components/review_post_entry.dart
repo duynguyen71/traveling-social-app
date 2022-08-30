@@ -14,13 +14,14 @@ class ReviewPostEntry extends StatelessWidget {
       required this.onTap,
       required this.child,
       this.imageName,
-      this.title})
+      this.title, this.color})
       : super(key: key);
   final double? coverImgHeight;
   final bool showFooter;
   final Function onTap;
   final Widget child;
   final String? imageName, title;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +29,7 @@ class ReviewPostEntry extends StatelessWidget {
       onTap: () => onTap(),
       child: Container(
         // color: Colors.white,
+        color: color,
         padding: const EdgeInsets.all(8.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

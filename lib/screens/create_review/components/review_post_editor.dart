@@ -22,7 +22,7 @@ import 'package:traveling_social_app/widgets/my_text_icon_button.dart';
 import 'package:traveling_social_app/widgets/tap_effect_widget.dart';
 import '../../../services/post_service.dart';
 import 'review_post_image_container.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class ReviewPostEditor extends StatefulWidget {
   const ReviewPostEditor(
       {Key? key,
@@ -204,14 +204,14 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
               runSpacing: 10,
               children: [
                 MyTextIconButton(
-                    text: 'Tag',
+                    text: AppLocalizations.of(context)!.addTag,
                     icon: Icons.tag,
                     bgColor: Colors.blueAccent,
                     textColor: Colors.white,
                     onTap: () => Navigator.push(
                         context, PickTagScreen.route(callback: (tagNames) {}))),
                 MyTextIconButton(
-                    text: 'Money',
+                    text: AppLocalizations.of(context)!.totalMoney,
                     icon: Icons.attach_money,
                     bgColor: Colors.orange,
                     textColor: Colors.white,
@@ -219,7 +219,7 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
                       _showCostInputDialog(context);
                     }),
                 MyTextIconButton(
-                    text: 'Date',
+                    text: AppLocalizations.of(context)!.travelDate,
                     icon: Icons.date_range,
                     bgColor: Colors.lightBlueAccent,
                     textColor: Colors.white,
@@ -236,7 +236,7 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Title",
+              Text(AppLocalizations.of(context)!.postTitle,
                   style:
                       MyTheme.heading2.copyWith(fontWeight: FontWeight.w600)),
               TextField(
@@ -262,7 +262,7 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           width: 200.0,
           child:
-              MyOutlineButton(onClick: _pickGalleryImages, text: 'Add images'),
+              MyOutlineButton(onClick: _pickGalleryImages, text: AppLocalizations.of(context)!.addImage),
         ),
         // IMAGE LIST
         Padding(

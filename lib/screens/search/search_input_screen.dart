@@ -75,6 +75,12 @@ class _SearchInputScreenState extends State<SearchInputScreen>
                   ),
                 ),
               ],
+              bottom: PreferredSize(
+                  child: Container(
+                    height: 1,
+                    decoration: BoxDecoration(color: Colors.grey.shade200),
+                  ),
+                  preferredSize: Size.fromHeight(1)),
             ),
           ];
         },

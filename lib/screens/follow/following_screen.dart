@@ -53,7 +53,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BaseAppBar(title: 'Following'),
+      appBar: const BaseAppBar(title: 'Đang theo dõi'),
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) => [],
         body: Container(

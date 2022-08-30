@@ -138,7 +138,7 @@ class _CommentEntryState extends State<CommentEntry> {
                               onTap: () {
                                 ApplicationUtility.showModelBottomDialog(
                                   context,
-                                  widget.userId !=
+                                  comment.user!.id! !=
                                           context
                                               .read<AuthenticationBloc>()
                                               .state
@@ -148,13 +148,13 @@ class _CommentEntryState extends State<CommentEntry> {
                                           items: [
                                             //REPLY COMMENT BUTTON
                                             BottomDialogItem(
-                                                title: 'Reply',
+                                                title: 'Trả lời',
                                                 onClick: () {
                                                   widget.replyCommentRequest(
                                                       widget.comment);
                                                 }),
                                             BottomDialogItem(
-                                              title: 'Copy',
+                                              title: 'Sao chép',
                                               onClick: () {
                                                 Clipboard.setData(ClipboardData(
                                                     text: widget.comment.content
@@ -166,7 +166,7 @@ class _CommentEntryState extends State<CommentEntry> {
                                       : MyBottomDialog(
                                           items: [
                                             BottomDialogItem(
-                                                title: 'Hide',
+                                                title: 'Xóa',
                                                 onClick: () {
                                                   widget.hideComment(
                                                       widget.comment);
@@ -175,7 +175,7 @@ class _CommentEntryState extends State<CommentEntry> {
                                                   });
                                                 }),
                                             BottomDialogItem(
-                                              title: 'Copy',
+                                              title: 'Sao chép',
                                               onClick: () {
                                                 Clipboard.setData(ClipboardData(
                                                     text: widget.comment.content
@@ -216,12 +216,12 @@ class _CommentEntryState extends State<CommentEntry> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text('Like'),
-                                const SizedBox(
-                                  width: 20,
-                                ),
+                                // const Text('Like'),
+                                // const SizedBox(
+                                //   width: 20,
+                                // ),
                                 GestureDetector(
-                                  child: const Text('Answer'),
+                                  child: const Text('Trả lời'),
                                   onTap: () => widget
                                       .replyCommentRequest(widget.comment),
                                 )

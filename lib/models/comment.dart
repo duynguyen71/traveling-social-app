@@ -12,6 +12,7 @@ class Comment {
   int? id;
   String? content;
   BaseUserInfo? user;
+  BaseUserInfo? replyUser;
   String? createDate;
   int? replyCount;
   List<Comment> replies = [];
@@ -29,6 +30,10 @@ class Comment {
     content = json['content'];
     if (json['user'] != null) {
       user = BaseUserInfo.fromJson(json['user'] as Map<String, dynamic>);
+    }
+    if (json['replyUser'] != null) {
+      replyUser =
+          BaseUserInfo.fromJson(json['replyUser'] as Map<String, dynamic>);
     }
     createDate = json['createDate'];
     replyCount = json['replyCount'];

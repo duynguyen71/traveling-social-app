@@ -83,5 +83,13 @@
   "birthDate": "Ngày sinh",
   "addYourBirthDate": "Thêm ngày sinh",
   "fullName": "Họ & tên",
-  "addYourFullName": "Thêm họ tên của bạn"
+  "addYourFullName": "Thêm họ tên của bạn",
+  "addTag": "Thêm thẻ",
+  "question": "Câu hỏi",
+  "totalMoney": "Tổng tiền đi",
+  "travelDate": "Ngày đi",
+  "addImage": "Thêm ảnh",
+  "postTitle": "Tiêu đề bài viết",
+  "createPostSuccess": "Tạo bài viết thành công",
+  "removePostSuccess": "Xóa bài thành công"
 }

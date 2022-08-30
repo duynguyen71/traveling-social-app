@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:collection/collection.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,9 +11,12 @@ import 'package:stomp_dart_client/stomp_config.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
-import 'package:traveling_social_app/extension/string_apis.dart';
-import 'package:traveling_social_app/models/chat_group_status.dart';
+import 'package:traveling_social_app/models/chat_group_detail.dart';
+import 'package:traveling_social_app/models/chat_group_status.dart'
+    as socketStatus;
 import 'package:traveling_social_app/models/group_status.dart';
+import 'package:traveling_social_app/screens/message/bloc/chat_bloc.dart';
+import 'package:traveling_social_app/screens/message/components/add_user.dart';
 import 'package:traveling_social_app/screens/message/components/chat_screen_drawer.dart';
 import 'package:traveling_social_app/screens/message/message_widget.dart';
 
@@ -22,9 +26,13 @@ import 'package:traveling_social_app/widgets/chat_screen_app_bar.dart';
 import '../../constants/app_theme_constants.dart';
 import '../../models/base_user.dart';
 import '../../models/message.dart';
+import '../../utilities/application_utility.dart';
 import 'chat_controller.dart';
 import 'package:provider/provider.dart';
 import 'dart:math' as Math;
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'chat_groups_screen.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({
@@ -98,12 +106,18 @@ class _ChatScreenState extends State<ChatScreen> {
     _chatController.text =
         lorem(paragraphs: 1, words: Math.Random().nextInt(10) + 6);
     _isTextMessageEmpty = false;
+    _getGroupDetail();
   }
 
   int get groupId => widget.groupId;
 
+  ChatGroupDetail? _chatGroupDetail;
+
   _getGroupDetail() async {
-    // var chatGroupDetail = await _chatService.getChatGroupDetail(groupId);
+    var chatGroupDetail = await _chatService.getChatGroupDetail(groupId);
+    setState(() {
+      _chatGroupDetail = chatGroupDetail;
+    });
   }
 
   // StompBadStateException
@@ -156,7 +170,8 @@ class _ChatScreenState extends State<ChatScreen> {
     if (!mounted) return;
     GroupStatus groupStatus = GroupStatus.fromJson(json);
     if (!isMyAccount(groupStatus.user!)) {
-      var isTyping = groupStatus.status == ChatGroupStatus.typing.value;
+      var isTyping =
+          groupStatus.status == socketStatus.ChatGroupStatus.typing.value;
       if (isTyping && _isTyping != true) {
         setState(() => _isTyping = true);
       } else if (!isTyping && _isTyping != false) {
@@ -186,7 +201,7 @@ class _ChatScreenState extends State<ChatScreen> {
     } on Exception catch (e) {
       print('Failed to send message: $e');
     } finally {
-      _sendStatus(status: ChatGroupStatus.sent.value);
+      _sendStatus(status: socketStatus.ChatGroupStatus.sent.value);
       _chatController.text =
           lorem(words: Math.Random().nextInt(10) + 5, paragraphs: 1);
       _scrollController.jumpTo(0);
@@ -235,9 +250,18 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       extendBodyBehindAppBar: true,
-      endDrawer: const ChatScreenDrawer(),
+      endDrawer: ChatScreenDrawer(
+        chatGroupDetail: _chatGroupDetail,
+        addMember: _addMember,
+        leaveGroup: _leaveGroup,
+        changeName: _changeName,
+      ),
       appBar: ChatScreenAppBar(
-        groupName: widget.tmpGroupName.toString(),
+        groupName: (_chatGroupDetail != null &&
+                _chatGroupDetail!.name != null &&
+                _chatGroupDetail!.name!.isNotEmpty)
+            ? _chatGroupDetail!.name
+            : widget.tmpGroupName,
         isTyping: _isTyping,
       ),
       body: SizedBox(
@@ -311,10 +335,10 @@ class _ChatScreenState extends State<ChatScreen> {
   _handleTextInputChange(value) {
     if (value.toString().trim().isNotEmpty) {
       isTextMessageEmpty = false;
-      _sendStatus(status: ChatGroupStatus.typing.value);
+      _sendStatus(status: socketStatus.ChatGroupStatus.typing.value);
     } else {
       isTextMessageEmpty = true;
-      _sendStatus(status: ChatGroupStatus.none.value);
+      _sendStatus(status: socketStatus.ChatGroupStatus.none.value);
     }
   }
 
@@ -329,5 +353,81 @@ class _ChatScreenState extends State<ChatScreen> {
     _chatController.dispose();
 
     super.dispose();
+  }
+
+  _addMember() {
+    // Navigator.pop(context);
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return AddUser(
+            onAddUser: (BaseUserInfo user) {
+              var users = _chatGroupDetail!.users;
+              var joinedUser =
+                  users.firstWhereOrNull((element) => element.id == user.id);
+              if (joinedUser != null) {
+                ApplicationUtility.showSuccessToast(
+                    "${user.username} đã ở trong nhóm!");
+              } else {
+                setState(() {
+                  _chatGroupDetail =
+                      _chatGroupDetail!.copyWith(users: [...users, user]);
+                });
+                _chatService.addMembersToGroup(
+                    groupId: widget.groupId, ids: [user.id!]);
+                ApplicationUtility.showSuccessToast(
+                    "Thêm ${user.username} vào nhóm thành công!");
+              }
+            },
+          );
+        },
+        backgroundColor: Colors.transparent,
+        isScrollControlled: true,
+        isDismissible: true);
+  }
+
+  _leaveGroup() {
+    Navigator.pop(context);
+    ApplicationUtility.showAlertDialog(context, () {
+      //reoi phong
+      context.read<ChatBloc>().add(LeaveGroup(widget.groupId));
+      Navigator.pushReplacement(context, ChatGroupsScreen.route());
+    }, () {
+      Navigator.pop(context);
+    }, 'Bạn có chắc muốn rời phòng?', 'Rời', 'Hủy');
+  }
+
+  _changeName() {
+    Navigator.pop(context);
+    showDialog(
+      context: context,
+      builder: (context) {
+        final _nameController = TextEditingController();
+        _nameController.text = _chatGroupDetail?.name ?? '';
+        return AlertDialog(
+          title: Text('Đổi tên nhóm'),
+          content: TextField(
+            controller: _nameController,
+            decoration: InputDecoration(
+                hintStyle: TextStyle(fontSize: 12), hintText: "Nhập tên mới"),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Đổi'),
+              onPressed: () async {
+                var username = _nameController.text;
+                await _chatService.updateGroupInfo(
+                    groupId: widget.groupId, name: username);
+                setState(() {
+                  _chatGroupDetail = _chatGroupDetail!.copyWith(name: username);
+                  context.read<ChatBloc>().add(FetchChatGroup());
+                });
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

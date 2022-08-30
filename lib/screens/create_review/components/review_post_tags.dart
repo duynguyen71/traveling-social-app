@@ -18,7 +18,7 @@ class ReviewPostTags extends StatelessWidget {
               const Padding(
                 padding: EdgeInsets.only(right: 8.0),
                 child: Text(
-                  "Tags:",
+                  "Thẻ:",
                   style: TextStyle(
                       fontWeight: FontWeight.w600, color: Colors.black87),
                 ),

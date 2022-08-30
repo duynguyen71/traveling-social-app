@@ -34,17 +34,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (_errorMessage != null) return;
     final username = _usernameController.text.toString();
     if (username.isEmpty || username.length < 4) {
-      setError('Username must be at least 4 characters!');
+      setError('Tên tài khoản phải ít nhất 4 ký tự!');
       return;
     }
     final email = _emailController.text.toString();
     if (email.isEmpty) {
-      setError('Email is not valid!');
+      setError('Email không hợp lệ');
       return;
     }
     final password = _passwordController.text.toString();
     if (password.isEmpty || password.length < 6) {
-      setError('Password must be at least 6 characters!');
+      setError('Mật khẩu phải ít nhất 6 ký tự!');
       return;
     }
     setLoading(true);
@@ -146,7 +146,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: CustomTextFormField(
                       validator: (value) {},
                       controller: _usernameController,
-                      hintText: 'enter your username ',
+                      hintText: 'Nhập tên đăng nhập ',
                       iconData: Icons.person,
                       onChange: (String value) {
                         onInputValueChange('username');
@@ -159,7 +159,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: CustomTextFormField(
                       validator: (value) {},
                       controller: _emailController,
-                      hintText: 'enter your email ',
+                      hintText: 'Nhập email ',
                       iconData: Icons.person,
                       onChange: (String value) {
                         onInputValueChange('email');
@@ -172,17 +172,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: TextFormField(
                       validator: (text) {
                         return null;
-
-                        // if (text == null) {
-                        //   return "Required password";
-                        // } else if (text.length < 3) {
-                        //   return "Password must be at least 4 characters or more";
-                        // }
                       },
                       controller: _passwordController,
                       obscureText: _isHidePassword,
                       decoration: InputDecoration(
-                        hintText: "Password",
+                        hintText: "Nhập mật khẩu",
                         hintStyle: const TextStyle(color: Colors.white),
                         border: InputBorder.none,
                         icon: const Icon(
@@ -226,7 +220,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   SizedBox(height: size.height * .03),
                   //REGISTER BUTTON
                   RoundedButton(
-                    text: 'Register',
+                    text: 'Đăng kí',
                     onPress: () async => await handleRegister(),
                     textColor: Colors.white,
                     bgColor: kLoginPrimaryColor,

@@ -14,7 +14,7 @@ class UserFileUploadGrid extends StatefulWidget {
 }
 
 class _UserFileUploadGridState extends State<UserFileUploadGrid>
-    with AutomaticKeepAliveClientMixin {
+   {
   final _postService = PostService();
   final List<FileUpload> _files = [];
   bool _hasReachMax = false;
@@ -29,7 +29,7 @@ class _UserFileUploadGridState extends State<UserFileUploadGrid>
       _isLoading = true;
     });
     _postService
-        .getUserFileUploads(widget.userId, page: _page, pageSize: 15)
+        .getUserFileUploads(widget.userId, page: _page, pageSize: 2)
         .then((value) {
       if (value.isEmpty) {
         setState(() {
@@ -54,7 +54,6 @@ class _UserFileUploadGridState extends State<UserFileUploadGrid>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return NotificationListener<ScrollNotification>(
       onNotification: (scrollNotification) {
         var position = scrollNotification.metrics;
@@ -96,6 +95,4 @@ class _UserFileUploadGridState extends State<UserFileUploadGrid>
     );
   }
 
-  @override
-  bool get wantKeepAlive => true;
 }

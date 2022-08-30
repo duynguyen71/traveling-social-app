@@ -55,8 +55,7 @@ class _ReviewPostCommentEntryState extends State<ReviewPostCommentEntry> {
       });
     }
     if ((
-        // (widget.currentFocusReplyId == widget.commentId)
-        // ||
+
         (oldWidget.currentReplyCommentId == widget.commentId))) {
       _getReplyComment();
     }
@@ -145,7 +144,8 @@ class _ReviewPostCommentEntryState extends State<ReviewPostCommentEntry> {
                                           ),
                                           ExpandableText(
                                               text:
-                                                  '\t${widget.commentId}\t${widget.commentContent}',
+                                                  // '\t${widget.commentId}\t${widget.commentContent}',
+                                                  '${widget.commentContent}',
                                               textStyle: const TextStyle(
                                                 fontSize: 13,
                                               ),
@@ -161,11 +161,7 @@ class _ReviewPostCommentEntryState extends State<ReviewPostCommentEntry> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  // GestureDetector(
-                                  // child: Text('level ${widget.level}'),
-                                  // onTap: () {
-                                  // },
-                                  // )
+
                                 ],
                               ),
                             ],

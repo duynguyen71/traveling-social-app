@@ -1,11 +1,9 @@
 import 'dart:io';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:provider/provider.dart';
-import 'package:traveling_social_app/dto/attachment_dto.dart';
 import 'package:traveling_social_app/my_theme.dart';
 import 'package:traveling_social_app/screens/create_review/components/review_post_gallery_view.dart';
 import 'package:traveling_social_app/screens/create_review/components/review_post_image_container.dart';
@@ -108,7 +106,7 @@ class _EditorReviewState extends State<EditorReview> {
                       )),
                   const SizedBox(width: 10),
                   IconTextButton(
-                      text: '${post.totalDay} days',
+                      text: '${post.totalDay} ngày',
                       icon: Icon(
                         Icons.calendar_today,
                         color: Colors.black54,
@@ -121,18 +119,18 @@ class _EditorReviewState extends State<EditorReview> {
                 readOnly: true, // true for view only mode
               ),
               // post images
+              ReviewPostTags(
+                tags: post.tags,
+                onTap: (tag) {},
+              ),//
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
-                  'Images: ',
+                  'Hình ảnh: ',
                   style: MyTheme.heading2,
                 ),
               ),
               // Tags
-              ReviewPostTags(
-                tags: post.tags,
-                onTap: (tag) {},
-              ),
               // Images
               SizedBox(
                   height: 140,

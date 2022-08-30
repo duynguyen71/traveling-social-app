@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
-import 'package:traveling_social_app/models/user.dart';
+import 'package:traveling_social_app/models/create_chat_group.dart';
+import 'package:traveling_social_app/my_theme.dart';
+import 'package:traveling_social_app/screens/message/bloc/chat_bloc.dart';
+import 'package:traveling_social_app/screens/message/chat_screen.dart';
 import 'package:traveling_social_app/services/user_service.dart';
-
+import 'package:traveling_social_app/utilities/application_utility.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../models/base_user.dart';
 
 /// Create message screen
@@ -17,8 +21,31 @@ class CreateMessageScreen extends StatefulWidget {
 }
 
 class _CreateMessageScreenState extends State<CreateMessageScreen> {
-  _createMessage() async {}
+  _createMessage() async {
+    var text = _userController.text;
+    if (text.isEmpty) {
+      ApplicationUtility.showFailToast(
+          'Vui lòng nhập tên các thành viên trong nhóm');
+      return;
+    }
+    var groupId = await _userService.createChatGroupWithNames(
+        names: text.split(' '), groupName: _groupNameController.text);
+    if (groupId == null) {
+      ApplicationUtility.showFailToast("Lỗi bất đinh. Vui lòng thử lại");
+      return;
+    }
+    Navigator.pushReplacement(
+        context,
+        ChatScreen.route(
+            groupId: groupId!, name: _groupNameController.text ?? ''));
+    context.read<ChatBloc>().add(const FetchChatGroup());
+    ApplicationUtility.showSuccessToast(
+        "Tạo nhóm chat ${_groupNameController.text ?? ''} thành công!");
+  }
+
   UserService _userService = UserService();
+  final _userController = TextEditingController();
+  final _groupNameController = TextEditingController();
 
   @override
   void initState() {
@@ -39,7 +66,7 @@ class _CreateMessageScreenState extends State<CreateMessageScreen> {
           ),
         ),
         title: const Text(
-          "Create Message",
+          "Tạo nhóm chat",
         ),
         titleTextStyle: const TextStyle(
           color: Colors.black87,
@@ -60,37 +87,52 @@ class _CreateMessageScreenState extends State<CreateMessageScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: Padding(
-        padding: kDefaultHorizPadding,
-        child: Column(
-          children: [
-            Autocomplete<BaseUserInfo>(
-              optionsBuilder: (value) async {
-                String usernameKeyWord = value.text;
-                var list = await _userService.searchUsers(
-                    username: usernameKeyWord, pageSize: 10);
-                print(list);
-                return list;
-              },
-              displayStringForOption: (BaseUserInfo user) {
-                return user.username.toString();
-              },
-              optionsViewBuilder: (context, onSelected, options) {
-                return Container();
-              },
-              onSelected: (string) {},
-              fieldViewBuilder: (context, textEditingController, focusNode,
-                  onFieldSubmitted) {
-                return TextField(
-                  controller: textEditingController,
-                  focusNode: focusNode,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                );
-              },
+      body: Stack(
+        children: [
+          Padding(
+            padding: kDefaultHorizPadding,
+            child: Column(
+              children: [
+                TextField(
+                  controller: _groupNameController,
+                  decoration: InputDecoration(
+                    label: Text(
+                      "Tên nhóm",
+                      style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: .7),
+                    ),
+                  ),
+                ),
+                TextField(
+                  controller: _userController,
+                  decoration: InputDecoration(
+                    hintText: "Nhập tên người dùng cách nhau bởi dấu cách",
+                    hintStyle: TextStyle(color: Colors.black45, fontSize: 14),
+                    label: Text(
+                      "Thành viên",
+                      style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: .7),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _userController.dispose();
+    _groupNameController.dispose();
+    super.dispose();
   }
 }

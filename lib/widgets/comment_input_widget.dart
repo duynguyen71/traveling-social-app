@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../constants/app_theme_constants.dart';
+
 class CommentInputWidget extends StatelessWidget {
   const CommentInputWidget(
       {Key? key,
@@ -32,12 +34,8 @@ class CommentInputWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Container(
-      height: size.height * .1,
-      constraints: const BoxConstraints(maxHeight: 80),
-      alignment: Alignment.center,
-      width: size.width,
+      constraints: const BoxConstraints(maxHeight: 200),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
           color: bgColor ?? Colors.grey.shade100,
@@ -53,35 +51,45 @@ class CommentInputWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(
-            child: TextField(
-              onChanged: (text) => onChange(text),
-              focusNode: focusNode,
-              controller: controller,
-              style: TextStyle(color: placeHolderColor ?? Colors.black87),
-              decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: inputBorderRadius ??
-                        const BorderRadius.all(Radius.circular(50)),
-                    borderSide: BorderSide(
-                        width: 1, color: inputBorderColor ?? Colors.white),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(Radius.circular(50)),
-                    borderSide: BorderSide(
-                        width: 1, color: inputBorderColor ?? Colors.white),
-                  ),
-                  filled: true,
-                  hintStyle:
-                      TextStyle(color: placeHolderColor ?? Colors.black54),
-                  hintText: placeHolderText ?? "Type in your text",
-                  fillColor: inputBgColor ?? Colors.white),
+            child: Container(
+              color: Colors.transparent,
+              constraints: const BoxConstraints(maxHeight: 200),
+              child: TextField(
+                onChanged: (text) => onChange(text),
+                focusNode: focusNode,
+                controller: controller,
+                keyboardType: TextInputType.multiline,
+                textAlign: TextAlign.left,
+                maxLines: null,
+                textInputAction: TextInputAction.send,
+                style: TextStyle(color: placeHolderColor ?? Colors.black87),
+                decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: inputBorderRadius ??
+                          const BorderRadius.all(Radius.circular(50)),
+                      borderSide: BorderSide(
+                          width: 1, color: inputBorderColor ?? Colors.white),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: const BorderRadius.all(Radius.circular(50)),
+                      borderSide: BorderSide(
+                          width: 1, color: inputBorderColor ?? Colors.white),
+                    ),
+                    filled: true,
+                    isCollapsed: true,
+                    contentPadding: const EdgeInsets.all(8.0),
+                    hintStyle:
+                        TextStyle(color: placeHolderColor ?? Colors.black54),
+                    hintText: placeHolderText ?? "Type in your text",
+                    fillColor: inputBgColor ?? Colors.white),
+              ),
             ),
           ),
           const SizedBox(width: 10),
           IconButton(
             icon: Icon(
               Icons.send,
-              color: sendBtnColor ?? Colors.black12,
+              color: sendBtnColor ?? Colors.black54,
             ),
             onPressed: () => onSendButtonClick(),
           ),

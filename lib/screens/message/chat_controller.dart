@@ -26,7 +26,7 @@ class ChatController extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       constraints: const BoxConstraints(maxHeight: 200),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color: kPrimaryColor,
           border: Border(
             top: BorderSide(color: kPrimaryLightColor, width: 1),
@@ -63,10 +63,10 @@ class ChatController extends StatelessWidget {
                   contentPadding: const EdgeInsets.all(8.0),
                   border: InputBorder.none,
                   hintStyle: TextStyle(
-                    color: Colors.white.withOpacity(.55),
+                    color: Colors.black45,
                     fontSize: 14,
                   ),
-                  hintText: "Enter message",
+                  hintText: "Nhập nội dung tin nhắn...",
                 ),
               ),
             ),

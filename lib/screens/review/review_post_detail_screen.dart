@@ -92,7 +92,8 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      resizeToAvoidBottomInset: false,
+      // resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: NestedScrollView(
         body: RefreshIndicator(
           onRefresh: () async {
@@ -209,39 +210,46 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
                             ),
                       (_isFetching || _reviewPostDetail.images.isEmpty)
                           ? const SizedBox.shrink()
-                          : Container(
-                              height: 120,
-                              constraints: const BoxConstraints(minHeight: 120),
-                              // padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: ListView.builder(
-                                padding: EdgeInsets.zero,
-                                scrollDirection: Axis.horizontal,
-                                physics: const BouncingScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      _showAttScrollView(index);
-                                    },
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 8.0),
-                                      child: AspectRatio(
-                                        aspectRatio: 1,
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              kReviewPostImageGalleryBorder,
-                                          child: CachedNetworkImage(
-                                              fit: BoxFit.cover,
-                                              imageUrl:
-                                                  '$imageUrl${_reviewPostDetail.images[index].image!.name}'),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                                itemCount: _reviewPostDetail.images.length,
-                                shrinkWrap: true,
-                              )),
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Hình ảnh",style:TextStyle(fontSize:16,fontWeight: FontWeight.w600)),
+                                Container(
+                                    height: 120,
+                                    constraints:
+                                        const BoxConstraints(minHeight: 120),
+                                    child: ListView.builder(
+                                      padding: EdgeInsets.zero,
+                                      scrollDirection: Axis.horizontal,
+                                      physics: const BouncingScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            _showAttScrollView(index);
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 8.0),
+                                            child: AspectRatio(
+                                              aspectRatio: 1,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    kReviewPostImageGalleryBorder,
+                                                child: CachedNetworkImage(
+                                                    fit: BoxFit.cover,
+                                                    imageUrl:
+                                                        '$imageUrl${_reviewPostDetail.images[index].image!.name}'),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      itemCount:
+                                          _reviewPostDetail.images.length,
+                                      shrinkWrap: true,
+                                    )),
+                              ],
+                            ),
                       //ABOUT AUTHOR
                       _isFetching
                           ? const SizedBox.shrink()
@@ -336,10 +344,12 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
                   onChange: (text) {},
                   sendBtnColor: kPrimaryLightColor,
                   controller: _commentController,
+                  placeHolderText: "Nhập nội dung bình luận",
                   focusNode: _commentFocusNode,
                   onSendButtonClick: _uploadComment,
                 ),
-                bottom: MediaQuery.of(context).viewInsets.bottom,
+                // bottom: MediaQuery.of(context).viewInsets.bottom,
+                bottom: 0,
               ),
             ],
           ),
@@ -452,13 +462,11 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
       setState(() {
         _replyComment = null;
         _removedCommentId = null;
-        // _currentFocusReplyId = null;
       });
     } on Exception catch (e) {
       print(e);
     } finally {
       _commentController.text = lorem(words: 6, paragraphs: 1);
-      // _commentFocusNode.unfocus();
     }
   }
 

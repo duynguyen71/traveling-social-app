@@ -15,7 +15,7 @@ class FollowUserEntry extends StatefulWidget {
       required this.isFollowing,
       required this.userService,
       required this.userId,
-      this.followText = 'Follow'})
+      this.followText = 'Theo dõi'})
       : super(key: key);
 
   final String? username, avt;
@@ -73,7 +73,7 @@ class _FollowUserEntryState extends State<FollowUserEntry> {
                   }
                   setState(() => _isFollowing = !_isFollowing);
                 },
-                text: _isFollowing ? 'Following' : widget.followText,
+                text: _isFollowing ? 'Đang theo dõi' : widget.followText,
                 color: _isFollowing ? kPrimaryColor : null,
                 textColor: _isFollowing ? Colors.white : null),
           ],

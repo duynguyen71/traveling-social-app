@@ -11,7 +11,7 @@ import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/base_sliver_app_bar.dart';
 import 'package:traveling_social_app/widgets/loading_widget.dart';
 import 'package:traveling_social_app/widgets/rounded_icon_button.dart';
-import '../../services/post_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CreateReviewPostScreen extends StatefulWidget {
   const CreateReviewPostScreen({Key? key}) : super(key: key);
@@ -38,7 +38,6 @@ class _CreateReviewPostScreenState extends State<CreateReviewPostScreen>
   _loadPrevData() {
     var review = context.read<CreateReviewPostCubit>().state.post;
     var title = review.title;
-
     if (title == null || review.contentJson == null) {
       _controller = quill.QuillController.basic();
       _titleController.text = lorem(words: 10, paragraphs: 1);
@@ -75,7 +74,6 @@ class _CreateReviewPostScreenState extends State<CreateReviewPostScreen>
     return WillPopScope(
       onWillPop: () {
         context.read<CreateReviewPostCubit>().clear();
-        // _updateReviewPostState(context);
         return Future.value(true);
       },
       child: Scaffold(
@@ -101,19 +99,8 @@ class _CreateReviewPostScreenState extends State<CreateReviewPostScreen>
                   BaseSliverAppBar(
                     elevation: 0,
                     forceElevated: true,
-                    title: 'Review post',
+                    title: AppLocalizations.of(context)!.review,
                     actions: [
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: RoundedIconButton(
-                            onClick: _handleUploadPost,
-                            icon: Icons.save,
-                            size: 30,
-                            bgColor: Colors.blue,
-                          ),
-                        ),
-                      ),
                       Center(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -121,6 +108,23 @@ class _CreateReviewPostScreenState extends State<CreateReviewPostScreen>
                               onClick: _changeToViewMode,
                               icon: Icons.visibility,
                               size: 30),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () => _handleUploadPost(),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 8),
+                          decoration: BoxDecoration(
+                              color: Colors.blueAccent,
+                              borderRadius: BorderRadius.circular(50)),
+                          child: Text(
+                            AppLocalizations.of(context)!.posting,
+                            style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.normal),
+                          ),
                         ),
                       ),
                     ],
@@ -156,6 +160,8 @@ class _CreateReviewPostScreenState extends State<CreateReviewPostScreen>
   _handleUploadPost() async {
     _updateReviewPostState(context);
     await context.read<CreateReviewPostCubit>().uploadReview();
+    ApplicationUtility.showSuccessToast(
+        AppLocalizations.of(context)!.createPostSuccess);
     Navigator.pop(context);
   }
 

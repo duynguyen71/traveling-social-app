@@ -32,15 +32,15 @@ class _CurrentUserReviewPostScreenState
 
   @override
   void initState() {
-    _getPosts();
     super.initState();
+    _getPosts();
   }
 
   // Get current user review posts active
   _getPosts() {
     _postService
         .getCurrentUserReviewPosts()
-        .then((value) => setState(() => _posts = value));
+        .then((value) => setState(() => _posts.addAll(value.reversed)));
   }
 
   void _showActionModalPopup(BuildContext context, int? id) {
@@ -55,7 +55,7 @@ class _CurrentUserReviewPostScreenState
                   Navigator.pop(context);
                   Navigator.push(context, ReviewPostDetailScreen.route(id!));
                 },
-                child: const Text('View')),
+                child: const Text('Xem')),
             CupertinoActionSheetAction(
                 onPressed: () async {
                   assert(id != null);
@@ -71,15 +71,31 @@ class _CurrentUserReviewPostScreenState
                     Navigator.pop(context);
                   }
                 },
-                child: const Text('Edit')),
+                child: const Text('Chỉnh sửa')),
+            CupertinoActionSheetAction(
+                onPressed: () async {
+                  assert(id != null);
+                  var creationReviewPost = await _postService
+                      .getCurrentUserEditReviewPostDetail(id!);
+                  if (creationReviewPost != null) {
+                    context
+                        .read<CreateReviewPostCubit>()
+                        .setReviewPost(creationReviewPost);
+                    Navigator.pop(context);
+                    Navigator.push(context, CreateReviewPostScreen.route());
+                  } else {
+                    Navigator.pop(context);
+                  }
+                },
+                child: const Text('Xóa')),
           ],
           cancelButton: CupertinoActionSheetAction(
             onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop("Cancel");
+              Navigator.of(context, rootNavigator: true).pop("Hủy");
             },
             isDefaultAction: true,
             child: const Text(
-              'Cancel',
+              'Hủy',
             ),
           ),
           // title: const Text('duy nguyen posts'),
@@ -97,7 +113,7 @@ class _CurrentUserReviewPostScreenState
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
               const BaseSliverAppBar(
-                title: 'Review',
+                title: 'Bài Review của bạn',
                 isShowLeading: true,
               )
             ];
@@ -160,7 +176,7 @@ class _CurrentUserReviewPostScreenState
                                 )),
                             Expanded(
                               child: Text(
-                                'Edited ${timeago.format(
+                                'Lần cuối chỉnh sửa ${timeago.format(
                                   updateDate,
                                 )}',
                                 style: TextStyle(fontSize: 12),

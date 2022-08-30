@@ -799,6 +799,86 @@ class S {
       args: [],
     );
   }
+
+  /// `Add tags`
+  String get addTag {
+    return Intl.message(
+      'Add tags',
+      name: 'addTag',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Question`
+  String get question {
+    return Intl.message(
+      'Question',
+      name: 'question',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Money`
+  String get totalMoney {
+    return Intl.message(
+      'Money',
+      name: 'totalMoney',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Travel date`
+  String get travelDate {
+    return Intl.message(
+      'Travel date',
+      name: 'travelDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add images`
+  String get addImage {
+    return Intl.message(
+      'Add images',
+      name: 'addImage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Post title`
+  String get postTitle {
+    return Intl.message(
+      'Post title',
+      name: 'postTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create post success`
+  String get createPostSuccess {
+    return Intl.message(
+      'Create post success',
+      name: 'createPostSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove post success`
+  String get removePostSuccess {
+    return Intl.message(
+      'Remove post success',
+      name: 'removePostSuccess',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

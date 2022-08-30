@@ -35,7 +35,6 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isHidePassword = true;
   String? _errorMessage;
   late UserService _userService;
-
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -49,11 +48,11 @@ class _LoginScreenState extends State<LoginScreen> {
     final password = _passwordController.text.toString();
 
     if (username.isEmpty) {
-      _setErrorMessage('username must not be empty');
+      _setErrorMessage('Tên tài khoản không được để trống');
       return;
     }
     if (password.isEmpty) {
-      _setErrorMessage('password must not be empty');
+      _setErrorMessage('Mật khẩu không được để trống');
       return;
     }
     _showLoadingIndicator(true);
@@ -77,8 +76,8 @@ class _LoginScreenState extends State<LoginScreen> {
         context: context,
         builder: (context) {
           return CupertinoAlertDialog(
-            title: const Text("Notification"),
-            content: const Text("Unknown error. Please try again"),
+            title: const Text("Thông báo"),
+            content: const Text("Lỗi bất định. Vui lòng đăng nhập lại"),
             actions: [
               CupertinoDialogAction(
                 child: const Text("Got it"),
@@ -108,8 +107,8 @@ class _LoginScreenState extends State<LoginScreen> {
     _isLoading = false;
     _userService = UserService();
     //
-    _usernameController.text = 'kddevit';
-    _passwordController.text = 'password';
+    // _usernameController.text = 'kddevit';
+    // _passwordController.text = 'password';
     super.initState();
   }
 
@@ -156,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     RoundedInputContainer(
                       child: CustomInputField(
                         controller: _usernameController,
-                        hintText: 'Username',
+                        hintText: 'Tên hoặc email',
                         iconData: Icons.person,
                         onChange: (value) => _setErrorMessage(null),
                       ),
@@ -168,7 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         obscureText: _isHidePassword,
                         controller: _passwordController,
                         decoration: InputDecoration(
-                          hintText: "Password",
+                          hintText: "Mật khẩu",
                           hintStyle: const TextStyle(color: Colors.white),
                           border: InputBorder.none,
                           icon: const Icon(
@@ -208,13 +207,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     //  Login Button
                     SizedBox(height: size.height * .03),
                     RoundedButton(
-                      text: 'Login',
+                      text: 'Đăng nhập',
                       onPress: () async => await _handleLogin(),
                       textColor: Colors.white,
                       bgColor: kLoginPrimaryColor,
                     ),
                     //Already have account check
-                    SizedBox(height: size.height * .03),
+                    SizedBox(height: size.height * .01),
                     AlreadyHaveAccountCheck(
                       isLogin: true,
                       onPress: () => ApplicationUtility.pushAndReplace(
@@ -224,19 +223,19 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: size.height * .03),
+                SizedBox(height: size.height * .01),
                 SizedBox(
                   width: size.width * .8,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
                         child: MyDivider(
                           color: Colors.grey.shade200,
                         ),
                       ),
-                      SizedBox(
-                        width: 30,
-                        child: Text("or"),
+                      Expanded(
+                        child: Center(child: Text("hoặc")),
                       ),
                       Expanded(
                         child: MyDivider(
@@ -246,16 +245,22 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                 ),
+                SizedBox(height: size.height * .02),
                 SignInButton(
                   Buttons.Google,
                   onPressed: () {},
+                  text: 'Đăng nhập với Google',
                   elevation: 0,
                 ),
-                SignInButton(
-                  Buttons.Facebook,
+                SignInButton(Buttons.Facebook,
+                    onPressed: () {},
+                    elevation: 0,
+                    text: 'Đăng nhập với Facebook'),
+                TextButton(
                   onPressed: () {},
-                  elevation: 0,
-
+                  child: Text(
+                    'Quên mật khẩu?',
+                  ),
                 ),
               ],
             ),

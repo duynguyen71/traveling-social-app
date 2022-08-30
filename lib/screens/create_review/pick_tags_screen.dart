@@ -8,6 +8,7 @@ import 'package:traveling_social_app/widgets/tap_effect_widget.dart';
 import 'package:provider/provider.dart';
 import '../../models/tag.dart';
 import '../../services/post_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PickTagScreen extends StatefulWidget {
   const PickTagScreen({Key? key, required this.onSaveCallback})
@@ -97,6 +98,9 @@ class _PickTagScreenState extends State<PickTagScreen> {
                   backgroundColor: Colors.white,
                   centerTitle: true,
                   title: TextField(
+                    decoration: InputDecoration(
+                        hintText: "Nhập tên thẻ cần thêm vào bài",
+                        hintStyle: TextStyle(color: Colors.black54)),
                     controller: _tagEditController,
                     onChanged: _onChange,
                   ),
@@ -105,7 +109,7 @@ class _PickTagScreenState extends State<PickTagScreen> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: MyTextIconButton(
-                            text: 'Save',
+                            text: AppLocalizations.of(context)!.save,
                             bgColor: Colors.blueAccent,
                             icon: Icons.safety_check,
                             onTap: () => _saveTags(context)),

@@ -19,6 +19,7 @@ import 'package:traveling_social_app/utilities/application_utility.dart';
 import '../config/base_interceptor.dart';
 import '../config/expired_token_retry.dart';
 import '../models/chat_group_detail.dart';
+import '../models/create_chat_group.dart';
 import '../models/group.dart';
 import '../models/message.dart';
 
@@ -377,6 +378,17 @@ class UserService {
     return [];
   }
 
+  Future<bool> leaveGroup({required int groupId}) async {
+    final url = Uri.parse(
+        baseUrl + "/api/v1/member/users/me/chat-groups/$groupId/leave");
+    final resp = await client.put(url);
+    if (resp.statusCode == 200) {
+      print('leave group $groupId success');
+      return true;
+    }
+    return false;
+  }
+
   Future<Set<Message>> getMessages(int groupId,
       {int? page, int? pageSize, String? direction, String? sortBy}) async {
     final url = Uri.parse(baseUrl +
@@ -414,13 +426,29 @@ class UserService {
   Future<ChatGroupDetail?> getChatGroupDetail(int groupId) async {
     final url =
         Uri.parse('$baseUrl/api/v1/member/users/me/chat-groups/$groupId');
-    final resp = await client.get(url, headers: await authorizationHeader());
+    final resp = await client.get(url);
     if (resp.statusCode == 200) {
       final data = (jsonDecode(resp.body) as Map<String, dynamic>)['data']
           as Map<String, dynamic>;
       var group = ChatGroupDetail.fromJson(data);
       return group;
     }
+    return null;
+  }
+
+  Future<int?> createChatGroupWithNames(
+      {String? groupName, required List<String> names}) async {
+    final url =
+        Uri.parse('$baseUrl/api/v1/member/users/me/chat-groups/member-names');
+    final resp = await client.post(url,
+        body: jsonEncode({"name": groupName, "names": names}));
+    if (resp.statusCode == 200) {
+      print('create chat group success');
+      var data = jsonDecode(resp.body)['data'] as Map<String, dynamic>;
+      print(data);
+      return data['id'] as int;
+    }
+    print(jsonDecode(resp.body));
     return null;
   }
 }

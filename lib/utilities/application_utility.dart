@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
@@ -14,6 +16,28 @@ class ApplicationUtility {
   //hide input keyboard
   static void hideKeyboard() {
     FocusManager.instance.primaryFocus?.unfocus();
+  }
+
+  static void showSuccessToast(String? message,{ToastGravity? gravity}) {
+    Fluttertoast.showToast(
+        msg: message ?? '',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity:gravity?? ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.green.shade500,
+        textColor: Colors.white,
+        fontSize: 13.0);
+  }
+
+  static void showFailToast(String? message) {
+    Fluttertoast.showToast(
+        msg: message ?? '',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.redAccent,
+        textColor: Colors.white,
+        fontSize: 13.0);
   }
 
   //push new screen
@@ -131,5 +155,81 @@ class ApplicationUtility {
       print('failed to format date: $e');
       return null;
     }
+  }
+
+  // static Future<void> showAlertDialog(BuildContext context, Function onConfirm,
+  //     Function onClose, String title, String confirm, String cancel) async {
+  //   await showCupertinoModalPopup(
+  //     context: context,
+  //     builder: (context) {
+  //       return CupertinoActionSheet(
+  //         actions: [
+  //           CupertinoActionSheetAction(
+  //               onPressed: () {
+  //                 Navigator.pop(context);
+  //                 showCupertinoDialog(
+  //                   context: context,
+  //                   barrierDismissible: true,
+  //                   builder: (context) {
+  //                     return CupertinoAlertDialog(
+  //                       title: Text(title),
+  //                       actions: [
+  //                         CupertinoDialogAction(
+  //                           child: Text(confirm),
+  //                           onPressed: () => onConfirm(),
+  //                           isDestructiveAction: true,
+  //                         ),
+  //                         CupertinoDialogAction(
+  //                           child: Text(cancel),
+  //                           isDefaultAction: true,
+  //                           onPressed: () {
+  //                             Navigator.of(context, rootNavigator: true)
+  //                                 .pop(cancel);
+  //                           },
+  //                         ),
+  //                       ],
+  //                     );
+  //                   },
+  //                 );
+  //               },
+  //               child: Text(confirm))
+  //         ],
+  //         cancelButton: CupertinoActionSheetAction(
+  //           onPressed: () => onClose(),
+  //           isDefaultAction: true,
+  //           child: Text(
+  //             cancel,
+  //           ),
+  //         ),
+  //         // title: const Text('duy nguyen posts'),
+  //       );
+  //     },
+  //   );
+  // }
+  static Future<void> showAlertDialog(BuildContext context, Function onConfirm,
+      Function onClose, String title, String confirm, String cancel) async {
+    return showCupertinoDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(title),
+          actions: [
+            CupertinoDialogAction(
+              child: Text(confirm),
+              onPressed: () => onConfirm(),
+              isDestructiveAction: true,
+            ),
+            CupertinoDialogAction(
+              child: Text(cancel),
+              isDefaultAction: true,
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop(cancel);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

@@ -28,7 +28,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "aboutUs": MessageLookupByLibrary.simpleMessage("Về chúng tôi"),
         "account": MessageLookupByLibrary.simpleMessage("Tài khoản"),
         "addBio": MessageLookupByLibrary.simpleMessage("Thêm tiểu sử"),
+        "addImage": MessageLookupByLibrary.simpleMessage("Thêm ảnh"),
         "addLocation": MessageLookupByLibrary.simpleMessage("Chọn địa điểm"),
+        "addTag": MessageLookupByLibrary.simpleMessage("Thêm thẻ"),
         "addWebsite":
             MessageLookupByLibrary.simpleMessage("Thêm trang web cá nhân"),
         "addYourBirthDate":
@@ -50,6 +52,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancel": MessageLookupByLibrary.simpleMessage("Hủy"),
         "comment": MessageLookupByLibrary.simpleMessage("Bình luận"),
         "createPost": MessageLookupByLibrary.simpleMessage("Tạo bài viết"),
+        "createPostSuccess":
+            MessageLookupByLibrary.simpleMessage("Tạo bài viết thành công"),
         "createQuestion": MessageLookupByLibrary.simpleMessage("Tạo câu hỏi"),
         "createReviewPost":
             MessageLookupByLibrary.simpleMessage("Viết bài review"),
@@ -85,10 +89,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "notification": MessageLookupByLibrary.simpleMessage("Thông báo"),
         "position": MessageLookupByLibrary.simpleMessage("Vị trí"),
         "post": MessageLookupByLibrary.simpleMessage("Bài viết"),
+        "postTitle": MessageLookupByLibrary.simpleMessage("Tiêu đề bài viết"),
         "posting": MessageLookupByLibrary.simpleMessage("Đăng bài"),
         "privacy": MessageLookupByLibrary.simpleMessage("Chính sách"),
         "profile": MessageLookupByLibrary.simpleMessage("Hồ sơ"),
+        "question": MessageLookupByLibrary.simpleMessage("Câu hỏi"),
         "register": MessageLookupByLibrary.simpleMessage("Đăng ký"),
+        "removePostSuccess":
+            MessageLookupByLibrary.simpleMessage("Xóa bài thành công"),
         "review": MessageLookupByLibrary.simpleMessage("Bài review"),
         "save": MessageLookupByLibrary.simpleMessage("Lưu"),
         "searchInChat":
@@ -107,6 +115,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "tcLogin": MessageLookupByLibrary.simpleMessage("TC Đăng Nhập"),
         "tcRegister": MessageLookupByLibrary.simpleMessage("TC Đăng Ký"),
         "title": MessageLookupByLibrary.simpleMessage("TC Social"),
+        "totalMoney": MessageLookupByLibrary.simpleMessage("Tổng tiền đi"),
+        "travelDate": MessageLookupByLibrary.simpleMessage("Ngày đi"),
         "typeInYourText":
             MessageLookupByLibrary.simpleMessage("Nhập nội dung tin nhắn"),
         "username": MessageLookupByLibrary.simpleMessage("Tên người dùng"),

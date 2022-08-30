@@ -99,13 +99,13 @@ class _ReviewPostCommentSectionState extends State<ReviewPostCommentSection> {
               items: [
                 //REPLY COMMENT BUTTON
                 BottomDialogItem(
-                    title: 'Reply',
+                    title: 'Trả lời',
                     onClick: () {
                       widget.setReplyComment(comment);
                       widget.setRemoveCommentId(null);
                     }),
                 BottomDialogItem(
-                  title: 'Copy',
+                  title: 'Sao chép',
                   onClick: () {
                     Clipboard.setData(
                         ClipboardData(text: comment.content.toString()));
@@ -115,19 +115,24 @@ class _ReviewPostCommentSectionState extends State<ReviewPostCommentSection> {
             )
           : MyBottomDialog(
               items: [
-                BottomDialogItem(
-                    title: 'Hide',
+                  BottomDialogItem(
+                    title: 'Mời vào nhóm chat',
                     onClick: () {
-                      // widget.hideComment(comment.id);
-                      widget.setRemoveCommentId(comment.id);
+
                     }),
                 BottomDialogItem(
-                  title: 'Copy',
+                  title: 'Sao chép',
                   onClick: () {
                     Clipboard.setData(
                         ClipboardData(text: comment.content.toString()));
                   },
                 ),
+                BottomDialogItem(
+                    title: 'Xóa',
+                    onClick: () {
+                      // widget.hideComment(comment.id);
+                      widget.setRemoveCommentId(comment.id);
+                    }),
               ],
             ),
     );

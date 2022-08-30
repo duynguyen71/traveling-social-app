@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_event.dart';
+import 'package:traveling_social_app/screens/account/current_user_questions_screen.dart';
 import 'package:traveling_social_app/screens/message/chat_groups_screen.dart';
 import 'package:traveling_social_app/screens/profile/current_user_profile_screen.dart';
 import 'package:traveling_social_app/screens/setting/language_setting_screen.dart';
@@ -132,8 +133,10 @@ class _AccountScreenState extends State<AccountScreen>
               ),
               title: AppLocalizations.of(context)!.review,
             ),
+            // QUESTION
             MyListTile(
-              onClick: () {},
+              onClick: () =>
+                  Navigator.push(context, CurrentUserQuestionsScreen.route()),
               leading: const LinearGradiantMask(
                 child: Icon(
                   Icons.ac_unit_outlined,
@@ -141,10 +144,9 @@ class _AccountScreenState extends State<AccountScreen>
                   size: 24.0,
                 ),
               ),
-              title: AppLocalizations.of(context)!.post,
+              title: AppLocalizations.of(context)!.question,
             ),
             const MyDivider(width: 2.5),
-
             MyListTile(
               onClick: () {},
               leading: const LinearGradiantMask(
@@ -207,6 +209,7 @@ class _AccountScreenState extends State<AccountScreen>
             ),
             const MyDivider(width: 2.5),
 
+            // Button Logout
             MyListTile(
               onClick: () {
                 // showAboutDialog(context: context);
@@ -246,23 +249,6 @@ class _AccountScreenState extends State<AccountScreen>
               ),
               title: AppLocalizations.of(context)!.logOut,
             ),
-            // Column(
-            //   children: List.generate(
-            //       10,
-            //       (index) => MyListTile(
-            //             onClick: () {
-            //               Navigator.push(
-            //                   context, NotificationSettingScreen.route());
-            //             },
-            //             leading: const LinearGradiantMask(
-            //               child: Icon(
-            //                 Icons.notifications,
-            //                 color: Colors.white,
-            //               ),
-            //             ),
-            //             title: AppLocalizations.of(context)!.notification,
-            //           )).toList(),
-            // )
           ],
         ),
       ),

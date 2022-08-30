@@ -77,7 +77,7 @@ class MyBottomDialog extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("Cancel", style: TextStyle(color: Colors.red[300])),
+              child: Text("Hủy", style: TextStyle(color: Colors.red[300])),
             ),
           )
         ],

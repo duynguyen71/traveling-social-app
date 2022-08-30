@@ -1,7 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/screens/login/login_screen.dart';
 import 'package:traveling_social_app/widgets/config_widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+
+import '../../authentication/bloc/authentication_event.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -37,11 +42,9 @@ class SplashScreen extends StatelessWidget {
               bottom: 0,
               left: 0,
               child: ConfigWidget(
-                  onTap: () => Navigator.pushAndRemoveUntil<void>(
-                        context,
-                        LoginScreen.route(),
-                        (route) => false,
-                      )),
+                  onTap: () =>
+                      context.read<AuthenticationBloc>().add(
+                          AuthenticationLogoutRequested())),
             )
           ],
         ),

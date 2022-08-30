@@ -22,13 +22,15 @@ class AlreadyHaveAccountCheck extends StatelessWidget {
           textAlign: TextAlign.end,
           text: TextSpan(children: [
             TextSpan(
-              text: isLogin ? "Don't have account?" : "Already have account?",
+              // text: isLogin ? "Don't have account?" : "Already have account?",
+              text: isLogin ? "Chưa có tài khoản?" : "Đã có tài khoản?",
               style: const TextStyle(
                 color: Colors.black,
               ),
             ),
             TextSpan(
-              text: isLogin ? " Sign up" : " Sign in",
+              // text: isLogin ? " Sign up" : " Sign in",
+              text: isLogin ? " Đăng kí" : " Đăng nhập",
               style: const TextStyle(
                 color: kPrimaryColor,
                 fontWeight: FontWeight.bold,
