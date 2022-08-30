@@ -28,14 +28,14 @@ class _MyFeedState extends State<MyFeed> with AutomaticKeepAliveClientMixin {
   void initState() {
     super.initState();
     context.read<PostBloc>().add(const FetchPost());
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _scrollController.addListener(() {
         var position = _scrollController.position;
         if (position.pixels == position.maxScrollExtent) {
           context.read<PostBloc>().add(const FetchPost());
         }
       });
-    });
+    // });
   }
 
   @override
@@ -49,7 +49,7 @@ class _MyFeedState extends State<MyFeed> with AutomaticKeepAliveClientMixin {
       child: CustomScrollView(
         controller: _scrollController,
         shrinkWrap: true,
-        slivers: [
+        slivers: const [
           //STORIES
           SliverToBoxAdapter(
             child: SizedBox(
@@ -62,7 +62,6 @@ class _MyFeedState extends State<MyFeed> with AutomaticKeepAliveClientMixin {
               height: 10,
             ),
           ),
-
           HomePosts(),
           // BUILDER FOR POSTS STATE
         ],

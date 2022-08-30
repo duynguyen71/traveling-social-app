@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/models/Base_review_post_response.dart';
 import 'package:traveling_social_app/models/base_user.dart';
+import 'package:traveling_social_app/models/question_post.dart';
 import 'package:traveling_social_app/screens/review/components/review_post_entry.dart';
 import 'package:traveling_social_app/screens/review/review_post_detail_screen.dart';
+import 'package:traveling_social_app/screens/search/components/question_entry.dart';
 
 import '../../services/post_service.dart';
 import '../../services/user_service.dart';
@@ -24,6 +26,7 @@ class _ReviewPostScreenState extends State<ReviewPostScreen>
   List<BaseReviewPostResponse> _posts = [];
   List<BaseUserInfo> _users = [];
   bool _isLoading = false;
+  List<QuestionPost> _questions = [];
 
   set isLoading(bool i) {
     setState(() {
@@ -35,6 +38,7 @@ class _ReviewPostScreenState extends State<ReviewPostScreen>
   void initState() {
     super.initState();
     getReviewPosts();
+    getQuestionPosts();
   }
 
   int _page = 0;
@@ -59,6 +63,14 @@ class _ReviewPostScreenState extends State<ReviewPostScreen>
     } finally {
       isLoading = false;
     }
+  }
+
+  getQuestionPosts() async {
+    var questions = await postService.getQuestionPosts();
+    setState(() {
+      _questions = questions;
+    });
+    print(questions);
   }
 
   @override
@@ -132,7 +144,10 @@ class _ReviewPostScreenState extends State<ReviewPostScreen>
                     physics: const NeverScrollableScrollPhysics(),
                     scrollDirection: Axis.vertical,
                     itemBuilder: (context, index) {
-                      var post = _posts[index];
+                      var post = _posts.reversed.toList()[index];
+                      if (index >= 5) {
+                        return const SizedBox();
+                      }
                       return ReviewPostEntry(
                         key: ValueKey(post.id),
                         imageName: post.coverPhoto?.name,
@@ -147,7 +162,27 @@ class _ReviewPostScreenState extends State<ReviewPostScreen>
                     itemCount: _posts.length,
                     shrinkWrap: true),
               ),
-            )
+            ),
+            SliverToBoxAdapter(
+              child: Container(
+                color: Colors.white,
+                child: ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (context, index) {
+                      var post = _questions[index];
+                      if (index >= 5) {
+                        return const SizedBox();
+                      }
+                      return QuestionEntry(
+                        post: post,
+                        showMetadata: true,
+                      );
+                    },
+                    itemCount: _questions.length,
+                    shrinkWrap: true),
+              ),
+            ),
           ],
         ),
       ),

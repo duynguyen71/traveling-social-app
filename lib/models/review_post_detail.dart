@@ -74,7 +74,7 @@ class ReviewPostDetail {
   String? content;
   String? contentJson;
   double? cost;
-  int numOfParticipant = 0;
+  int numOfParticipant = 1;
   int numOfReaction = 0;
   int numOfVisitor = 0;
   int numOfComment = 0;

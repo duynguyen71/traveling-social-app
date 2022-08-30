@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
-import 'package:traveling_social_app/models/create_chat_group.dart';
-import 'package:traveling_social_app/my_theme.dart';
 import 'package:traveling_social_app/screens/message/bloc/chat_bloc.dart';
 import 'package:traveling_social_app/screens/message/chat_screen.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../models/base_user.dart';
+
 
 /// Create message screen
 class CreateMessageScreen extends StatefulWidget {
@@ -37,13 +35,13 @@ class _CreateMessageScreenState extends State<CreateMessageScreen> {
     Navigator.pushReplacement(
         context,
         ChatScreen.route(
-            groupId: groupId!, name: _groupNameController.text ?? ''));
+            groupId: groupId, name: _groupNameController.text ));
     context.read<ChatBloc>().add(const FetchChatGroup());
     ApplicationUtility.showSuccessToast(
-        "Tạo nhóm chat ${_groupNameController.text ?? ''} thành công!");
+        "Tạo nhóm chat ${_groupNameController.text} thành công!");
   }
 
-  UserService _userService = UserService();
+  final  _userService = UserService();
   final _userController = TextEditingController();
   final _groupNameController = TextEditingController();
 

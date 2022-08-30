@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_user_agentx/flutter_user_agent.dart';
 import 'package:http/http.dart';
@@ -18,6 +19,7 @@ import 'package:traveling_social_app/utilities/application_utility.dart';
 
 import '../config/base_interceptor.dart';
 import '../config/expired_token_retry.dart';
+import '../models/Notification_resp.dart';
 import '../models/chat_group_detail.dart';
 import '../models/create_chat_group.dart';
 import '../models/group.dart';
@@ -130,7 +132,6 @@ class UserService {
     if (resp.statusCode == 200) {
       final body = jsonDecode(resp.body) as Map<String, dynamic>;
       Map<String, dynamic> tokens = body['data'];
-      // await saveToken(tokens);
       return tokens;
     } else {
       throw 'Code is not valid';
@@ -331,13 +332,14 @@ class UserService {
   Future<void> refreshDeviceToken({required String token}) async {}
 
   /// Get notifications
-  Future<void> getNotifications() async {
+  Future<List<NotificationResp>> getNotifications() async {
     final url = Uri.parse(baseUrl + "/api/v1/member/users/me/notifications");
     final resp = await http.get(url, headers: await authorizationHeader());
     if (resp.statusCode == 200) {
-      print('fetch noti success');
-      print(jsonDecode(resp.body));
+      var list = jsonDecode(resp.body)['data'] as List<dynamic>;
+      return list.map((e) => NotificationResp.fromJson(e)).toList();
     }
+    return [];
   }
 
   Future<void> getNotificationMessage() async {}
@@ -450,5 +452,21 @@ class UserService {
     }
     print(jsonDecode(resp.body));
     return null;
+  }
+
+  Future<void> updateToken(token) async {
+    await FkUserAgent.init();
+    var ua = FkUserAgent.userAgent;
+    final url = Uri.parse('$baseUrl/api/v1/member/users/me/devices/token');
+    await client.post(url, headers: {
+      "Authorization": 'Bearer ${await _storage.read(key: 'accessToken')}',
+      "Content-Type": "application/json",
+      "pnt": token,
+      "User-Agent": '$ua'
+    });
+  }
+
+  Future<void> forgetPasswordRequest()async{
+
   }
 }

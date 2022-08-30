@@ -22,6 +22,7 @@ import '../create_review/components/cover_image_container.dart';
 import '../create_review/components/review_post_title.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 
+import '../profile/components/icon_with_text.dart';
 import 'components/auth_tag.dart';
 import 'components/reaction_bar.dart';
 import 'components/review_post_comment_section.dart';
@@ -189,6 +190,37 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
                                     ),
                                   ),
                                 ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Row(
+                                    children: [
+                                      IconTextButton(
+                                          text:
+                                              '${_reviewPostDetail.numOfParticipant ?? 1}',
+                                          icon: Icon(
+                                            Icons.group,
+                                            color: Colors.black54,
+                                          )),
+                                      const SizedBox(width: 10),
+                                      IconTextButton(
+                                          text:
+                                              '${_reviewPostDetail.cost ?? 0}',
+                                          icon: Icon(
+                                            Icons.monetization_on,
+                                            color: Colors.black54,
+                                          )),
+                                      const SizedBox(width: 10),
+                                      IconTextButton(
+                                          text:
+                                              '${_reviewPostDetail.totalDay ?? 1} ngày',
+                                          icon: Icon(
+                                            Icons.calendar_today,
+                                            color: Colors.black54,
+                                          )),
+                                    ],
+                                  ),
+                                ),
                                 // QUILL CONTROLLER
                                 Padding(
                                   padding:
@@ -213,7 +245,10 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
                           : Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Hình ảnh",style:TextStyle(fontSize:16,fontWeight: FontWeight.w600)),
+                                Text("Hình ảnh",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600)),
                                 Container(
                                     height: 120,
                                     constraints:

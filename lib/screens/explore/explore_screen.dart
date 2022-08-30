@@ -5,7 +5,9 @@ import 'package:traveling_social_app/screens/bookmark/bookmark_screen.dart';
 
 import 'package:traveling_social_app/screens/home/home_screen.dart';
 import 'package:traveling_social_app/screens/notification/notification_screen.dart';
+import 'package:traveling_social_app/services/user_service.dart';
 
+import '../../services/user_service.dart';
 import 'components/drawer.dart';
 import 'components/main_bottom_nav.dart';
 
@@ -36,12 +38,10 @@ class _ExploreScreenState extends State<ExploreScreen>
   @override
   void initState() {
     super.initState();
-
     var firebaseMessaging = FirebaseMessaging.instance;
-    firebaseMessaging.onTokenRefresh.listen((event) {
-      print('device notification token refresh $event');
+    firebaseMessaging.onTokenRefresh.listen((token) {
+      UserService().updateToken(token);
     });
-    firebaseMessaging.getToken().then((value) => print('Firebase messaging token $value'));
     _pageController =
         PageController(initialPage: _currentPageIndex, keepPage: true);
   }

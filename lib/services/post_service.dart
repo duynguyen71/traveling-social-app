@@ -550,6 +550,15 @@ class PostService {
     }
     return [];
   }
+  Future<List<QuestionPost>> getQuestionPosts() async {
+    final url = Uri.parse(baseUrl + "/api/v1/member/questions");
+    final resp = await client.get(url);
+    if (resp.statusCode == 200) {
+      var list = jsonDecode(resp.body)['data'] as List<dynamic>;
+      return list.map((e) => QuestionPost.fromJson(e)).toList();
+    }
+    return [];
+  }
 
   Future<QuestionPost?> getQuestionPostDetail(
       {required int questionPostId}) async {

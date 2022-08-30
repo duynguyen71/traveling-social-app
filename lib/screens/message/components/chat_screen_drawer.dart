@@ -81,8 +81,8 @@ class _ChatScreenDrawerState extends State<ChatScreenDrawer> {
                     child: ListView.builder(
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        var users = widget.chatGroupDetail!.users ?? [];
-                        var user = users![index];
+                        var users = widget.chatGroupDetail!.users ;
+                        var user = users[index];
                         var username = user.username;
                         return GestureDetector(
                           onTap: () => Navigator.push(
@@ -114,7 +114,7 @@ class _ChatScreenDrawerState extends State<ChatScreenDrawer> {
                           ),
                         );
                       },
-                      itemCount: widget.chatGroupDetail!.users.length ?? 0,
+                      itemCount: widget.chatGroupDetail!.users.length ,
                     ),
                   ),
                   Container(

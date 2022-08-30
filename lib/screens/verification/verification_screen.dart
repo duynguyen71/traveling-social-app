@@ -97,162 +97,170 @@ class _VerificationScreenState extends State<VerificationScreen> {
     return SafeArea(
       child: Scaffold(
         // resizeToAvoidBottomInset: false,
-        body: Stack(
-          alignment: Alignment.topLeft,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 32),
-              child: Column(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(
+                alignment: Alignment.topLeft,
                 children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: const Icon(
-                        Icons.arrow_back,
-                        size: 25,
-                        color: kPrimaryColor,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 18,
-                  ),
-                  const Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Xác thực tài khoản',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Nhập mã gửi đến email của bạn",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black38,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 28,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 24, horizontal: 32),
                     child: Column(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            _textFieldOTP(
-                                first: true,
-                                last: false,
-                                controller: _digit1,
-                                onChange: () => onChange()),
-                            _textFieldOTP(
-                                first: false,
-                                last: false,
-                                controller: _digit2,
-                                onChange: () => onChange()),
-                            _textFieldOTP(
-                                first: false,
-                                last: false,
-                                controller: _digit3,
-                                onChange: () => onChange()),
-                            _textFieldOTP(
-                                first: false,
-                                last: false,
-                                controller: _digit4,
-                                onChange: () => onChange()),
-                            _textFieldOTP(
-                                first: false,
-                                last: false,
-                                controller: _digit5,
-                                onChange: () => onChange()),
-                            _textFieldOTP(
-                                first: false,
-                                last: true,
-                                controller: _digit6,
-                                onChange: () => onChange()),
-                          ],
-                        ),
-                        Wrap(
-                          alignment: WrapAlignment.spaceAround,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: const [],
-                        ),
-                        const SizedBox(
-                          height: 11,
-                        ),
                         Align(
-                          alignment: Alignment.centerRight,
-                          child: SizedBox(
-                            height: 18,
-                            child: errorMessage != null
-                                ? Text(
-                                    errorMessage!,
-                                    style: TextStyle(
-                                        color: Colors.red[500],
-                                        fontWeight: FontWeight.w400),
-                                  )
-                                : const SizedBox.shrink(),
+                          alignment: Alignment.topLeft,
+                          child: GestureDetector(
+                            onTap: () => Navigator.pop(context),
+                            child: const Icon(
+                              Icons.arrow_back,
+                              size: 25,
+                              color: kPrimaryColor,
+                            ),
                           ),
                         ),
                         const SizedBox(
-                          height: 22,
+                          height: 18,
                         ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: RoundedButton(
-                            onPress: () => handleVerifyAccount(),
-                            text: 'Xác nhận',
-                            bgColor: kPrimaryColor,
-                            textColor: Colors.white,
+                        const Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            'Xác thực tài khoản',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        )
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        const Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "Nhập mã gửi đến email của bạn",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black38,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 28,
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  _textFieldOTP(
+                                      first: true,
+                                      last: false,
+                                      controller: _digit1,
+                                      onChange: () => onChange()),
+                                  _textFieldOTP(
+                                      first: false,
+                                      last: false,
+                                      controller: _digit2,
+                                      onChange: () => onChange()),
+                                  _textFieldOTP(
+                                      first: false,
+                                      last: false,
+                                      controller: _digit3,
+                                      onChange: () => onChange()),
+                                  _textFieldOTP(
+                                      first: false,
+                                      last: false,
+                                      controller: _digit4,
+                                      onChange: () => onChange()),
+                                  _textFieldOTP(
+                                      first: false,
+                                      last: false,
+                                      controller: _digit5,
+                                      onChange: () => onChange()),
+                                  _textFieldOTP(
+                                      first: false,
+                                      last: true,
+                                      controller: _digit6,
+                                      onChange: () => onChange()),
+                                ],
+                              ),
+                              Wrap(
+                                alignment: WrapAlignment.spaceAround,
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                children: const [],
+                              ),
+                              const SizedBox(
+                                height: 11,
+                              ),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: SizedBox(
+                                  height: 18,
+                                  child: errorMessage != null
+                                      ? Text(
+                                          errorMessage!,
+                                          style: TextStyle(
+                                              color: Colors.red[500],
+                                              fontWeight: FontWeight.w400),
+                                        )
+                                      : const SizedBox.shrink(),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 22,
+                              ),
+                              SizedBox(
+                                width: double.infinity,
+                                child: RoundedButton(
+                                  onPress: () => handleVerifyAccount(),
+                                  text: 'Xác nhận',
+                                  bgColor: kPrimaryColor,
+                                  textColor: Colors.white,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 18,
+                        ),
+                        const Text(
+                          "Không nhận được mã?",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black38,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(
+                          height: 18,
+                        ),
+                        const Text(
+                          "Gửi mã xác nhận mới",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: kLoginPrimaryColor,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 18,
-                  ),
-                  const Text(
-                    "Không nhận được mã?",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.black38,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(
-                    height: 18,
-                  ),
-                  const Text(
-                    "Gửi mã xác nhận mới",
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: kLoginPrimaryColor,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+                  LoadingWidget(isLoading: _isLoading),
                 ],
               ),
-            ),
-            LoadingWidget(isLoading: _isLoading),
-          ],
+            ],
+          ),
         ),
       ),
     );

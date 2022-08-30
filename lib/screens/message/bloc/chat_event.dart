@@ -35,3 +35,8 @@ class Filter extends ChatEvent {
   @override
   List<Object?> get props => [keyWord];
 }
+
+class ClearGroup extends ChatEvent {
+  @override
+  List<Object?> get props => [];
+}

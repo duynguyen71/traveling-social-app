@@ -62,6 +62,8 @@ class AuthenticationRepository {
       {required String accessToken, required String refreshToken}) async {
     await _storage.write(key: "accessToken", value: accessToken);
     await _storage.write(key: "refreshToken", value: refreshToken);
+    _controller.add(AuthenticationStatus.authenticated);
+
   }
 
   Future<bool> checkAuthenticated() async {

@@ -19,6 +19,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<FetchMoreChatGroup>(_fetchMoreGroups);
     on<LeaveGroup>(_leaveGroup);
     on<Filter>(_filter);
+    on<ClearGroup>(_clear);
   }
 
   _onFetchChatGroup(FetchChatGroup event, Emitter<ChatState> emit) async {
@@ -94,5 +95,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                   element.lastMessage!.message!.contains(keyWord))));
       emit(state.copyWith(filtered: [...filtered]));
     }
+  }
+  _clear(event,emit){
+    emit(
+        state.copyWith(hasReachMax: false,status: ChatGroupStatus.initial,page: 0,filtered: [],groups: [])
+    );
   }
 }

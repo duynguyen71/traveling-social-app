@@ -4,6 +4,7 @@ import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dar
 import 'package:provider/provider.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_event.dart';
 import 'package:traveling_social_app/screens/account/current_user_questions_screen.dart';
+import 'package:traveling_social_app/screens/message/bloc/chat_bloc.dart';
 import 'package:traveling_social_app/screens/message/chat_groups_screen.dart';
 import 'package:traveling_social_app/screens/profile/current_user_profile_screen.dart';
 import 'package:traveling_social_app/screens/setting/language_setting_screen.dart';
@@ -218,7 +219,7 @@ class _AccountScreenState extends State<AccountScreen>
                   builder: (context) {
                     return CupertinoAlertDialog(
                       //TODO: translate
-                      title: Text("Thông báo"),
+                      title: Text( AppLocalizations.of(context)!.notification,),
                       content: Text("Bạn có chắc muốn đăng xuất?"),
                       actions: <Widget>[
                         CupertinoDialogAction(
@@ -227,6 +228,7 @@ class _AccountScreenState extends State<AccountScreen>
                           onPressed: () {
                             context.read<PostBloc>().add(Reset());
                             context.read<StoryBloc>().add(ResetStoryState());
+                            context.read<ChatBloc>().add((ClearGroup()));
                             context
                                 .read<AuthenticationBloc>()
                                 .add(AuthenticationLogoutRequested());

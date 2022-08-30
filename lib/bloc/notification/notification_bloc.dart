@@ -13,7 +13,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
 
   NotificationBloc({required NotificationRepository notificationRepository})
       : _notificationRepo = notificationRepository,
-        super(NotificationState()) {
+        super(NotificationState.initial()) {
     on<FetchNotification>(_fetchNotifications);
     on<NotificationEvent>(_onFirebaseNotificationEvent);
     add(RequestNotificationPermission());
@@ -59,6 +59,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   }
 
   _fetchNotifications(event, emit) async {
-    _notificationRepo.getNotifications();
+    var notifications =await _notificationRepo.getNotifications();
+    emit(state.copyWith(notifications: notifications));
   }
 }

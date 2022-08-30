@@ -39,6 +39,7 @@ class NotificationRepository {
   }
 
   getNotifications() async {
-    _userService.getNotifications();
+    var notifications =await _userService.getNotifications();
+    return notifications;
   }
 }

@@ -263,23 +263,6 @@ class _PostEntryState extends State<PostEntry>
                     ],
                   ),
                 ),
-                // Expanded(
-                //   child: Row(
-                //     crossAxisAlignment: CrossAxisAlignment.center,
-                //     mainAxisAlignment: MainAxisAlignment.center,
-                //     mainAxisSize: MainAxisSize.max,
-                //     children: [
-                //       IconButton(
-                //         onPressed: () {},
-                //         icon: SvgPicture.asset(
-                //           'assets/icons/share.svg',
-                //           width: 24.0,
-                //           height: 24.0,
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
               ],
             ),
           )
