@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_event.dart';
 import 'package:traveling_social_app/bloc/post/post_bloc.dart';
@@ -6,10 +8,6 @@ import 'package:traveling_social_app/bloc/story/story_bloc.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/message/chat_groups_screen.dart';
 import 'package:traveling_social_app/screens/setting/setting_screen.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import '../../message/bloc/chat_bloc.dart';
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({

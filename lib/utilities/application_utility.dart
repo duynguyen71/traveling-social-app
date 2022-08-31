@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flutter/cupertino.dart';
@@ -10,7 +11,6 @@ import 'package:intl/intl.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/widgets/bottom_select_dialog.dart';
-import 'dart:math';
 
 class ApplicationUtility {
   //hide input keyboard

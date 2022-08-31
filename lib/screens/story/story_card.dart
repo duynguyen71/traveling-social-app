@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
-import 'package:traveling_social_app/models/post_content.dart';
 import 'package:traveling_social_app/models/post.dart';
+import 'package:traveling_social_app/models/post_content.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
 

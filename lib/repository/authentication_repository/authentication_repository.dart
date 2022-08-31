@@ -1,11 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:traveling_social_app/constants/api_constants.dart';
-import 'dart:convert';
-import 'package:ua_client_hints/ua_client_hints.dart';
-import 'package:fk_user_agent/fk_user_agent.dart';
 
 enum AuthenticationStatus {
   unknown,

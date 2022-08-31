@@ -1,5 +1,4 @@
-import 'package:flutter/cupertino.dart';
-import 'package:traveling_social_app/models/base_user.dart';
+
 
 class UpdateBaseUserInfo {
   UpdateBaseUserInfo(

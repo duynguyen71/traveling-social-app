@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/widgets/base_app_bar.dart';
 import 'package:traveling_social_app/widgets/follow_user_entry.dart';
-import 'package:traveling_social_app/widgets/my_outline_button.dart';
+
 import '../../models/base_user.dart';
 import '../../widgets/scroll_end_notification.dart';
 

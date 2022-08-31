@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:traveling_social_app/models/chat_group_detail.dart';
 import 'package:traveling_social_app/screens/profile/components/icon_with_text.dart';
 
 import '../../../authentication/bloc/authentication_bloc.dart';
 import '../../../widgets/user_avt.dart';
 import '../../profile/profile_screen.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChatScreenDrawer extends StatefulWidget {
   const ChatScreenDrawer({

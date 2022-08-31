@@ -1,20 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:traveling_social_app/models/user.dart';
-import 'package:traveling_social_app/screens/profile/components/profile_avt_and_cover.dart';
+import 'package:traveling_social_app/extension/string_apis.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
 
 import '../../../constants/api_constants.dart';
 import '../../../constants/app_theme_constants.dart';
-import 'button_edit_profile.dart';
 import 'follow_count.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import 'icon_with_text.dart';
-import 'package:traveling_social_app/extension/string_apis.dart';
 
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader(

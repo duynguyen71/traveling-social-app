@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:traveling_social_app/bloc/locale/locale_cubit.dart';
 import 'package:traveling_social_app/models/language.dart';
 import 'package:traveling_social_app/screens/setting/components/setting_item_selected.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:traveling_social_app/widgets/base_app_bar.dart';
 
 class LanguageSettingScreen extends StatefulWidget {

@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:traveling_social_app/dto/attachment_dto.dart';
 import 'package:traveling_social_app/dto/creation_review_post.dart';
 
@@ -65,7 +64,6 @@ class CreateReviewPostCubit extends Cubit<CreateReviewPostState> {
       emit(state.copyWith(status: ReviewPostStatus.uploadingReview));
       await _postService.createReviewPost(state.post);
       emit(state.copyWith(status: ReviewPostStatus.success));
-    } on Exception catch (e) {
     } finally {
       // emit(
       //   state.copyWith(

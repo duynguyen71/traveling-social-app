@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:traveling_social_app/models/Author.dart';
 
 import '../../../authentication/bloc/authentication_bloc.dart';
@@ -7,8 +9,6 @@ import '../../../widgets/my_outline_button.dart';
 import '../../../widgets/user_avt.dart';
 import '../../profile/components/follow_count.dart';
 import '../../profile/profile_screen.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthTag extends StatefulWidget {
   const AuthTag({

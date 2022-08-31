@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:traveling_social_app/screens/review/question_post_detail_screen.dart';
 import 'package:traveling_social_app/screens/search/components/question_entry.dart';
 import 'package:traveling_social_app/services/post_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/base_app_bar.dart';
-import 'package:timeago/timeago.dart' as timeago;
+
 import '../../models/question_post.dart';
 import '../profile/components/icon_with_text.dart';
 

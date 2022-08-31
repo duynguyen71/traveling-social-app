@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/bloc/locale/locale_cubit.dart';
 import 'package:traveling_social_app/bloc/post/post_bloc.dart';
@@ -8,14 +10,13 @@ import 'package:traveling_social_app/bloc/story/story_bloc.dart';
 import 'package:traveling_social_app/repository/authentication_repository/authentication_repository.dart';
 import 'package:traveling_social_app/repository/notification_repository/notification_repository.dart';
 import 'package:traveling_social_app/repository/user_repository/user_repository.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:traveling_social_app/screens/explore/explore_screen.dart';
 import 'package:traveling_social_app/screens/login/login_screen.dart';
 import 'package:traveling_social_app/screens/message/bloc/chat_bloc.dart';
 import 'package:traveling_social_app/screens/splash/splash_screen.dart';
+
 import 'authentication/bloc/authentication_state.dart';
 import 'bloc/notification/notification_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 //root application
 class App extends StatelessWidget {

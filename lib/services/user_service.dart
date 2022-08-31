@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_user_agentx/flutter_user_agent.dart';
 import 'package:http/http.dart';
 import 'package:http_interceptor/http/intercepted_client.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';

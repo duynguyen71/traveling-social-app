@@ -4,7 +4,6 @@ import 'package:traveling_social_app/screens/profile/profile_screen.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
 
-import '../constants/api_constants.dart';
 import 'my_outline_button.dart';
 
 class FollowUserEntry extends StatefulWidget {

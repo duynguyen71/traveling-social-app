@@ -4,13 +4,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
+import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/models/comment.dart';
 import 'package:traveling_social_app/screens/create_review/components/review_post_tags.dart';
 import 'package:traveling_social_app/screens/profile/profile_screen.dart';
 import 'package:traveling_social_app/screens/review/components/review_post_att_scroll_view.dart';
-import 'package:provider/provider.dart';
 import 'package:traveling_social_app/widgets/comment_input_reply_widget.dart';
+
 import '../../constants/api_constants.dart';
 import '../../constants/app_theme_constants.dart';
 import '../../models/Author.dart';
@@ -20,13 +23,10 @@ import '../../services/user_service.dart';
 import '../../widgets/user_avt.dart';
 import '../create_review/components/cover_image_container.dart';
 import '../create_review/components/review_post_title.dart';
-import 'package:flutter_quill/flutter_quill.dart' as quill;
-
 import '../profile/components/icon_with_text.dart';
 import 'components/auth_tag.dart';
 import 'components/reaction_bar.dart';
 import 'components/review_post_comment_section.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class ReviewPostDetailScreen extends StatefulWidget {
   const ReviewPostDetailScreen({Key? key, required this.id}) : super(key: key);
@@ -197,7 +197,7 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
                                     children: [
                                       IconTextButton(
                                           text:
-                                              '${_reviewPostDetail.numOfParticipant ?? 1}',
+                                              '${_reviewPostDetail.numOfParticipant}',
                                           icon: Icon(
                                             Icons.group,
                                             color: Colors.black54,

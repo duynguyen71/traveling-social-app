@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/models/chat_group_detail.dart';
 import 'package:traveling_social_app/models/group.dart';
-import 'package:http/http.dart' as http;
 import 'package:traveling_social_app/models/message.dart';
 
 class ChatService {

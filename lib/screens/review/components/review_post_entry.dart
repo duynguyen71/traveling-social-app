@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:traveling_social_app/models/Base_review_post_response.dart';
 
 import '../../../widgets/my_divider.dart';
 import '../../../widgets/rounded_image_container.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class ReviewPostEntry extends StatelessWidget {
   const ReviewPostEntry(

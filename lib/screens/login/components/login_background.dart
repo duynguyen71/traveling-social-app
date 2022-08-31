@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/widgets/config_widget.dart';
 import 'package:traveling_social_app/widgets/loading_widget.dart';
 

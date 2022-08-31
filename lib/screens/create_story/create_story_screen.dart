@@ -2,17 +2,17 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:traveling_social_app/bloc/story/story_bloc.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/loading_widget.dart';
-import 'package:provider/provider.dart';
 
 import '../../widgets/media_file_container.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_lorem/flutter_lorem.dart';
 
 class CreateStoryScreen extends StatefulWidget {
   const CreateStoryScreen({Key? key}) : super(key: key);

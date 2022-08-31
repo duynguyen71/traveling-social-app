@@ -1,11 +1,14 @@
 import 'dart:convert';
-import 'package:collection/collection.dart';
+import 'dart:math' as Math;
 
-import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:stomp_dart_client/stomp.dart';
 import 'package:stomp_dart_client/stomp_config.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';
@@ -19,7 +22,6 @@ import 'package:traveling_social_app/screens/message/bloc/chat_bloc.dart';
 import 'package:traveling_social_app/screens/message/components/add_user.dart';
 import 'package:traveling_social_app/screens/message/components/chat_screen_drawer.dart';
 import 'package:traveling_social_app/screens/message/message_widget.dart';
-
 import 'package:traveling_social_app/services/chat_service.dart';
 import 'package:traveling_social_app/widgets/chat_screen_app_bar.dart';
 
@@ -28,10 +30,6 @@ import '../../models/base_user.dart';
 import '../../models/message.dart';
 import '../../utilities/application_utility.dart';
 import 'chat_controller.dart';
-import 'package:provider/provider.dart';
-import 'dart:math' as Math;
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'chat_groups_screen.dart';
 
 class ChatScreen extends StatefulWidget {

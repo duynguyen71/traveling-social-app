@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/repository/authentication_repository/authentication_repository.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/loading_widget.dart';
 import 'package:traveling_social_app/widgets/rounded_button.dart';
-import 'package:provider/provider.dart';
 
 class VerificationScreen extends StatefulWidget {
   const VerificationScreen({Key? key}) : super(key: key);

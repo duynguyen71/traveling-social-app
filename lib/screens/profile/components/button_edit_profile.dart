@@ -1,10 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/models/update_base_user_info.dart';
 
 import '../edit_profile.dart';

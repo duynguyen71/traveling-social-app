@@ -1,9 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:traveling_social_app/models/comment.dart';
 import 'package:traveling_social_app/models/post_content.dart';
-import 'package:traveling_social_app/models/reaction.dart';
 import 'package:traveling_social_app/models/tag.dart';
 
 import 'user.dart';

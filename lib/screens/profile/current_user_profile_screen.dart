@@ -1,19 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/explore/components/post_entry.dart';
 import 'package:traveling_social_app/screens/profile/components/current_user_profile_header.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
-import 'package:traveling_social_app/widgets/scroll_end_notification.dart';
-import '../../bloc/post/post_bloc.dart';
+
 import '../../models/post.dart';
 import '../../my_theme.dart';
 import '../../services/post_service.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'components/user_file_upload_grid.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CurrentUserProfileScreen extends StatefulWidget {
   const CurrentUserProfileScreen({Key? key}) : super(key: key);

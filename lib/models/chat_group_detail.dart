@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:traveling_social_app/models/user.dart';
 
 import 'base_user.dart';
 import 'message.dart';

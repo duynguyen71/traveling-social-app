@@ -1,20 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/models/post.dart';
-import 'package:traveling_social_app/widgets/expandable_text.dart';
 import 'package:traveling_social_app/screens/story/story_context_menu.dart';
+import 'package:traveling_social_app/widgets/expandable_text.dart';
 
 import '../../authentication/bloc/authentication_bloc.dart';
 import '../../utilities/application_utility.dart';
 import '../../widgets/user_avt.dart';
 import '../profile/profile_screen.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
-class StoryFullScreen extends StatefulWidget {
+class
+StoryFullScreen extends StatefulWidget {
   const StoryFullScreen({Key? key, required this.post}) : super(key: key);
 
   final Post post;

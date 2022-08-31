@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
-import 'package:traveling_social_app/bloc/post/post_bloc.dart';
 import 'package:traveling_social_app/models/attachment.dart';
 import 'package:traveling_social_app/models/post.dart';
 import 'package:traveling_social_app/screens/comment/comment_screen.dart';
@@ -16,8 +16,6 @@ import 'package:traveling_social_app/widgets/username_text.dart';
 import '../../../models/post_content.dart';
 import '../../../models/reaction.dart';
 import '../../../services/post_service.dart';
-import 'package:provider/provider.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class PostEntry extends StatefulWidget {
   const PostEntry(

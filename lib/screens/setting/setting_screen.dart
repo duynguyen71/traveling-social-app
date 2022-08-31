@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:traveling_social_app/screens/setting/components/setting_item_checkbox.dart';
 import 'package:traveling_social_app/screens/setting/components/setting_item_with_more_icon.dart';
 import 'package:traveling_social_app/screens/setting/language_setting_screen.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:traveling_social_app/screens/setting/notification_screen.dart';
 
 class SettingScreen extends StatefulWidget {

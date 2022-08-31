@@ -1,12 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:traveling_social_app/app.dart';
 import 'package:traveling_social_app/repository/authentication_repository/authentication_repository.dart';
 import 'package:traveling_social_app/repository/notification_repository/notification_repository.dart';
 import 'package:traveling_social_app/repository/user_repository/user_repository.dart';
-import 'package:flutter/cupertino.dart';
 
 //handle background messages
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {

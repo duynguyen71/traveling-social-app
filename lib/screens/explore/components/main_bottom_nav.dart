@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../widgets/icon_gradient.dart';
 import '../../home/components/badge_bottom_nav_item.dart';
 import '../../profile/components/create_post_type_dialog.dart';
 import 'my_bottom_nav_item.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MainBottomNav extends StatelessWidget {
   const MainBottomNav(

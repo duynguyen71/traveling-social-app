@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
@@ -15,10 +16,8 @@ import 'package:traveling_social_app/widgets/current_user_avt.dart';
 
 import '../../../constants/api_constants.dart';
 import '../../../constants/app_theme_constants.dart';
-
 import '../../../models/update_base_user_info.dart';
 import 'button_edit_profile.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfileAvtAndCover extends StatefulWidget {
   const ProfileAvtAndCover({Key? key}) : super(key: key);

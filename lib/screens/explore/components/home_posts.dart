@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/models/post.dart';
 import 'package:traveling_social_app/screens/explore/components/post_entry.dart';
-import 'package:traveling_social_app/widgets/scroll_end_notification.dart';
 
 import '../../../bloc/post/post_bloc.dart';
 import '../../comment/comment_screen.dart';

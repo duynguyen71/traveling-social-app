@@ -5,16 +5,16 @@ import 'package:flutter_svg/svg.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/models/group.dart';
+import 'package:traveling_social_app/models/user.dart';
 import 'package:traveling_social_app/screens/message/components/group_chat_entry.dart';
 import 'package:traveling_social_app/screens/message/create_message_screen.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/my_divider.dart';
 import 'package:traveling_social_app/widgets/rounded_icon_button.dart';
 import 'package:traveling_social_app/widgets/rounded_input_container.dart';
+
 import 'bloc/chat_bloc.dart';
 import 'chat_screen.dart';
-
-import 'package:traveling_social_app/models/user.dart';
 
 class ChatGroupsScreen extends StatefulWidget {
   const ChatGroupsScreen({Key? key}) : super(key: key);

@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
+import 'package:traveling_social_app/extension/string_apis.dart';
 import 'package:traveling_social_app/screens/profile/components/profile_avt_and_cover.dart';
 
 import '../../../authentication/bloc/authentication_state.dart';
 import 'follow_count.dart';
 import 'icon_with_text.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:timeago/timeago.dart' as timeago;
-import 'package:traveling_social_app/extension/string_apis.dart';
-import 'package:traveling_social_app/extension/string_apis.dart';
 
 class CurrentUserProfileHeader extends StatelessWidget {
   const CurrentUserProfileHeader({Key? key}) : super(key: key);

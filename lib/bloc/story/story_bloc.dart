@@ -6,7 +6,6 @@ import 'package:traveling_social_app/services/post_service.dart';
 import '../../models/post.dart';
 
 part 'story_event.dart';
-
 part 'story_state.dart';
 
 class StoryBloc extends Bloc<StoryEvent, StoryState> {

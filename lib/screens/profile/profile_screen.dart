@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:traveling_social_app/models/group.dart';
 import 'package:traveling_social_app/models/user.dart';
 import 'package:traveling_social_app/services/chat_service.dart';
@@ -8,8 +9,6 @@ import 'package:traveling_social_app/widgets/my_outline_button.dart';
 import '../../constants/app_theme_constants.dart';
 import '../../services/user_service.dart';
 import '../message/chat_screen.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import 'components/post_list.dart';
 import 'components/profile_header.dart';
 import 'components/profile_tab_bar.dart';

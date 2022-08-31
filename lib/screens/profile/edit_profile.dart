@@ -2,18 +2,19 @@ import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_state.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
+import 'package:traveling_social_app/extension/string_apis.dart';
 import 'package:traveling_social_app/models/update_base_user_info.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/base_app_bar.dart';
 import 'package:traveling_social_app/widgets/current_user_avt.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../constants/app_theme_constants.dart';
 import '../../services/user_service.dart';
-import 'package:traveling_social_app/extension/string_apis.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile(

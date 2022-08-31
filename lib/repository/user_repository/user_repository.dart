@@ -1,10 +1,9 @@
 import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/repository/authentication_repository/user.dart';
-import 'package:http/http.dart' as http;
 
 class UserRepository {
   User? _user;

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:traveling_social_app/models/comment.dart';
 import 'package:traveling_social_app/screens/review/components/review_post_comment_entry.dart';
+
 import '../../../authentication/bloc/authentication_bloc.dart';
 import '../../../services/post_service.dart';
 import '../../../utilities/application_utility.dart';
 import '../../../widgets/bottom_select_dialog.dart';
-import 'package:provider/provider.dart';
 
 class ReviewPostCommentSection extends StatefulWidget {
   const ReviewPostCommentSection({

@@ -2,13 +2,11 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-
 import 'package:traveling_social_app/services/user_service.dart';
 
 import '../../../models/group.dart';
 
 part 'chat_event.dart';
-
 part 'chat_state.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {

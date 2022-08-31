@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:traveling_social_app/widgets/icon_gradient.dart';
-
-import '../../../constants/app_theme_constants.dart';
 
 class MyBottomNavItem extends StatelessWidget {
   const MyBottomNavItem(

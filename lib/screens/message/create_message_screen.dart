@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/message/bloc/chat_bloc.dart';
 import 'package:traveling_social_app/screens/message/chat_screen.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 /// Create message screen

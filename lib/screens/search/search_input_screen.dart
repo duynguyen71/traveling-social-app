@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:traveling_social_app/screens/search/search_results.dart';
 
 import '../../constants/app_theme_constants.dart';
 import '../../widgets/custom_input_field.dart';
 import '../../widgets/rounded_input_container.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SearchInputScreen extends StatefulWidget {
   const SearchInputScreen({Key? key}) : super(key: key);

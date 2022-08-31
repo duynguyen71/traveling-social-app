@@ -1,17 +1,17 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:traveling_social_app/bloc/notification/notification_bloc.dart';
 import 'package:traveling_social_app/bloc/notification/notification_event.dart';
 import 'package:traveling_social_app/bloc/notification/notification_state.dart';
-import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/profile/profile_screen.dart';
 import 'package:traveling_social_app/widgets/base_sliver_app_bar.dart';
 import 'package:traveling_social_app/widgets/empty_mesage_widget.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'dart:math' as math;
-import 'package:timeago/timeago.dart' as timeago;
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({Key? key}) : super(key: key);
@@ -79,7 +79,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                                   onTap: () => Navigator.push(
                                       context,
                                       ProfileScreen.route(
-                                          notification!.user!.id!)),
+                                          notification.user!.id!)),
                                 ),
                                 Expanded(
                                   child: Padding(

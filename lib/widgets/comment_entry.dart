@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/screens/profile/current_user_profile_screen.dart';
 import 'package:traveling_social_app/screens/profile/profile_screen.dart';
@@ -6,10 +8,9 @@ import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/bottom_select_dialog.dart';
 import 'package:traveling_social_app/widgets/expandable_text.dart';
 import 'package:traveling_social_app/widgets/user_avt.dart';
+
 import '../models/base_user.dart';
 import '../models/comment.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import '../services/comment_service.dart';
 
 class CommentEntry extends StatefulWidget {

@@ -1,14 +1,13 @@
 import 'package:bloc/bloc.dart';
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:traveling_social_app/services/comment_service.dart';
 import 'package:traveling_social_app/services/post_service.dart';
 
 import '../../models/post.dart';
-import 'package:collection/collection.dart';
 
 part 'post_event.dart';
-
 part 'post_state.dart';
 
 class PostBloc extends Bloc<PostEvent, PostState> {

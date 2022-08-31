@@ -2,16 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:traveling_social_app/bloc/review/creation_review_cubit.dart';
-import 'package:traveling_social_app/screens/create_review/components/review_post_editor.dart';
 import 'package:traveling_social_app/screens/create_review/components/editor_review.dart';
+import 'package:traveling_social_app/screens/create_review/components/review_post_editor.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/base_sliver_app_bar.dart';
 import 'package:traveling_social_app/widgets/loading_widget.dart';
 import 'package:traveling_social_app/widgets/rounded_icon_button.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CreateReviewPostScreen extends StatefulWidget {
   const CreateReviewPostScreen({Key? key}) : super(key: key);

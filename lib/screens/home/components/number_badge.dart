@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:traveling_social_app/widgets/icon_gradient.dart';
 
 class NumberBadge extends StatelessWidget {
   const NumberBadge({Key? key, required this.number}) : super(key: key);

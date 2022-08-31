@@ -2,12 +2,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/screens/account/account_screen.dart';
 import 'package:traveling_social_app/screens/bookmark/bookmark_screen.dart';
-
 import 'package:traveling_social_app/screens/home/home_screen.dart';
 import 'package:traveling_social_app/screens/notification/notification_screen.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 
-import '../../services/user_service.dart';
 import 'components/drawer.dart';
 import 'components/main_bottom_nav.dart';
 

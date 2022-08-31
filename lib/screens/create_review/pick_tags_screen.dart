@@ -1,14 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:traveling_social_app/bloc/review/creation_review_cubit.dart';
 import 'package:traveling_social_app/screens/create_review/components/selected_tag.dart';
 import 'package:traveling_social_app/widgets/my_text_icon_button.dart';
 import 'package:traveling_social_app/widgets/tap_effect_widget.dart';
-import 'package:provider/provider.dart';
+
 import '../../models/tag.dart';
 import '../../services/post_service.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PickTagScreen extends StatefulWidget {
   const PickTagScreen({Key? key, required this.onSaveCallback})

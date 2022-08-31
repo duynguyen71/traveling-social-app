@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../constants/app_theme_constants.dart';
-
 class CommentInputWidget extends StatelessWidget {
   const CommentInputWidget(
       {Key? key,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/create_post/create_question_screen.dart';
 import 'package:traveling_social_app/screens/create_review/create_review_post_screen.dart';
@@ -7,7 +8,6 @@ import 'package:traveling_social_app/widgets/my_divider.dart';
 import '../../../utilities/application_utility.dart';
 import '../../create_post/create_post_screen.dart';
 import '../../create_story/create_story_screen.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CreatePostTypeDialog extends StatelessWidget {
   const CreatePostTypeDialog({Key? key}) : super(key: key);

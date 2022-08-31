@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 
 import 'components/background.dart';
-
 import 'components/dialog_edit_image.dart';
 
 class EditProfileScreen extends StatefulWidget {

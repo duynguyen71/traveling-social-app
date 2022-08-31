@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
-import 'user.dart';
 import 'message.dart';
+import 'user.dart';
 
 class Group with ChangeNotifier {
   Group.fromJson(dynamic json) {

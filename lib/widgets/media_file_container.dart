@@ -1,9 +1,10 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
-import 'dart:io';
 import 'package:traveling_social_app/widgets/rounded_icon_button.dart';
 
 class MediaFileContainer extends StatefulWidget {

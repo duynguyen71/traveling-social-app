@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../constants/app_theme_constants.dart';
-
 class ReactionBar extends StatefulWidget {
   const ReactionBar(
       {Key? key,

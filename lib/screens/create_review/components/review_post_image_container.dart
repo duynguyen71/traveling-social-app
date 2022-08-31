@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/dto/attachment_dto.dart';

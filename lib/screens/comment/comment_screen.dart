@@ -1,17 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
+import 'package:provider/provider.dart';
 import 'package:traveling_social_app/bloc/post/post_bloc.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/services/comment_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/comment_input_reply_widget.dart';
 import 'package:traveling_social_app/widgets/scroll_end_notification.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../models/comment.dart';
 import '../../widgets/comment_entry.dart';
-import 'package:provider/provider.dart';
-
 import '../../widgets/empty_mesage_widget.dart';
 
 class CommentScreen extends StatefulWidget {

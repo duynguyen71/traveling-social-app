@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/services/user_service.dart';
@@ -7,8 +8,6 @@ import 'package:traveling_social_app/widgets/rounded_input_container.dart';
 
 import '../../models/base_user.dart';
 import '../../my_theme.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import 'components/post_search.dart';
 import 'components/question_search.dart';
 import 'components/user_search.dart';

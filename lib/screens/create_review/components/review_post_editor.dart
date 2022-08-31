@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,7 +11,6 @@ import 'package:traveling_social_app/bloc/review/creation_review_cubit.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/dto/attachment_dto.dart';
-import 'package:traveling_social_app/dto/creation_review_post.dart';
 import 'package:traveling_social_app/my_theme.dart';
 import 'package:traveling_social_app/screens/create_review/components/cover_image_container.dart';
 import 'package:traveling_social_app/screens/create_review/components/day_cost_input_dialog.dart';
@@ -20,9 +20,8 @@ import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/my_outline_button.dart';
 import 'package:traveling_social_app/widgets/my_text_icon_button.dart';
 import 'package:traveling_social_app/widgets/tap_effect_widget.dart';
-import '../../../services/post_service.dart';
+
 import 'review_post_image_container.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class ReviewPostEditor extends StatefulWidget {
   const ReviewPostEditor(
       {Key? key,

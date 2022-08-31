@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:traveling_social_app/screens/review/components/post_meta.dart';
 import 'package:traveling_social_app/screens/review/question_post_detail_screen.dart';
 import 'package:traveling_social_app/screens/search/components/question_entry.dart';
 import 'package:traveling_social_app/screens/search/components/search_result_list_container.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 
-import '../../../models/Base_review_post_response.dart';
-import '../../../models/post.dart';
 import '../../../models/question_post.dart';
 import '../../../services/post_service.dart';
-import '../../review/components/review_post_entry.dart';
-import '../../review/review_post_detail_screen.dart';
 
 class QuestionSearch extends StatefulWidget {
   const QuestionSearch({Key? key, this.keyWord}) : super(key: key);

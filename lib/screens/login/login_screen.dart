@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:provider/provider.dart';
-import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/constants/app_theme_constants.dart';
 import 'package:traveling_social_app/screens/login/components/login_background.dart';
 import 'package:traveling_social_app/screens/register/register_screen.dart';

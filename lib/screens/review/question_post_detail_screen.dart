@@ -1,16 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:traveling_social_app/models/question_post.dart';
 import 'package:traveling_social_app/services/post_service.dart';
-import 'package:timeago/timeago.dart' as timeago;
+
 import '../../constants/app_theme_constants.dart';
 import '../../models/comment.dart';
 import '../../services/comment_service.dart';
 import '../../widgets/comment_input_reply_widget.dart';
 import '../../widgets/user_avt.dart';
 import 'components/review_post_comment_section.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class QuestionPostDetailScreen extends StatefulWidget {
   const QuestionPostDetailScreen({Key? key, required this.questionPostId})

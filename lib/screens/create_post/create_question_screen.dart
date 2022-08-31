@@ -1,18 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:traveling_social_app/screens/create_review/components/selected_tag.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/bottom_select_dialog.dart';
 import 'package:traveling_social_app/widgets/media_file_container.dart';
-import 'dart:io';
-import 'package:provider/provider.dart';
-import '../../bloc/post/post_bloc.dart';
+
 import '../../models/tag.dart';
 import '../../services/post_service.dart';
 import '../../widgets/loading_widget.dart';
-import 'components/user_draft_posts.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CreateQuestionScreen extends StatefulWidget {
   const CreateQuestionScreen({Key? key}) : super(key: key);

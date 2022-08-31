@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dart';
 import 'package:traveling_social_app/authentication/bloc/authentication_event.dart';
 import 'package:traveling_social_app/screens/account/current_user_questions_screen.dart';
 import 'package:traveling_social_app/screens/message/bloc/chat_bloc.dart';
@@ -17,10 +18,7 @@ import 'package:traveling_social_app/widgets/my_list_tile.dart';
 
 import '../../bloc/post/post_bloc.dart';
 import '../../bloc/story/story_bloc.dart';
-import '../../constants/app_theme_constants.dart';
 import '../../widgets/username_text.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import '../follow/follower_screen.dart';
 import '../follow/following_screen.dart';
 import '../review/current_user_review_post_screen.dart';

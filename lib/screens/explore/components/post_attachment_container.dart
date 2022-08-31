@@ -5,7 +5,6 @@ import 'package:traveling_social_app/utilities/application_utility.dart';
 
 import '../../../constants/api_constants.dart';
 import '../../../models/attachment.dart';
-import '../../../widgets/rounded_icon_button.dart';
 
 class PostAttachmentContainer extends StatefulWidget {
   const PostAttachmentContainer({Key? key, required this.attachments})
