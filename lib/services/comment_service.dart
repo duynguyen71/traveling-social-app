@@ -11,6 +11,7 @@ class CommentService {
 
   Future<List<Comment>> getRootCommentsOnPost(
       {required int postId, int? page}) async {
+    //TODO: fix comment page error
     final url = Uri.parse(baseUrl +
         "/api/v1/member/posts/$postId/comments?page=$page&pageSize=100");
     final resp = await http.get(url, headers: await authorizationHeader());

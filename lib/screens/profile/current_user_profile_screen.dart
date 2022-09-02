@@ -210,35 +210,6 @@ class _CurrentUserProfileScreenState extends State<CurrentUserProfileScreen>
     );
   }
 
-  // void showHidePostAlert( int postId) {
-  //   showDialog<void>(
-  //     context: context,
-  //     barrierDismissible: true,
-  //     builder: (BuildContext dialogContext) {
-  //       return CupertinoAlertDialog(
-  //         title: const Text("Thông báo"),
-  //         content: const Text("Bạn có chắc muốn xóa bài này?"),
-  //         actions: <Widget>[
-  //           CupertinoDialogAction(
-  //             child: const Text("Hủy"),
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //             },
-  //           ),
-  //           CupertinoDialogAction(
-  //             isDefaultAction: true,
-  //             child: const Text("Xóa",
-  //                 style: TextStyle(color: Colors.redAccent)),
-  //             onPressed: () {
-  //               context.read<PostBloc>().add(RemovePost(postId));
-  //               Navigator.of(context).pop();
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
 
   @override
   bool get wantKeepAlive {

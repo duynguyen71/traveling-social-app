@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:traveling_social_app/models/location.dart';
 
 User afvFromJson(String str) => User.fromJson(json.decode(str));
 
@@ -21,6 +22,8 @@ class User with ChangeNotifier {
     isFollowing = json['isFollowing'] ?? false;
     website = json['website'];
     birthdate = json['birthdate'];
+    location = json['location']!=null?Location.fromMap(json['location']):null;
+
   }
 
   int? id;
@@ -36,6 +39,7 @@ class User with ChangeNotifier {
   String? background;
   String? createDate;
   bool isFollowing = false;
+  Location? location ;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

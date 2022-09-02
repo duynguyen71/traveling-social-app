@@ -1,3 +1,4 @@
+import 'package:traveling_social_app/models/location.dart';
 import 'package:traveling_social_app/models/reaction.dart';
 import 'package:traveling_social_app/models/tag.dart';
 
@@ -21,6 +22,7 @@ class ReviewPostDetail {
     BaseUserInfo? user,
     String? createDate,
     bool hasBookmark = false,
+    Location? location,
   }) {
     id = id;
     title = title;
@@ -36,6 +38,7 @@ class ReviewPostDetail {
     createDate = createDate;
     tags = tags;
     hasBookmark = hasBookmark;
+    location = location;
   }
 
   ReviewPostDetail.fromJson(dynamic json) {
@@ -67,6 +70,8 @@ class ReviewPostDetail {
     createDate = json['createDate'];
     myReaction =
         json['reaction'] != null ? Reaction.fromJson(json['reaction']) : null;
+    location =
+        json['location'] != null ? Location.fromMap(json['location']) : null;
   }
 
   int? id;
@@ -87,6 +92,7 @@ class ReviewPostDetail {
   String? createDate;
   bool hasBookmark = false;
   Reaction? myReaction;
+  Location? location;
 
   ReviewPostDetail copyWith({
     int? id,
@@ -102,6 +108,7 @@ class ReviewPostDetail {
     List<Tag> tags = const [],
     BaseUserInfo? user,
     String? createDate,
+    Location? location,
   }) =>
       ReviewPostDetail(
           id: id ?? this.id,
@@ -116,5 +123,6 @@ class ReviewPostDetail {
           images: images,
           user: user ?? user,
           createDate: createDate ?? createDate,
-          tags: tags);
+          tags: tags,
+          location: location ?? this.location);
 }

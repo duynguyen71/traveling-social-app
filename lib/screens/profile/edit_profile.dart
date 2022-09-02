@@ -13,8 +13,12 @@ import 'package:traveling_social_app/utilities/application_utility.dart';
 import 'package:traveling_social_app/widgets/base_app_bar.dart';
 import 'package:traveling_social_app/widgets/current_user_avt.dart';
 
+import '../../bloc/appIication/application_state_bloc.dart';
 import '../../constants/app_theme_constants.dart';
+import '../../models/location.dart';
 import '../../services/user_service.dart';
+
+import '../../widgets/location_finder.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile(
@@ -79,7 +83,7 @@ class _EditProfileState extends State<EditProfile>
     return DraggableScrollableSheet(
       initialChildSize: .95,
       maxChildSize: .95,
-      minChildSize: .5,
+      minChildSize: .6,
       snap: false,
       builder: (context, scrollController) {
         return Scaffold(
@@ -224,7 +228,7 @@ class _EditProfileState extends State<EditProfile>
                                 ),
                                 // Location
                                 CustomTextField(
-                                  onTap: () {},
+                                  onTap: _handleShowLocations,
                                   enabled: false,
                                   label: AppLocalizations.of(context)!.location,
                                   controller: _locationController,
@@ -275,6 +279,28 @@ class _EditProfileState extends State<EditProfile>
     );
   }
 
+  // FractionallySizedBox
+  _handleShowLocations() {
+    FocusScope.of(context).unfocus();
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        context: context,
+        builder: (context) {
+          return LocationFinder(
+            onSaveLocation: (Location? location) {
+              Navigator.pop(context);
+              dto = dto.copyWith(location: location);
+              if (location != null) {
+                _locationController.text = location.label ?? '';
+              }
+            },
+          );
+        },
+        backgroundColor: Colors.transparent,
+        isDismissible: true,
+        isScrollControlled: true);
+  }
+
   _validationUsernameOnChanged(String? str) async {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(seconds: 1), () async {
@@ -318,6 +344,8 @@ class _EditProfileState extends State<EditProfile>
     }
   }
 
+  var dto = UpdateBaseUserInfo();
+
   /// Handle update base user info
   _updateBaseUserInfo() async {
     ApplicationUtility.hideKeyboard();
@@ -326,8 +354,7 @@ class _EditProfileState extends State<EditProfile>
     if (_usernameError != null) {
       return;
     }
-    var dto = UpdateBaseUserInfo(
-        location: _locationController.text,
+    dto = dto.copyWith(
         birthdate: ApplicationUtility.formatDate(_birthdayController.text),
         website: _websiteController.text,
         bio: _bioController.text,
@@ -389,7 +416,6 @@ class CustomTextField extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border(
             top: BorderSide(color: Colors.grey.shade200),
-            // bottom: BorderSide(color: Colors.grey.shade200),
           ),
         ),
         child: Row(

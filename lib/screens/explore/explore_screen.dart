@@ -1,11 +1,15 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:geocode/geocode.dart';
 import 'package:traveling_social_app/screens/account/account_screen.dart';
 import 'package:traveling_social_app/screens/bookmark/bookmark_screen.dart';
 import 'package:traveling_social_app/screens/home/home_screen.dart';
 import 'package:traveling_social_app/screens/notification/notification_screen.dart';
 import 'package:traveling_social_app/services/user_service.dart';
-
+import 'package:geolocator/geolocator.dart';
+import '../../models/location.dart';
+import '../../services/location_service.dart';
 import 'components/drawer.dart';
 import 'components/main_bottom_nav.dart';
 
@@ -33,8 +37,22 @@ class _ExploreScreenState extends State<ExploreScreen>
     });
   }
 
+  // static void updateUserAddress(int? value) async {
+  //    print('start update user location');
+  //    var position = await Geolocator.getCurrentPosition(
+  //        desiredAccuracy: LocationAccuracy.high);
+  //    GeoCode geoCode = GeoCode();
+  //    var latitude = position.latitude;
+  //    var longitude = position.longitude;
+  //    var address =
+  //    await geoCode.reverseGeocoding(latitude: latitude, longitude: longitude);
+  //    var location = Location.fromAddress(longitude, latitude, address);
+  //    await UserService().updateLocation(location);
+  //  }
+
   @override
   void initState() {
+    // compute(updateUserAddress, null);
     super.initState();
     var firebaseMessaging = FirebaseMessaging.instance;
     firebaseMessaging.onTokenRefresh.listen((token) {
@@ -42,10 +60,27 @@ class _ExploreScreenState extends State<ExploreScreen>
     });
     _pageController =
         PageController(initialPage: _currentPageIndex, keepPage: true);
+    //update current user pos
+  }
+
+  _getAndReverseLocation() async {
+    print('get and reverse location');
+    var position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    LocationService().reverseLocation(
+        latitude: position.latitude, longitude: position.longitude);
+  }
+
+  _forwardLocation() async {
+    print('get and reverse location');
+    LocationService().forwardLocation(
+        query: "Tan Phu");
   }
 
   @override
   Widget build(BuildContext context) {
+    // _getAndReverseLocation();
+    // _forwardLocation();
     super.build(context);
     return WillPopScope(
       onWillPop: () async {
@@ -65,7 +100,7 @@ class _ExploreScreenState extends State<ExploreScreen>
               HomeScreen(),
               BookmarkScreen(),
               NotificationScreen(),
-              AccountScreen()
+              AccountScreen(),
             ],
           ),
           bottomNavigationBar: MainBottomNav(

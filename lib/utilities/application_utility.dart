@@ -12,17 +12,20 @@ import 'package:palette_generator/palette_generator.dart';
 import 'package:traveling_social_app/constants/api_constants.dart';
 import 'package:traveling_social_app/widgets/bottom_select_dialog.dart';
 
+import '../models/location.dart';
+import '../widgets/location_finder.dart';
+
 class ApplicationUtility {
   //hide input keyboard
   static void hideKeyboard() {
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
-  static void showSuccessToast(String? message,{ToastGravity? gravity}) {
+  static void showSuccessToast(String? message, {ToastGravity? gravity}) {
     Fluttertoast.showToast(
         msg: message ?? '',
         toastLength: Toast.LENGTH_SHORT,
-        gravity:gravity?? ToastGravity.TOP,
+        gravity: gravity ?? ToastGravity.TOP,
         timeInSecForIosWeb: 1,
         backgroundColor: Colors.green.shade500,
         textColor: Colors.white,
@@ -147,6 +150,7 @@ class ApplicationUtility {
 
   static String? formatDate(String? str,
       {Locale? locale, String formatPattern = "dd-MMM-yyyy"}) {
+    if (str == null) return null;
     try {
       var format = DateFormat(formatPattern, locale?.toString())
           .format(DateTime.parse('$str'));
@@ -155,6 +159,22 @@ class ApplicationUtility {
       print('failed to format date: $e');
       return null;
     }
+  }
+
+  static void showModalSelectLocationDialog(
+      BuildContext context, Function(Location? location) onSaveLocation) {
+    FocusScope.of(context).unfocus();
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        context: context,
+        builder: (context) {
+          return LocationFinder(
+            onSaveLocation: onSaveLocation,
+          );
+        },
+        backgroundColor: Colors.transparent,
+        isDismissible: true,
+        isScrollControlled: true);
   }
 
   // static Future<void> showAlertDialog(BuildContext context, Function onConfirm,

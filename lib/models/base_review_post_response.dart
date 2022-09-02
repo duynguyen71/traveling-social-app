@@ -10,6 +10,7 @@ class BaseReviewPostResponse {
     this.coverPhoto,
     this.user,
     this.createDate,
+    this.location,
   });
 
   BaseReviewPostResponse.fromJson(dynamic json) {
@@ -21,6 +22,7 @@ class BaseReviewPostResponse {
         : null;
     user = json['user'] != null ? BaseUserInfo.fromJson(json['user']) : null;
     createDate = json['createDate'];
+    location = json['location'];
   }
 
   int? id;
@@ -29,6 +31,7 @@ class BaseReviewPostResponse {
   FileUpload? coverPhoto;
   BaseUserInfo? user;
   String? createDate;
+  String? location;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -42,6 +45,7 @@ class BaseReviewPostResponse {
       map['user'] = user?.toJson();
     }
     map['createDate'] = createDate;
+    map['location'] = location;
     return map;
   }
 }

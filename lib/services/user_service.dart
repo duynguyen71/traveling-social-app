@@ -22,6 +22,7 @@ import '../models/Notification_resp.dart';
 import '../models/chat_group_detail.dart';
 import '../models/create_chat_group.dart';
 import '../models/group.dart';
+import '../models/location.dart';
 import '../models/message.dart';
 
 class UserService {
@@ -63,6 +64,7 @@ class UserService {
 
   /// Update base user info
   Future<bool> updateBaseUserInfo(UpdateBaseUserInfo info) async {
+    print('handle update user');
     final url = Uri.parse("$baseUrl/api/v1/member/users/me");
     final resp = await client.put(url, body: jsonEncode(info.toJson()));
     if (resp.statusCode == 200) {
@@ -465,7 +467,20 @@ class UserService {
     });
   }
 
-  Future<void> forgetPasswordRequest()async{
+  Future<void> forgetPasswordRequest() async {}
 
+  Future<void> updateLocation(Location location) async {
+    print('update user location');
+    final url = Uri.parse('$baseUrl/api/v1/member/users/me/location');
+    try {
+      final resp = await client.post(url, body: locationToJson(location));
+      if (resp.statusCode == 200) {
+        print('update location success');
+      } else {
+        print(resp.body);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }

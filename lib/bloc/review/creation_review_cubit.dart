@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:traveling_social_app/dto/attachment_dto.dart';
 import 'package:traveling_social_app/dto/creation_review_post.dart';
 
+import '../../models/location.dart';
 import '../../models/tag.dart';
 import '../../services/post_service.dart';
 
@@ -32,6 +33,7 @@ class CreateReviewPostCubit extends Cubit<CreateReviewPostState> {
     AttachmentDto? coverImage,
     List<AttachmentDto>? images,
     List<Tag>? tags,
+    Location? location,
   }) {
     emit(
       CreateReviewPostState(
@@ -46,7 +48,7 @@ class CreateReviewPostCubit extends Cubit<CreateReviewPostState> {
             shortDescription: shortDescription,
             coverPhoto: coverImage,
             images: images,
-            tags: tags),
+            tags: tags,location: location),
       ),
     );
   }

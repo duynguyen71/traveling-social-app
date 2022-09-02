@@ -160,6 +160,7 @@ class _PostEntryState extends State<PostEntry>
                         const TextStyle(fontSize: 16, color: Colors.black87),
                   ),
                 ),
+          //ATTACHMENT
           PostAttachmentContainer(attachments: _attachments),
           //BUTTONS
           Container(

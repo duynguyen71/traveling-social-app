@@ -1,18 +1,22 @@
 import 'package:equatable/equatable.dart';
 
+import '../../models/location.dart';
+
 class User extends Equatable {
-  const User(
-      {required this.id,
-      required this.username,
-      required this.createDate,
-      required this.followerCounts,
-      required this.followingCounts,
-      this.fullName,
-      this.avt,
-      this.bio,
-      this.background,
-      this.birthdate,
-      this.website});
+  const User({
+    required this.id,
+    required this.username,
+    required this.createDate,
+    required this.followerCounts,
+    required this.followingCounts,
+    this.fullName,
+    this.avt,
+    this.bio,
+    this.background,
+    this.birthdate,
+    this.website,
+    this.location,
+  });
 
   final int id;
   final String username;
@@ -25,6 +29,7 @@ class User extends Equatable {
   final String? background;
   final String? website;
   final String? birthdate;
+  final Location? location;
 
   factory User.fromJson(dynamic json) {
     return User(
@@ -38,7 +43,10 @@ class User extends Equatable {
         bio: json['bio'],
         website: json['website'],
         birthdate: json['birthdate'],
-        background: json['background']);
+        background: json['background'],
+        location: json['location'] != null
+            ? Location.fromMap(json['location'])
+            : null);
   }
 
   static const empty = User(
@@ -58,6 +66,7 @@ class User extends Equatable {
     String? background,
     String? birthdate,
     String? fullName,
+    Location? location,
   }) {
     return User(
         id: id,
@@ -70,12 +79,13 @@ class User extends Equatable {
         followingCounts: followingCounts,
         birthdate: birthdate ?? this.birthdate,
         website: website ?? this.website,
-        fullName: fullName ?? this.fullName);
+        fullName: fullName ?? this.fullName,
+        location: location ?? this.location);
   }
 
   @override
   List<Object?> get props =>
-      [id, username, fullName, avt, bio, background, birthdate];
+      [id, username, fullName, avt, bio, background, birthdate, location];
 
   @override
   bool get stringify => true;

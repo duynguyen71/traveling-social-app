@@ -1,3 +1,5 @@
+import 'dart:isolate';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +20,7 @@ class _HomeStoriesState extends State<HomeStories>
   @override
   void initState() {
     super.initState();
-    context.read<StoryBloc>().add(const FetchStory());
+      context.read<StoryBloc>().add(const FetchStory());
   }
 
   @override
@@ -56,7 +58,7 @@ class _HomeStoriesState extends State<HomeStories>
                       return false;
                     },
                     child: ListView.builder(
-                      shrinkWrap: true,
+                      shrinkWrap: false,
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (context, index) {
                         if (index == stories.length) {

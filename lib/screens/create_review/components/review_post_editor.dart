@@ -21,7 +21,10 @@ import 'package:traveling_social_app/widgets/my_outline_button.dart';
 import 'package:traveling_social_app/widgets/my_text_icon_button.dart';
 import 'package:traveling_social_app/widgets/tap_effect_widget.dart';
 
+import '../../../models/location.dart';
+import '../../../widgets/location_finder.dart';
 import 'review_post_image_container.dart';
+
 class ReviewPostEditor extends StatefulWidget {
   const ReviewPostEditor(
       {Key? key,
@@ -52,7 +55,6 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
       var images = [...bloc.state.post.images];
       images.add(AttachmentDto(path: path, pos: pos, status: 1));
       bloc.updateReviewPost(images: images);
-    } on Exception catch (e) {
     } finally {
       context
           .read<CreateReviewPostCubit>()
@@ -209,6 +211,20 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
                     textColor: Colors.white,
                     onTap: () => Navigator.push(
                         context, PickTagScreen.route(callback: (tagNames) {}))),
+                // Button add location
+                MyTextIconButton(
+                    text: 'Location',
+                    icon: Icons.location_on_outlined,
+                    bgColor: Colors.blueAccent,
+                    textColor: Colors.white,
+                    onTap: () {
+                      ApplicationUtility.showModalSelectLocationDialog(context,
+                          (location) {
+                        context
+                            .read<CreateReviewPostCubit>()
+                            .updateReviewPost(location: location);
+                      });
+                    }),
                 MyTextIconButton(
                     text: AppLocalizations.of(context)!.totalMoney,
                     icon: Icons.attach_money,
@@ -260,8 +276,9 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
           margin: const EdgeInsets.symmetric(horizontal: 8.0),
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           width: 200.0,
-          child:
-              MyOutlineButton(onClick: _pickGalleryImages, text: AppLocalizations.of(context)!.addImage),
+          child: MyOutlineButton(
+              onClick: _pickGalleryImages,
+              text: AppLocalizations.of(context)!.addImage),
         ),
         // IMAGE LIST
         Padding(

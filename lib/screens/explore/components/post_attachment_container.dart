@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 
@@ -27,6 +28,12 @@ class _PostAttachmentContainerState extends State<PostAttachmentContainer>
 
   double? _displayRatio;
 
+  Future<bool> myFunction(Map map) async {
+    print("Starten");
+    // fake long process
+    await Future.delayed(Duration(seconds: 5));
+    return true;
+  }
   @override
   void initState() {
     super.initState();
@@ -203,4 +210,11 @@ class _PostAttachmentContainerState extends State<PostAttachmentContainer>
 
   @override
   bool get wantKeepAlive => true;
+}
+
+class IsolateModel {
+  IsolateModel(this.iteration, this.multiplier);
+
+  final int iteration;
+  final int multiplier;
 }

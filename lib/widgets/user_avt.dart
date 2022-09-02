@@ -8,13 +8,14 @@ class UserAvatar extends StatelessWidget {
     required this.size,
     required this.avt,
     required this.onTap,
-    this.isActive,
+    this.isActive, this.padding,
   }) : super(key: key);
 
   final double size;
   final String? avt;
   final Function onTap;
   final bool? isActive;
+  final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +25,10 @@ class UserAvatar extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           Container(
+            padding:padding,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(size),
-                  color: Colors.grey.shade300),
+                  color: Colors.white),
               constraints: BoxConstraints(minWidth: size, minHeight: size),
               child: CachedNetworkImage(
                 imageUrl: '$imageUrl$avt',

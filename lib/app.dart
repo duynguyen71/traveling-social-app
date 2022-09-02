@@ -16,6 +16,7 @@ import 'package:traveling_social_app/screens/message/bloc/chat_bloc.dart';
 import 'package:traveling_social_app/screens/splash/splash_screen.dart';
 
 import 'authentication/bloc/authentication_state.dart';
+import 'bloc/appIication/application_state_bloc.dart';
 import 'bloc/notification/notification_bloc.dart';
 
 //root application
@@ -41,6 +42,9 @@ class App extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: [
+          BlocProvider<ApplicationStateBloc>(
+            create: (context) => ApplicationStateBloc(),
+          ),
           BlocProvider<AuthenticationBloc>(
               create: (context) => AuthenticationBloc(
                   authenticationRepository: authRepo,

@@ -95,13 +95,21 @@ class CurrentUserProfileHeader extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             // Location
-                            const IconTextButton(
-                                text: "Ho Chi Minh city",
-                                icon: Icon(
-                                  Icons.location_on_outlined,
-                                  color: Colors.black87,
-                                  size: 16,
-                                )),
+                            BlocConsumer<AuthenticationBloc,
+                                AuthenticationState>(
+                              listener: (context, state) => state.user.location,
+                              builder: (context, state) {
+                                return state.user.location == null
+                                    ? const SizedBox.shrink()
+                                    : IconTextButton(
+                                        text: state.user.location?.label ?? '',
+                                        icon: Icon(
+                                          Icons.location_on_outlined,
+                                          color: Colors.black87,
+                                          size: 16,
+                                        ));
+                              },
+                            ),
                             const SizedBox(width: 10),
                             // Joined Date
                             IconTextButton(

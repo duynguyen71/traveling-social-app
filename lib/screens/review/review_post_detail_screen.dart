@@ -130,48 +130,52 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
                                 ),
 
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        TextButton(
-                                          style: TextButton.styleFrom(
-                                              padding: EdgeInsets.zero,
-                                              minimumSize: const Size(50, 30),
-                                              alignment: Alignment.centerRight,
-                                              tapTargetSize:
-                                                  MaterialTapTargetSize
-                                                      .shrinkWrap),
-                                          onPressed: () {},
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 4.0),
-                                                child: Text(
-                                                    _reviewPostDetail
-                                                        .numOfVisitor
-                                                        .toString(),
-                                                    style: const TextStyle(
-                                                        fontSize: 14)),
-                                              ),
-                                              const Icon(
-                                                Icons.visibility,
-                                                size: 16,
-                                              ),
-                                            ],
+                                    // LOCATION
+                                    _reviewPostDetail.location != null
+                                        ? IconTextButton(
+                                        text: '${_reviewPostDetail.location?.label}',
+                                        icon: Icon(
+                                          Icons.location_on_outlined,
+                                          color: Colors.black54,
+                                        ))
+                                        : const SizedBox.shrink(),
+                                    // COUNT VIEWER
+                                    TextButton(
+                                      style: TextButton.styleFrom(
+                                          padding: EdgeInsets.zero,
+                                          minimumSize: const Size(50, 30),
+                                          alignment: Alignment.centerRight,
+                                          tapTargetSize:
+                                              MaterialTapTargetSize
+                                                  .shrinkWrap),
+                                      onPressed: () {},
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 4.0),
+                                            child: Text(
+                                                _reviewPostDetail
+                                                    .numOfVisitor
+                                                    .toString(),
+                                                style: const TextStyle(
+                                                    fontSize: 14)),
                                           ),
-                                        )
-                                      ],
+                                          const Icon(
+                                            Icons.visibility,
+                                            size: 16,
+                                          ),
+                                        ],
+                                      ),
                                     )
                                   ],
                                 ),

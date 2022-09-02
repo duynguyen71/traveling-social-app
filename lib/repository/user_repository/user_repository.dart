@@ -17,8 +17,8 @@ class UserRepository {
         "Authorization": "Bearer ${await _storage.read(key: "accessToken")}"
       });
       if (resp.statusCode == 200) {
-        print('user repository get user');
         _user = User.fromJson(jsonDecode(resp.body)['data']);
+        print(_user);
         return _user;
       }
       return null;

@@ -63,10 +63,13 @@ dependencies:
   flutter_lorem: ^2.0.0
   shimmer: ^2.0.0
   flutter_quill: 5.4.0
-  flutter_user_agentx: ^1.2.4
-  ua_client_hints: ^1.1.1
   fk_user_agent: ^2.1.0
   flutter_signin_button: ^2.0.0
+  flutter_isolate: ^2.0.2
+  geolocator: ^8.2.1
+  geocode: ^1.0.2
+  geolocator_android: 3.1.5
+#  location: ^4.4.0
 
 dev_dependencies:
   flutter_test:

@@ -58,16 +58,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SliverList(
                   delegate: SliverChildListDelegate([
                 ProfileHeader(
-                  username: _user?.username,
-                  fullName: _user?.fullName,
-                  website: _user?.website,
-                  bio: _user?.bio,
-                  avt: _user?.avt,
-                  bgImage: _user?.background,
-                  followerCount: _user?.followerCounts ?? 0,
-                  followingCount: _user?.followingCounts ?? 0,
-                  joinedDate: _user?.createDate,
                   onTapAvt: () {},
+                  user: _user,
                   onTapBg: () {},
                   buttons: Row(
                     mainAxisAlignment: MainAxisAlignment.end,

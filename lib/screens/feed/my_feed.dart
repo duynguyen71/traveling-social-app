@@ -19,14 +19,12 @@ class _MyFeedState extends State<MyFeed> with AutomaticKeepAliveClientMixin {
   void initState() {
     super.initState();
     context.read<PostBloc>().add(const FetchPost());
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _scrollController.addListener(() {
         var position = _scrollController.position;
         if (position.pixels == position.maxScrollExtent) {
           context.read<PostBloc>().add(const FetchPost());
         }
       });
-    // });
   }
 
   @override

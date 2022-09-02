@@ -89,28 +89,41 @@ class _EditorReviewState extends State<EditorReview> {
                   padding: const EdgeInsets.only(bottom: 8.0),
                   title: post.title.toString()),
               // aditional infomation
-              Row(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  IconTextButton(
-                      text: '${post.numOfParticipant}',
-                      icon: Icon(
-                        Icons.group,
-                        color: Colors.black54,
-                      )),
-                  const SizedBox(width: 10),
-                  IconTextButton(
-                      text: '${post.cost}',
-                      icon: Icon(
-                        Icons.monetization_on,
-                        color: Colors.black54,
-                      )),
-                  const SizedBox(width: 10),
-                  IconTextButton(
-                      text: '${post.totalDay} ngày',
-                      icon: Icon(
-                        Icons.calendar_today,
-                        color: Colors.black54,
-                      )),
+                  post.location != null
+                      ? IconTextButton(
+                          text: '${post.location?.label}',
+                          icon: Icon(
+                            Icons.location_on_outlined,
+                            color: Colors.black54,
+                          ))
+                      : const SizedBox.shrink(),
+                  Row(
+                    children: [
+                      IconTextButton(
+                          text: '${post.numOfParticipant}',
+                          icon: Icon(
+                            Icons.group,
+                            color: Colors.black54,
+                          )),
+                      const SizedBox(width: 10),
+                      IconTextButton(
+                          text: '${post.cost}',
+                          icon: Icon(
+                            Icons.monetization_on,
+                            color: Colors.black54,
+                          )),
+                      const SizedBox(width: 10),
+                      IconTextButton(
+                          text: '${post.totalDay} ngày',
+                          icon: Icon(
+                            Icons.calendar_today,
+                            color: Colors.black54,
+                          )),
+                    ],
+                  ),
                 ],
               ),
               // post content
@@ -122,7 +135,7 @@ class _EditorReviewState extends State<EditorReview> {
               ReviewPostTags(
                 tags: post.tags,
                 onTap: (tag) {},
-              ),//
+              ), //
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(

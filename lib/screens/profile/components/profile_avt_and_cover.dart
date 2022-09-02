@@ -93,7 +93,7 @@ class _ProfileAvtAndCoverState extends State<ProfileAvtAndCover> {
             bottom: 0,
             left: kDefaultPadding,
             child: CurrentUserAvt(
-              padding: const EdgeInsets.all(4.0),
+              padding: const EdgeInsets.all(2.0),
               onTap: () {
                 _onTapUserAvt(context);
               },
@@ -109,11 +109,7 @@ class _ProfileAvtAndCoverState extends State<ProfileAvtAndCover> {
               height: 40,
               child: ButtonEditProfile(
                 onUpdateCallback: (UpdateBaseUserInfo info) async {
-                  bool isSuccess = await _userService.updateBaseUserInfo(info);
-                  if (isSuccess) {
-                    context.read<AuthenticationBloc>().add(UserInfoChanged());
-                  }
-                  return;
+                  await handleUpdate(info, context);
                 },
                 onTapUserAvt: (context) => _onTapUserAvt(context),
                 onTapCoverBg: (context) => _onTapCoverBg(context),
@@ -123,6 +119,15 @@ class _ProfileAvtAndCoverState extends State<ProfileAvtAndCover> {
         ],
       ),
     );
+  }
+
+  Future<void> handleUpdate(
+      UpdateBaseUserInfo info, BuildContext context) async {
+    bool isSuccess = await _userService.updateBaseUserInfo(info);
+    if (isSuccess) {
+      context.read<AuthenticationBloc>().add(UserInfoChanged());
+    }
+    return;
   }
 
   void _onTapCoverBg(BuildContext context) {

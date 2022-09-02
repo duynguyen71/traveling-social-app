@@ -7,28 +7,21 @@ import 'package:traveling_social_app/widgets/user_avt.dart';
 
 import '../../../constants/api_constants.dart';
 import '../../../constants/app_theme_constants.dart';
+import '../../../models/user.dart';
 import 'follow_count.dart';
 import 'icon_with_text.dart';
 
 class ProfileHeader extends StatelessWidget {
-  const ProfileHeader(
-      {Key? key,
-      required this.username,
-      this.followingCount = 0,
-      this.followerCount = 0,
-      this.avt,
-      this.bgImage,
-      this.joinedDate,
-      required this.onTapAvt,
-      required this.onTapBg,
-      required this.buttons,
-      this.fullName,
-      this.bio,
-      this.website})
-      : super(key: key);
-  final String? username, fullName, bio, website;
-  final int? followingCount, followerCount;
-  final String? avt, bgImage, joinedDate;
+  const ProfileHeader({
+    super.key,
+    this.user,
+    required this.onTapAvt,
+    required this.onTapBg,
+    required this.buttons,
+  });
+
+  final User? user;
+
   final Function onTapAvt, onTapBg;
   final Widget buttons;
 
@@ -57,7 +50,7 @@ class ProfileHeader extends StatelessWidget {
                         aspectRatio: 16 / 9,
                         child: CachedNetworkImage(
                           fit: BoxFit.cover,
-                          imageUrl: '$imageUrl$bgImage',
+                          imageUrl: '$imageUrl${user?.background}',
                           errorWidget: (context, url, error) => Image.asset(
                             "assets/images/home_bg.png",
                             fit: BoxFit.cover,
@@ -70,9 +63,10 @@ class ProfileHeader extends StatelessWidget {
                   bottom: 0,
                   left: kDefaultPadding,
                   child: UserAvatar(
+                    padding: EdgeInsets.all(2.0),
                     onTap: () => onTapAvt(),
                     size: 150,
-                    avt: avt,
+                    avt: user?.avt,
                   ),
                 ),
                 Positioned(
@@ -95,10 +89,10 @@ class ProfileHeader extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  fullName.isNullOrBlank
+                  user == null || user!.fullName.isNullOrBlank
                       ? const SizedBox.shrink()
                       : Text(
-                          '$fullName',
+                          '${user!.fullName}',
                           style: const TextStyle(
                               color: Colors.black87,
                               fontSize: 16,
@@ -108,7 +102,7 @@ class ProfileHeader extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: Text(
-                      '@${username ?? ''}',
+                      '@${user?.username ?? ''}',
                       style:
                           const TextStyle(color: Colors.black54, fontSize: 16),
                     ),
@@ -118,10 +112,10 @@ class ProfileHeader extends StatelessWidget {
                     children: [
                       FollowCount(
                           title: AppLocalizations.of(context)!.following,
-                          count: followingCount),
+                          count: user?.followingCounts),
                       FollowCount(
                           title: AppLocalizations.of(context)!.follower,
-                          count: followerCount),
+                          count: user?.followerCounts),
                     ],
                   ),
                   const SizedBox(height: 5),
@@ -134,18 +128,21 @@ class ProfileHeader extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            const IconTextButton(
-                                text: "Ho Chi Minh city",
-                                icon: Icon(
-                                  Icons.location_on_outlined,
-                                  color: Colors.black87,
-                                  size: 16,
-                                )),
+                            (user == null || user!.location == null)
+                                ? const SizedBox.shrink()
+                                : IconTextButton(
+                                    text: (user!.location!.label ?? ''),
+                                    icon: Icon(
+                                      Icons.location_on_outlined,
+                                      color: Colors.black87,
+                                      size: 16,
+                                    )),
                             const SizedBox(width: 10),
                             IconTextButton(
-                              text: Jiffy(joinedDate == null
+                              text: Jiffy(user == null ||
+                                          user?.createDate == null
                                       ? DateTime.now()
-                                      : DateTime.parse('$joinedDate'))
+                                      : DateTime.parse('${user?.createDate}'))
                                   .format('dd-MM-yyyy'),
                               icon: const Icon(
                                 Icons.calendar_today_outlined,
@@ -156,25 +153,29 @@ class ProfileHeader extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 10),
-                        website.isNullOrBlank
-                            ? const SizedBox.shrink()
-                            : IconTextButton(
-                                text: '$website',
-                                icon: const Icon(
-                                  Icons.link,
-                                  color: Colors.black87,
-                                  size: 16,
-                                ),
-                              ),
+                        Row(
+                          children: [
+                            user == null || user!.website.isNullOrBlank
+                                ? const SizedBox.shrink()
+                                : IconTextButton(
+                                    text: '${user!.website}',
+                                    icon: const Icon(
+                                      Icons.link,
+                                      color: Colors.black87,
+                                      size: 16,
+                                    ),
+                                  ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
-                  bio.isNullOrBlank
+                  user == null || user!.bio.isNullOrBlank
                       ? const SizedBox.shrink()
                       : Container(
                           margin: const EdgeInsets.only(bottom: 8.0),
                           child: Text(
-                            bio ?? '',
+                            user?.bio ?? '',
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(

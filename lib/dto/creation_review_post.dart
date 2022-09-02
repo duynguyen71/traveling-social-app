@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+import '../models/location.dart';
 import '../models/tag.dart';
 import 'attachment_dto.dart';
 
@@ -16,6 +17,7 @@ class CreationReviewPost extends Equatable {
   final List<AttachmentDto> images;
   final List<Tag> tags;
   final int status;
+  final Location? location;
 
   factory CreationReviewPost.fromJson(dynamic json) {
     return CreationReviewPost(
@@ -38,6 +40,8 @@ class CreationReviewPost extends Equatable {
       tags: json['tags'] != null
           ? (json['tags'] as List<dynamic>).map((t) => Tag.fromJson(t)).toList()
           : [],
+      location:
+          json['location'] != null ? Location.fromMap(json['location']) : null,
     );
   }
 
@@ -53,7 +57,8 @@ class CreationReviewPost extends Equatable {
       this.contentJson,
       this.images = const [],
       this.tags = const [],
-      this.cost = 0});
+      this.cost = 0,
+      this.location});
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {};
@@ -67,33 +72,38 @@ class CreationReviewPost extends Equatable {
     map['totalDay'] = totalDay;
     map['status'] = status;
     map['tags'] = tags;
+    map['location'] = location;
     return map;
   }
 
-  CreationReviewPost copyWith(
-          {int? id,
-          String? title,
-          String? shortDescription,
-          int? numOfParticipant,
-          int? days,
-          double? cost,
-          List<AttachmentDto>? images,
-          String? content,
-          AttachmentDto? coverPhoto,
-          String? contentJson,
-          List<Tag>? tags}) =>
+  CreationReviewPost copyWith({
+    int? id,
+    String? title,
+    String? shortDescription,
+    int? numOfParticipant,
+    int? days,
+    double? cost,
+    List<AttachmentDto>? images,
+    String? content,
+    AttachmentDto? coverPhoto,
+    String? contentJson,
+    List<Tag>? tags,
+    Location? location,
+  }) =>
       CreationReviewPost(
-          id: id ?? this.id,
-          title: title ?? this.title,
-          shortDescription: shortDescription ?? this.shortDescription,
-          numOfParticipant: numOfParticipant ?? this.numOfParticipant,
-          totalDay: days ?? this.totalDay,
-          cost: cost ?? this.cost,
-          coverPhoto: coverPhoto ?? this.coverPhoto,
-          images: images ?? this.images,
-          tags: tags ?? this.tags,
-          contentJson: contentJson ?? this.contentJson,
-          content: content ?? this.content);
+        id: id ?? this.id,
+        title: title ?? this.title,
+        shortDescription: shortDescription ?? this.shortDescription,
+        numOfParticipant: numOfParticipant ?? this.numOfParticipant,
+        totalDay: days ?? totalDay,
+        cost: cost ?? this.cost,
+        coverPhoto: coverPhoto ?? this.coverPhoto,
+        images: images ?? this.images,
+        tags: tags ?? this.tags,
+        contentJson: contentJson ?? this.contentJson,
+        content: content ?? this.content,
+        location: location ?? this.location,
+      );
 
   @override
   List<Object?> get props => [id, coverPhoto, images];
