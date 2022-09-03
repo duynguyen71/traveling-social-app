@@ -1,6 +1,6 @@
 # traveling_social_app
 
-Travelling Social App using flutter
+Flutter project for Traveling Social (TC Social)
 
 ## Getting Started
 
