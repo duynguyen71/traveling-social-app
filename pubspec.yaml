@@ -35,6 +35,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_svg: ^1.0.3
+  permission_handler: ^10.0.0
   google_fonts: ^2.1.0
   provider: ^6.0.0
   fluttertoast: ^8.0.7
@@ -67,9 +68,10 @@ dependencies:
   flutter_signin_button: ^2.0.0
   flutter_isolate: ^2.0.2
   geolocator: ^8.2.1
-  geocode: ^1.0.2
-  geolocator_android: 3.1.5
-#  location: ^4.4.0
+  #  flutter_osm_plugin: ^0.39.1
+  flutter_map: ^2.1.0
+  latlong2: ^0.8.1
+  geocoding: ^2.0.5
 
 dev_dependencies:
   flutter_test:

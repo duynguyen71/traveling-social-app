@@ -5,20 +5,18 @@ import 'package:traveling_social_app/widgets/rounded_input_container.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/appIication/application_state_bloc.dart';
 import '../models/location.dart';
+import 'package:traveling_social_app/widgets/open_street_map.dart';
 
 class LocationFinder extends StatefulWidget {
   const LocationFinder({Key? key, required this.onSaveLocation})
       : super(key: key);
   final Function(Location? location) onSaveLocation;
 
-
   @override
   State<LocationFinder> createState() => _LocationFinderState();
 }
 
 class _LocationFinderState extends State<LocationFinder> {
-  Location? selectedLocation;
-
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
@@ -47,16 +45,14 @@ class _LocationFinderState extends State<LocationFinder> {
                       if (value.isEmpty) {}
                     },
                     onSubmitted: (value) {
-                      context
-                          .read<ApplicationStateBloc>()
-                          .add(ForwardLocationEvent(value));
+                      findLocation(context, value);
                     },
                     decoration: const InputDecoration(
                       isCollapsed: true,
                       border: InputBorder.none,
                       hintText: 'Địa chỉ',
                       contentPadding:
-                      EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                          EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
                       hintStyle: TextStyle(
                         letterSpacing: .5,
                         fontSize: 14,
@@ -68,9 +64,14 @@ class _LocationFinderState extends State<LocationFinder> {
                 ),
                 actions: [
                   // Save button
-                  TextButton(
-                    onPressed: () => widget.onSaveLocation(selectedLocation),
-                    child: Text('Save'),
+                  BlocBuilder<ApplicationStateBloc, ApplicationStateState>(
+                    builder: (context, state) {
+                      return TextButton(
+                        onPressed: () =>
+                            widget.onSaveLocation(state.selectedLocation),
+                        child: Text('Lưu'),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -89,13 +90,29 @@ class _LocationFinderState extends State<LocationFinder> {
                         controller: scrollController,
                         shrinkWrap: true,
                         children: [
-                          selectedLocation != null
-                              ? SelectedLocationWidget(
-                              location: selectedLocation!,
-                              onRemove: () {
-                                setState(() => selectedLocation = null);
-                              })
-                              : const SizedBox.shrink(),
+                          BlocBuilder<ApplicationStateBloc,
+                              ApplicationStateState>(
+                            builder: (context, state) {
+                              var selectedLoc = state.selectedLocation;
+                              if (selectedLoc == null)
+                                return const SizedBox.shrink();
+                              print('selected loc ${selectedLoc.label}');
+                              return SelectedLocationWidget(
+                                location: selectedLoc!,
+                                onRemove: () {
+                                  setState(() => selectedLoc = null);
+                                },
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => OpenStreetMap(
+                                            location: selectedLoc),
+                                      ));
+                                },
+                              );
+                            },
+                          ),
                           BlocBuilder<ApplicationStateBloc,
                               ApplicationStateState>(
                             builder: (context, state) {
@@ -107,10 +124,11 @@ class _LocationFinderState extends State<LocationFinder> {
                                   var location = locations[index];
                                   return LocationWidget(
                                     location: location,
-                                    onSelected: () =>
-                                        setState(
-                                                () =>
-                                            selectedLocation = location),
+                                    onSelected: () {
+                                      context
+                                          .read<ApplicationStateBloc>()
+                                          .add(SelectLocationEvent(location));
+                                    },
                                   );
                                 },
                                 itemCount: locations.length,
@@ -123,9 +141,9 @@ class _LocationFinderState extends State<LocationFinder> {
                         builder: (context, state) {
                           return state.status == ApplicationStatus.loading
                               ? const Positioned.fill(
-                              child: Center(
-                                child: CupertinoActivityIndicator(),
-                              ))
+                                  child: Center(
+                                  child: CupertinoActivityIndicator(),
+                                ))
                               : const SizedBox.shrink();
                         },
                       )
@@ -138,6 +156,10 @@ class _LocationFinderState extends State<LocationFinder> {
         );
       },
     );
+  }
+
+  void findLocation(BuildContext context, String value) {
+    context.read<ApplicationStateBloc>().add(ForwardLocationEvent(value));
   }
 
   @override
@@ -163,7 +185,7 @@ class LocationWidget extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
                 border:
-                Border(bottom: BorderSide(color: Colors.grey.shade100))),
+                    Border(bottom: BorderSide(color: Colors.grey.shade100))),
             padding: const EdgeInsets.all(4.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -199,22 +221,26 @@ class LocationWidget extends StatelessWidget {
 
 class SelectedLocationWidget extends StatelessWidget {
   const SelectedLocationWidget(
-      {Key? key, required this.location, required this.onRemove})
+      {Key? key,
+      required this.location,
+      required this.onRemove,
+      required this.onTap})
       : super(key: key);
   final Location location;
   final Function onRemove;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.white,
       child: InkWell(
-        onTap: () {},
+        onTap: onTap,
         child: Ink(
           child: Container(
             decoration: BoxDecoration(
                 border:
-                Border(bottom: BorderSide(color: Colors.grey.shade100))),
+                    Border(bottom: BorderSide(color: Colors.grey.shade100))),
             padding: const EdgeInsets.all(8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,

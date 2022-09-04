@@ -21,6 +21,7 @@ import 'package:traveling_social_app/widgets/my_outline_button.dart';
 import 'package:traveling_social_app/widgets/my_text_icon_button.dart';
 import 'package:traveling_social_app/widgets/tap_effect_widget.dart';
 
+import '../../../bloc/appIication/application_state_bloc.dart';
 import '../../../models/location.dart';
 import '../../../widgets/location_finder.dart';
 import 'review_post_image_container.dart';
@@ -40,7 +41,8 @@ class ReviewPostEditor extends StatefulWidget {
   State<ReviewPostEditor> createState() => _ReviewPostEditorState();
 }
 
-class _ReviewPostEditorState extends State<ReviewPostEditor> {
+class _ReviewPostEditorState extends State<ReviewPostEditor>
+    with AutomaticKeepAliveClientMixin {
   final ImagePicker _imagePicker = ImagePicker();
 
   final ImageCropper _imageCropper = ImageCropper();
@@ -150,6 +152,7 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -218,12 +221,7 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
                     bgColor: Colors.blueAccent,
                     textColor: Colors.white,
                     onTap: () {
-                      ApplicationUtility.showModalSelectLocationDialog(context,
-                          (location) {
-                        context
-                            .read<CreateReviewPostCubit>()
-                            .updateReviewPost(location: location);
-                      });
+                      _selectLocation(context);
                     }),
                 MyTextIconButton(
                     text: AppLocalizations.of(context)!.totalMoney,
@@ -355,6 +353,17 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
     );
   }
 
+  void _selectLocation(BuildContext context) {
+    var selectedLoc = context.read<CreateReviewPostCubit>().state.post.location;
+    context.read<ApplicationStateBloc>().add(SelectLocationEvent(selectedLoc));
+    ApplicationUtility.showModalSelectLocationDialog(context, (location) {
+      Navigator.pop(context);
+      context
+          .read<CreateReviewPostCubit>()
+          .updateReviewPost(location: location);
+    });
+  }
+
   void _showCostInputDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -428,4 +437,7 @@ class _ReviewPostEditorState extends State<ReviewPostEditor> {
           coverImage: post.coverPhoto!.copyWith(path: path, status: 1));
     }
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -12,11 +12,12 @@ class BaseSliverAppBar extends StatelessWidget {
       this.forceElevated = false,
       this.elevation,
       this.height = kToolbarHeight,
-      this.isShowLeading = false})
+      this.isShowLeading = false, this.leading})
       : super(key: key);
 
   final String title;
   final List<Widget> actions;
+  final Widget? leading;
   final PreferredSizeWidget? bottom;
   final Widget? flexibleSpace;
   final bool forceElevated;
@@ -28,6 +29,7 @@ class BaseSliverAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       toolbarHeight: height,
+      leading: leading,
       title: Text(
         title,
         style: kDefaultAppBarTextTitleStyle,

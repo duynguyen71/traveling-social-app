@@ -48,22 +48,52 @@ class LocationService {
     return position;
   }
 
-  reverseLocation({required double latitude, required double longitude}) async {
+  checkLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      // Request permission
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+  }
+
+  Future<List<Location>> reverse(
+      {required double latitude, required double longitude}) async {
     final url = Uri.parse('http://api.positionstack.com/v1/reverse?access_key='
         '$kPositionStackAPIKey'
         '&query=$latitude,$longitude'
         '&output=json'
-        '&limit=1'
+        '&limit=30'
         '&fields=results.label,results.map_url');
     final resp = await http.get(url);
     if (resp.statusCode == 200) {
-      print('Reverse location success: ${jsonDecode(resp.body)}');
+      var body = jsonDecode(resp.body) as Map<String, dynamic>;
+      var data = body['data'] as List<dynamic>;
+      var rs = data.map((location) => Location.fromMap(location)).toList();
+      print('\n ${data.length} \n');
+      return rs;
     } else {
-      print('Reverse location failed: ${resp.body}');
+      return [];
     }
   }
 
-  Future<List<Location>> forwardLocation({required String query}) async {
+  Future<List<Location>> forward({required String query}) async {
     final url = Uri.parse('http://api.positionstack.com/v1/forward?access_key='
         '$kPositionStackAPIKey'
         '&query=$query'
@@ -74,11 +104,7 @@ class LocationService {
     if (resp.statusCode == 200) {
       var body = jsonDecode(resp.body) as Map<String, dynamic>;
       var data = body['data'] as List<dynamic>;
-      // print(data);
-      var rs = data.map((location) {
-        var l = Location.fromMap(location);
-        return l;
-      }).toList();
+      var rs = data.map((location) => Location.fromMap(location)).toList();
       return rs;
     } else {
       print('Forward location failed: ${resp.body}');

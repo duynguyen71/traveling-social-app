@@ -14,8 +14,6 @@ import 'package:traveling_social_app/repository/user_repository/user_repository.
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   //init firebase
   await Firebase.initializeApp();
-  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  //
   FlutterLocalNotificationsPlugin localNotification =
       FlutterLocalNotificationsPlugin();
   localNotification.initialize(
@@ -45,7 +43,7 @@ void main() async {
   // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   //request ios permission
-  FirebaseMessaging.instance.requestPermission(
+  await FirebaseMessaging.instance.requestPermission(
     alert: true,
     announcement: false,
     badge: true,
@@ -54,7 +52,7 @@ void main() async {
     provisional: false,
     sound: true,
   );
-   FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
     badge: true,
     sound: true,

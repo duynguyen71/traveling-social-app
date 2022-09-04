@@ -38,8 +38,8 @@ class Location extends Equatable {
 
   factory Location.fromMap(Map<String, dynamic> map) {
     return Location(
-      latitude: map['latitude'],
-      longitude: map['longitude'],
+      latitude: (map['latitude']) ?? 0,
+      longitude: (map['longitude'] ) ?? 0,
       city: map['region'],
       county: map['county'],
       type: map['type'],

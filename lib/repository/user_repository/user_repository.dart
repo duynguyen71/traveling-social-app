@@ -10,7 +10,6 @@ class UserRepository {
   final _storage = const FlutterSecureStorage();
 
   Future<User?> getUser() async {
-    // if (_user != null) return _user;
     final url = Uri.parse("$baseUrl/api/v1/member/users/me");
     try {
       final resp = await http.get(url, headers: {
@@ -18,12 +17,10 @@ class UserRepository {
       });
       if (resp.statusCode == 200) {
         _user = User.fromJson(jsonDecode(resp.body)['data']);
-        print(_user);
         return _user;
       }
       return null;
     } on Exception catch (e) {
-      print('Failed get user $e');
       return null;
     }
   }

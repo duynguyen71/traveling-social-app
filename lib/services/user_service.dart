@@ -459,7 +459,7 @@ class UserService {
     await FkUserAgent.init();
     var ua = FkUserAgent.userAgent;
     final url = Uri.parse('$baseUrl/api/v1/member/users/me/devices/token');
-    await client.post(url, headers: {
+    await http.post(url, headers: {
       "Authorization": 'Bearer ${await _storage.read(key: 'accessToken')}',
       "Content-Type": "application/json",
       "pnt": token,

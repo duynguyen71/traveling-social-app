@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:traveling_social_app/bloc/appIication/application_state_bloc.dart';
 import 'package:traveling_social_app/bloc/review/creation_review_cubit.dart';
 import 'package:traveling_social_app/screens/create_review/components/editor_review.dart';
 import 'package:traveling_social_app/screens/create_review/components/review_post_editor.dart';
@@ -74,6 +75,7 @@ class _CreateReviewPostScreenState extends State<CreateReviewPostScreen>
     return WillPopScope(
       onWillPop: () {
         context.read<CreateReviewPostCubit>().clear();
+        context.read<ApplicationStateBloc>().add(ClearLocationDataEvent());
         return Future.value(true);
       },
       child: Scaffold(
@@ -98,6 +100,7 @@ class _CreateReviewPostScreenState extends State<CreateReviewPostScreen>
                 return [
                   BaseSliverAppBar(
                     elevation: 0,
+                    isShowLeading: true,
                     forceElevated: true,
                     title: AppLocalizations.of(context)!.review,
                     actions: [
