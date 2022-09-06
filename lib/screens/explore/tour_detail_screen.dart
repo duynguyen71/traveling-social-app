@@ -128,17 +128,12 @@ class _TourDetailScreeState extends State<TourDetailScree> {
                                     // COUNT VIEWER
                                   ],
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    IconTextButton(
-                                      icon: const Icon(
-                                        Icons.supervised_user_circle,
-                                      ),
-                                      text:
-                                          '${_tour.tourUsers.length} / ${_tour.numOfMember} người',
-                                    )
-                                  ],
+                                TourNote(
+                                  icon: const Icon(
+                                    Icons.supervised_user_circle_sharp,
+                                  ),
+                                  text:
+                                  '${_tour.joinedMember} / ${_tour.numOfMember} thành viên',
                                 ),
                                 TourNote(
                                   icon: Icon(

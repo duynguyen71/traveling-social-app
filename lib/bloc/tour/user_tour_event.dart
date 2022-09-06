@@ -59,3 +59,7 @@ class CompleteTourEvent extends UserTourEvent {
 
   const CompleteTourEvent(this.id);
 }
+class LeaveTour extends UserTourEvent {
+
+  const LeaveTour();
+}

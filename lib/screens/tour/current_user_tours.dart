@@ -242,11 +242,14 @@ class _CurrentUserTourState extends State<CurrentUserTours> {
                                                 ),
                                               ));
                                         },
-                                        child: tour.location==null ? const SizedBox.shrink(): TourNote(
-                                            icon: Icon(
-                                                color: Colors.redAccent,
-                                                Icons.location_on_outlined),
-                                            text: tour.location?.label ?? ''),
+                                        child: tour.location == null
+                                            ? const SizedBox.shrink()
+                                            : TourNote(
+                                                icon: Icon(
+                                                    color: Colors.redAccent,
+                                                    Icons.location_on_outlined),
+                                                text:
+                                                    tour.location?.label ?? ''),
                                       ),
                                     ],
                                   ),
@@ -348,8 +351,8 @@ class _CurrentUserTourState extends State<CurrentUserTours> {
                 ? CupertinoActionSheetAction(
                     onPressed: () {
                       Navigator.pop(context);
-                      Navigator.push(
-                          context, TourDetailScree.route(tourId: tour.id!));
+                      context.read<UserTourBloc>().add(LeaveTour());
+                      Navigator.pop(context);
                     },
                     child: const Text('Rời đi'),
                   )
@@ -373,7 +376,9 @@ class _CurrentUserTourState extends State<CurrentUserTours> {
                 ? CupertinoActionSheetAction(
                     onPressed: () async {
                       Navigator.pop(context);
-                      context.read<UserTourBloc>().add(CompleteTourEvent(tour.id!));
+                      context
+                          .read<UserTourBloc>()
+                          .add(CompleteTourEvent(tour.id!));
                       Navigator.pop(context);
                     },
                     child: const Text('Đánh dấu hoàn thành'))
