@@ -18,6 +18,7 @@ import 'package:traveling_social_app/screens/splash/splash_screen.dart';
 import 'authentication/bloc/authentication_state.dart';
 import 'bloc/appIication/application_state_bloc.dart';
 import 'bloc/notification/notification_bloc.dart';
+import 'bloc/tour/user_tour_bloc.dart';
 
 //root application
 class App extends StatelessWidget {
@@ -53,6 +54,8 @@ class App extends StatelessWidget {
               create: (context) =>
                   NotificationBloc(notificationRepository: notificationRepo),
               lazy: false),
+          BlocProvider<UserTourBloc>(
+              create: (context) => UserTourBloc(), lazy: false),
           BlocProvider<ChatBloc>(
             create: (context) => ChatBloc(),
           ),

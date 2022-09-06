@@ -59,6 +59,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "createReviewPost":
             MessageLookupByLibrary.simpleMessage("Create review post"),
         "createStory": MessageLookupByLibrary.simpleMessage("Create story"),
+        "createTour": MessageLookupByLibrary.simpleMessage("Create tour"),
+        "createTourSuccess":
+            MessageLookupByLibrary.simpleMessage("Create tour success!"),
         "delete": MessageLookupByLibrary.simpleMessage("Delete"),
         "doNotHaveAccount":
             MessageLookupByLibrary.simpleMessage("Don\'t have account"),
@@ -99,8 +102,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "profile": MessageLookupByLibrary.simpleMessage("Profile"),
         "question": MessageLookupByLibrary.simpleMessage("Question"),
         "register": MessageLookupByLibrary.simpleMessage("Register"),
+        "reject": MessageLookupByLibrary.simpleMessage("Reject"),
         "removePostSuccess":
             MessageLookupByLibrary.simpleMessage("Remove post success"),
+        "request": MessageLookupByLibrary.simpleMessage("Request"),
         "review": MessageLookupByLibrary.simpleMessage("Review"),
         "save": MessageLookupByLibrary.simpleMessage("Save"),
         "searchInChat": MessageLookupByLibrary.simpleMessage("Search in chat"),
@@ -119,6 +124,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tcRegister": MessageLookupByLibrary.simpleMessage("TC Register"),
         "title": MessageLookupByLibrary.simpleMessage("TC Social"),
         "totalMoney": MessageLookupByLibrary.simpleMessage("Money"),
+        "tour": MessageLookupByLibrary.simpleMessage("Tour"),
         "travelDate": MessageLookupByLibrary.simpleMessage("Travel date"),
         "typeInYourText":
             MessageLookupByLibrary.simpleMessage("Type in your text"),

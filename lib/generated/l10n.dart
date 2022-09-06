@@ -879,6 +879,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Tour`
+  String get tour {
+    return Intl.message(
+      'Tour',
+      name: 'tour',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create tour`
+  String get createTour {
+    return Intl.message(
+      'Create tour',
+      name: 'createTour',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create tour success!`
+  String get createTourSuccess {
+    return Intl.message(
+      'Create tour success!',
+      name: 'createTourSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Request`
+  String get request {
+    return Intl.message(
+      'Request',
+      name: 'request',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reject`
+  String get reject {
+    return Intl.message(
+      'Reject',
+      name: 'reject',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

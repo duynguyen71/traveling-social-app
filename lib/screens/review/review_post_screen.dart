@@ -4,11 +4,13 @@ import 'package:traveling_social_app/models/Base_review_post_response.dart';
 import 'package:traveling_social_app/models/base_user.dart';
 import 'package:traveling_social_app/models/question_post.dart';
 import 'package:traveling_social_app/screens/review/components/review_post_entry.dart';
+import 'package:traveling_social_app/screens/review/question_post_detail_screen.dart';
 import 'package:traveling_social_app/screens/review/review_post_detail_screen.dart';
 import 'package:traveling_social_app/screens/search/components/question_entry.dart';
 
 import '../../services/post_service.dart';
 import '../../services/user_service.dart';
+import '../../widgets/text_title.dart';
 import 'components/post_meta.dart';
 import 'components/review_post_card.dart';
 
@@ -24,6 +26,7 @@ class _ReviewPostScreenState extends State<ReviewPostScreen>
   final postService = PostService();
   final _userService = UserService();
   List<BaseReviewPostResponse> _posts = [];
+  List<BaseReviewPostResponse> _newestReviewPost = [];
   List<BaseUserInfo> _users = [];
   bool _isLoading = false;
   List<QuestionPost> _questions = [];
@@ -39,6 +42,7 @@ class _ReviewPostScreenState extends State<ReviewPostScreen>
     super.initState();
     getReviewPosts();
     getQuestionPosts();
+    getNewestReviewPosts();
   }
 
   int _page = 0;
@@ -70,7 +74,13 @@ class _ReviewPostScreenState extends State<ReviewPostScreen>
     setState(() {
       _questions = questions;
     });
-    print(questions);
+  }
+
+  getNewestReviewPosts() async {
+    var newReviewPosts = await postService.getNewestReviewPost(pageSize: 5);
+    setState(() {
+      _newestReviewPost = newReviewPosts;
+    });
   }
 
   @override
@@ -85,10 +95,75 @@ class _ReviewPostScreenState extends State<ReviewPostScreen>
           _page = 1;
           _hasReachMax = false;
         });
+        getNewestReviewPosts();
       },
+
       child: NotificationListener<ScrollNotification>(
         child: CustomScrollView(
           slivers: [
+            const SliverToBoxAdapter(child: SizedBox(height: 10)),
+            SliverToBoxAdapter(
+              child:Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border(
+                    top: BorderSide(
+                      color: Colors.grey.shade200,
+                    ),
+                    bottom: BorderSide(
+                      color: Colors.grey.shade200,
+                    ),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: TextTitle(
+                          text: 'Xu hướng',
+                        ),
+                      ),
+                    ),
+                    Container(
+
+                      padding: const EdgeInsets.all(8.0),
+                      height: 150,
+                      child: NotificationListener<ScrollNotification>(
+                        onNotification: (scrollNotification) {
+                          var position = scrollNotification.metrics;
+                          if (position.pixels == position.maxScrollExtent) {
+                            getReviewPosts();
+                            return true;
+                          }
+                          return false;
+                        },
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            addAutomaticKeepAlives: true,
+                            addRepaintBoundaries: true,
+                            scrollDirection: Axis.horizontal,
+                            physics: const BouncingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              if (index == _posts.length) {
+                                return _isLoading
+                                    ? const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: CupertinoActivityIndicator(),
+                                )
+                                    : const SizedBox.shrink();
+                              }
+                              return ReviewPostCard(reviewPost: _posts[index]);
+                            },
+                            itemCount: _posts.length + 1),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            // List random review post
             const SliverToBoxAdapter(child: SizedBox(height: 10)),
             SliverToBoxAdapter(
               child: Container(
@@ -103,86 +178,86 @@ class _ReviewPostScreenState extends State<ReviewPostScreen>
                     ),
                   ),
                 ),
-                padding: const EdgeInsets.all(8.0),
-                height: 150,
-                child: NotificationListener<ScrollNotification>(
-                  onNotification: (scrollNotification) {
-                    var position = scrollNotification.metrics;
-                    if (position.pixels == position.maxScrollExtent) {
-                      getReviewPosts();
-                      return true;
-                    }
-                    return false;
-                  },
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      addAutomaticKeepAlives: true,
-                      addRepaintBoundaries: true,
-                      scrollDirection: Axis.horizontal,
-                      physics: const BouncingScrollPhysics(),
+                child: Column(children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: TextTitle(
+                        text: 'Mới nhất',
+                      ),
+                    ),
+                  ),
+                  ListView.builder(
+                      padding: EdgeInsets.zero,
+                      physics: const NeverScrollableScrollPhysics(),
+                      scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
-                        if (index == _posts.length) {
-                          return _isLoading
-                              ? const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: CupertinoActivityIndicator(),
-                                )
-                              : const SizedBox.shrink();
+                        var post = _newestReviewPost[index];
+                        if (index >= 5) {
+                          return const SizedBox();
                         }
-                        return ReviewPostCard(reviewPost: _posts[index]);
+                        return ReviewPostEntry(
+                          key: ValueKey(post.id),
+                          imageName: post.coverPhoto?.name,
+                          title: post.title,
+                          onTap: () => Navigator.push(
+                              context, ReviewPostDetailScreen.route(post.id!)),
+                          child: PostMetadata(
+                              username: post.user?.username,
+                              createDate: post.createDate),
+                        );
                       },
-                      itemCount: _posts.length + 1),
-                ),
-              ),
-            ),
-            // List random review post
-            const SliverToBoxAdapter(child: SizedBox(height: 10)),
-            SliverToBoxAdapter(
-              child: Container(
-                color: Colors.white,
-                child: ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (context, index) {
-                      var post = _posts.reversed.toList()[index];
-                      if (index >= 5) {
-                        return const SizedBox();
-                      }
-                      return ReviewPostEntry(
-                        key: ValueKey(post.id),
-                        imageName: post.coverPhoto?.name,
-                        title: post.title,
-                        onTap: () => Navigator.push(
-                            context, ReviewPostDetailScreen.route(post.id!)),
-                        child: PostMetadata(
-                            username: post.user?.username,
-                            createDate: post.createDate),
-                      );
-                    },
-                    itemCount: _posts.length,
-                    shrinkWrap: true),
+                      itemCount: _newestReviewPost.length,
+                      shrinkWrap: true),
+                ]),
               ),
             ),
             SliverToBoxAdapter(
-              child: Container(
-                color: Colors.white,
-                child: ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (context, index) {
-                      var post = _questions[index];
-                      if (index >= 5) {
-                        return const SizedBox();
-                      }
-                      return QuestionEntry(
-                        post: post,
-                        showMetadata: true,
-                      );
-                    },
-                    itemCount: _questions.length,
-                    shrinkWrap: true),
+              child: SizedBox(
+                height: 10,
               ),
             ),
+            SliverToBoxAdapter(
+                child: Container(
+              color: Colors.white,
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: TextTitle(
+                        text: 'Cần bạn giải đáp',
+                      ),
+                    ),
+                  ),
+                  Container(
+                    color: Colors.white,
+                    child: ListView.builder(
+                        padding: EdgeInsets.zero,
+                        physics: const NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (context, index) {
+                          var post = _questions[index];
+                          if (index >= 5) {
+                            return const SizedBox();
+                          }
+                          return QuestionEntry(
+                            post: post,
+                            onTap: () {
+                              Navigator.push(context,
+                                  QuestionPostDetailScreen.route(post.id!));
+                            },
+                            showMetadata: true,
+                          );
+                        },
+                        itemCount: _questions.length,
+                        shrinkWrap: true),
+                  )
+                ],
+              ),
+            )),
           ],
         ),
       ),

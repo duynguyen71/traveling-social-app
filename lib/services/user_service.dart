@@ -20,7 +20,6 @@ import '../config/base_interceptor.dart';
 import '../config/expired_token_retry.dart';
 import '../models/Notification_resp.dart';
 import '../models/chat_group_detail.dart';
-import '../models/create_chat_group.dart';
 import '../models/group.dart';
 import '../models/location.dart';
 import '../models/message.dart';

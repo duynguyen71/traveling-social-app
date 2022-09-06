@@ -27,6 +27,7 @@ import '../profile/components/icon_with_text.dart';
 import 'components/auth_tag.dart';
 import 'components/reaction_bar.dart';
 import 'components/review_post_comment_section.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ReviewPostDetailScreen extends StatefulWidget {
   const ReviewPostDetailScreen({Key? key, required this.id}) : super(key: key);
@@ -52,6 +53,7 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
   final _commentController = TextEditingController();
   Set<Comment> _comments = {};
   Author _author = Author.empty();
+  double _myRating = 0;
 
   _getReviewPostDetail() async {
     setState(() => _isFetching = true);
@@ -64,6 +66,7 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
         _reviewPostDetail = data;
         _isBookmarked = _reviewPostDetail.hasBookmark;
         _isFetching = false;
+        _myRating = _reviewPostDetail.myRating ?? 0;
       });
       _getAuthor();
     }
@@ -130,18 +133,24 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
                                 ),
 
                                 Row(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     // LOCATION
                                     _reviewPostDetail.location != null
-                                        ? IconTextButton(
-                                        text: '${_reviewPostDetail.location?.label}',
-                                        icon: Icon(
-                                          Icons.location_on_outlined,
-                                          color: Colors.black54,
-                                        ))
+                                        ? Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 4.0),
+                                            child: IconTextButton(
+                                              text:
+                                                  '${_reviewPostDetail.location?.label}',
+                                              icon: const Icon(
+                                                color: Colors.redAccent,
+                                                Icons.location_on,
+                                              ),
+                                            ),
+                                          )
                                         : const SizedBox.shrink(),
                                     // COUNT VIEWER
                                     TextButton(
@@ -150,8 +159,7 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
                                           minimumSize: const Size(50, 30),
                                           alignment: Alignment.centerRight,
                                           tapTargetSize:
-                                              MaterialTapTargetSize
-                                                  .shrinkWrap),
+                                              MaterialTapTargetSize.shrinkWrap),
                                       onPressed: () {},
                                       child: Row(
                                         crossAxisAlignment:
@@ -160,12 +168,10 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
                                             MainAxisAlignment.end,
                                         children: [
                                           Padding(
-                                            padding:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 4.0),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 4.0),
                                             child: Text(
-                                                _reviewPostDetail
-                                                    .numOfVisitor
+                                                _reviewPostDetail.numOfVisitor
                                                     .toString(),
                                                 style: const TextStyle(
                                                     fontSize: 14)),
@@ -204,15 +210,15 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
                                               '${_reviewPostDetail.numOfParticipant}',
                                           icon: Icon(
                                             Icons.group,
-                                            color: Colors.black54,
+                                            color: Colors.blue,
                                           )),
                                       const SizedBox(width: 10),
                                       IconTextButton(
                                           text:
-                                              '${_reviewPostDetail.cost ?? 0}',
+                                              '${_reviewPostDetail.cost ?? 0} vnd',
                                           icon: Icon(
                                             Icons.monetization_on,
-                                            color: Colors.black54,
+                                            color: Colors.orangeAccent,
                                           )),
                                       const SizedBox(width: 10),
                                       IconTextButton(
@@ -220,7 +226,7 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
                                               '${_reviewPostDetail.totalDay ?? 1} ngày',
                                           icon: Icon(
                                             Icons.calendar_today,
-                                            color: Colors.black54,
+                                            color: Colors.redAccent.shade200,
                                           )),
                                     ],
                                   ),
@@ -254,39 +260,39 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600)),
                                 Container(
-                                    height: 120,
-                                    constraints:
-                                        const BoxConstraints(minHeight: 120),
-                                    child: ListView.builder(
-                                      padding: EdgeInsets.zero,
-                                      scrollDirection: Axis.horizontal,
-                                      physics: const BouncingScrollPhysics(),
-                                      itemBuilder: (context, index) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                            _showAttScrollView(index);
-                                          },
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 8.0),
-                                            child: AspectRatio(
-                                              aspectRatio: 1,
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    kReviewPostImageGalleryBorder,
-                                                child: CachedNetworkImage(
-                                                    fit: BoxFit.cover,
-                                                    imageUrl:
-                                                        '$imageUrl${_reviewPostDetail.images[index].image!.name}'),
-                                              ),
+                                  height: 120,
+                                  constraints:
+                                      const BoxConstraints(minHeight: 120),
+                                  child: ListView.builder(
+                                    padding: EdgeInsets.zero,
+                                    scrollDirection: Axis.horizontal,
+                                    physics: const BouncingScrollPhysics(),
+                                    itemBuilder: (context, index) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          _showAttScrollView(index);
+                                        },
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 8.0),
+                                          child: AspectRatio(
+                                            aspectRatio: 1,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  kReviewPostImageGalleryBorder,
+                                              child: CachedNetworkImage(
+                                                  fit: BoxFit.cover,
+                                                  imageUrl:
+                                                      '$imageUrl${_reviewPostDetail.images[index].image!.name}'),
                                             ),
                                           ),
-                                        );
-                                      },
-                                      itemCount:
-                                          _reviewPostDetail.images.length,
-                                      shrinkWrap: true,
-                                    )),
+                                        ),
+                                      );
+                                    },
+                                    itemCount: _reviewPostDetail.images.length,
+                                    shrinkWrap: true,
+                                  ),
+                                ),
                               ],
                             ),
                       //ABOUT AUTHOR
@@ -307,6 +313,31 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
                                       isFollowing: !_author.isFollowing);
                                 });
                               },
+                            ),
+                      //RATING BAR
+                      _isFetching
+                          ? const SizedBox.shrink()
+                          : Container(
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: RatingBar.builder(
+                                  initialRating: _myRating,
+                                  minRating: 1,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: true,
+                                  itemCount: 5,
+                                  itemSize: 25,
+                                  itemPadding: const EdgeInsets.symmetric(
+                                      horizontal: 4.0),
+                                  itemBuilder: (context, _) => const Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                  ),
+                                  onRatingUpdate: (rating) {
+                                    _handleRating(context, rating);
+                                  },
+                                ),
+                              ),
                             ),
                       // TAGS
                       _isFetching
@@ -477,6 +508,33 @@ class _ReviewPostDetailScreenState extends State<ReviewPostDetailScreen> {
         },
       ),
     );
+  }
+
+  Future<void> _handleRating(BuildContext context, double rating) async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: const Text("Thông báo"),
+            content: Text("Đánh giá bài viết $rating sao"),
+            actions: [
+              CupertinoDialogAction(
+                child: const Text("Đồng ý"),
+                isDefaultAction: true,
+                onPressed: () {
+                  setState(() => _myRating = rating);
+                  Navigator.pop(context);
+                },
+              ),
+              CupertinoDialogAction(
+                child: const Text("Hủy"),
+                isDefaultAction: true,
+                onPressed: () => Navigator.pop(context),
+              )
+            ],
+          );
+        },
+        barrierDismissible: false);
   }
 
   _uploadComment() async {

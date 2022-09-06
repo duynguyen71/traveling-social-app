@@ -58,6 +58,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "createReviewPost":
             MessageLookupByLibrary.simpleMessage("Viết bài review"),
         "createStory": MessageLookupByLibrary.simpleMessage("Tạo tin nhanh"),
+        "createTour": MessageLookupByLibrary.simpleMessage("Tạo chuyến đi"),
+        "createTourSuccess":
+            MessageLookupByLibrary.simpleMessage("Tạo chuyến đi!"),
         "delete": MessageLookupByLibrary.simpleMessage("Xóa"),
         "drafts": MessageLookupByLibrary.simpleMessage("Bản nháp"),
         "edit": MessageLookupByLibrary.simpleMessage("Chỉnh sửa"),
@@ -95,8 +98,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "profile": MessageLookupByLibrary.simpleMessage("Hồ sơ"),
         "question": MessageLookupByLibrary.simpleMessage("Câu hỏi"),
         "register": MessageLookupByLibrary.simpleMessage("Đăng ký"),
+        "reject": MessageLookupByLibrary.simpleMessage("Từ chối"),
         "removePostSuccess":
             MessageLookupByLibrary.simpleMessage("Xóa bài thành công"),
+        "request": MessageLookupByLibrary.simpleMessage("Yêu cầu"),
         "review": MessageLookupByLibrary.simpleMessage("Bài review"),
         "save": MessageLookupByLibrary.simpleMessage("Lưu"),
         "searchInChat":
@@ -116,6 +121,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tcRegister": MessageLookupByLibrary.simpleMessage("TC Đăng Ký"),
         "title": MessageLookupByLibrary.simpleMessage("TC Social"),
         "totalMoney": MessageLookupByLibrary.simpleMessage("Tổng tiền đi"),
+        "tour": MessageLookupByLibrary.simpleMessage("Chuyến đi"),
         "travelDate": MessageLookupByLibrary.simpleMessage("Ngày đi"),
         "typeInYourText":
             MessageLookupByLibrary.simpleMessage("Nhập nội dung tin nhắn"),

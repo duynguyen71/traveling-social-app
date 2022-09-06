@@ -23,6 +23,8 @@ class ReviewPostDetail {
     String? createDate,
     bool hasBookmark = false,
     Location? location,
+    double? rating,
+    double? myRating,
   }) {
     id = id;
     title = title;
@@ -39,6 +41,8 @@ class ReviewPostDetail {
     tags = tags;
     hasBookmark = hasBookmark;
     location = location;
+    rating = rating;
+    myRating=myRating;
   }
 
   ReviewPostDetail.fromJson(dynamic json) {
@@ -53,6 +57,8 @@ class ReviewPostDetail {
     numOfVisitor = json['numOfVisitor'];
     totalDay = json['totalDay'];
     status = json['status'];
+    rating = json['rating'];
+    myRating = json['myRating'];
     hasBookmark = json['hasBookmark'];
     coverPhoto = json['coverPhoto'] != null
         ? FileUpload.fromJson(json['coverPhoto'])
@@ -93,6 +99,8 @@ class ReviewPostDetail {
   bool hasBookmark = false;
   Reaction? myReaction;
   Location? location;
+  double? rating;
+  double? myRating;
 
   ReviewPostDetail copyWith({
     int? id,

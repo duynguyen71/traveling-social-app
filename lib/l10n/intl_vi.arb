@@ -91,5 +91,10 @@
   "addImage": "Thêm ảnh",
   "postTitle": "Tiêu đề bài viết",
   "createPostSuccess": "Tạo bài viết thành công",
-  "removePostSuccess": "Xóa bài thành công"
+  "removePostSuccess": "Xóa bài thành công",
+  "tour": "Chuyến đi",
+  "createTour": "Tạo chuyến đi",
+  "createTourSuccess": "Tạo chuyến đi!",
+  "request": "Yêu cầu",
+  "reject": "Từ chối"
 }

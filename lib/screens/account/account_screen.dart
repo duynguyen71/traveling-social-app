@@ -18,10 +18,12 @@ import 'package:traveling_social_app/widgets/my_list_tile.dart';
 
 import '../../bloc/post/post_bloc.dart';
 import '../../bloc/story/story_bloc.dart';
+import '../../bloc/tour/user_tour_bloc.dart';
 import '../../widgets/username_text.dart';
 import '../follow/follower_screen.dart';
 import '../follow/following_screen.dart';
 import '../review/current_user_review_post_screen.dart';
+import '../tour/current_user_tours.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({Key? key}) : super(key: key);
@@ -34,6 +36,7 @@ class _AccountScreenState extends State<AccountScreen>
     with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
+    context.read<UserTourBloc>().add(const GetCurrentTourEvent());
     super.initState();
   }
 
@@ -132,6 +135,18 @@ class _AccountScreenState extends State<AccountScreen>
               ),
               title: AppLocalizations.of(context)!.review,
             ),
+            //TOUR
+            MyListTile(
+              onClick: () => Navigator.push(context, CurrentUserTours.route()),
+              leading: const LinearGradiantMask(
+                child: Icon(
+                  Icons.ac_unit_outlined,
+                  color: Colors.white,
+                  size: 24.0,
+                ),
+              ),
+              title: AppLocalizations.of(context)!.tour,
+            ),
             // QUESTION
             MyListTile(
               onClick: () =>
@@ -217,7 +232,9 @@ class _AccountScreenState extends State<AccountScreen>
                   builder: (context) {
                     return CupertinoAlertDialog(
                       //TODO: translate
-                      title: Text( AppLocalizations.of(context)!.notification,),
+                      title: Text(
+                        AppLocalizations.of(context)!.notification,
+                      ),
                       content: Text("Bạn có chắc muốn đăng xuất?"),
                       actions: <Widget>[
                         CupertinoDialogAction(

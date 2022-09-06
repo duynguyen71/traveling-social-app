@@ -69,18 +69,19 @@ class User extends Equatable {
     Location? location,
   }) {
     return User(
-        id: id,
-        username: username ?? this.username,
-        createDate: createDate,
-        bio: bio ?? this.bio,
-        avt: avt ?? this.avt,
-        background: background ?? this.background,
-        followerCounts: followerCounts,
-        followingCounts: followingCounts,
-        birthdate: birthdate ?? this.birthdate,
-        website: website ?? this.website,
-        fullName: fullName ?? this.fullName,
-        location: location ?? this.location);
+      id: id,
+      username: username ?? this.username,
+      createDate: createDate,
+      bio: bio ?? this.bio,
+      avt: avt ?? this.avt,
+      background: background ?? this.background,
+      followerCounts: followerCounts,
+      followingCounts: followingCounts,
+      birthdate: birthdate ?? this.birthdate,
+      website: website ?? this.website,
+      fullName: fullName ?? this.fullName,
+      location: location ?? this.location,
+    );
   }
 
   @override
