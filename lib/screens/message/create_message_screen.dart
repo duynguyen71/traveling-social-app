@@ -6,7 +6,6 @@ import 'package:traveling_social_app/screens/message/chat_screen.dart';
 import 'package:traveling_social_app/services/user_service.dart';
 import 'package:traveling_social_app/utilities/application_utility.dart';
 
-
 /// Create message screen
 class CreateMessageScreen extends StatefulWidget {
   const CreateMessageScreen({Key? key}) : super(key: key);
@@ -31,17 +30,16 @@ class _CreateMessageScreenState extends State<CreateMessageScreen> {
     if (groupId == null) {
       ApplicationUtility.showFailToast("Lỗi bất đinh. Vui lòng thử lại");
       return;
+    } else {
+      Navigator.pushReplacement(context,
+          ChatScreen.route(groupId: groupId, name: _groupNameController.text));
+      context.read<ChatBloc>().add(const FetchChatGroup());
+      ApplicationUtility.showSuccessToast(
+          "Tạo nhóm chat ${_groupNameController.text} thành công!");
     }
-    Navigator.pushReplacement(
-        context,
-        ChatScreen.route(
-            groupId: groupId, name: _groupNameController.text ));
-    context.read<ChatBloc>().add(const FetchChatGroup());
-    ApplicationUtility.showSuccessToast(
-        "Tạo nhóm chat ${_groupNameController.text} thành công!");
   }
 
-  final  _userService = UserService();
+  final _userService = UserService();
   final _userController = TextEditingController();
   final _groupNameController = TextEditingController();
 

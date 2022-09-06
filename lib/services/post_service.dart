@@ -17,11 +17,15 @@ import '../dto/creation_review_post.dart';
 import '../models/Author.dart';
 import '../models/Base_review_post_response.dart';
 import '../models/Review_post_report.dart';
+import '../models/base_tour.dart';
 import '../models/comment.dart';
+import '../models/current_user_tour.dart';
 import '../models/file_upload.dart';
 import '../models/question_post.dart';
 import '../models/review_post_detail.dart';
 import '../models/tag.dart';
+import '../models/tour_user.dart';
+import '../widgets/tour.dart';
 
 /// Service class for Posts
 class PostService {
@@ -549,6 +553,7 @@ class PostService {
     }
     return [];
   }
+
   Future<List<QuestionPost>> getQuestionPosts() async {
     final url = Uri.parse(baseUrl + "/api/v1/member/questions");
     final resp = await client.get(url);
@@ -572,8 +577,78 @@ class PostService {
   }
 
   Future<void> closeCommentOnPost({required int postId, int status = 0}) async {
-    final url =
-        Uri.parse(baseUrl + "/api/v1/member/users/me/questions/$postId/close/$status");
+    final url = Uri.parse(
+        baseUrl + "/api/v1/member/users/me/questions/$postId/close/$status");
     await client.put(url);
+  }
+
+  //TOUR
+  Future<List<BaseTour>> getCurrentUserTours({int? page}) async {
+    final url = Uri.parse(baseUrl + "/api/v1/member/users/me/tours?page=$page");
+    var resp = await client.get(url);
+    if (resp.statusCode == 200) {
+      var body = jsonDecode(resp.body) as Map<String, dynamic>;
+      var list = body['data'] as List<dynamic>;
+      print('get user tour length ${list.length}');
+      return list.map((e) => BaseTour.fromJson(e)).toList();
+    }
+    return [];
+  }
+
+  Future<void> saveTour({required Tour tour}) async {
+    final url = Uri.parse(baseUrl + "/api/v1/member/users/me/tours");
+    String jso = tourToJson(tour);
+    print(tour);
+    final resp = await client.post(url, body: jso);
+    if (resp.statusCode == 200) {
+      // print(jsonDecode(resp.body));
+    }
+  }
+
+  Future<Tour?> getTourDetail(int id) async {
+    final url = Uri.parse(baseUrl + "/api/v1/member/users/me/tours/${id}");
+    var resp = await client.get(url);
+    if (resp.statusCode == 200) {
+      var tour = Tour.fromJson(jsonDecode(resp.body)['data']);
+      print(tour);
+      return tour;
+    }
+
+    return null;
+  }
+
+  Future<CurrentUserTour?> getCurrentTour() async {
+    final url = Uri.parse(baseUrl + "/api/v1/member/users/me/tours/current");
+    var resp = await client.get(url);
+    if (resp.statusCode == 200) {
+      var tour = CurrentUserTour.fromJson(jsonDecode(resp.body)['data']);
+      print(tour);
+      return tour;
+    }
+    return null;
+  }
+
+  Future<List<TourUser>> getTourUsers(int tourId) async {
+    final url =
+        Uri.parse(baseUrl + "/api/v1/member/users/me/tours/$tourId/users");
+    final resp = await client.get(url);
+    if (resp.statusCode == 200) {
+      final list = (jsonDecode(resp.body)['data']) as List<dynamic>;
+      print("Tour users count ${list.length}");
+      return list.map((e) => TourUser.fromJson(e)).toList();
+    }
+    return [];
+  }
+
+  Future<bool> updateTourUserStatus(
+      { var tourUserId, var status}) async {
+    final url = Uri.parse(baseUrl +
+        "/api/v1/member/users/me/tours/users/$tourUserId/status/$status");
+    final resp = await client.put(url);
+    if (resp.statusCode == 200) {
+      print('update status $status');
+      return true;
+    }
+    return false;
   }
 }

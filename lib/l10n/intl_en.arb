@@ -91,5 +91,10 @@
   "addImage": "Add images",
   "postTitle": "Post title",
   "createPostSuccess": "Create post success",
-  "removePostSuccess": "Remove post success"
+  "removePostSuccess": "Remove post success",
+  "tour": "Tour",
+  "createTour": "Create tour",
+  "createTourSuccess": "Create tour success!",
+  "request": "Request",
+  "reject": "Reject"
 }

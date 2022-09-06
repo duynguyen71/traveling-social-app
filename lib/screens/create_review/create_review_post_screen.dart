@@ -60,13 +60,14 @@ class _CreateReviewPostScreenState extends State<CreateReviewPostScreen>
         .read<CreateReviewPostCubit>()
         .updateReviewPost(contentJson: json, title: _titleController.text);
     return showModalBottomSheet(
-        context: context,
-        builder: (context) {
-          return EditorReview(controller: _controller);
-        },
-        backgroundColor: Colors.transparent,
-        isScrollControlled: true,
-        isDismissible: true);
+      context: context,
+      builder: (context) {
+        return EditorReview(controller: _controller);
+      },
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      isDismissible: true,
+    );
   }
 
   @override

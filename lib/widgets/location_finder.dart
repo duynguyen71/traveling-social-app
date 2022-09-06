@@ -92,13 +92,17 @@ class _LocationFinderState extends State<LocationFinder> {
                         children: [
                           BlocBuilder<ApplicationStateBloc,
                               ApplicationStateState>(
+                            buildWhen: (previous, current) {
+                              return previous.selectedLocation !=
+                                  current.selectedLocation;
+                            },
                             builder: (context, state) {
                               var selectedLoc = state.selectedLocation;
-                              if (selectedLoc == null)
+                              if (selectedLoc == null) {
                                 return const SizedBox.shrink();
-                              print('selected loc ${selectedLoc.label}');
+                              }
                               return SelectedLocationWidget(
-                                location: selectedLoc!,
+                                location: selectedLoc,
                                 onRemove: () {
                                   setState(() => selectedLoc = null);
                                 },

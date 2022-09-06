@@ -22,6 +22,7 @@ import '../../widgets/username_text.dart';
 import '../follow/follower_screen.dart';
 import '../follow/following_screen.dart';
 import '../review/current_user_review_post_screen.dart';
+import '../tour/current_user_tours.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({Key? key}) : super(key: key);
@@ -131,6 +132,19 @@ class _AccountScreenState extends State<AccountScreen>
                 ),
               ),
               title: AppLocalizations.of(context)!.review,
+            ),
+            //TOUR
+            MyListTile(
+              onClick: () =>
+                  Navigator.push(context, CurrentUserTours.route()),
+              leading: const LinearGradiantMask(
+                child: Icon(
+                  Icons.ac_unit_outlined,
+                  color: Colors.white,
+                  size: 24.0,
+                ),
+              ),
+              title: AppLocalizations.of(context)!.tour,
             ),
             // QUESTION
             MyListTile(
