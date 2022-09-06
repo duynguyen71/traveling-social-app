@@ -86,7 +86,7 @@ class User extends Equatable {
 
   @override
   List<Object?> get props =>
-      [id, username, fullName, avt, bio, background, birthdate, location];
+      [id, username, fullName, avt, bio, background, location];
 
   @override
   bool get stringify => true;

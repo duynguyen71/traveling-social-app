@@ -55,10 +55,10 @@ class UserTourBloc extends Bloc<UserTourEvent, UserTourState> {
         final currentTour = await _postService.getCurrentTour();
         print('current tour ${currentTour}');
         emit(state.copyWith(
-            currentTour: currentTour, status: UserTourStateStatus.success));
+            c: currentTour, status: UserTourStateStatus.success));
       } else if (event is UpdateCurrentUserTour) {
         final newTour = event.currentUserTour;
-        emit(state.copyWith(currentTour: newTour));
+        emit(state.copyWith(c: newTour));
       } else if (event is RejectUser) {
         var currentTour = state.currentTour;
         var rejectTourUserId = event.rejectTourUserId;
@@ -67,11 +67,12 @@ class UserTourBloc extends Bloc<UserTourEvent, UserTourState> {
           List<TourUser> newJoinedMembers = joinedMembers
               .where((element) => element.id != rejectTourUserId)
               .toList();
-          var numOfRequest = currentTour!.numOfRequest ??0;
+          var numOfRequest = currentTour!.numOfRequest ?? 0;
           emit(state.copyWith(
-              currentTour: currentTour.copyWith(
-                  numOfRequest: numOfRequest<=0?0:(numOfRequest - 1), tourUsers: newJoinedMembers)));
-        }                // filtered = copy;
+              c: currentTour.copyWith(
+                  numOfRequest: numOfRequest <= 0 ? 0 : (numOfRequest - 1),
+                  tourUsers: newJoinedMembers)));
+        } // filtered = copy;
 
       } else if (event is AcceptTourUserEvent) {
         var currentTour = state.currentTour;
@@ -80,9 +81,11 @@ class UserTourBloc extends Bloc<UserTourEvent, UserTourState> {
         var numOfRequest = currentTour?.numOfRequest ?? 1;
         joinedMembers.add(tourUser);
         emit(state.copyWith(
-            currentTour: currentTour?.copyWith(
+            c: currentTour?.copyWith(
                 numOfRequest: numOfRequest <= 0 ? 0 : (numOfRequest - 1),
                 tourUsers: joinedMembers)));
+      } else if (event is CloseCurrentTour) {
+        _postService.closeTour(event.id);
       }
     });
   }

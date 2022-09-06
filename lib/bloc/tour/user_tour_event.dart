@@ -48,3 +48,9 @@ class AcceptTourUserEvent extends UserTourEvent {
 
   const AcceptTourUserEvent(this.tourUser);
 }
+
+class CloseCurrentTour extends UserTourEvent {
+  final int id;
+
+  const CloseCurrentTour(this.id);
+}

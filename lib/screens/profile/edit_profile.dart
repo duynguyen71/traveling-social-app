@@ -42,7 +42,6 @@ class _EditProfileState extends State<EditProfile>
   final _bioController = TextEditingController();
   final _websiteController = TextEditingController();
   final _locationController = TextEditingController();
-  final _birthdayController = TextEditingController();
   final _formatBirthdayController = TextEditingController();
   final _fullNameController = TextEditingController();
   final _userService = UserService();
@@ -58,19 +57,18 @@ class _EditProfileState extends State<EditProfile>
     _fullNameController.text = user.fullName ?? '';
     _bioController.text = user.bio ?? '';
     _websiteController.text = user.website ?? '';
-    _birthdayController.text = user.birthdate ?? '';
     _formatBirthdayController.text = user.birthdate ?? '';
   }
 
   @override
   void didChangeDependencies() {
-    if (mounted) {
-      var user = context.read<AuthenticationBloc>().state.user;
-      _formatBirthdayController.text = ApplicationUtility.formatDate(
-              user.birthdate,
-              locale: Localizations.localeOf(context)) ??
-          '';
-    }
+    // if (mounted) {
+    //   var user = context.read<AuthenticationBloc>().state.user;
+    //   _formatBirthdayController.text = ApplicationUtility.formatDate(
+    //           user.birthdate,
+    //           locale: Localizations.localeOf(context)) ??
+    //       '';
+    // }
     super.didChangeDependencies();
   }
 
@@ -239,22 +237,6 @@ class _EditProfileState extends State<EditProfile>
                                     color: Colors.black45,
                                   ),
                                 ),
-                                // Birthday
-                                CustomTextField(
-                                  enabled: false,
-                                  onTap: () async {
-                                    await _getBirthdate(context);
-                                  },
-                                  label:
-                                      AppLocalizations.of(context)!.birthDate,
-                                  controller: _formatBirthdayController,
-                                  hintText: AppLocalizations.of(context)!
-                                      .addYourBirthDate,
-                                  icon: const Icon(
-                                    Icons.keyboard_arrow_down_sharp,
-                                    color: Colors.black54,
-                                  ),
-                                ),
                                 // Website
                                 CustomTextField(
                                   textInputType: TextInputType.url,
@@ -324,25 +306,25 @@ class _EditProfileState extends State<EditProfile>
   }
 
   /// Show pick date dialog & get Date
-  Future<void> _getBirthdate(BuildContext context) async {
-    var tryGetDate = await showDatePicker(
-      context: context,
-      initialDate:
-          DateTime.tryParse(_birthdayController.text) ?? DateTime.now(),
-      firstDate: DateTime.utc(1900),
-      lastDate: DateTime.now(),
-      locale: Localizations.localeOf(context),
-      fieldLabelText: AppLocalizations.of(context)!.addYourBirthDate,
-    );
-
-    var formatDate = ApplicationUtility.formatDate(tryGetDate.toString(),
-        locale: Localizations.localeOf(context));
-
-    if (formatDate != null) {
-      _birthdayController.text = tryGetDate.toString();
-      _formatBirthdayController.text = formatDate;
-    }
-  }
+  // Future<void> _getBirthdate(BuildContext context) async {
+  //   var tryGetDate = await showDatePicker(
+  //     context: context,
+  //     initialDate:
+  //         DateTime.tryParse(_birthdayController.text) ?? DateTime.now(),
+  //     firstDate: DateTime.utc(1900),
+  //     lastDate: DateTime.now(),
+  //     locale: Localizations.localeOf(context),
+  //     fieldLabelText: AppLocalizations.of(context)!.addYourBirthDate,
+  //   );
+  //
+  //   var formatDate = ApplicationUtility.formatDate(tryGetDate.toString(),
+  //       locale: Localizations.localeOf(context));
+  //
+  //   if (formatDate != null) {
+  //     _birthdayController.text = tryGetDate.toString();
+  //     _formatBirthdayController.text = formatDate;
+  //   }
+  // }
 
   var dto = UpdateBaseUserInfo();
 
@@ -355,7 +337,6 @@ class _EditProfileState extends State<EditProfile>
       return;
     }
     dto = dto.copyWith(
-        birthdate: ApplicationUtility.formatDate(_birthdayController.text),
         website: _websiteController.text,
         bio: _bioController.text,
         username: _usernameController.text,
@@ -372,7 +353,6 @@ class _EditProfileState extends State<EditProfile>
     _usernameController.dispose();
     _bioController.dispose();
     _locationController.dispose();
-    _birthdayController.dispose();
     _formatBirthdayController.dispose();
     _fullNameController.dispose();
     super.dispose();

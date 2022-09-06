@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:traveling_social_app/screens/explore/tour_detail_screen.dart';
+import '../../bloc/tour/user_tour_bloc.dart';
 import '../../models/base_tour.dart';
 
 import '../../services/post_service.dart';
@@ -24,6 +26,7 @@ class _TourScreenState extends State<TourScreen>
   @override
   void initState() {
     super.initState();
+    context.read<UserTourBloc>().add(const GetCurrentTourEvent());
     getTours();
   }
 
@@ -38,7 +41,7 @@ class _TourScreenState extends State<TourScreen>
     super.build(context);
     return RefreshIndicator(
       onRefresh: () async {
-         getTours();
+        getTours();
       },
       child: NotificationListener<ScrollNotification>(
         child: CustomScrollView(
@@ -63,7 +66,7 @@ class _TourScreenState extends State<TourScreen>
                         },
                         child: Card(
                           child: Container(
-                            padding: EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(8.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -77,8 +80,6 @@ class _TourScreenState extends State<TourScreen>
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
                                           fontSize: 16,
-                                          // letterSpacing: .8,
-                                          // fontWeight: FontWeight.w600,
                                         ),
                                       ),
                                     ),
@@ -115,8 +116,7 @@ class _TourScreenState extends State<TourScreen>
                                   child: Text(
                                     timeago.format(
                                         DateTime.parse(t.createDate.toString()),
-                                        locale: Localizations.localeOf(context)
-                                            .languageCode),
+                                        locale: Localizations.localeOf(context).languageCode),
                                     style: TextStyle(
                                         color: Colors.grey[800], fontSize: 14),
                                   ),

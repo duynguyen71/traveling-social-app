@@ -176,9 +176,7 @@ class _CurrentUserReviewPostScreenState
                                 )),
                             Expanded(
                               child: Text(
-                                'Lần cuối chỉnh sửa ${timeago.format(
-                                  updateDate,
-                                )}',
+                                'Lần cuối chỉnh sửa ${timeago.format(updateDate, locale: Localizations.localeOf(context).languageCode)}',
                                 style: TextStyle(fontSize: 12),
                                 textAlign: TextAlign.end,
                               ),

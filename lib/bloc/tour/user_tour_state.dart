@@ -26,14 +26,14 @@ class UserTourState extends Equatable {
       int? page,
       UserTourStateStatus? status,
       Tour? createTour,
-      CurrentUserTour? currentTour,
+      CurrentUserTour? c,
       bool? hasReachMax}) {
     return UserTourState._(
       tours: tours ?? this.tours,
       page: page ?? this.page,
       status: status ?? this.status,
       hasReachMax: hasReachMax ?? this.hasReachMax,
-      currentTour: currentTour ?? this.currentTour,
+      currentTour: c ,
       createTour: createTour ?? this.createTour,
     );
   }

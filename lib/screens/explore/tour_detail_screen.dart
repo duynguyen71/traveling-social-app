@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:traveling_social_app/bloc/tour/user_tour_bloc.dart';
 
 import '../../authentication/bloc/authentication_bloc.dart';
 import '../../constants/app_theme_constants.dart';
@@ -21,10 +22,12 @@ class TourDetailScree extends StatefulWidget {
   @override
   State<TourDetailScree> createState() => _TourDetailScreeState();
 
-  static Route route({required int tourId}) => MaterialPageRoute(
-        builder: (context) => TourDetailScree(
-          tourId: tourId,
-        ),
+  static Route route({required int tourId}) =>
+      MaterialPageRoute(
+        builder: (context) =>
+            TourDetailScree(
+              tourId: tourId,
+            ),
       );
 }
 
@@ -32,8 +35,10 @@ class _TourDetailScreeState extends State<TourDetailScree> {
   bool _isFetching = false;
   late TourDetail _tour;
   final _postService = PostService();
+  bool _isJoined = false;
 
-  set isLoading(bool i) => setState(() {
+  set isLoading(bool i) =>
+      setState(() {
         _isFetching = i;
       });
 
@@ -42,6 +47,7 @@ class _TourDetailScreeState extends State<TourDetailScree> {
     final tour = await _postService.getTourDetail(id: widget.tourId);
     if (tour == null) Navigator.pop(context);
     setState(() => _tour = tour!);
+    checkJoined();
     isLoading = false;
   }
 
@@ -51,8 +57,30 @@ class _TourDetailScreeState extends State<TourDetailScree> {
     getTour();
   }
 
-  bool isHost(){
-    return (_tour.host?.id==context.read<AuthenticationBloc>().state.user.id);
+  bool isHost() {
+    return (_tour.host?.id == context
+        .read<AuthenticationBloc>()
+        .state
+        .user
+        .id);
+  }
+
+  checkJoined() {
+    var bool = (_tour.id == context
+        .read<UserTourBloc>()
+        .state
+        .currentTour
+        ?.id);
+    setState(() {
+      _isJoined = bool;
+    });
+  }
+
+  isJoinedAnotherTour() {
+    return context
+        .read<UserTourBloc>()
+        .state
+        .currentTour != null;
   }
 
   @override
@@ -77,124 +105,207 @@ class _TourDetailScreeState extends State<TourDetailScree> {
                     children: [
                       _isFetching
                           ? SizedBox(
-                              height: MediaQuery.of(context).size.height,
-                              child: const Center(
-                                child: CupertinoActivityIndicator(),
-                              ),
-                            )
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .height,
+                        child: const Center(
+                          child: CupertinoActivityIndicator(),
+                        ),
+                      )
                           : Column(
-                              children: [
-                                // POST TITLE
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: ReviewPostTitle(
-                                    title: _tour.title ?? '',
-                                    padding: const EdgeInsets.only(top: 8.0),
+                        children: [
+                          // POST TITLE
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: ReviewPostTitle(
+                              title: _tour.title ?? '',
+                              padding: const EdgeInsets.only(top: 8.0),
+                            ),
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            children: [
+                              // LOCATION
+                              _tour.location != null
+                                  ? Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 8.0),
+                                child: IconTextButton(
+                                  text: '${_tour.location?.label}',
+                                  icon: const Icon(
+                                    color: Colors.redAccent,
+                                    Icons.location_on,
                                   ),
                                 ),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                              )
+                                  : const SizedBox.shrink(),
+                              // COUNT VIEWER
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                    padding: EdgeInsets.zero,
+                                    minimumSize: const Size(50, 30),
+                                    alignment: Alignment.centerRight,
+                                    tapTargetSize:
+                                    MaterialTapTargetSize.shrinkWrap),
+                                onPressed: () {},
+                                child: Row(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.center,
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.end,
                                   children: [
-                                    // LOCATION
-                                    _tour.location != null
-                                        ? Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 8.0),
-                                            child: IconTextButton(
-                                              text: '${_tour.location?.label}',
-                                              icon: const Icon(
-                                                color: Colors.redAccent,
-                                                Icons.location_on,
-                                              ),
-                                            ),
-                                          )
-                                        : const SizedBox.shrink(),
-                                    // COUNT VIEWER
-                                    TextButton(
-                                      style: TextButton.styleFrom(
-                                          padding: EdgeInsets.zero,
-                                          minimumSize: const Size(50, 30),
-                                          alignment: Alignment.centerRight,
-                                          tapTargetSize:
-                                              MaterialTapTargetSize.shrinkWrap),
-                                      onPressed: () {},
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 4.0),
-                                            child: Text(
-                                                '${_tour.joinedMember} / ${_tour.numOfMember} thành viên',
-                                                style: const TextStyle(
-                                                    fontSize: 14)),
-                                          ),
-                                          const Icon(
-                                            Icons.supervised_user_circle_sharp,
-                                          ),
-                                        ],
-                                      ),
-                                    )
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 4.0),
+                                      child: Text(
+                                          '${_tour.joinedMember} / ${_tour
+                                              .numOfMember} thành viên',
+                                          style: const TextStyle(
+                                              fontSize: 14)),
+                                    ),
+                                    const Icon(
+                                      Icons.supervised_user_circle_sharp,
+                                    ),
                                   ],
                                 ),
-                                TourNote(
-                                  icon: Icon(
-                                    Icons.date_range,
-                                    color: Colors.orangeAccent,
-                                  ),
-                                  text: 'Số ngày đi ${_tour.totalDay ?? 1}',
-                                ),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child:Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 12.0,),
-                                    child:  Text(
-                                      _tour.content ?? '',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Container(
-                                      constraints: BoxConstraints(minWidth: 100),
-                                      margin: EdgeInsets.all(18.0),
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(40),
-                                          color: Colors.grey.shade50),
-                                      child: TextButton(
-                                        onPressed: () {},
-                                        child: Text(
-                                          'Yêu cầu tham gia',
-                                          textAlign: TextAlign.center,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: kPrimaryColor,
-                                              letterSpacing: .6,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 12),
-                                        ),
-                                        style: TextButton.styleFrom(
-                                          elevation: 0,
-                                          tapTargetSize:
-                                              MaterialTapTargetSize.shrinkWrap,
-                                          minimumSize: const Size(100, 30),
-                                          padding: EdgeInsets.zero,
-                                        ),
-                                      ),
-                                    )),
-                              ],
+                              )
+                            ],
+                          ),
+                          TourNote(
+                            icon: Icon(
+                              Icons.date_range,
+                              color: Colors.orangeAccent,
                             ),
+                            text: 'Số ngày đi ${_tour.totalDay ?? 1}',
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 12.0,
+                              ),
+                              child: Text(
+                                _tour.content ?? '',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Align(
+                              alignment: Alignment.centerRight,
+                              child: Container(
+                                constraints:
+                                BoxConstraints(minWidth: 100),
+                                margin: EdgeInsets.all(18.0),
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                    BorderRadius.circular(40),
+                                    color: Colors.blue.shade50),
+                                child: TextButton(
+                                  onPressed: () {
+                                    if (!_isJoined) {
+                                      if (isJoinedAnotherTour()) {
+                                        showCupertinoDialog(
+                                          context: context,
+                                          barrierDismissible: true,
+                                          builder: (context) {
+                                            return CupertinoAlertDialog(
+                                              title: Text("Thông báo"),
+                                              content: Text(
+                                                  "Bạn không thể yêu cầu tham gia vì đang tham 1 tour trước đó"),
+                                              actions: [
+                                                CupertinoDialogAction(
+                                                  child: Text("Xem"),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                    Navigator.push(context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) {
+                                                            return CurrentUserTours();
+                                                          },));
+                                                  },
+                                                  isDestructiveAction:
+                                                  false,
+                                                ),
+                                                CupertinoDialogAction(
+                                                  child: Text("Hủy"),
+                                                  isDefaultAction: true,
+                                                  onPressed: () {
+                                                    Navigator.of(context,
+                                                        rootNavigator:
+                                                        true)
+                                                        .pop();
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                        return;
+                                      }
+                                      showCupertinoDialog(
+                                        context: context,
+                                        barrierDismissible: true,
+                                        builder: (context) {
+                                          return CupertinoAlertDialog(
+                                            title: Text("Thông báo"),
+                                            content: Text(
+                                                "Xác nhận gửi yêu cầu tham gia"),
+                                            actions: [
+                                              CupertinoDialogAction(
+                                                child: Text("Xác nhận"),
+                                                onPressed: () {},
+                                              ),
+                                              CupertinoDialogAction(
+                                                child: Text("Hủy"),
+                                                isDefaultAction: true,
+                                                onPressed: () {
+                                                  Navigator.of(context,
+                                                      rootNavigator:
+                                                      true)
+                                                      .pop();
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    } else {
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) {
+                                            return CurrentUserTours();
+                                          },));
+                                    }
+                                  },
+                                  child: Text(
+                                    _isJoined
+                                        ? "Đã tham gia"
+                                        : 'Yêu cầu tham gia',
+                                    textAlign: TextAlign.center,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: kPrimaryColor,
+                                        letterSpacing: .6,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 12),
+                                  ),
+                                  style: TextButton.styleFrom(
+                                    elevation: 0,
+                                    tapTargetSize:
+                                    MaterialTapTargetSize.shrinkWrap,
+                                    minimumSize: const Size(100, 30),
+                                    padding: EdgeInsets.zero,
+                                  ),
+                                ),
+                              )),
+                        ],
+                      ),
 
                       // SPACER
                       const SizedBox(
@@ -224,47 +335,48 @@ class _TourDetailScreeState extends State<TourDetailScree> {
               title: _isFetching
                   ? const SizedBox.shrink()
                   : Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    UserAvatar(
+                        size: 40,
+                        avt: '${_tour.host!.avt}',
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              ProfileScreen.route(
+                                _tour.host!.id!,
+                              ));
+                        }),
+                    Padding(
+                      padding:
+                      const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          UserAvatar(
-                              size: 40,
-                              avt: '${_tour.host!.avt}',
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    ProfileScreen.route(
-                                      _tour.host!.id!,
-                                    ));
-                              }),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  _tour.host!.username!,
-                                  style: const TextStyle(
-                                      color: Colors.black87, fontSize: 16),
-                                ),
-                                Text(
-                                  timeago.format(
-                                      DateTime.parse(
-                                          _tour.createDate.toString()),
-                                      locale: Localizations.localeOf(context)
-                                          .languageCode),
-                                  style: const TextStyle(
-                                      color: Colors.black26, fontSize: 12),
-                                ),
-                              ],
-                            ),
-                          )
+                          Text(
+                            _tour.host!.username!,
+                            style: const TextStyle(
+                                color: Colors.black87, fontSize: 16),
+                          ),
+                          Text(
+                            timeago.format(
+                                DateTime.parse(
+                                    _tour.createDate.toString()),
+                                locale: Localizations
+                                    .localeOf(context)
+                                    .languageCode),
+                            style: const TextStyle(
+                                color: Colors.black26, fontSize: 12),
+                          ),
                         ],
                       ),
-                    ),
+                    )
+                  ],
+                ),
+              ),
               elevation: 0,
               bottom: PreferredSize(
                   child: Container(

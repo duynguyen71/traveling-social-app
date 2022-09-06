@@ -15,9 +15,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../services/chat_service.dart';
 import '../../utilities/application_utility.dart';
 import '../../widgets/base_sliver_app_bar.dart';
+import '../../widgets/empty_mesage_widget.dart';
 import '../../widgets/tap_effect_widget.dart';
 import '../../widgets/text_title.dart';
 import '../../widgets/user_avt.dart';
+import '../account/account_screen.dart';
 import '../explore/tour_detail_screen.dart';
 import '../message/chat_screen.dart';
 import '../profile/profile_screen.dart';
@@ -53,7 +55,7 @@ class _CurrentUserTourState extends State<CurrentUserTours> {
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
               BaseSliverAppBar(
-                title: 'Tour cua ban',
+                title: 'Đang tham gia',
                 isShowLeading: true,
                 bottom: PreferredSize(
                     child: Container(
@@ -74,7 +76,7 @@ class _CurrentUserTourState extends State<CurrentUserTours> {
           },
           body: RefreshIndicator(
             onRefresh: () async {
-              context.read<UserTourBloc>().add(InitialTourEvent());
+              context.read<UserTourBloc>().add(GetCurrentTourEvent());
             },
             child: ListView(
               physics: const NeverScrollableScrollPhysics(),
@@ -85,6 +87,8 @@ class _CurrentUserTourState extends State<CurrentUserTours> {
                 //
                 BlocBuilder<UserTourBloc, UserTourState>(
                   builder: (context, state) {
+                    if (state.currentTour == null)
+                      return const SizedBox.shrink();
                     var numOfRequest = state.currentTour?.numOfRequest ?? 0;
                     return (numOfRequest <= 0)
                         ? const SizedBox.shrink()
@@ -126,6 +130,8 @@ class _CurrentUserTourState extends State<CurrentUserTours> {
                 // INFO
                 BlocBuilder<UserTourBloc, UserTourState>(
                   builder: (context, state) {
+                    if (state.currentTour == null)
+                      return const SizedBox.shrink();
                     var tour = state.currentTour;
                     if (tour == null) {
                       return const SizedBox.shrink();
@@ -254,6 +260,10 @@ class _CurrentUserTourState extends State<CurrentUserTours> {
                 //MEMBER
                 BlocBuilder<UserTourBloc, UserTourState>(
                   builder: (context, state) {
+                    if (state.currentTour == null)
+                      return EmptyMessageWidget(
+                        message: 'Bạn chưa tham gia tour nào cả',
+                      );
                     var members = state.currentTour?.tourUsers ?? [];
                     return //  MEMBER
                         Row(
@@ -372,7 +382,14 @@ class _CurrentUserTourState extends State<CurrentUserTours> {
                 : const SizedBox.shrink(),
             isHost
                 ? CupertinoActionSheetAction(
-                    onPressed: () async {}, child: const Text('Xóa'))
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      context
+                          .read<UserTourBloc>()
+                          .add(CloseCurrentTour(tour.id!));
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Xóa'))
                 : const SizedBox.shrink(),
           ],
           cancelButton: CupertinoActionSheetAction(

@@ -162,6 +162,7 @@ class _CreateReviewPostScreenState extends State<CreateReviewPostScreen>
   }
 
   _handleUploadPost() async {
+    ApplicationUtility.hideKeyboard();
     _updateReviewPostState(context);
     await context.read<CreateReviewPostCubit>().uploadReview();
     ApplicationUtility.showSuccessToast(

@@ -3,7 +3,6 @@ import 'package:traveling_social_app/models/base_user.dart';
 import 'package:traveling_social_app/models/location.dart';
 import 'package:traveling_social_app/models/tour_user.dart';
 
-import 'current_user_tour.dart';
 
 class TourDetail extends Equatable {
   final int? id;

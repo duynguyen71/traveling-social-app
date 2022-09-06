@@ -69,7 +69,7 @@ class _CreateTourScreenState extends State<CreateTourScreen>
         extendBodyBehindAppBar: false,
         backgroundColor: Colors.white,
         appBar: BaseAppBar(
-          title: ("Create Tour"),
+          title: ("Chuyến đi của bạn"),
           actions: [
             Center(
               child: GestureDetector(
@@ -207,9 +207,8 @@ class _CreateTourScreenState extends State<CreateTourScreen>
                                       children: [
                                         IconTextButton(
                                           text: loc == null
-                                              ? 'Select location'
-                                              : (loc.label ??
-                                                  "Select location"),
+                                              ? 'Chọn điểm đến'
+                                              : (loc.label ?? "Chọn điểm đến"),
                                           onTap: () {
                                             _onSelectLocation(context);
                                           },

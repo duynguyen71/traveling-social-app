@@ -379,8 +379,8 @@ class PostService {
   /// Get review post comment replies
   Future<Set<Comment>> getReviewPostReplyComment(
       {required int parentCommentId}) async {
-    final url =
-        Uri.parse(baseUrl + "/api/v1/member/review-posts/comments/$parentCommentId/reply");
+    final url = Uri.parse(baseUrl +
+        "/api/v1/member/review-posts/comments/$parentCommentId/reply");
     final resp = await client.get(url);
     if (resp.statusCode == 200) {
       final jsonBody = jsonDecode(resp.body) as Map<String, dynamic>;
@@ -627,7 +627,6 @@ class PostService {
   Future<TourDetail?> getTourDetail({required int id}) async {
     final url = Uri.parse(baseUrl + "/api/v1/member/tours/$id");
     var resp = await client.get(url);
-    print(jsonDecode(resp.body));
     if (resp.statusCode == 200) {
       var tour = TourDetail.fromJson(jsonDecode(resp.body)['data']);
       return tour;
@@ -678,6 +677,16 @@ class PostService {
       return list.map((e) => TourUser.fromJson(e)).toList();
     }
     return [];
+  }
+
+  Future<bool> closeTour(int tourId) async {
+    final url =
+        Uri.parse(baseUrl + "/api/v1/member/users/me/tours/$tourId/close/0");
+    final resp = await client.post(url);
+    if (resp.statusCode == 200) {
+      return true;
+    }
+    return false;
   }
 
   Future<bool> updateTourUserStatus({var tourUserId, var status}) async {

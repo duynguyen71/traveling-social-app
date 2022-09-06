@@ -59,7 +59,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   }
 
   _fetchNotifications(event, emit) async {
-    var notifications =await _notificationRepo.getNotifications();
+    var notifications = await _notificationRepo.getNotifications();
     emit(state.copyWith(notifications: notifications));
   }
 }

@@ -48,7 +48,9 @@ class _NotificationScreenState extends State<NotificationScreen>
         ];
       },
       body: RefreshIndicator(
-        onRefresh: () async {},
+        onRefresh: () async {
+          context.read<NotificationBloc>().add(FetchNotification());
+        },
         child: Stack(
           children: [
             BlocBuilder<NotificationBloc, NotificationState>(

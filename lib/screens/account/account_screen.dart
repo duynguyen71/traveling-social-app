@@ -30,6 +30,10 @@ class AccountScreen extends StatefulWidget {
 
   @override
   State<AccountScreen> createState() => _AccountScreenState();
+
+  static Route<void> route() => MaterialPageRoute(
+        builder: (context) => AccountScreen(),
+      );
 }
 
 class _AccountScreenState extends State<AccountScreen>
