@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:traveling_social_app/bloc/tour/user_tour_bloc.dart';
-import 'package:traveling_social_app/models/post.dart';
 
 import '../../authentication/bloc/authentication_bloc.dart';
 import '../../constants/app_theme_constants.dart';
@@ -144,13 +143,13 @@ class _TourDetailScreeState extends State<TourDetailScree> {
                                 TourNote(
                                   icon: Icon(
                                     Icons.date_range,
-                                    color: Colors.orangeAccent,
+                                    color: Colors.blueAccent,
                                   ),
                                   text: 'Số ngày đi ${_tour.totalDay ?? 1}',
                                 ),
                                 TourNote(
                                   icon: Icon(
-                                    Icons.date_range,
+                                    Icons.monetization_on,
                                     color: Colors.orangeAccent,
                                   ),
                                   text:
