@@ -55,7 +55,7 @@ class UserTourBloc extends Bloc<UserTourEvent, UserTourState> {
         final currentTour = await _postService.getCurrentTour();
         print('current tour ${currentTour}');
         emit(state.copyWith(
-            c: currentTour, status: UserTourStateStatus.success));
+            c: currentTour, status: UserTourStateStatus.success,createTour: Tour.empty()));
       } else if (event is UpdateCurrentUserTour) {
         final newTour = event.currentUserTour;
         emit(state.copyWith(c: newTour));
@@ -86,6 +86,10 @@ class UserTourBloc extends Bloc<UserTourEvent, UserTourState> {
                 tourUsers: joinedMembers)));
       } else if (event is CloseCurrentTour) {
         _postService.closeTour(event.id);
+        emit(state.copyWith(createTour: Tour.empty()));
+      } else if (event is CompleteTourEvent) {
+        _postService.complete(event.id);
+        emit(state.copyWith(createTour: Tour.empty()));
       }
     });
   }

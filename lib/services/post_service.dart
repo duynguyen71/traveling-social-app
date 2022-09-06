@@ -49,7 +49,7 @@ class PostService {
       final respBody = jsonDecode(resp.body) as Map<String, dynamic>;
       var list = respBody['data'] as List<dynamic>;
       final rs =
-          list.map((e) => Post.fromJson((e as Map<String, dynamic>))).toSet();
+      list.map((e) => Post.fromJson((e as Map<String, dynamic>))).toSet();
       return rs;
     }
     return <Post>{};
@@ -67,7 +67,7 @@ class PostService {
       final respBody = jsonDecode(resp.body) as Map<String, dynamic>;
       var list = respBody['data'] as List<dynamic>;
       final rs =
-          list.map((e) => Post.fromJson((e as Map<String, dynamic>))).toSet();
+      list.map((e) => Post.fromJson((e as Map<String, dynamic>))).toSet();
       return rs;
     }
     return <Post>{};
@@ -85,7 +85,7 @@ class PostService {
       final respBody = jsonDecode(resp.body) as Map<String, dynamic>;
       var list = respBody['data'] as List<dynamic>;
       final rs =
-          list.map((e) => Post.fromJson((e as Map<String, dynamic>))).toList();
+      list.map((e) => Post.fromJson((e as Map<String, dynamic>))).toList();
       return rs;
     }
     return [];
@@ -101,7 +101,7 @@ class PostService {
       final respBody = jsonDecode(resp.body) as Map<String, dynamic>;
       var list = respBody['data'] as List<dynamic>;
       final rs =
-          list.map((e) => Post.fromJson((e as Map<String, dynamic>))).toList();
+      list.map((e) => Post.fromJson((e as Map<String, dynamic>))).toList();
       return rs;
     }
     return [];
@@ -138,8 +138,8 @@ class PostService {
   }
 
   /// Add story
-  Future<Post> createStory(
-      Map<String, dynamic> story, List<File> attachments) async {
+  Future<Post> createStory(Map<String, dynamic> story,
+      List<File> attachments) async {
     var url = Uri.parse(baseUrl + "/api/v1/member/users/me/posts");
     List<int> attachmentIds = [];
     if (attachments.isNotEmpty) {
@@ -156,12 +156,13 @@ class PostService {
       "contents": attachmentIds
           .asMap()
           .entries
-          .map((e) => {
-                "attachment": {"id": e.value},
-                "pos": e.key,
-                "active": 1,
-                "caption": story['caption'].toString().trim()
-              })
+          .map((e) =>
+      {
+        "attachment": {"id": e.value},
+        "pos": e.key,
+        "active": 1,
+        "caption": story['caption'].toString().trim()
+      })
           .toList(),
     };
     var resp = await http.post(url,
@@ -183,11 +184,10 @@ class PostService {
     };
   }
 
-  Future<Post> createPost(
-      {required Map<String, dynamic> post,
-      required List<File> attachments,
-      int type = 1,
-      Set<Tag> tags = const {}}) async {
+  Future<Post> createPost({required Map<String, dynamic> post,
+    required List<File> attachments,
+    int type = 1,
+    Set<Tag> tags = const {}}) async {
     var url = Uri.parse(baseUrl + "/api/v1/member/users/me/posts");
     List<int> attachmentIds = [];
     if (attachments.isNotEmpty) {
@@ -204,12 +204,13 @@ class PostService {
       "contents": attachmentIds
           .asMap()
           .entries
-          .map((e) => {
-                "attachment": {"id": e.value},
-                "pos": e.key,
-                "active": 1,
-                "caption": post['caption'].toString().trim()
-              })
+          .map((e) =>
+      {
+        "attachment": {"id": e.value},
+        "pos": e.key,
+        "active": 1,
+        "caption": post['caption'].toString().trim()
+      })
           .toList(),
       "tags": tags.map((e) => e.toJson()).toList()
     };
@@ -270,7 +271,7 @@ class PostService {
     final resp = await client.get(url, headers: await authorizationHeader());
     if (resp.statusCode == 200) {
       final data = (jsonDecode(resp.body) as Map<String, dynamic>)['data']
-          as List<dynamic>;
+      as List<dynamic>;
       List<Post> posts = data.map((e) => Post.fromJson(e)).toList();
       return posts;
     }
@@ -287,7 +288,7 @@ class PostService {
       final json = jsonDecode(resp.body) as Map<String, dynamic>;
       final data = json['data'] as List<dynamic>;
       List<BaseReviewPostResponse> list =
-          data.map((e) => BaseReviewPostResponse.fromJson(e)).toList();
+      data.map((e) => BaseReviewPostResponse.fromJson(e)).toList();
       return list;
     }
     return [];
@@ -303,7 +304,7 @@ class PostService {
       final json = jsonDecode(resp.body) as Map<String, dynamic>;
       final data = json['data'] as List<dynamic>;
       List<BaseReviewPostResponse> list =
-          data.map((e) => BaseReviewPostResponse.fromJson(e)).toList();
+      data.map((e) => BaseReviewPostResponse.fromJson(e)).toList();
       return list;
     }
     return [];
@@ -395,7 +396,7 @@ class PostService {
 
   Future<Author> getReviewPostAuthInfo({required int reviewPostId}) async {
     final url =
-        Uri.parse('$baseUrl/api/v1/member/review-posts/$reviewPostId/auth');
+    Uri.parse('$baseUrl/api/v1/member/review-posts/$reviewPostId/auth');
     var resp = await client.get(url);
     if (resp.statusCode == 200) {
       return Author.fromJson(jsonDecode(resp.body)['data']);
@@ -404,14 +405,13 @@ class PostService {
   }
 
   /// Comment on review post
-  Future<Comment> commentReviewPost(
-      {int? postId,
-      int? commentId,
-      String? contentText,
-      int? attachmentId,
-      int? parentCommentId}) async {
+  Future<Comment> commentReviewPost({int? postId,
+    int? commentId,
+    String? contentText,
+    int? attachmentId,
+    int? parentCommentId}) async {
     final url =
-        Uri.parse(baseUrl + "/api/v1/member/review-posts/$postId/comments");
+    Uri.parse(baseUrl + "/api/v1/member/review-posts/$postId/comments");
     final resp = await client.post(
       url,
       body: jsonEncode(
@@ -427,7 +427,7 @@ class PostService {
     if (resp.statusCode == 200) {
       final jsonBody = jsonDecode(resp.body) as Map<String, dynamic>;
       Comment comment =
-          Comment.fromJson(jsonBody['data'] as Map<String, dynamic>);
+      Comment.fromJson(jsonBody['data'] as Map<String, dynamic>);
       return comment;
     }
     throw 'Failed to post comment';
@@ -488,12 +488,12 @@ class PostService {
   /// Get current user review posts edit detail
   Future<CreationReviewPost?> getCurrentUserEditReviewPostDetail(int id) async {
     final url =
-        Uri.parse('$baseUrl/api/v1/member/users/me/review-posts/$id/detail');
+    Uri.parse('$baseUrl/api/v1/member/users/me/review-posts/$id/detail');
     final resp = await client.get(url);
     if (resp.statusCode == 200) {
       print(jsonDecode(resp.body));
       var creationReviewPost =
-          CreationReviewPost.fromJson(jsonDecode(resp.body)['data']);
+      CreationReviewPost.fromJson(jsonDecode(resp.body)['data']);
       print(creationReviewPost);
       return creationReviewPost;
     }
@@ -510,7 +510,7 @@ class PostService {
       final json = jsonDecode(resp.body) as Map<String, dynamic>;
       final data = json['data'] as List<dynamic>;
       List<BaseReviewPostResponse> list =
-          data.map((e) => BaseReviewPostResponse.fromJson(e)).toList();
+      data.map((e) => BaseReviewPostResponse.fromJson(e)).toList();
       print('Bookmark list size ${list.length}');
       return list;
     }
@@ -520,7 +520,7 @@ class PostService {
   /// Get bookmarks
   Future<bool> saveBookmark({int? postId}) async {
     final url =
-        Uri.parse(baseUrl + "/api/v1/member/review-posts/bookmarks/$postId");
+    Uri.parse(baseUrl + "/api/v1/member/review-posts/bookmarks/$postId");
     final resp = await client.post(url);
     if (resp.statusCode == 200) {
       print('Bookmark review post $postId success!');
@@ -532,7 +532,7 @@ class PostService {
   /// Remove bookmark
   Future<bool> removeBookmark(int id) async {
     final url =
-        Uri.parse(baseUrl + "/api/v1/member/review-posts/bookmarks/$id");
+    Uri.parse(baseUrl + "/api/v1/member/review-posts/bookmarks/$id");
     final resp = await client.put(url);
     if (resp.statusCode == 200) return true;
     return false;
@@ -541,7 +541,7 @@ class PostService {
   // Search review-post
   Future<List<BaseReviewPostResponse>> searchReviewPosts(key) async {
     final url =
-        Uri.parse(baseUrl + "/api/v1/member/review-posts/search?keyWord=$key");
+    Uri.parse(baseUrl + "/api/v1/member/review-posts/search?keyWord=$key");
     final resp = await client.get(url);
     if (resp.statusCode == 200) {
       var list = jsonDecode(resp.body)['data'] as List<dynamic>;
@@ -552,7 +552,7 @@ class PostService {
 
   Future<List<QuestionPost>> searchQuestions(key) async {
     final url =
-        Uri.parse(baseUrl + "/api/v1/member/posts/search?keyWord=$key&type=2");
+    Uri.parse(baseUrl + "/api/v1/member/posts/search?keyWord=$key&type=2");
     final resp = await client.get(url);
     if (resp.statusCode == 200) {
       var list = jsonDecode(resp.body)['data'] as List<dynamic>;
@@ -584,7 +584,7 @@ class PostService {
   Future<QuestionPost?> getQuestionPostDetail(
       {required int questionPostId}) async {
     final url =
-        Uri.parse(baseUrl + "/api/v1/member/questions/$questionPostId/detail");
+    Uri.parse(baseUrl + "/api/v1/member/questions/$questionPostId/detail");
     final resp = await client.get(url);
     if (resp.statusCode == 200) {
       var data = jsonDecode(resp.body)['data'] as Map<String, dynamic>;
@@ -669,7 +669,7 @@ class PostService {
 
   Future<List<TourUser>> getTourUsers(int tourId) async {
     final url =
-        Uri.parse(baseUrl + "/api/v1/member/users/me/tours/$tourId/users");
+    Uri.parse(baseUrl + "/api/v1/member/users/me/tours/$tourId/users");
     final resp = await client.get(url);
     if (resp.statusCode == 200) {
       final list = (jsonDecode(resp.body)['data']) as List<dynamic>;
@@ -681,11 +681,33 @@ class PostService {
 
   Future<bool> closeTour(int tourId) async {
     final url =
-        Uri.parse(baseUrl + "/api/v1/member/users/me/tours/$tourId/close/0");
+    Uri.parse(baseUrl + "/api/v1/member/users/me/tours/$tourId/close/0");
     final resp = await client.post(url);
     if (resp.statusCode == 200) {
       return true;
     }
+    return false;
+  }
+  Future<bool> complete(int tourId) async {
+    final url =
+    Uri.parse(baseUrl + "/api/v1/member/users/me/tours/$tourId/complete");
+    final resp = await client.post(url);
+    if (resp.statusCode == 200) {
+      print('complete tour');
+      return true;
+    }
+    return false;
+  }
+
+  Future<bool> requestJoin(int tourId) async {
+    final url =
+    Uri.parse(baseUrl + "/api/v1/member/tours/$tourId/request-join");
+    final resp = await client.post(url);
+    if (resp.statusCode == 200) {
+      print('request join success');
+      return true;
+    }
+    print(resp.body);
     return false;
   }
 

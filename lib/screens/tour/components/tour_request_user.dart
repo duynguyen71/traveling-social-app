@@ -440,14 +440,6 @@ class _TourRequestUserState extends State<TourRequestUser> {
     filtered = copy;
   }
 
-  //
-  // void _removeTourUser(TourUser tourUser) {
-  //   var copy =
-  //       _tourUsers.where((element) => element.id != tourUser?.id).toList();
-  //   tourUsers = copy;
-  //   filtered = copy;
-  // }
-
   Future<bool> _updateStatus(TourUser tourUser, {required int status}) async {
     bool success = await _postService.updateTourUserStatus(
         status: status, tourUserId: tourUser.id);
@@ -492,21 +484,21 @@ class _TourRequestUserState extends State<TourRequestUser> {
     switch (tourUser.status) {
       case 0:
         {
-          button = 'Rejected';
+          button = 'Đã từ chối';
           break;
         }
       case 1:
         {
-          button = 'Requested';
+          button = 'Yêu cầu tham gia';
           break;
         }
       case 2:
         {
-          button = 'Accept';
+          button = 'Đã tham gia';
           break;
         }
       default:
-        button = 'Rejected';
+        button = 'Từ chối';
     }
     return Text(
       button,

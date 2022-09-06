@@ -31,7 +31,17 @@ class Tour extends Equatable {
     this.location,
     this.departureDate,
   });
-
+ factory  Tour.empty(){
+    return Tour(
+        id: null,
+        location:null,
+        totalDay: 1,
+        content: '',
+        cost: 0.0,
+        title: 'Title',
+        numOfMember: 1,
+        tags:[]);
+  }
   Tour copyWith({
     int? id,
     String? title,

@@ -7,6 +7,7 @@ import 'package:traveling_social_app/authentication/bloc/authentication_bloc.dar
 import 'package:traveling_social_app/models/base_tour.dart';
 import 'package:traveling_social_app/models/base_user.dart';
 import 'package:traveling_social_app/models/current_user_tour.dart';
+import 'package:traveling_social_app/models/user.dart';
 import 'package:traveling_social_app/screens/profile/components/icon_with_text.dart';
 import 'package:traveling_social_app/screens/tour/tour_map_view.dart';
 
@@ -87,8 +88,9 @@ class _CurrentUserTourState extends State<CurrentUserTours> {
                 //
                 BlocBuilder<UserTourBloc, UserTourState>(
                   builder: (context, state) {
-                    if (state.currentTour == null)
+                    if (state.currentTour == null) {
                       return const SizedBox.shrink();
+                    }
                     var numOfRequest = state.currentTour?.numOfRequest ?? 0;
                     return (numOfRequest <= 0)
                         ? const SizedBox.shrink()
@@ -176,7 +178,7 @@ class _CurrentUserTourState extends State<CurrentUserTours> {
                                     ),
                                   ),
                                   Text(
-                                    '${tour.id} - ${tour.title}',
+                                    '${tour.title}',
                                     style: const TextStyle(
                                         fontSize: 14, letterSpacing: .7),
                                   ),
@@ -188,7 +190,7 @@ class _CurrentUserTourState extends State<CurrentUserTours> {
                                           Icons.supervised_user_circle,
                                         ),
                                         text:
-                                            '${tour.tourUsers.length + 1} / ${tour.numOfMember} members',
+                                            '${tour.tourUsers.length + 1} / ${tour.numOfMember} người',
                                       )
                                     ],
                                   )
@@ -240,11 +242,11 @@ class _CurrentUserTourState extends State<CurrentUserTours> {
                                                 ),
                                               ));
                                         },
-                                        child: TourNote(
+                                        child: tour.location==null ? const SizedBox.shrink(): TourNote(
                                             icon: Icon(
                                                 color: Colors.redAccent,
                                                 Icons.location_on_outlined),
-                                            text: tour.location!.label ?? ''),
+                                            text: tour.location?.label ?? ''),
                                       ),
                                     ],
                                   ),
@@ -319,13 +321,6 @@ class _CurrentUserTourState extends State<CurrentUserTours> {
                     );
                   },
                 ),
-                //
-                // Container(
-                //   margin: const EdgeInsets.only(top: 4.0),
-                //   padding: EdgeInsets.all(4.0),
-                //   child: TextTitle(text: "Đã hoàn thành"),
-                //   color: Colors.white,
-                // ),
               ],
             ),
           )),
@@ -349,6 +344,16 @@ class _CurrentUserTourState extends State<CurrentUserTours> {
               },
               child: const Text('Xem'),
             ),
+            !isHost
+                ? CupertinoActionSheetAction(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context, TourDetailScree.route(tourId: tour.id!));
+                    },
+                    child: const Text('Rời đi'),
+                  )
+                : const SizedBox.shrink(),
             isHost
                 ? CupertinoActionSheetAction(
                     onPressed: () async {
@@ -367,16 +372,9 @@ class _CurrentUserTourState extends State<CurrentUserTours> {
             isHost
                 ? CupertinoActionSheetAction(
                     onPressed: () async {
-                      showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return TourRequestUser(
-                              tourId: tour.id!,
-                            );
-                          },
-                          backgroundColor: Colors.transparent,
-                          isScrollControlled: true,
-                          isDismissible: true);
+                      Navigator.pop(context);
+                      context.read<UserTourBloc>().add(CompleteTourEvent(tour.id!));
+                      Navigator.pop(context);
                     },
                     child: const Text('Đánh dấu hoàn thành'))
                 : const SizedBox.shrink(),
