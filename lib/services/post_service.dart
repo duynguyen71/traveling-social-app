@@ -24,6 +24,7 @@ import '../models/file_upload.dart';
 import '../models/question_post.dart';
 import '../models/review_post_detail.dart';
 import '../models/tag.dart';
+import '../models/tour_detail.dart';
 import '../models/tour_user.dart';
 import '../widgets/tour.dart';
 
@@ -292,6 +293,22 @@ class PostService {
     return [];
   }
 
+  /// Get newest review posts
+  Future<List<BaseReviewPostResponse>> getNewestReviewPost(
+      {int? page, int? pageSize}) async {
+    final url = Uri.parse(baseUrl +
+        "/api/v1/member/review-posts/newest?page=$page&pageSize=$pageSize");
+    final resp = await client.get(url, headers: await authorizationHeader());
+    if (resp.statusCode == 200) {
+      final json = jsonDecode(resp.body) as Map<String, dynamic>;
+      final data = json['data'] as List<dynamic>;
+      List<BaseReviewPostResponse> list =
+          data.map((e) => BaseReviewPostResponse.fromJson(e)).toList();
+      return list;
+    }
+    return [];
+  }
+
   /// Get review post detail
   Future<ReviewPostDetail?> getReviewPostDetail(int id) async {
     final url = Uri.parse('$baseUrl/api/v1/member/review-posts/$id');
@@ -363,7 +380,7 @@ class PostService {
   Future<Set<Comment>> getReviewPostReplyComment(
       {required int parentCommentId}) async {
     final url =
-        Uri.parse(baseUrl + "/api/v1/member/comments/$parentCommentId/reply");
+        Uri.parse(baseUrl + "/api/v1/member/review-posts/comments/$parentCommentId/reply");
     final resp = await client.get(url);
     if (resp.statusCode == 200) {
       final jsonBody = jsonDecode(resp.body) as Map<String, dynamic>;
@@ -583,6 +600,7 @@ class PostService {
   }
 
   //TOUR
+
   Future<List<BaseTour>> getCurrentUserTours({int? page}) async {
     final url = Uri.parse(baseUrl + "/api/v1/member/users/me/tours?page=$page");
     var resp = await client.get(url);
@@ -595,18 +613,40 @@ class PostService {
     return [];
   }
 
+  Future<List<BaseTour>> getTours({int? page}) async {
+    final url = Uri.parse(baseUrl + "/api/v1/member/tours");
+    var resp = await client.get(url);
+    if (resp.statusCode == 200) {
+      var body = jsonDecode(resp.body) as Map<String, dynamic>;
+      var list = body['data'] as List<dynamic>;
+      return list.map((e) => BaseTour.fromJson(e)).toList();
+    }
+    return [];
+  }
+
+  Future<TourDetail?> getTourDetail({required int id}) async {
+    final url = Uri.parse(baseUrl + "/api/v1/member/tours/$id");
+    var resp = await client.get(url);
+    print(jsonDecode(resp.body));
+    if (resp.statusCode == 200) {
+      var tour = TourDetail.fromJson(jsonDecode(resp.body)['data']);
+      return tour;
+    }
+    return null;
+  }
+
   Future<void> saveTour({required Tour tour}) async {
     final url = Uri.parse(baseUrl + "/api/v1/member/users/me/tours");
     String jso = tourToJson(tour);
-    print(tour);
     final resp = await client.post(url, body: jso);
     if (resp.statusCode == 200) {
+      print('save tour success');
       // print(jsonDecode(resp.body));
     }
   }
 
-  Future<Tour?> getTourDetail(int id) async {
-    final url = Uri.parse(baseUrl + "/api/v1/member/users/me/tours/${id}");
+  Future<Tour?> getMyTourDetail(int id) async {
+    final url = Uri.parse(baseUrl + "/api/v1/member/users/me/tours/$id");
     var resp = await client.get(url);
     if (resp.statusCode == 200) {
       var tour = Tour.fromJson(jsonDecode(resp.body)['data']);
@@ -640,8 +680,7 @@ class PostService {
     return [];
   }
 
-  Future<bool> updateTourUserStatus(
-      { var tourUserId, var status}) async {
+  Future<bool> updateTourUserStatus({var tourUserId, var status}) async {
     final url = Uri.parse(baseUrl +
         "/api/v1/member/users/me/tours/users/$tourUserId/status/$status");
     final resp = await client.put(url);

@@ -3,7 +3,9 @@ import 'package:traveling_social_app/models/base_user.dart';
 import 'package:traveling_social_app/models/location.dart';
 import 'package:traveling_social_app/models/tour_user.dart';
 
-class CurrentUserTour extends Equatable {
+import 'current_user_tour.dart';
+
+class TourDetail extends Equatable {
   final int? id;
   final String? title;
   final String? content;
@@ -16,9 +18,9 @@ class CurrentUserTour extends Equatable {
   final BaseUserInfo? host;
   final int? numOfRequest;
   final List<TourUser> tourUsers;
-
-
-  CurrentUserTour(
+  final String? createDate;
+final bool joined;
+  const TourDetail(
       {this.id,
       this.title,
       this.content,
@@ -30,9 +32,11 @@ class CurrentUserTour extends Equatable {
       this.departureDate,
       this.numOfRequest,
       this.tourUsers = const [],
-      this.host,});
+      this.createDate,
+        this.joined = false,
+      this.host});
 
-  CurrentUserTour copyWith({
+  TourDetail copyWith({
     String? title,
     String? content,
     int? numOfRequest,
@@ -43,9 +47,10 @@ class CurrentUserTour extends Equatable {
     Location? location,
     String? departureDate,
     List<TourUser>? tourUsers,
+    bool? joined,
     BaseUserInfo? host,
   }) {
-    return CurrentUserTour(
+    return TourDetail(
         id: id,
         title: title ?? this.title,
         content: content ?? this.content,
@@ -57,12 +62,13 @@ class CurrentUserTour extends Equatable {
         departureDate: departureDate ?? this.departureDate,
         numOfRequest: numOfRequest ?? this.numOfRequest,
         tourUsers: tourUsers ?? this.tourUsers,
+        joined: joined??this.joined,
         host: host ?? this.host);
   }
 
-  factory CurrentUserTour.fromJson(Map<String, dynamic> json) {
-    var json2 = (json['users'] as List<dynamic>);
-    return CurrentUserTour(
+  factory TourDetail.fromJson(Map<String, dynamic> json) {
+    var json2 = (json['users']);
+    return TourDetail(
       id: json['id'],
       title: json['title'],
       content: json['content'],
@@ -70,13 +76,15 @@ class CurrentUserTour extends Equatable {
       cost: json['cost'],
       totalDay: json['totalDay'],
       joinedMember: json['joinedMember'],
+      joined: json['joined'],
+      createDate: json['createDate'],
       numOfRequest: json['numOfRequest'],
       location:
           json['location'] != null ? Location.fromMap(json['location']) : null,
       departureDate: json['departureDate'],
       host: json['host'] != null ? BaseUserInfo.fromJson(json['host']) : null,
-      tourUsers: json2.isNotEmpty
-          ? json2.map((e) => TourUser.fromJson(e)).toList()
+      tourUsers: json2 != null
+          ? (json2 as List<dynamic>).map((e) => TourUser.fromJson(e)).toList()
           : [],
     );
   }

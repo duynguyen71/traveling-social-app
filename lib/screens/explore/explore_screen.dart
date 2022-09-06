@@ -9,6 +9,7 @@ import '../../bloc/appIication/application_state_bloc.dart';
 import 'components/drawer.dart';
 import 'components/main_bottom_nav.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:traveling_social_app/screens/explore/tour_screen.dart';
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({Key? key}) : super(key: key);

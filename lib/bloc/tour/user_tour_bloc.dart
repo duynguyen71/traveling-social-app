@@ -46,10 +46,11 @@ class UserTourBloc extends Bloc<UserTourEvent, UserTourState> {
       } else if (event is UpdateTourRequestEvent) {
         emit(state.copyWith(status: UserTourStateStatus.loading));
         var id = event.id;
-        var tour = await _postService.getTourDetail(id);
+        var tour = await _postService.getMyTourDetail(id);
         emit(state.copyWith(
             createTour: tour, status: UserTourStateStatus.success));
       } else if (event is GetCurrentTourEvent) {
+        print('get current user tour');
         emit(state.copyWith(status: UserTourStateStatus.loading));
         final currentTour = await _postService.getCurrentTour();
         print('current tour ${currentTour}');

@@ -17,10 +17,16 @@ class FollowCount extends StatelessWidget {
             fontSize: 12,
           ),
         ),
-        Text(
-          ' $title\t\t',
-          style: const TextStyle(
-            color: Colors.black54,
+        ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: 100),
+          child: Text(
+            ' $title\t\t',
+            overflow: TextOverflow.ellipsis,
+            softWrap: true,
+            style: const TextStyle(
+              fontSize: 12,
+              color: Colors.black54,
+            ),
           ),
         ),
       ],

@@ -1,3 +1,5 @@
+import 'package:traveling_social_app/models/location.dart';
+
 import 'tag.dart';
 
 class BaseTour {
@@ -8,6 +10,7 @@ class BaseTour {
   int? joinedMember;
   String? createDate;
   List<Tag>? tags;
+  Location? location;
 
   BaseTour(
       {this.id,
@@ -16,6 +19,7 @@ class BaseTour {
       this.numOfMember,
       this.joinedMember,
       this.createDate,
+      this.location,
       this.tags});
 
   BaseTour.fromJson(Map<String, dynamic> json) {
@@ -25,6 +29,8 @@ class BaseTour {
     numOfMember = json['numOfMember'];
     joinedMember = json['joinedMember'];
     createDate = json['createDate'];
+    location =
+        json['location'] != null ? Location.fromMap(json['location']) : null;
     if (json['tags'] != null) {
       tags = <Tag>[];
       json['tags'].forEach((v) {

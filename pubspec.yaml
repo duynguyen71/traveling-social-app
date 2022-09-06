@@ -68,7 +68,7 @@ dependencies:
   flutter_signin_button: ^2.0.0
   flutter_isolate: ^2.0.2
   geolocator: ^8.2.1
-#  flutter_map: ^2.1.0
+  #  flutter_map: ^2.1.0
   flutter_rating_bar: ^4.0.1
   flutter_map: ^3.0.0
   latlong2: ^0.8.1

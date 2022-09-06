@@ -116,11 +116,6 @@ class _ReviewPostCommentSectionState extends State<ReviewPostCommentSection> {
             )
           : MyBottomDialog(
               items: [
-                  BottomDialogItem(
-                    title: 'Mời vào nhóm chat',
-                    onClick: () {
-
-                    }),
                 BottomDialogItem(
                   title: 'Sao chép',
                   onClick: () {

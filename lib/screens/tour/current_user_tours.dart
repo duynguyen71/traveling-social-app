@@ -18,6 +18,7 @@ import '../../widgets/base_sliver_app_bar.dart';
 import '../../widgets/tap_effect_widget.dart';
 import '../../widgets/text_title.dart';
 import '../../widgets/user_avt.dart';
+import '../explore/tour_detail_screen.dart';
 import '../message/chat_screen.dart';
 import '../profile/profile_screen.dart';
 import 'components/tour_request_user.dart';
@@ -203,15 +204,6 @@ class _CurrentUserTourState extends State<CurrentUserTours> {
                                       const TextTitle(
                                           text: "Vài thông tin bạn cần lưu ý"),
                                       TourNote(
-                                          icon: const Icon(
-                                            Icons.card_travel_outlined,
-                                          ),
-                                          text:
-                                              'Ngày khởi hành ${Jiffy((DateTime.parse('${tour.departureDate}'))).format('dd-MM-yyyy HH:mm')}'
-
-                                          // '${calculateTimeDifferenceBetween(startDate: DateTime.now(), endDate: DateTime.parse('${tour.departureDate}'))}',
-                                          ),
-                                      TourNote(
                                         icon: Icon(
                                           Icons.money,
                                           color: Colors.orangeAccent,
@@ -318,13 +310,12 @@ class _CurrentUserTourState extends State<CurrentUserTours> {
                   },
                 ),
                 //
-
-                Container(
-                  margin: const EdgeInsets.only(top: 4.0),
-                  padding: EdgeInsets.all(4.0),
-                  child: TextTitle(text: "Đã hoàn thành"),
-                  color: Colors.white,
-                ),
+                // Container(
+                //   margin: const EdgeInsets.only(top: 4.0),
+                //   padding: EdgeInsets.all(4.0),
+                //   child: TextTitle(text: "Đã hoàn thành"),
+                //   color: Colors.white,
+                // ),
               ],
             ),
           )),
@@ -343,6 +334,8 @@ class _CurrentUserTourState extends State<CurrentUserTours> {
             CupertinoActionSheetAction(
               onPressed: () {
                 Navigator.pop(context);
+                Navigator.push(
+                    context, TourDetailScree.route(tourId: tour.id!));
               },
               child: const Text('Xem'),
             ),

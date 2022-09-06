@@ -18,6 +18,7 @@ import 'package:traveling_social_app/widgets/my_list_tile.dart';
 
 import '../../bloc/post/post_bloc.dart';
 import '../../bloc/story/story_bloc.dart';
+import '../../bloc/tour/user_tour_bloc.dart';
 import '../../widgets/username_text.dart';
 import '../follow/follower_screen.dart';
 import '../follow/following_screen.dart';
@@ -35,6 +36,7 @@ class _AccountScreenState extends State<AccountScreen>
     with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
+    context.read<UserTourBloc>().add(const GetCurrentTourEvent());
     super.initState();
   }
 
@@ -135,8 +137,7 @@ class _AccountScreenState extends State<AccountScreen>
             ),
             //TOUR
             MyListTile(
-              onClick: () =>
-                  Navigator.push(context, CurrentUserTours.route()),
+              onClick: () => Navigator.push(context, CurrentUserTours.route()),
               leading: const LinearGradiantMask(
                 child: Icon(
                   Icons.ac_unit_outlined,
@@ -231,7 +232,9 @@ class _AccountScreenState extends State<AccountScreen>
                   builder: (context) {
                     return CupertinoAlertDialog(
                       //TODO: translate
-                      title: Text( AppLocalizations.of(context)!.notification,),
+                      title: Text(
+                        AppLocalizations.of(context)!.notification,
+                      ),
                       content: Text("Bạn có chắc muốn đăng xuất?"),
                       actions: <Widget>[
                         CupertinoDialogAction(

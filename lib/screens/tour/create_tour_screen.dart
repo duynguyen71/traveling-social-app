@@ -396,7 +396,9 @@ class _CreateTourScreenState extends State<CreateTourScreen>
       totalDay: int.tryParse(_dayController.text),
     );
     _updateTour(context, tour);
-    _postService.saveTour(tour: tour);
+    await _postService.saveTour(tour: tour);
+    context.read<UserTourBloc>().add(const GetCurrentTourEvent());
+    Navigator.pop(context);
   }
 
   Tour _getContextTour(BuildContext context) {

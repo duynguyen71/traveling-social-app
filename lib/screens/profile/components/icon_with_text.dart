@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 class IconTextButton extends StatelessWidget {
-  const IconTextButton({Key? key, required this.text, required this.icon, this.onTap})
+  const IconTextButton(
+      {Key? key, required this.text, required this.icon, this.onTap})
       : super(key: key);
 
   final String text;
   final Icon icon;
-final Function()? onTap;
+  final Function()? onTap;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -17,9 +19,13 @@ final Function()? onTap;
           icon,
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4.0),
-            child: Text(
-              text,
-              style: const TextStyle(fontSize: 14, color: Colors.black54),
+            child: Container(
+              child: Text(
+                text,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 14, color: Colors.black54),
+              ),
             ),
           )
         ],

@@ -11,12 +11,14 @@ class BaseReviewPostResponse {
     this.user,
     this.createDate,
     this.location,
+    this.rating,
   });
 
   BaseReviewPostResponse.fromJson(dynamic json) {
     id = json['id'];
     title = json['title'];
     content = json['content'];
+    rating = json['rating'];
     coverPhoto = json['coverPhoto'] != null
         ? FileUpload.fromJson(json['coverPhoto'])
         : null;
@@ -32,6 +34,7 @@ class BaseReviewPostResponse {
   BaseUserInfo? user;
   String? createDate;
   String? location;
+  double? rating;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
