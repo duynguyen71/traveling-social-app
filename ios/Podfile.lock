@@ -1,41 +1,44 @@
 PODS:
   - device_info_plus (0.0.1):
     - Flutter
-  - Firebase/CoreOnly (8.15.0):
-    - FirebaseCore (= 8.15.0)
-  - Firebase/Messaging (8.15.0):
+  - Firebase/CoreOnly (9.4.0):
+    - FirebaseCore (= 9.4.0)
+  - Firebase/Messaging (9.4.0):
     - Firebase/CoreOnly
-    - FirebaseMessaging (~> 8.15.0)
-  - firebase_core (1.18.0):
-    - Firebase/CoreOnly (= 8.15.0)
+    - FirebaseMessaging (~> 9.4.0)
+  - firebase_core (1.21.1):
+    - Firebase/CoreOnly (= 9.4.0)
     - Flutter
-  - firebase_messaging (11.4.2):
-    - Firebase/Messaging (= 8.15.0)
+  - firebase_messaging (11.4.4):
+    - Firebase/Messaging (= 9.4.0)
     - firebase_core
     - Flutter
-  - FirebaseCore (8.15.0):
-    - FirebaseCoreDiagnostics (~> 8.0)
+  - FirebaseCore (9.4.0):
+    - FirebaseCoreDiagnostics (~> 9.0)
+    - FirebaseCoreInternal (~> 9.0)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/Logger (~> 7.7)
-  - FirebaseCoreDiagnostics (8.15.0):
-    - GoogleDataTransport (~> 9.1)
+  - FirebaseCoreDiagnostics (9.5.0):
+    - GoogleDataTransport (< 10.0.0, >= 9.1.4)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/Logger (~> 7.7)
-    - nanopb (~> 2.30908.0)
-  - FirebaseInstallations (8.15.0):
-    - FirebaseCore (~> 8.0)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - FirebaseCoreInternal (9.5.0):
+    - "GoogleUtilities/NSData+zlib (~> 7.7)"
+  - FirebaseInstallations (9.5.0):
+    - FirebaseCore (~> 9.0)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/UserDefaults (~> 7.7)
-    - PromisesObjC (< 3.0, >= 1.2)
-  - FirebaseMessaging (8.15.0):
-    - FirebaseCore (~> 8.0)
-    - FirebaseInstallations (~> 8.0)
-    - GoogleDataTransport (~> 9.1)
+    - PromisesObjC (~> 2.1)
+  - FirebaseMessaging (9.4.0):
+    - FirebaseCore (~> 9.0)
+    - FirebaseInstallations (~> 9.0)
+    - GoogleDataTransport (< 10.0.0, >= 9.1.4)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/Reachability (~> 7.7)
     - GoogleUtilities/UserDefaults (~> 7.7)
-    - nanopb (~> 2.30908.0)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
   - fk_user_agent (2.0.0):
     - Flutter
   - Flutter (1.0.0)
@@ -66,6 +69,8 @@ PODS:
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
   - gallery_saver (0.0.1):
+    - Flutter
+  - geocoding (1.0.5):
     - Flutter
   - geolocator_apple (1.2.0):
     - Flutter
@@ -107,13 +112,15 @@ PODS:
   - Mantle (2.2.0):
     - Mantle/extobjc (= 2.2.0)
   - Mantle/extobjc (2.2.0)
-  - nanopb (2.30908.0):
-    - nanopb/decode (= 2.30908.0)
-    - nanopb/encode (= 2.30908.0)
-  - nanopb/decode (2.30908.0)
-  - nanopb/encode (2.30908.0)
+  - nanopb (2.30909.0):
+    - nanopb/decode (= 2.30909.0)
+    - nanopb/encode (= 2.30909.0)
+  - nanopb/decode (2.30909.0)
+  - nanopb/encode (2.30909.0)
   - OrderedSet (5.0.0)
   - path_provider_ios (0.0.1):
+    - Flutter
+  - permission_handler_apple (9.0.4):
     - Flutter
   - PromisesObjC (2.1.1)
   - SDWebImage (5.13.2):
@@ -146,10 +153,12 @@ DEPENDENCIES:
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - gallery_saver (from `.symlinks/plugins/gallery_saver/ios`)
+  - geocoding (from `.symlinks/plugins/geocoding/ios`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
   - image_cropper (from `.symlinks/plugins/image_cropper/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/ios`)
@@ -159,6 +168,7 @@ SPEC REPOS:
     - Firebase
     - FirebaseCore
     - FirebaseCoreDiagnostics
+    - FirebaseCoreInternal
     - FirebaseInstallations
     - FirebaseMessaging
     - FMDB
@@ -201,6 +211,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/fluttertoast/ios"
   gallery_saver:
     :path: ".symlinks/plugins/gallery_saver/ios"
+  geocoding:
+    :path: ".symlinks/plugins/geocoding/ios"
   geolocator_apple:
     :path: ".symlinks/plugins/geolocator_apple/ios"
   image_cropper:
@@ -209,6 +221,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_picker_ios/ios"
   path_provider_ios:
     :path: ".symlinks/plugins/path_provider_ios/ios"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
   url_launcher_ios:
@@ -218,13 +232,14 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
-  Firebase: 5f8193dff4b5b7c5d5ef72ae54bb76c08e2b841d
-  firebase_core: b14c1cfa29b9eb316345f74d1489328283825d6d
-  firebase_messaging: 5374d57b2ca7a5efe1a150500b9a2451ca9ff5af
-  FirebaseCore: 5743c5785c074a794d35f2fff7ecc254a91e08b1
-  FirebaseCoreDiagnostics: 92e07a649aeb66352b319d43bdd2ee3942af84cb
-  FirebaseInstallations: 40bd9054049b2eae9a2c38ef1c3dd213df3605cd
-  FirebaseMessaging: 5e5118a2383b3531e730d974680954c679ca0a13
+  Firebase: 7703fc4022824b6d6db1bf7bea58d13b8e17ec46
+  firebase_core: 8e500850dd138c269d197c8dfca3ae886fa3b6f2
+  firebase_messaging: c7f8a34e148cdcbbcbf01b3644204db33a91c587
+  FirebaseCore: 9a2b10270a854731c4d4d8a97d0aa8380ec3458d
+  FirebaseCoreDiagnostics: 17cbf4e72b1dbd64bfdc33d4b1f07bce4f16f1d8
+  FirebaseCoreInternal: 50a8e39cae8abf72d5145d07ea34c3244f70862b
+  FirebaseInstallations: 41f811b530c41dd90973d0174381cdb3fcb5e839
+  FirebaseMessaging: 4e220eddd356181469ba2ec5f7d5fafbc2312841
   fk_user_agent: 1f47ec39291e8372b1d692b50084b0d54103c545
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_image_compress: 5a5e9aee05b6553048b8df1c3bc456d0afaac433
@@ -236,6 +251,7 @@ SPEC CHECKSUMS:
   fluttertoast: 16fbe6039d06a763f3533670197d01fc73459037
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   gallery_saver: 9fc173c9f4fcc48af53b2a9ebea1b643255be542
+  geocoding: 32cfcdb16d38d907caaba65e2e42ad10d38bee58
   geolocator_apple: cc556e6844d508c95df1e87e3ea6fa4e58c50401
   GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
@@ -243,9 +259,10 @@ SPEC CHECKSUMS:
   image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
   libwebp: 60305b2e989864154bd9be3d772730f08fc6a59c
   Mantle: c5aa8794a29a022dfbbfc9799af95f477a69b62d
-  nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
+  nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
+  permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   SDWebImage: 72f86271a6f3139cc7e4a89220946489d4b9a866
   SDWebImageWebPCoder: 3dc350894112feab5375cfba9ce0986544a66a69
@@ -255,6 +272,6 @@ SPEC CHECKSUMS:
   url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
   video_player_avfoundation: e489aac24ef5cf7af82702979ed16f2a5ef84cff
 
-PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+PODFILE CHECKSUM: fe0e1ee7f3d1f7d00b11b474b62dd62134535aea
 
 COCOAPODS: 1.11.3
