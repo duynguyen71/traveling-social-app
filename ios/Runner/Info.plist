@@ -12,6 +12,11 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>vi</string>
+	</array>
 	<key>CFBundleName</key>
 	<string>traveling_social_app</string>
 	<key>CFBundlePackageType</key>
@@ -22,8 +27,37 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAllowsArbitraryLoads</key>
+	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_dartobservatory._tcp</string>
+	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>To capture profile photo please grant camera access</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app needs access to location when open and in the background.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This app needs access to location when in the background.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs access to location when open.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>App needs access to photo lib for profile images</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>processing</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -43,43 +77,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-	<key>NSAllowsArbitraryLoads</key>
-    <true/>
-
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>App needs access to photo lib for profile images</string>
-
-    <key>NSCameraUsageDescription</key>
-    <string>To capture profile photo please grant camera access</string>
-
-     <key>NSAppTransportSecurity</key>
-     <dict>
-         <key>NSAllowsArbitraryLoads</key>
-         <true/>
-     </dict>
-
-     <key>NSBonjourServices</key>
-     <array>
-        <string>_dartobservatory._tcp</string>
-     </array>
-    <key>io.flutter.embedded_views_preview</key>
-    <string>YES</string>
-    <key>com.apple.security.network.client</key>
-    <true/>
-    <key>FirebaseAppDelegateProxyEnabled</key>
-    <false/>
-    <key>CFBundleLocalizations</key>
+	<key>io.flutter.embedded_views_preview</key>
+	<string>YES</string>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
     <array>
-        <string>en</string>
-        <string>vi</string>
+        <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
     </array>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>This app needs access to location when open.</string>
-
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>This app needs access to location when in the background.</string>
-
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>This app needs access to location when open and in the background.</string>
 </dict>
 </plist>
